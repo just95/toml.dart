@@ -7,7 +7,7 @@ It can be used with the
 library which allows you to dynamically load configuration files.
 
 It currently supports version
-[v0.3.1](https://github.com/toml-lang/toml/blob/master/versions/toml-v0.3.1.md) 
+[v0.3.1](https://github.com/toml-lang/toml/blob/master/versions/en/toml-v0.3.1.md) 
 of the TOML specification.
 
 ## Installation
