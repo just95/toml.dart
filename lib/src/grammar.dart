@@ -77,7 +77,8 @@ class TomlGrammar extends GrammarDefinition {
              ref(integer) | 
              ref(boolean) | 
              ref(str) | 
-             ref(array);
+             ref(array) |
+             ref(inlineTable);
 
   // -----------------------------------------------------------------
   // String values.
@@ -225,7 +226,8 @@ class TomlGrammar extends GrammarDefinition {
              arrayOf(integer) | 
              arrayOf(boolean) | 
              arrayOf(str) | 
-             arrayOf(array);
+             arrayOf(array) | 
+             arrayOf(inlineTable);
   
   arrayOf(v) => ref(token, char('['), false, true) & 
                 ref(v).separatedBy(
@@ -249,6 +251,18 @@ class TomlGrammar extends GrammarDefinition {
   tableArray() => ref(tableArrayHeader).trim(ref(ignore, true)) & 
                   ref(keyValuePairs);
   tableArrayHeader() => char('[') & ref(tableHeader) & char(']');
+  
+  // -----------------------------------------------------------------
+  // Inline Tables.
+  // -----------------------------------------------------------------
+  
+  inlineTable() => ref(token, char('{'))
+                 & ref(keyValuePair).separatedBy(
+                     token(char(',')), 
+                     optionalSeparatorAtEnd: true,
+                     includeSeparators: false  
+                   ).optional([])
+                 & ref(token, char('}'));
   
   // -----------------------------------------------------------------
   // Keys.

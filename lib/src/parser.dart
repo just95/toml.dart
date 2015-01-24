@@ -85,6 +85,18 @@ class TomlParserDefinition extends TomlGrammar {
   tableArrayHeader() => super.tableArrayHeader().pick(1);
   
   // -----------------------------------------------------------------
+  // Inline Tables.
+  // -----------------------------------------------------------------
+
+  inlineTable() => super.inlineTable().pick(1).map((List pairs) {
+    var map = {};
+    pairs.forEach((Map pair) {
+      map[pair['key']] = pair['value'];
+    });
+    return map;
+  });
+  
+  // -----------------------------------------------------------------
   // Keys.
   // -----------------------------------------------------------------
   
