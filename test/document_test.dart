@@ -174,6 +174,29 @@ main() {
       };
       errors.forEach(documentErrorTester);
     });
+    
+    test('Inline Tables', () {
+      var cases = {
+        '''
+          name = { first = "Tom", last = "Preston-Werner" }
+          point = { x = 1, y = 2 }
+          address = { proto = "http", ip = "10.0.0.1", port = 8080 }
+          points = [ { x = 1, y = 2, z = 3 },
+                     { x = 7, y = 8, z = 9 },
+                     { x = 2, y = 4, z = 8 } ]
+        ''': {
+          'name': {'first': 'Tom', 'last': 'Preston-Werner'},
+          'point': {'x': 1, 'y': 2},
+          'address': {'proto': 'http', 'ip': '10.0.0.1', 'port': 8080},
+          'points': [
+             {'x': 1, 'y': 2, 'z': 3},
+             {'x': 7, 'y': 8, 'z': 9},   
+             {'x': 2, 'y': 4, 'z': 8}         
+          ]
+        }
+      };
+      cases.forEach(documentTester);
+    });
      
     test('Example', () {
       var examples = {
