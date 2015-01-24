@@ -22,6 +22,11 @@ typedef void TomlValueEncoder<V>(V value);
 /// TOML document builder.
 class TomlDocumentBuilder {
   
+  /**
+   * Regular expression of a bare key.
+   */
+  static final RegExp bareKeyRegExp = new RegExp(r'^[A-Za-z0-9_-]+$');
+  
   /// A buffer which holds the textual representation of the document.
   final StringBuffer _buf = new StringBuffer();
   
@@ -133,7 +138,12 @@ class TomlDocumentBuilder {
   
   /// Inserts a [key].
   void encodeKey(String key) {
-    _buf.write(key);
+    if(bareKeyRegExp.hasMatch(key)){
+      _buf.write(key);
+    }
+    else{
+      basicString(key);
+    }
   }
   
   /// Applies a [TomlValueEncoder] on [value].
