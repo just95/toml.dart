@@ -1,4 +1,5 @@
-﻿# toml.dart
+toml.dart
+=========
 
 This package provides an implementation of a TOML (Tom's Obvious, Minimal 
 Language) parser and encoder for dart.
@@ -100,92 +101,92 @@ whose return value can be represented by TOML in turn.
 
 ## Data Structure
 
-* TOML **documents** and **tables** are represented through nested 
-  `UnmodifiableMapView` objects whose keys are `String`s and values `dynamic`
-  read-only representations of the corresponding TOML value or sub-table. 
-  The contents of a table declared by:
-  ```toml
-  [a.b.c]
-  key = 'value'
-  ```
-  may be accessed using `[]`:
-  ```dart
-  var table = document['a']['b']['c']; // ok
-  var value = table['key'];
-  ```
-  The following, however, is invalid:
-  ```dart
-  var table = document['a.b.c']; // error
-  table['key'] = value; // error
-  ```
+TOML **documents** and **tables** are represented through nested 
+`UnmodifiableMapView` objects whose keys are `String`s and values `dynamic`
+read-only representations of the corresponding TOML value or sub-table. 
+The contents of a table declared by:
+```toml
+[a.b.c]
+key = 'value'
+```
+may be accessed using `[]`:
+```dart
+var table = document['a']['b']['c']; // ok
+var value = table['key'];
+```
+The following, however, is invalid:
+```dart
+var table = document['a.b.c']; // error
+table['key'] = value; // error
+```
 
-* All kinds of **arrays** including **arrays of tables** are stored as 
-  `UnmodifiableListView` objects. Though the encoder accepts any `Iterable`.
-  The items of the list represent either a value or a table.
-  Given a document:
-  ```toml
-  [[items]]
-  name = 'A'
+All kinds of **arrays** including **arrays of tables** are stored as 
+`UnmodifiableListView` objects. Though the encoder accepts any `Iterable`.
+The items of the list represent either a value or a table.
+Given a document:
+```toml
+[[items]]
+name = 'A'
 
-  [[items]]
-  name = 'B'
+[[items]]
+name = 'B'
 
-  [[items]]
-  name = 'C'
-  ```
-  One might iterate over the items of the list:
-  ```dart
-  document['items'].forEach((Map item) { # ok
-    print(item.name);
-  });
-  ```
-  But it is not allowed to add, remove or modify its entries:
-  ```dart
-  document['items'].add({ # error
-    'name': 'D'
-  });
-  document['items'][0] = { # error
-    'name': 'E'
-  };
-  ```
+[[items]]
+name = 'C'
+```
+One might iterate over the items of the list:
+```dart
+document['items'].forEach((Map item) { # ok
+  print(item.name);
+});
+```
+But it is not allowed to add, remove or modify its entries:
+```dart
+document['items'].add({ # error
+  'name': 'D'
+});
+document['items'][0] = { # error
+  'name': 'E'
+};
+```
 
-* All **string** variants produce regular dart `String`s.
-  These are therefore all eqivalent:
-  ```toml
-  str1 = "Hello World!"
-  str2 = 'Hello World!'
-  str3 = """
-    Hello \
-    World!\
-  """
-  str4 = '''Hello World!'''
-  ```
+All **string** variants produce regular dart `String`s.
+These are therefore all eqivalent:
+```toml
+str1 = "Hello World!"
+str2 = 'Hello World!'
+str3 = """
+  Hello \
+  World!\
+"""
+str4 = '''Hello World!'''
+```
 
-* **Integers** are of type `int` and **float**ing point numbers are represented 
-  as `double`s.
-  When compiled to JavaScript these two types are not distinct. 
-  Thus a float without decimal places might accidentally be encoded as an
-  integer. This behavior would lead to the generation of invalid numeric 
-  arrays.
-  The `TomlEncoder` addresses this issue by analyzing the contents of numeric 
-  arrays first.
-  If any of its items cannot be represented as an integer all items will be
-  encoded as floats instead.
-  Encoding the following map:
-  ```dart
-  var document = {
-    'array': [1, 2.0, 3.141]
-  };
-  ```
-  would throw an `MixedArrayTypesError` in the vm but yields this document when
-  compiled to JavaScript:
-  ```toml
-  array = [1.0, 2.0, 3.141]
-  ```
-    
-* **Boolean** values are obviously of type `bool`. 
+**Integers** are of type `int` and **float**ing point numbers are represented 
+as `double`s.
+When compiled to JavaScript these two types are not distinct. 
+Thus a float without decimal places might accidentally be encoded as an
+integer. This behavior would lead to the generation of invalid numeric 
+arrays.
+The `TomlEncoder` addresses this issue by analyzing the contents of numeric 
+arrays first.
+If any of its items cannot be represented as an integer all items will be
+encoded as floats instead.
+Encoding the following map:
+```dart
+var document = {
+  'array': [1, 2.0, 3.141]
+};
+```
+would throw an `MixedArrayTypesError` in the vm but yields this document when
+compiled to JavaScript:
+```toml
+array = [1.0, 2.0, 3.141]
+```
+  
+**Boolean** values are obviously of type `bool`. 
 
-* **Datetime** values are UTC `DateTime` objects.
+**Datetime** values are UTC `DateTime` objects.
 
 ## Examples
 
