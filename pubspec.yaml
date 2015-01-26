@@ -1,5 +1,5 @@
 name: toml
-version: 0.1.0
+version: 0.1.1
 author: Justin Andresen <jan.dresen.95@gmail.com>
 description: Parser and encoder for TOML v0.3.1 (Tom's Obvious, Minimal Language) configuration files.
 homepage: https://github.com/just95/toml.dart

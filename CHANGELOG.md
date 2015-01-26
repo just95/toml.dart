@@ -1,4 +1,9 @@
-# Changelog
+Changelog
+=========
+
+## 0.1.1 / 2015-01-26
+
+- Fixed links and markdown.
 
 ## 0.1.0 / 2015-01-23
 
