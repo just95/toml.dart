@@ -39,7 +39,7 @@ class TomlGrammar extends GrammarDefinition {
   }
   
   start() => ref(document).end();
-  token(p, [bool multiLineLeft = false, bool multiLineRight]){
+  token(p, [bool multiLineLeft = false, bool multiLineRight]) {
     // multiLineRight defaults to the value of multiLineLeft
     if (multiLineRight == null) multiLineRight = multiLineLeft;
     

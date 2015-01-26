@@ -10,7 +10,7 @@ import '../tester/encoder.dart';
 
 void main() {
   group('encoder test:', () {
-    test('Numeric Arrays', (){
+    test('Numeric Arrays', () {
       var cases = {
         'a = [1]': {'a': [1]},
         'a = [1, 2]': {'a': [1, 2.0]},
