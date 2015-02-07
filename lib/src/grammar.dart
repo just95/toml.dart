@@ -171,8 +171,10 @@ class TomlGrammar extends GrammarDefinition {
   
   integer() => ref(token, _integer);  
   _integer() => anyIn('+-').optional() & 
-                char('0').or(digit().plus());
-
+                (char('0') | ref(digits));
+  
+  digits() => digit().plus().separatedBy(char('_'));
+  
   // -----------------------------------------------------------------
   // Float values.
   // -----------------------------------------------------------------
@@ -183,7 +185,7 @@ class TomlGrammar extends GrammarDefinition {
                 ref(exponentPart)
               );
   
-  fractionalPart() => char('.') & digit().plus();
+  fractionalPart() => char('.') & ref(digits);
   exponentPart() => anyIn('eE') & ref(_integer);
 
   // -----------------------------------------------------------------
