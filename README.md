@@ -96,7 +96,7 @@ var document = {
 var encoder = new TomlEncoder();
 var toml = encoder.encode(document);
 ```
-Clases which implement the `TomlEncodable` interface define a `toToml` method
+Classes which implement the `TomlEncodable` interface define a `toToml` method
 whose return value can be represented by TOML in turn.
 
 ## Data Structure
@@ -151,7 +151,7 @@ document['items'][0] = { # error
 ```
 
 All **string** variants produce regular dart `String`s.
-These are therefore all eqivalent:
+These are therefore all equivalent:
 ```toml
 str1 = "Hello World!"
 str2 = 'Hello World!'
@@ -190,7 +190,7 @@ array = [1.0, 2.0, 3.141]
 
 ## Examples
 
-Check out the scripts located in the `'/examples'` directory.
+Check out the scripts located in the `'/example'` directory.
 
 ## License
 
