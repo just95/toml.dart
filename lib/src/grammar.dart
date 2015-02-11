@@ -259,7 +259,9 @@ class TomlGrammar extends GrammarDefinition {
   inlineTable() => ref(token, char('{'))
                  & ref(keyValuePair).separatedBy(
                      token(char(',')), 
-                     optionalSeparatorAtEnd: true,
+                     /// trailing commas are currently not allowed
+                     /// See https://github.com/toml-lang/toml/pull/235#issuecomment-73578529
+                     optionalSeparatorAtEnd: false,
                      includeSeparators: false  
                    ).optional([])
                  & ref(token, char('}'));
