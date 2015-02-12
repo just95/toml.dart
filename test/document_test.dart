@@ -17,9 +17,20 @@ main() {
           [table]
         ''': {'table': {}},
         '''
-          [dog.tater]
+          [dog."tater.man"]
           type = "pug"
-        ''': { 'dog': { 'tater': { 'type': 'pug' } } },
+        ''': { 'dog': { 'tater.man': { 'type': 'pug' } } },
+        '''
+          [a.b.c]          # this is best practice
+          [ d.e.f ]        # same as [d.e.f]
+          [ g .  h  . i ]  # same as [g.h.i]
+          [ j . "ʞ" . l ]  # same as [j."ʞ".l]
+        ''': {
+           'a': {'b': {'c': {}}},
+           'd': {'e': {'f': {}}},
+           'g': {'h': {'i': {}}},
+           'j': {'ʞ': {'l': {}}}
+         },
         '''
           # [x] you
           # [x.y] don't

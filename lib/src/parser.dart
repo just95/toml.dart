@@ -83,17 +83,7 @@ class TomlParserDefinition extends TomlGrammar {
     'pairs': def[1]
   });
   tableArrayHeader() => super.tableArrayHeader().pick(1);
-  
-  // -----------------------------------------------------------------
-  // Keys.
-  // -----------------------------------------------------------------
-  
-  key() => super.key().pick(1).map((List chars) => chars.join().trim());
-  
-  tableName() => super.tableName().map((List parts) => parts.map(
-    (List part) => part.join()    
-  ).toList());
-  
+    
   // -----------------------------------------------------------------
   // Key/value pairs.
   // -----------------------------------------------------------------

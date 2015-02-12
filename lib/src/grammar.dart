@@ -254,11 +254,14 @@ class TomlGrammar extends GrammarDefinition {
   // Keys.
   // -----------------------------------------------------------------
   
-  key() => char('[').not() & 
-           anyIn('#=').neg().plus();
+  key() => ref(token, bareKey) | 
+           ref(quotedKey);
+ 
+  bareKey() => pattern('A-Za-z0-9_-').plus();
+  quotedKey() => ref(basicStr);
   
-  tableName() => anyIn('#.[]').neg().plus().separatedBy(
-      char('.'),
+  tableName() => ref(key).separatedBy(
+      char('.'), 
       includeSeparators: false);
       
   // -----------------------------------------------------------------
