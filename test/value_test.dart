@@ -87,6 +87,27 @@ main() {
         '-17': -17
       };
       cases.forEach(valueTester);
+      
+      var errors = [
+        '0777' // no leading zeros
+      ];
+      errors.forEach(valueErrorTester);
+    });
+    
+    test('Large Integer', () {
+      var cases = {
+        '1_000': 1000, 
+        '5_349_221': 5349221, 
+        '1_2_3_4_5': 12345
+      };
+      cases.forEach(valueTester);
+      
+      var errors = [
+        '_1000',
+        '1000_',
+        '1__00',
+      ];
+      errors.forEach(valueErrorTester);
     });
 
     test('Float', () {
@@ -105,6 +126,27 @@ main() {
         '6.626e-34': 6.626e-34
       };
       cases.forEach(valueTester);
+    });
+    
+    test('Large Float', () {
+      var cases = {
+        '9_224_617.445_991_228_313': 9224617.445991228313,
+        '1e1_000': 1e1000
+      };
+      cases.forEach(valueTester);
+      
+      var errors = [
+        '_3.1415', 
+        '3._1415',
+        '3_.1415',
+        '3.1415_',
+        '3.14__1',
+        '1_e1000',
+        '1e_1000',
+        '1e1000_',
+        '1e10__0'
+      ];
+      errors.forEach(valueErrorTester);
     });
     
     test('Boolean', () {

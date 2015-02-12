@@ -34,19 +34,19 @@ class TomlParserDefinition extends TomlGrammar {
   // Integer values.
   // -----------------------------------------------------------------
   
-  integer() => super.integer().map(int.parse);
+  integer() => super.integer().map((str) => int.parse(str.replaceAll('_', '')));
 
   // -----------------------------------------------------------------
   // Float values.
   // -----------------------------------------------------------------
   
-  float() => super.float().map(double.parse);
+  float() => super.float().map((str) => double.parse(str.replaceAll('_', '')));
 
   // -----------------------------------------------------------------
   // Boolean values.
   // -----------------------------------------------------------------
 
-  boolean() => super.boolean().map((String b) => b == 'true');
+  boolean() => super.boolean().map((str) => str == 'true');
 
   // -----------------------------------------------------------------
   // Datetime values.
