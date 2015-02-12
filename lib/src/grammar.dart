@@ -20,7 +20,6 @@ class TomlGrammar extends GrammarDefinition {
      'f': 0x0C,
      'r': 0x0D,
      '"': 0x22,
-     '/': 0x2F,
     r'\': 0x5C
   };
   
