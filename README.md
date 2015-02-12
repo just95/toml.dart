@@ -101,9 +101,11 @@ whose return value can be represented by TOML in turn.
 
 ## Data Structure
 
-TOML **documents** and **tables** are represented through nested 
-`UnmodifiableMapView` objects whose keys are `String`s and values `dynamic`
-read-only representations of the corresponding TOML value or sub-table. 
+<<<<<<< HEAD
+TOML **documents** and **tables** as well as **inline tables** are represented 
+through nested `UnmodifiableMapView` objects whose keys are `String`s and values
+`dynamic` read-only representations of the corresponding TOML value or 
+sub-table.
 The contents of a table declared by:
 ```toml
 [a.b.c]
