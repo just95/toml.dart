@@ -8,7 +8,7 @@ It can be used with the
 library which allows you to dynamically load configuration files.
 
 It currently supports version
-[v0.3.1](https://github.com/toml-lang/toml/blob/master/versions/en/toml-v0.3.1.md) 
+[v0.4.0](https://github.com/toml-lang/toml/blob/master/versions/en/toml-v0.4.0.md) 
 of the TOML specification.
 
 ## Installation
@@ -17,7 +17,7 @@ To get started add `toml` as a dependency to your `pubspec.yaml` and run the
 `pub get` command.
 ```yaml
 dependencies:
-  toml: ">=0.1.0 <0.2.0"
+  toml: ">=0.2.0 <0.3.0"
 ```
 
 ## Usage
@@ -101,7 +101,6 @@ whose return value can be represented by TOML in turn.
 
 ## Data Structure
 
-<<<<<<< HEAD
 TOML **documents** and **tables** as well as **inline tables** are represented 
 through nested `UnmodifiableMapView` objects whose keys are `String`s and values
 `dynamic` read-only representations of the corresponding TOML value or 
