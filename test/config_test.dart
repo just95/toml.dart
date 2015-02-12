@@ -13,5 +13,8 @@ void main() {
     test('Example', () {
       configTester('example');
     });
+    test('Hard Example', () {
+      configTester('hard_example');
+    });
   });
 }
