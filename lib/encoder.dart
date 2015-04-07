@@ -13,7 +13,7 @@ class TomlEncoder {
   /// Encodes a TOML [document].
   String encode(Map<String, dynamic> document) {
     var builder = new TomlDocumentBuilder();
-    builder.subTable(document, name: []);
+    builder.encodeSubTable(document, name: []);
     return builder.toString();
   }
 }
