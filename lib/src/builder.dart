@@ -289,7 +289,7 @@ class TomlDocumentBuilder {
     if (esc.isNotEmpty) {
       value = value.codeUnits.map((int codeUnit) {
         if (esc.contains(codeUnit)) {
-          return '\\${TomlGrammar.reverseEscTable[codeUnit]}';
+          return '\\${TomlGrammar.escTable.inverse[codeUnit]}';
         }
         return new String.fromCharCode(codeUnit);
       }).join();

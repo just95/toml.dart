@@ -5,6 +5,7 @@
 library toml.src.grammar;
 
 import 'package:petitparser/petitparser.dart';
+import 'package:quiver/collection.dart';
 
 /// The grammar definition of TOML.
 class TomlGrammar extends GrammarDefinition {
@@ -13,7 +14,7 @@ class TomlGrammar extends GrammarDefinition {
   ///
   /// Additionally any unicode character may be escaped with the `\uXXXX`
   /// and `\UXXXXXXXX` forms.
-  static final Map<String, int> escTable = {
+  static final BiMap<String, int> escTable = new BiMap()..addAll({
     'b': 0x08, // Backspace.
     't': 0x09, // Tab.
     'n': 0x0A, // Linefeed.
@@ -21,21 +22,7 @@ class TomlGrammar extends GrammarDefinition {
     'r': 0x0D, // Carriage return.
     '"': 0x22, // Quote.
     r'\': 0x5C // Backslash.
-  };
-
-  /// Cache for [reverseEscTable].
-  static Map<int, String> _reverseEscTable;
-
-  /// Gets the reverse of [escTable].
-  static Map<int, String> get reverseEscTable {
-    if (_reverseEscTable == null) {
-      _reverseEscTable = {};
-      escTable.forEach((k, v) {
-        _reverseEscTable[v] = k;
-      });
-    }
-    return _reverseEscTable;
-  }
+  });
 
   start() => ref(document).end();
   token(p, [bool multiLineLeft = false, bool multiLineRight]) {
