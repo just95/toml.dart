@@ -24,42 +24,23 @@ dependencies:
 
 ### With dart_config
 
-If you want to use `dart_config` and your code is running in the **browser** 
-add the following import directive:
+If you want to use `dart_config` to load your TOML files add the following 
+import directive to your script:
 ```dart
-import 'package:toml/browser.dart';
+import 'package:toml/loader.dart';
 ```
-For command line and **server** side applications write:
-```dart
-import 'package:toml/server.dart';
-```
+In your `main` function call `useHttpConfigLoader` if your code is running in
+the **browser** or `useFilesystemConfigLoader` if your code is running on the
+**server**. If you want to use a **custom** loader pass an instance of
+your `ConfigLoader` implementation to `useCustomConfigLoader`.
 
-Both imports define a `loadConfig` function which takes an optional path to
+The library defines a `loadConfig` function which takes an optional path to
 the configuration file (defaults to `'config.toml'`) and returns a `Future` of
-the parsed document as an unmodifiable `Map`.
-They use the default `ConfigHttpRequestLoader` and `ConfigFilesystemLoader`,
-respectively.
+the parsed document as an unmodifiable `Map`. 
 ```dart
 loadConfig().then((Map document) {
   // ...
 })
-```
-
-If you want to use a **custom** `ConfigLoader` add the following import instead:
-```dart
-import 'package:toml/config.dart';
-```
-There you will find the `TomlConfigParser` which implements the `ConfigParser` 
-interface and can be used in conjunction with `dart_config`s `Config` class and 
-your loader:
-```dart
-var config = new Config(filename,
-  new MyConfigLoader(),
-  new TomlConfigParser()
-);
-config.readConfig().then((Map document) {
-  // ...
-});
 ```
 
 ### Without dart_config
