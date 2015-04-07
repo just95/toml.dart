@@ -1,4 +1,4 @@
-// Copyright (c) 2015 Justin Andresen. All rights reserved. 
+// Copyright (c) 2015 Justin Andresen. All rights reserved.
 // This software may be modified and distributed under the terms
 // of the MIT license. See the LICENSE file for details.
 
@@ -19,17 +19,14 @@ Function tomlTester(Parser parser) => (String input, output) {
 
 /// Returns a function which tests whether [parser] fails to parse its first
 /// argument.
-/// 
-/// Optionally tests whether a specific error is thrown by passing a second 
+///
+/// Optionally tests whether a specific error is thrown by passing a second
 /// argument to the returned function.
 Function tomlErrorTester(Parser parser) => (String input, [err]) {
   if (err == null) {
     var res = parser.parse(input);
     expect(res, isFailure);
-  }
-  else {
-    expect(
-        () => parser.parse(input),
-        throwsA(err));
+  } else {
+    expect(() => parser.parse(input), throwsA(err));
   }
 };

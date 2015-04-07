@@ -1,4 +1,4 @@
-// Copyright (c) 2015 Justin Andresen. All rights reserved. 
+// Copyright (c) 2015 Justin Andresen. All rights reserved.
 // This software may be modified and distributed under the terms
 // of the MIT license. See the LICENSE file for details.
 
@@ -19,18 +19,18 @@ main() {
         '''
           [dog."tater.man"]
           type = "pug"
-        ''': { 'dog': { 'tater.man': { 'type': 'pug' } } },
+        ''': {'dog': {'tater.man': {'type': 'pug'}}},
         '''
           [a.b.c]          # this is best practice
           [ d.e.f ]        # same as [d.e.f]
           [ g .  h  . i ]  # same as [g.h.i]
           [ j . "ʞ" . l ]  # same as [j."ʞ".l]
         ''': {
-           'a': {'b': {'c': {}}},
-           'd': {'e': {'f': {}}},
-           'g': {'h': {'i': {}}},
-           'j': {'ʞ': {'l': {}}}
-         },
+          'a': {'b': {'c': {}}},
+          'd': {'e': {'f': {}}},
+          'g': {'h': {'i': {}}},
+          'j': {'ʞ': {'l': {}}}
+        },
         '''
           # [x] you
           # [x.y] don't
@@ -46,7 +46,7 @@ main() {
         ''': {'a': {'b': {'c': 1}, 'd': 2}}
       };
       cases.forEach(documentTester);
-      
+
       var errors = {
         '''
           # DO NOT DO THIS
@@ -82,18 +82,11 @@ main() {
         ''': new RedefinitionError('a.b')
       };
       errors.forEach(documentErrorTester);
-      
-      errors = [
-        '[]',
-        '[a.]',
-        '[a..b]',
-        '[.b]',
-        '[.]',
-        '= "no key name"'
-      ];
+
+      errors = ['[]', '[a.]', '[a..b]', '[.b]', '[.]', '= "no key name"'];
       errors.forEach(documentErrorTester);
     });
-    
+
     test('Array of Tables', () {
       var cases = {
         '''
@@ -109,9 +102,9 @@ main() {
           color = "gray"
         ''': {
           'products': [
-            { 'name': 'Hammer', 'sku': 738594937 },
-            { },
-            { 'name': 'Nail', 'sku': 284758393, 'color': 'gray' }
+            {'name': 'Hammer', 'sku': 738594937},
+            {},
+            {'name': 'Nail', 'sku': 284758393, 'color': 'gray'}
           ]
         },
         '''
@@ -137,28 +130,17 @@ main() {
           'fruit': [
             {
               'name': 'apple',
-              'physical': {
-                'color': 'red',
-                'shape': 'round'
-              },
-              'variety': [
-                { 'name': 'red delicious' },
-                { 'name': 'granny smith' }
-              ]
+              'physical': {'color': 'red', 'shape': 'round'},
+              'variety': [{'name': 'red delicious'}, {'name': 'granny smith'}]
             },
-            {
-              'name': 'banana',
-              'variety': [
-                { 'name': 'plantain' }
-              ]
-            }
+            {'name': 'banana', 'variety': [{'name': 'plantain'}]}
           ]
         }
       };
       cases.forEach(documentTester);
-      
+
       var errors = {
-                    '''
+        '''
           # INVALID TOML DOC
           [[fruit]]
             name = "apple"
@@ -181,11 +163,11 @@ main() {
             # This table conflicts with the previous table
             [[fruit.variety]]
               name = "red delicious"
-        ''': new RedefinitionError('fruit[0].variety')              
+        ''': new RedefinitionError('fruit[0].variety')
       };
       errors.forEach(documentErrorTester);
     });
-    
+
     test('Inline Tables', () {
       var cases = {
         '''
@@ -200,15 +182,15 @@ main() {
           'point': {'x': 1, 'y': 2},
           'address': {'proto': 'http', 'ip': '10.0.0.1', 'port': 8080},
           'points': [
-             {'x': 1, 'y': 2, 'z': 3},
-             {'x': 7, 'y': 8, 'z': 9},   
-             {'x': 2, 'y': 4, 'z': 8}         
+            {'x': 1, 'y': 2, 'z': 3},
+            {'x': 7, 'y': 8, 'z': 9},
+            {'x': 2, 'y': 4, 'z': 8}
           ]
         }
       };
       cases.forEach(documentTester);
     });
-     
+
     test('Example', () {
       var examples = {
         '''
@@ -249,31 +231,22 @@ main() {
           'title': 'TOML Example',
           'owner': {
             'name': 'Lance Uppercut',
-            'dob': new DateTime.utc(1979, 5, 27, 7, 32)
-                               .add(new Duration(hours: 8))
+            'dob':
+                new DateTime.utc(1979, 5, 27, 7, 32).add(new Duration(hours: 8))
           },
           'database': {
             'server': '192.168.1.1',
-            'ports': [ 8001, 8001, 8002 ],
+            'ports': [8001, 8001, 8002],
             'connection_max': 5000,
             'enabled': true
           },
           'servers': {
-            'alpha': {
-              'ip': '10.0.0.1',
-              'dc': 'eqdc10'
-            },
-            'beta': {
-              'ip': '10.0.0.2',
-              'dc': 'eqdc10'
-            }
+            'alpha': {'ip': '10.0.0.1', 'dc': 'eqdc10'},
+            'beta': {'ip': '10.0.0.2', 'dc': 'eqdc10'}
           },
           'clients': {
-            'data': [ ['gamma', 'delta'], [1, 2] ],
-            'hosts': [
-              'alpha',
-              'omega'
-            ]
+            'data': [['gamma', 'delta'], [1, 2]],
+            'hosts': ['alpha', 'omega']
           }
         }
       };

@@ -18,8 +18,7 @@ class InvalidEscapeSequenceError {
   InvalidEscapeSequenceError(this.escapeSequence);
 
   @override
-  bool operator ==(other) =>
-      other is InvalidEscapeSequenceError && 
+  bool operator ==(other) => other is InvalidEscapeSequenceError &&
       other.escapeSequence == escapeSequence;
 
   @override
@@ -27,7 +26,6 @@ class InvalidEscapeSequenceError {
 
   @override
   String toString() => 'The escape sequence "$escapeSequence" is invalid!';
-
 }
 
 /// An error which is thrown when the encoder encounters a character in a
@@ -40,16 +38,13 @@ class InvalidStringError {
   InvalidStringError(this.msg);
 
   @override
-  bool operator ==(other) => 
-      other is InvalidStringError && 
-      other.msg == msg;
+  bool operator ==(other) => other is InvalidStringError && other.msg == msg;
 
   @override
   int get hashCode => msg.hashCode;
 
   @override
   String toString() => msg;
-
 }
 
 /// An error which is thrown when a table or key is defined more than once.
@@ -61,16 +56,13 @@ class RedefinitionError {
   RedefinitionError(this.name);
 
   @override
-  bool operator ==(other) => 
-      other is RedefinitionError && 
-      other.name == name;
+  bool operator ==(other) => other is RedefinitionError && other.name == name;
 
   @override
   int get hashCode => name.hashCode;
 
   @override
   String toString() => 'Cannot redefine "$name"!';
-
 }
 
 /// An error which is thrown when the parent element of a table is not
@@ -93,9 +85,7 @@ class NotATableError {
   NotATableError(this.name);
 
   @override
-  bool operator ==(other) => 
-      other is NotATableError && 
-      other.name == name;
+  bool operator ==(other) => other is NotATableError && other.name == name;
 
   @override
   int get hashCode => name.hashCode;
@@ -119,15 +109,13 @@ class UnknownValueTypeError {
 
   @override
   bool operator ==(other) =>
-      other is UnknownValueTypeError && 
-      other.value == value;
+      other is UnknownValueTypeError && other.value == value;
 
   @override
   int get hashCode => value.hashCode;
 
   @override
   String toString() => '"$value" cannot be encoded as a TOMl value!';
-
 }
 
 /// An error which is thrown when an `Iterable` cannot be encoded as an array
@@ -147,13 +135,11 @@ class MixedArrayTypesError {
 
   @override
   bool operator ==(other) =>
-      other is MixedArrayTypesError && 
-      other.array == array;
+      other is MixedArrayTypesError && other.array == array;
 
   @override
   int get hashCode => array.hashCode;
 
   @override
   String toString() => 'The items of "$array" must all be of the same type!';
-
 }

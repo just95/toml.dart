@@ -2,7 +2,7 @@ toml.dart
 =========
 
 This package provides an implementation of a TOML (Tom's Obvious, Minimal 
-Language) parser and encoder for dart.
+Language) parser and encoder for Dart.
 It can be used with the
 [`dart_config`](https://pub.dartlang.org/packages/dart_config)
 library which allows you to dynamically load configuration files.
@@ -178,8 +178,8 @@ array = [1.0, 2.0, 3.141]
 
 Check out the scripts located in the `'/example'` directory.
 
+
 ## License
 
 toml.dart is licensed under the MIT license agreement.
 See the LICENSE file for details.
-
