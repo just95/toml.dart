@@ -1,5 +1,4 @@
-toml.dart
-=========
+# toml.dart
 
 This package provides an implementation of a TOML (Tom's Obvious, Minimal 
 Language) parser and encoder for Dart.
@@ -177,7 +176,6 @@ array = [1.0, 2.0, 3.141]
 ## Examples
 
 Check out the scripts located in the `'/example'` directory.
-
 
 ## License
 
