@@ -43,6 +43,10 @@ loadConfig().then((Map document) {
 })
 ```
 
+**Note:** The old `toml.browser` and `toml.server` libraries are still supported 
+for backward compatibility. They are deprecated and will be removed in an 
+upcoming release.
+
 ### Without dart_config
 
 If you don't want to use `dart_config` at all, add:
