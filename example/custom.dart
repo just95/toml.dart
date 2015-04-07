@@ -6,12 +6,12 @@ library toml.example.custom;
 
 import 'dart:async';
 import 'package:dart_config/config.dart';
-import 'package:toml/config.dart';
+import 'package:toml/loader.dart';
 
 class MyConfigLoader extends ConfigLoader{
   
   Map<String, String> _cache = {
-    'config.yaml': '''
+    'config.toml': '''
       [table]
         [[table.array]]
         key = "Hello, World!"
@@ -25,14 +25,10 @@ class MyConfigLoader extends ConfigLoader{
 }
 
 void main() {
-  var config = new Config(
-    'config.yaml',
-    new MyConfigLoader(),
-    new TomlConfigParser()
-  );
-  config.readConfig().then(
+  useCustomConfigLoader(new MyConfigLoader());
+  loadConfig('config.toml').then(
     (Map config) {
       print(config['table']['array'][0]['key']);
     }
-  ).catchError((error) => print(error));
+  ).catchError((error) => print(error));;
 }

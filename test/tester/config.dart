@@ -7,8 +7,7 @@ library toml.test.tester.config;
 import 'dart:async';
 
 import 'package:unittest/unittest.dart';
-import 'package:dart_config/default_server.dart' as yaml;
-import 'package:toml/server.dart' as toml;
+import 'package:toml/loader.dart';
 
 /// Tests a TOML and a YAML table for deep equality.
 void _cmpMaps(Map toml, Map yaml) {
@@ -52,8 +51,8 @@ void _cmp(tomlValue, yamlValue) {
 /// Tests the results for deep equality.
 void configTester(String name) {
   var future = Future.wait([
-    toml.loadConfig('config/$name.toml'),
-    yaml.loadConfig('config/$name.yaml')
+    loadConfig('config/$name.toml'),
+    loadConfig('config/$name.yaml')
   ]);
   future.then(expectAsync((res) {
     _cmpMaps(res[0], res[1]);

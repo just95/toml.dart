@@ -5,9 +5,10 @@
 library toml.example.browser;
 
 import 'dart:html';
-import 'package:toml/browser.dart';
+import 'package:toml/loader.dart';
 
 void main() {
+  useHttpConfigLoader();
   var elem = document.getElementById('text');
   loadConfig('config.toml').then(
     (Map config) {

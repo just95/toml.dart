@@ -4,9 +4,10 @@
 
 library toml.example.server;
 
-import 'package:toml/server.dart';
+import 'package:toml/loader.dart';
 
 void main() {
+  useFilesystemConfigLoader();
   loadConfig('config.toml').then(
     (Map config) {
       print(config['table']['array'][0]['key']);
