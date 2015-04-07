@@ -6,17 +6,11 @@ library toml.server;
 
 import 'dart:async';
 
-import 'package:dart_config/config.dart';
-import 'package:dart_config/loaders/config_loader_filesystem.dart';
-
-import 'config.dart';
+import 'loader.dart' as loader;
 
 /// Loads [filename] from the local filesystem and parses the contents as a 
 /// TOML document.
-Future<Map> loadConfig([String filename = "config.toml"]) {
-  var config = new Config(filename,
-      new ConfigFilesystemLoader(),
-      new TomlConfigParser());
-  
-  return config.readConfig();
+Future<Map> loadConfig([String filename = 'config.toml']) {
+  loader.useFilesystemConfigLoader();
+  return loader.loadConfig(filename);
 }

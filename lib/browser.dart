@@ -6,16 +6,10 @@ library toml.browser;
 
 import 'dart:async';
 
-import 'package:dart_config/config.dart';
-import 'package:dart_config/loaders/config_loader_httprequest.dart';
-
-import 'config.dart';
+import 'loader.dart' as loader;
 
 /// Loads [filename] via HTTP and parses the response as a TOML document.
-Future<Map> loadConfig([String filename = "config.toml"]) {
-  var config = new Config(filename,
-      new ConfigHttpRequestLoader(),
-      new TomlConfigParser());
-  
-  return config.readConfig();
+Future<Map> loadConfig([String filename = 'config.toml']) {
+  loader.useHttpConfigLoader();
+  return loader.loadConfig(filename);
 }
