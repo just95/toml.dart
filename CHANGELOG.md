@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.3.0 / 2015-04-08
+
+- Introduced new `toml.loader` library.
+- The `toml.browser` and `toml.server` libraries are now deprecated and will
+  be removed in the next release. Use the new `toml.loader` library instead.
+
 ## 0.2.0 / 2015-02-12
 
 - Updated to v0.4.0 of the TOML spec.
