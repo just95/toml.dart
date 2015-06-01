@@ -4,13 +4,13 @@
 
 library toml.test.config_test;
 
-import 'package:toml/loader.dart';
+import 'package:toml/loader/fs.dart';
 import 'package:unittest/unittest.dart';
 
 import 'tester/config.dart';
 
 void main() {
-  useFilesystemConfigLoader();
+  FilesystemConfigLoader.use();
   group('config test:', () {
     test('Example', () {
       configTester('example');

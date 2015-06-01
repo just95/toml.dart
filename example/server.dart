@@ -4,11 +4,16 @@
 
 library toml.example.server;
 
-import 'package:toml/loader.dart';
+import 'dart:async';
 
-void main() {
-  useFilesystemConfigLoader();
-  loadConfig('config.toml').then((Map config) {
-    print(config['table']['array'][0]['key']);
-  }).catchError((error) => print(error));
+import 'package:toml/loader/fs.dart';
+
+Future main() async {
+  FilesystemConfigLoader.use();
+  try {
+    var cfg = await loadConfig();
+    print(cfg['table']['array'][0]['key']);
+  } catch (e) {
+    print('ERROR: $e');
+  }
 }

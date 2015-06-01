@@ -5,10 +5,15 @@
 library toml.example.custom;
 
 import 'dart:async';
-import 'package:dart_config/config.dart';
+
 import 'package:toml/loader.dart';
 
 class MyConfigLoader extends ConfigLoader {
+  
+  static void use() {
+    ConfigLoader.use(new MyConfigLoader());
+  }
+
   Map<String, String> _cache = {
     'config.toml': '''
       [table]
@@ -17,15 +22,18 @@ class MyConfigLoader extends ConfigLoader {
     '''
   };
 
-  Future<String> loadConfig(pathOrUrl) {
-    return new Future.value(_cache[pathOrUrl]);
+  @override
+  Future<String> loadConfig(String filename) {
+    return new Future.value(_cache[filename]);
   }
 }
 
-void main() {
-  useCustomConfigLoader(new MyConfigLoader());
-  loadConfig('config.toml').then((Map config) {
-    print(config['table']['array'][0]['key']);
-  }).catchError((error) => print(error));
-  ;
+Future main() async {
+  MyConfigLoader.use();
+  try {
+    var cfg = await loadConfig();
+    print(cfg['table']['array'][0]['key']);
+  } catch (e) {
+    print('ERROR: $e');
+  }
 }

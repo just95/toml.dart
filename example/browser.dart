@@ -4,15 +4,19 @@
 
 library toml.example.browser;
 
+import 'dart:async';
 import 'dart:html';
-import 'package:toml/loader.dart';
 
-void main() {
-  useHttpConfigLoader();
+import 'package:toml/loader/http.dart';
+
+Future main() async {
+  HttpConfigLoader.use();
   var elem = document.getElementById('text');
-  loadConfig('config.toml').then((Map config) {
-    elem.text = config['table']['array'][0]['key'];
-  }).catchError((error) {
-    elem.text = '$error';
-  });
+  try {
+    var cfg = await loadConfig();
+    elem.text = cfg['table']['array'][0]['key'];
+  } catch (e) {
+    elem.style.color = 'red';
+    elem.text = 'ERROR: $e';
+  }
 }
