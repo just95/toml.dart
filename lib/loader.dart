@@ -31,17 +31,29 @@ abstract class ConfigLoader {
 }
 
 /// Configures [loadConfig] to load files via HTTP.
+///
+/// This function is deprecated. You should use [http.HttpConfigLoader.use]
+/// instead.
+@deprecated
 Future useHttpConfigLoader() async {
   ConfigLoader.use(http.loadLibrary().then((_) => new http.HttpConfigLoader()));
 }
 
 /// Configures [loadConfig] to load files from the local file system.
+///
+/// This function is deprecated. You should use
+/// [fs.FilesystemConfigLoader.use] instead.
+@deprecated
 Future useFilesystemConfigLoader() async {
   ConfigLoader.use(fs.loadLibrary().then(
       (_) => new fs.FilesystemConfigLoader()));
 }
 
 /// Configures [loadConfig] to load files using a custom [loader].
+///
+/// This function is deprecated. You should use [ConfigLoader.use] or write
+/// your own static `use` method.
+@deprecated
 void useCustomConfigLoader(ConfigLoader loader) {
   ConfigLoader.use(loader);
 }
