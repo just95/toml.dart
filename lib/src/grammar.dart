@@ -12,7 +12,7 @@ class TomlGrammar extends GrammarDefinition {
 
   /// Specified escape sequences.
   ///
-  /// Additionally any unicode character may be escaped with the `\uXXXX`
+  /// Additionally any Unicode character may be escaped with the `\uXXXX`
   /// and `\UXXXXXXXX` forms.
   static final BiMap<String, int> escTable = new BiMap()..addAll({
     'b': 0x08, // Backspace.
@@ -67,7 +67,7 @@ class TomlGrammar extends GrammarDefinition {
 
   /// Generates a new parser for a string.
   ///
-  /// A string is delimited by a pair of [quotes] and contains any charcters
+  /// A string is delimited by a pair of [quotes] and contains any characters
   /// but [quotes].
   /// [newline]s are only allowed if [multiline] is set to `true`.
   /// Special characters can be expressed using [esc]ape sequences.

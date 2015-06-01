@@ -18,9 +18,9 @@ class TomlParser extends GrammarParser {
 
 /// TOML value parser.
 ///
-/// Similiar to [TomlParser] but only accepts TOML values rather than entire
+/// Similar to [TomlParser] but only accepts TOML values rather than entire
 /// documents.
-/// Indended for test purposes.
+/// Intended for test purposes.
 class TomlValueParser extends GrammarParser {
   TomlValueParser() : super(new TomlValueParserDefinition());
 }

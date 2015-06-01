@@ -8,7 +8,7 @@ import 'parser.dart';
 
 /// TOML value parser definition.
 ///
-/// This is very similiar to [TomlParserDefinition] but the start rule is set
+/// This is very similar to [TomlParserDefinition] but the start rule is set
 /// such that only TOML values are accepted.
 /// This class is intended for testing purposes.
 class TomlValueParserDefinition extends TomlParserDefinition {

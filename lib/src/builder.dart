@@ -10,7 +10,7 @@ import 'grammar.dart';
 /// An object which can be encoded as a TOML value or table.
 abstract class TomlEncodable {
 
-  /// Converts this object to an object which can nativly be represented as
+  /// Converts this object to an object which can natively be represented as
   /// a TOML value or table.
   toToml();
 }
@@ -72,7 +72,7 @@ class TomlDocumentBuilder {
   ///
   /// This method generates a table header automatically if required.
   /// [name] is the qualified name of the [table]. Each item represents one of
-  /// the dot separed parts of the table name.
+  /// the dot separated parts of the table name.
   ///
   /// If [array] is set to `true` [table] is an item of the array of tables
   /// called [name].
@@ -143,7 +143,7 @@ class TomlDocumentBuilder {
 
   /// Applies a [TomlValueEncoder] on [value].
   ///
-  /// Uses [getValueEncoder] to determaine which [TomlValueEncoder] to use on
+  /// Uses [getValueEncoder] to determine which [TomlValueEncoder] to use on
   /// [value].
   /// Throws an [UnknownTypeError] if there is no matching encoder.
   void encodeValue(value) {
@@ -153,7 +153,7 @@ class TomlDocumentBuilder {
     encoder(value);
   }
 
-  /// Selets a [TomlValueEncoder] bases on the runtime type of [value].
+  /// Selects a [TomlValueEncoder] bases on the runtime type of [value].
   ///
   /// Returns `null` if no matching encoder was found.
   TomlValueEncoder getValueEncoder(value) {
@@ -232,7 +232,7 @@ class TomlDocumentBuilder {
     _buf.write(']');
   }
 
-  /// Determains which syntactic variation fits best the requirements of a
+  /// Determines which syntactic variation fits best the requirements of a
   /// string.
   ///
   /// By default the literal string encoder is considered the best choise.

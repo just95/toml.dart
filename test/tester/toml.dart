@@ -9,7 +9,7 @@ import 'package:petitparser/petitparser.dart';
 
 import '../matcher/parser_result.dart';
 
-/// Retruns a function which tests whether [parser] successfully parses its
+/// Returns a function which tests whether [parser] successfully parses its
 /// first argument and the result equals its second argument.
 Function tomlTester(Parser parser) => (String input, output) {
   var res = parser.parse(input);
