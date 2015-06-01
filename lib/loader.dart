@@ -5,71 +5,66 @@
 library toml.loader;
 
 import 'dart:async';
+import 'dart:convert' deferred as convert;
 
-import 'package:dart_config/config.dart';
+import 'package:yaml/yaml.dart' deferred as yaml;
 import 'package:path/path.dart';
 
-// Loaders:
-import 'package:dart_config/loaders/config_loader_httprequest.dart' deferred
-    as http;
-import 'package:dart_config/loaders/config_loader_filesystem.dart' deferred
-    as fs;
+import 'toml.dart';
+import 'loader/http.dart' deferred as http;
+import 'loader/fs.dart' deferred as fs;
 
-// Parsers:
-import 'package:dart_config/parsers/config_parser_json.dart' deferred as json;
-import 'package:dart_config/parsers/config_parser_yaml.dart' deferred as yaml;
+/// Interface for configuration file loaders.
+abstract class ConfigLoader {
 
-import 'config.dart';
+  /// Sets [loader] as the the default instance of this interface.
+  ///
+  /// [loader] must be either an instance or future of [ConfigLoader].
+  /// Throws an exception if the default instance has been set already.
+  static void use(loader) {
+    _defaultInstance.complete(loader);
+  }
+  static final _defaultInstance = new Completer<ConfigLoader>();
 
-Future<ConfigLoader> _loader;
-
-/// Configures [loadConfig] to load files via HTTP.
-void useHttpConfigLoader() {
-  _loader = http.loadLibrary().then((_) => new http.ConfigHttpRequestLoader());
+  /// Loads the specified file and returns a future of its contents.
+  Future<String> loadConfig(String filename);
 }
 
-/// Configures [loadConfig] to load files from the local filesystem.
-void useFilesystemConfigLoader() {
-  _loader = fs.loadLibrary().then((_) => new fs.ConfigFilesystemLoader());
+/// Configures [loadConfig] to load files via HTTP.
+Future useHttpConfigLoader() async {
+  ConfigLoader.use(http.loadLibrary().then((_) => new http.HttpConfigLoader()));
+}
+
+/// Configures [loadConfig] to load files from the local file system.
+Future useFilesystemConfigLoader() async {
+  ConfigLoader.use(fs.loadLibrary().then(
+      (_) => new fs.FilesystemConfigLoader()));
 }
 
 /// Configures [loadConfig] to load files using a custom [loader].
 void useCustomConfigLoader(ConfigLoader loader) {
-  _loader = new Future.value(loader);
+  ConfigLoader.use(loader);
 }
 
-/// Loads [filename] using the configured loader and parses the contents using
-/// the specified [parser].
-///
-/// If no [parser] was specified the document will be parsed as TOML, YAML or
-/// JSON depending on the file extension. By default it is parsed as a
-/// TOML document.
+/// Loads [filename] using the default loader and parses the contents as either
+/// a TOML, YAML or JSON document depending on the file extension.
 ///
 /// Returns a Future of the loaded configuration file.
 /// The Future fails if no loader was set, the file could not be loaded or if
 /// it has any syntax errors.
-Future<Map> loadConfig(
-    [String filename = 'config.toml', ConfigParser parser]) async {
-  if (_loader == null) throw new StateError('No configuration loader set.');
-  var loader = await _loader;
-
-  if (parser == null) {
-    switch (extension(filename)) {
-      case '.json':
-        await json.loadLibrary();
-        parser = new json.JsonConfigParser();
-        break;
-      case '.yaml':
-        await yaml.loadLibrary();
-        parser = new yaml.YamlConfigParser();
-        break;
-      case '.toml':
-      default:
-        parser = new TomlConfigParser();
-        break;
-    }
+Future<Map> loadConfig([String filename = 'config.toml']) async {
+  var loader = await ConfigLoader._defaultInstance.future;
+  var contents = loader.loadConfig(filename);
+  switch (extension(filename)) {
+    case '.json':
+      await convert.loadLibrary();
+      return convert.JSON.decode(await contents);
+    case '.yaml':
+      await yaml.loadLibrary();
+      return yaml.loadYaml(await contents);
+    case '.toml':
+    default:
+      var parser = new TomlParser();
+      return parser.parse(await contents).value;
   }
-
-  var config = new Config(filename, loader, parser);
-  return config.readConfig();
 }
