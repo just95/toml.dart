@@ -2,9 +2,6 @@
 
 This package provides an implementation of a TOML (Tom's Obvious, Minimal 
 Language) parser and encoder for Dart.
-It can be used with the
-[`dart_config`](https://pub.dartlang.org/packages/dart_config)
-library which allows you to dynamically load configuration files.
 
 It currently supports version
 [v0.4.0](https://github.com/toml-lang/toml/blob/master/versions/en/toml-v0.4.0.md) 
@@ -21,34 +18,83 @@ dependencies:
 
 ## Usage
 
-### With dart_config
+> **Note:** I decided to drop support for the 
+> [`dart_config`](https://pub.dartlang.org/packages/dart_config)
+> package because it seems not to be maintained anymore.
 
-If you want to use `dart_config` to load your TOML files add the following 
-import directive to your script:
-```dart
-import 'package:toml/loader.dart';
-```
-In your `main` function call `useHttpConfigLoader` if your code is running in
-the **browser** or `useFilesystemConfigLoader` if your code is running on the
-**server**. If you want to use a **custom** loader pass an instance of
-your `ConfigLoader` implementation to `useCustomConfigLoader`.
+### Load configuration files.
 
-The library defines a `loadConfig` function which takes an optional path to
-the configuration file (defaults to `'config.toml'`) and returns a `Future` of
-the parsed document as an unmodifiable `Map`. 
+Before any configuration file can be parsed the library needs to know how
+to load it. There are two default methods available, but you can easily 
+implement your own loading mechanism as further described below.
+
+If your code is running in the **browser** you probably want to use XHR to 
+fetch the file from the server. To do so import the `toml.loader.http` library and call the static `HttpConfigLoader.use` method, e.g. from your `main`
+function.
 ```dart
-loadConfig().then((Map document) {
+import 'package:toml/loader/http.dart';
+
+void main() {
+  HttpConfigLoader.use();
   // ...
-})
+}
 ```
 
-**Note:** The old `toml.browser` and `toml.server` libraries are still supported 
-for backward compatibility. They are deprecated and will be removed in an 
-upcoming release.
+If your code is running on the **server** you can load configuration files from
+the local file system. Simply import the `toml.loader.fs` library and call the
+static `FilesystemConfigLoader.use` method, e.g. from your `main` function.
+```dart
+import 'package:toml/loader/fs.dart';
 
-### Without dart_config
+void main() {
+  FilesystemConfigLoader.use();
+  // ...
+}
+```
 
-If you don't want to use `dart_config` at all, add:
+For convenience Both libraries export the `loadConfig` function from the 
+`toml.loader` library. It optionally takes the path to the configuration file 
+as its only argument (defaults to `'config.toml'`) and returns a `Future` of 
+the parsed configuration options.
+```dart
+Future main() async {
+  // ...
+  var cfg = await loadConfig();
+  // ...
+}
+```
+
+### Implement a custom loader.
+
+To create a custom loader which fits exactly your needs import the 
+`toml.loader` library, create a new class and implement the `ConfigLoader`
+interface. You can use this code as a starting point:
+```dart
+library my.config.loader;
+
+import 'package:toml/loader.dart';
+export 'package:toml/loader.dart' show loadConfig;
+
+class MyConfigLoader implements ConfigLoader {
+
+  static void use() {
+    ConfigLoader.use(new MyConfigLoader());
+  }
+
+  @override
+  Future<String> loadConfig(String filename) {
+    // ...
+  }
+
+}
+```
+In your `main` function invoke the `MyConfigLoader.use` method and call the 
+`loadConfig` function as usual.
+
+### Parse TOML
+
+If you only want to parse a string of TOML add the following import directive 
+to your script: 
 ```dart
 import 'package:toml/toml.dart';
 ```
@@ -86,8 +132,8 @@ whose return value can be represented by TOML in turn.
 ## Data Structure
 
 TOML **documents** and **tables** as well as **inline tables** are represented 
-through nested `UnmodifiableMapView` objects whose keys are `String`s and values
-`dynamic` read-only representations of the corresponding TOML value or 
+through nested `UnmodifiableMapView` objects whose keys are `String`s and 
+values `dynamic` read-only representations of the corresponding TOML value or 
 sub-table.
 The contents of a table declared by:
 ```toml
@@ -121,16 +167,16 @@ name = 'C'
 ```
 One might iterate over the items of the list:
 ```dart
-document['items'].forEach((Map item) { # ok
+document['items'].forEach((Map item) { // ok
   print(item.name);
 });
 ```
 But it is not allowed to add, remove or modify its entries:
 ```dart
-document['items'].add({ # error
+document['items'].add({ // error
   'name': 'D'
 });
-document['items'][0] = { # error
+document['items'][0] = { // error
   'name': 'E'
 };
 ```
