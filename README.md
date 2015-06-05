@@ -13,7 +13,7 @@ To get started add `toml` as a dependency to your `pubspec.yaml` and run the
 `pub get` command.
 ```yaml
 dependencies:
-  toml: "^0.3.0"
+  toml: "^0.4.0"
 ```
 
 ## Usage
