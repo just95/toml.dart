@@ -5,7 +5,7 @@
 library toml.test.config_test;
 
 import 'package:toml/loader/fs.dart';
-import 'package:unittest/unittest.dart';
+import 'package:test/test.dart';
 
 import 'tester/config.dart';
 

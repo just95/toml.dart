@@ -4,7 +4,7 @@
 
 library toml.test.document_test;
 
-import 'package:unittest/unittest.dart';
+import 'package:test/test.dart';
 import 'package:toml/toml.dart';
 
 import 'tester/document.dart';
@@ -40,7 +40,7 @@ main() {
         '''
           [a.b]
           c = 1
-          
+
           [a]
           d = 2
         ''': {'a': {'b': {'c': 1}, 'd': 2}}
@@ -50,33 +50,33 @@ main() {
       var errors = {
         '''
           # DO NOT DO THIS
-          
+
           [a]
           b = 1
-          
+
           [a]
           c = 2
         ''': new RedefinitionError('a'),
         '''
           # DO NOT DO THIS EITHER
-          
+
           [a]
           b = 1
-          
+
           [a.b]
           c = 2
         ''': new RedefinitionError('a.b'),
         '''
           [a]
           b = 1
-          
+
           [a.b.c]
           d = 2
         ''': new NotATableError('a.b'),
         '''
           [a.b.c]
           d = 1
-      
+
           [a]
           b = 2
         ''': new RedefinitionError('a.b')
@@ -93,9 +93,9 @@ main() {
           [[products]]
           name = "Hammer"
           sku = 738594937
-          
+
           [[products]]
-          
+
           [[products]]
           name = "Nail"
           sku = 284758393
@@ -110,20 +110,20 @@ main() {
         '''
           [[fruit]]
             name = "apple"
-          
+
             [fruit.physical]
               color = "red"
               shape = "round"
-          
+
             [[fruit.variety]]
               name = "red delicious"
-          
+
             [[fruit.variety]]
               name = "granny smith"
-          
+
           [[fruit]]
             name = "banana"
-          
+
             [[fruit.variety]]
               name = "plantain"
         ''': {
@@ -144,10 +144,10 @@ main() {
           # INVALID TOML DOC
           [[fruit]]
             name = "apple"
-          
+
             [[fruit.variety]]
               name = "red delicious"
-          
+
             # This table conflicts with the previous table
             [fruit.variety]
              name = "granny smith"
@@ -156,10 +156,10 @@ main() {
           # INVALID TOML DOC
           [[fruit]]
             name = "apple"
-          
+
             [fruit.variety]
              name = "granny smith"
-          
+
             # This table conflicts with the previous table
             [[fruit.variety]]
               name = "red delicious"
@@ -197,31 +197,31 @@ main() {
           # This is a TOML document. Boom.
 
           title = "TOML Example"
-          
+
           [owner]
           name = "Lance Uppercut"
           dob = 1979-05-27T07:32:00-08:00 # First class dates? Why not?
-          
+
           [database]
           server = "192.168.1.1"
           ports = [ 8001, 8001, 8002 ]
           connection_max = 5000
           enabled = true
-          
+
           [servers]
-          
+
             # You can indent as you please. Tabs or spaces. TOML don't care.
             [servers.alpha]
             ip = "10.0.0.1"
             dc = "eqdc10"
-          
+
             [servers.beta]
             ip = "10.0.0.2"
             dc = "eqdc10"
-          
+
           [clients]
           data = [ ["gamma", "delta"], [1, 2] ]
-          
+
           # Line breaks are OK when inside arrays
           hosts = [
             "alpha",

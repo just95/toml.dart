@@ -4,7 +4,7 @@
 
 library toml.test.tester.toml;
 
-import 'package:unittest/unittest.dart';
+import 'package:test/test.dart';
 import 'package:petitparser/petitparser.dart';
 
 import '../matcher/parser_result.dart';

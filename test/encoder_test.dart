@@ -4,7 +4,7 @@
 
 library toml.test.encoder_test;
 
-import 'package:unittest/unittest.dart';
+import 'package:test/test.dart';
 
 import 'tester/encoder.dart';
 
@@ -54,7 +54,7 @@ main() {
       var errors = [
         // Mixed array.
         {'a': [1, 'two']},
-        
+
         // Only allowed in JavaScript.
         {'a': [1, 2.0, 3.141]}
       ];

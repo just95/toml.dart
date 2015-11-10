@@ -4,7 +4,7 @@
 
 library toml.test.js_encoder;
 
-import 'package:unittest/unittest.dart';
+import 'package:test/test.dart';
 
 import '../tester/encoder.dart';
 

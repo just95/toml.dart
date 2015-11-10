@@ -6,7 +6,7 @@ library toml.test.tester.config;
 
 import 'dart:async';
 
-import 'package:unittest/unittest.dart';
+import 'package:test/test.dart';
 import 'package:toml/loader.dart';
 
 /// Tests a TOML and a YAML table for deep equality.
@@ -39,7 +39,7 @@ void _cmp(tomlValue, yamlValue) {
 }
 
 /**
- * Uses `dart_config` to load the configuration files located at 
+ * Uses `dart_config` to load the configuration files located at
  * `toml/test/config/[name].{toml,yaml}`.
  * Tests the results for deep equality.
  */

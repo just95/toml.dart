@@ -4,7 +4,7 @@
 
 library toml.test.matcher.parser_result;
 
-import 'package:unittest/unittest.dart';
+import 'package:test/test.dart';
 import 'package:petitparser/petitparser.dart';
 
 /// A matcher which tests whether a parser completes successfully or not.

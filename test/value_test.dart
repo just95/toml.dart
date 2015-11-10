@@ -4,7 +4,7 @@
 
 library toml.test.value_test;
 
-import 'package:unittest/unittest.dart';
+import 'package:test/test.dart';
 import 'package:toml/toml.dart';
 
 import 'tester/value.dart';
