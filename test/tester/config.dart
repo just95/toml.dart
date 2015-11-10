@@ -47,8 +47,8 @@ void _cmp(tomlValue, yamlValue) {
 /// `toml/test/config/[name].toml` and `toml/test/config/[name].yaml`.
 /// Tests the results for deep equality.
 void configTester(String name) {
-  var future = Future
-      .wait([loadConfig('config/$name.toml'), loadConfig('config/$name.yaml')]);
+  var future = Future.wait([
+      loadConfig('test/config/$name.toml'), loadConfig('test/config/$name.yaml')]);
   future.then(expectAsync((res) {
     _cmpMaps(res[0], res[1]);
   }));
