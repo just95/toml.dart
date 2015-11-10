@@ -2,6 +2,7 @@
 // This software may be modified and distributed under the terms
 // of the MIT license. See the LICENSE file for details.
 
+@TestOn("vm")
 library toml.test.config_test;
 
 import 'package:toml/loader/fs.dart';
