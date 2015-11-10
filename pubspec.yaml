@@ -11,5 +11,4 @@ dependencies:
   quiver: '^0.21.0'
   yaml: '^2.1.2'
 dev_dependencies:
-  browser: any
   test: any
