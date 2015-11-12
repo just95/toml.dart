@@ -10,12 +10,13 @@ import 'toml.dart';
 
 var _parser = new TomlValueParser();
 
-/// A function which tests whether [TomlValueParser] successfully parses its
-/// first argument and the the result equals its second argument.
-final valueTester = tomlTester(_parser);
+/// Tests whether [TomlValueParser] successfully parses the [input] string
+/// and produces the specified [output].
+void testValue(String desciption, {String input, output}) =>
+    testToml(desciption, parser: _parser, input: input, output: output);
 
-/// Tests whether [TomlValueParser] fails to parse the first argument.
+/// Tests whether [TomlValueParser] fails to parse [input].
 ///
-/// An optional second argument specifies the exception which is expected to be
-/// thrown.
-final valueErrorTester = tomlErrorTester(_parser);
+/// Optionally tests whether a specific [error] is thrown.
+void testValueFailure(String desciption, {String input, error}) =>
+    testTomlFailure(desciption, parser: _parser, input: input, error: error);

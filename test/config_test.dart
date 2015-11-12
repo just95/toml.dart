@@ -14,10 +14,10 @@ void main() {
   FilesystemConfigLoader.use();
   group('config test:', () {
     test('Example', () {
-      configTester('example');
+      testConfig('example');
     });
     test('Hard Example', () {
-      configTester('hard_example');
+      testConfig('hard_example');
     });
   });
 }

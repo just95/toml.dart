@@ -9,24 +9,26 @@ import 'package:petitparser/petitparser.dart';
 
 import '../matcher/parser_result.dart';
 
-/// Returns a function which tests whether [parser] successfully parses its
-/// first argument and the result equals its second argument.
-Function tomlTester(Parser parser) => (String input, output) {
-  var res = parser.parse(input);
-  expect(res, isSuccess);
-  expect(res.value, equals(output));
-};
-
-/// Returns a function which tests whether [parser] fails to parse its first
-/// argument.
-///
-/// Optionally tests whether a specific error is thrown by passing a second
-/// argument to the returned function.
-Function tomlErrorTester(Parser parser) => (String input, [err]) {
-  if (err == null) {
+/// Tests whether the [parser] successfully parses the [input] and produces
+/// the specified [output].
+void testToml(String desciption, {Parser parser, String input, output}) {
+  test(desciption, () {
     var res = parser.parse(input);
-    expect(res, isFailure);
-  } else {
-    expect(() => parser.parse(input), throwsA(err));
-  }
-};
+    expect(res, isSuccess);
+    expect(res.value, equals(output));
+  });
+}
+
+/// Tests whether [parser] fails to parse the [input].
+///
+/// Optionally tests whether a specific [error] is thrown.
+void testTomlFailure(String desciption, {Parser parser, String input, error}) {
+  test(desciption, () {
+    if (error == null) {
+      var res = parser.parse(input);
+      expect(res, isFailure);
+    } else {
+      expect(() => parser.parse(input), throwsA(error));
+    }
+  });
+}

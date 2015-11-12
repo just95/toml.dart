@@ -8,78 +8,139 @@ import 'package:test/test.dart';
 
 import 'tester/encoder.dart';
 
-main() {
-  group('encoder test:', () {
-    test('Strings', () {
-      var cases = {
-        // Literal strings.
-        "s = 'Hello World!'": {'s': 'Hello World!'},
-        "s = 'Double \"Quotes\"!'": {'s': 'Double "Quotes"!'},
-        r"s = 'C:\Windows\System32'": {'s': r'C:\Windows\System32'},
-
-        // Basic strings.
-        's = "Single \'Quotes\'!"': {'s': "Single 'Quotes'!"},
-        r's = "col 1\tcol 2"': {'s': 'col 1\tcol 2'},
-
-        // Multi-line literal strings.
-        "s = '''\nline 1\nline 2'''": {'s': 'line 1\nline 2'},
-        's = """\nline 1.1\\tline 1.2\n'
-            'line 2.1\\tline 2.2"""': {
-          's': 'line 1.1\tline 1.2\n'
-              'line 2.1\tline 2.2'
-        }
-      };
-      cases.forEach(encoderTester);
+void main() {
+  group('Encoder', () {
+    group('Strings', () {
+      group('Literal', () {
+        testEncoder(
+          'strings are encoded as literal strings by default',
+          input: {'s': 'Hello World!'},
+          output: "s = 'Hello World!'");
+        testEncoder(
+          'double quotes are not escaped',
+          input: {'s': 'Double "Quotes"!'},
+          output: "s = 'Double \"Quotes\"!'");
+        testEncoder(
+          'backshlashes are not escaped',
+          input: {'s': r'C:\Windows\System32'},
+          output: r"s = 'C:\Windows\System32'");
+        testEncoder(
+          'if there are any newline characters a multi-line string is created',
+          input: {'s': 'line 1\nline 2'},
+          output: "s = '''\nline 1\nline 2'''");
+      });
+      group('Basic', () {
+        testEncoder(
+          'strings which contain single quotes are encoded as basic strings',
+          input: {'s': "Single 'Quotes'!"},
+          output: 's = "Single \'Quotes\'!"');
+        testEncoder(
+          'tab character is escaped',
+          input: {'s': 'col 1\tcol 2'},
+          output: r's = "col 1\tcol 2"');
+        testEncoder(
+          'if there are any newline characters a multi-line string is created',
+          input:
+              {'s': 'line 1.1\tline 1.2\n'
+                    'line 2.1\tline 2.2'},
+          output:
+              's = """\nline 1.1\\tline 1.2\n'
+              'line 2.1\\tline 2.2"""');
+      });
     });
-    test('Values', () {
-      var cases = {
-        'v = 1': {'v': 1},
-        'v = 3.0': {'v': 3.0},
-        'v = 3.141': {'v': 3.141},
-        'v = true': {'v': true},
-        'v = false': {'v': false}
-      };
-      cases.forEach(encoderTester);
-    });
-    test('Arrays', () {
-      var cases = {
-        "a = ['x', 'y', 'z']": {'a': ['x', 'y', 'z']},
-        'a = [1, 2, 3]': {'a': [1, 2, 3]},
-        'a = [1.0, 2.0, 3.0]': {'a': [1.0, 2.0, 3.0]},
-        'a = [true, false]': {'a': [true, false]},
-        'a = [[1, 2], [1.0, 2.0]]': {'a': [[1, 2], [1.0, 2.0]]}
-      };
-      cases.forEach(encoderTester);
 
-      var errors = [
-        // Mixed array.
-        {'a': [1, 'two']},
-
-        // Only allowed in JavaScript.
-        {'a': [1, 2.0, 3.141]}
-      ];
-      errors.forEach(encoderErrorTester);
+    group('Integers', () {
+      testEncoder(
+        'positive',
+        input: {'n': 1},
+        output: 'n = 1');
+      testEncoder(
+        'negative',
+        input: {'n': -1},
+        output: 'n = -1');
     });
-    test('Tables', () {
-      var cases = {
-        '': {'A': {}},
-        '[A]\n'
-            'a = 1': {'A': {'a': 1}},
-        '[A]\n'
+    group('Floats', () {
+      testEncoder(
+        'with decimal places',
+        input: {'pi': 3.141},
+        output: 'pi = 3.141');
+      testEncoder(
+        'without decimal places',
+        input: {'x': 3.0},
+        output: 'x = 3.0');
+    });
+
+    group('Booleans', () {
+      testEncoder(
+        'true',
+        input: {'b': true},
+        output: 'b = true');
+      testEncoder(
+        'false',
+        input: {'b': false},
+        output: 'b = false');
+    });
+
+    group('Arrays', () {
+      testEncoder(
+        'array of strings',
+        input: {'a': ['x', 'y', 'z']},
+        output: "a = ['x', 'y', 'z']");
+      testEncoder(
+        'array of integers',
+        input: {'a': [1, 2, 3]},
+        output: 'a = [1, 2, 3]');
+      testEncoder(
+        'array of floats',
+        input: {'a': [1.0, 2.0, 3.0]},
+        output: 'a = [1.0, 2.0, 3.0]');
+      testEncoder(
+        'array of booleans',
+        input: {'a': [true, false]},
+        output: 'a = [true, false]');
+      testEncoder(
+        'array of arrays',
+        input: {'a': [[1, 2], [1.0, 2.0]]},
+        output: 'a = [[1, 2], [1.0, 2.0]]');
+      testEncoderFailure(
+        'mixed arrays are not allowed',
+        input: {'a': [[1, 'two']]});
+    });
+    
+    group('Tables', () {
+      testEncoder(
+        'empty table',
+        input: {'A': {}},
+        output: '');
+      testEncoder(
+        'non-empty table',
+        input: {'A': {'a': 1, 'b': 2}},
+        output:
+            '[A]\n'
             'a = 1\n'
-            'b = 2': {'A': {'a': 1, 'b': 2}},
-        '[A]\n'
+            'b = 2');
+      testEncoder(
+        'multiple tables',
+        input: {'A': {'a': 1, 'b': 2}, 'B': {'c': 3}},
+        output:
+            '[A]\n'
             'a = 1\n'
             'b = 2\n'
             '\n'
             '[B]\n'
-            'c = 3': {'A': {'a': 1, 'b': 2}, 'B': {'c': 3}},
-        '[A.B]\n'
-            'a = 1': {'A': {'B': {'a': 1}}},
-        '["A.B".C]\n'
-            '"ä" = 1': {'A.B': {'C': {'ä': 1}}}
-      };
-      cases.forEach(encoderTester);
+            'c = 3');
+      testEncoder(
+        'subtables',
+        input: {'A': {'B': {'a': 1}}},
+        output:
+            '[A.B]\n'
+            'a = 1');
+      testEncoder(
+        'quoted keys',
+        input: {'A.B': {'C': {'ä': 1}}},
+        output:
+            '["A.B".C]\n'
+            '"ä" = 1');
     });
   });
 }

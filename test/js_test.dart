@@ -7,10 +7,33 @@ library toml.test.js_test;
 
 import 'package:test/test.dart';
 
-import 'js/encoder_test.dart' as encoder_test;
+import 'tester/encoder.dart';
 
 void main() {
   group('JavaScript', () {
-    encoder_test.main();
+    group('Encoder', () {
+      test('Numeric Arrays', () {
+        testEncoder(
+          'integers',
+          input: {'a': [1, 2, 3]},
+          output: 'a = [1, 2, 3]');
+        testEncoder(
+          'floats without decimal places',
+          input: {'a': [1.0, 2.0, 3.0]},
+          output: 'a = [1, 2, 3]');
+        testEncoder(
+          'floats with decimal places',
+          input: {'a': [1.4, 2.5, 3.6]},
+          output: 'a = [1.4, 2.5, 3.6]');
+        testEncoder(
+          'mixed integers and floats without decimal places',
+          input: {'a': [1, 2.0, 3]},
+          output: 'a = [1, 2, 3]');
+        testEncoder(
+          'mixed integers and floats with decimal places',
+          input: {'a': [1, 2.0, 3.141]},
+          output: 'a = [1.0, 2.0, 3.141]');
+      });
+    });
   });
 }

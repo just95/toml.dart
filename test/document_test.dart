@@ -9,46 +9,57 @@ import 'package:toml/toml.dart';
 
 import 'tester/document.dart';
 
-main() {
-  group('document test:', () {
-    test('Tables', () {
-      var cases = {
-        '''
-          [table]
-        ''': {'table': {}},
-        '''
-          [dog."tater.man"]
-          type = "pug"
-        ''': {'dog': {'tater.man': {'type': 'pug'}}},
-        '''
-          [a.b.c]          # this is best practice
-          [ d.e.f ]        # same as [d.e.f]
-          [ g .  h  . i ]  # same as [g.h.i]
-          [ j . "ʞ" . l ]  # same as [j."ʞ".l]
-        ''': {
-          'a': {'b': {'c': {}}},
-          'd': {'e': {'f': {}}},
-          'g': {'h': {'i': {}}},
-          'j': {'ʞ': {'l': {}}}
-        },
-        '''
+void main() {
+  group('Document', () {
+    group('Tables', () {
+      testDocument(
+        'empty table',
+        input: '[table]',
+        output: {'table': {}});
+      testDocument(
+        'quoted keys',
+        input:
+            '[dog."tater.man"]\n'
+            'type = "pug"',
+        output: {'dog': {'tater.man': {'type': 'pug'}}});
+      testDocument(
+        'unquoted keys',
+        input: '[a.b.c]',
+        output: {'a': {'b': {'c': {}}}});
+      testDocument(
+        'whitespace after opening and before closing brackets',
+        input: '[ d.e.f ]',
+        output: {'d': {'e': {'f': {}}}});
+      testDocument(
+        'whitespace around keys',
+        input: '[ g .  h  . i ]',
+        output: {'g': {'h': {'i': {}}}});
+      testDocument(
+        'non latin letters in table names',
+        input: '[ j . "ʞ" . l ]',
+        output: {'j': {'ʞ': {'l': {}}}});
+      testDocument(
+        'empty super-tables are not required',
+        input: '''
           # [x] you
           # [x.y] don't
           # [x.y.z] need these
           [x.y.z.w] # for this to work
-        ''': {'x': {'y': {'z': {'w': {}}}}},
-        '''
+        ''',
+        output: {'x': {'y': {'z': {'w': {}}}}});
+      testDocument(
+        'super-tables do not need to preceed their children',
+        input: '''
           [a.b]
           c = 1
 
           [a]
           d = 2
-        ''': {'a': {'b': {'c': 1}, 'd': 2}}
-      };
-      cases.forEach(documentTester);
-
-      var errors = {
-        '''
+        ''',
+        output: {'a': {'b': {'c': 1}, 'd': 2}});
+      testDocumentFailure(
+        'tables cannot be defined more than once',
+        input: '''
           # DO NOT DO THIS
 
           [a]
@@ -56,8 +67,11 @@ main() {
 
           [a]
           c = 2
-        ''': new RedefinitionError('a'),
-        '''
+        ''',
+        error: new RedefinitionError('a'));
+      testDocumentFailure(
+        'tables cannot overwrite keys',
+        input: '''
           # DO NOT DO THIS EITHER
 
           [a]
@@ -65,31 +79,52 @@ main() {
 
           [a.b]
           c = 2
-        ''': new RedefinitionError('a.b'),
-        '''
+        ''',
+        error: new RedefinitionError('a.b'));
+      testDocumentFailure(
+        'parent of table must be table',
+        input: '''
           [a]
           b = 1
 
           [a.b.c]
           d = 2
-        ''': new NotATableError('a.b'),
-        '''
+        ''',
+        error: new NotATableError('a.b'));
+      testDocumentFailure(
+        'an implicitly created super-table cannot be overwritten',
+        input: '''
           [a.b.c]
           d = 1
 
           [a]
           b = 2
-        ''': new RedefinitionError('a.b')
-      };
-      errors.forEach(documentErrorTester);
-
-      errors = ['[]', '[a.]', '[a..b]', '[.b]', '[.]', '= "no key name"'];
-      errors.forEach(documentErrorTester);
+        ''',
+        error: new RedefinitionError('a.b'));
+      testDocumentFailure(
+        'table name must not be empty',
+        input: '[]');
+      testDocumentFailure(
+        'table name must not end with a dot',
+        input: '[a.]');
+      testDocumentFailure(
+        'table name must not contain empty parts',
+        input: '[a..b]');
+      testDocumentFailure(
+        'table name must not start with a dot',
+        input: '[.b]');
+      testDocumentFailure(
+        'table name must not be a dot',
+        input: '[.]');
+      testDocumentFailure(
+        'key must not be empty',
+        input: '= "no key name"');
     });
 
-    test('Array of Tables', () {
-      var cases = {
-        '''
+    group('Array of Tables', () {
+      testDocument(
+        'empty table',
+        input: '''
           [[products]]
           name = "Hammer"
           sku = 738594937
@@ -100,14 +135,17 @@ main() {
           name = "Nail"
           sku = 284758393
           color = "gray"
-        ''': {
+        ''',
+        output: {
           'products': [
             {'name': 'Hammer', 'sku': 738594937},
             {},
             {'name': 'Nail', 'sku': 284758393, 'color': 'gray'}
           ]
-        },
-        '''
+        });
+      testDocument(
+        'sub-tables',
+        input: '''
           [[fruit]]
             name = "apple"
 
@@ -126,21 +164,18 @@ main() {
 
             [[fruit.variety]]
               name = "plantain"
-        ''': {
-          'fruit': [
-            {
-              'name': 'apple',
-              'physical': {'color': 'red', 'shape': 'round'},
-              'variety': [{'name': 'red delicious'}, {'name': 'granny smith'}]
-            },
-            {'name': 'banana', 'variety': [{'name': 'plantain'}]}
-          ]
-        }
-      };
-      cases.forEach(documentTester);
-
-      var errors = {
-        '''
+        ''',
+        output: {'fruit': [
+          {
+            'name': 'apple',
+            'physical': {'color': 'red', 'shape': 'round'},
+            'variety': [{'name': 'red delicious'}, {'name': 'granny smith'}]
+          },
+          {'name': 'banana', 'variety': [{'name': 'plantain'}]}
+        ]});
+      testDocumentFailure(
+        'table cannot overwrite array of tables',
+        input: '''
           # INVALID TOML DOC
           [[fruit]]
             name = "apple"
@@ -151,8 +186,11 @@ main() {
             # This table conflicts with the previous table
             [fruit.variety]
              name = "granny smith"
-        ''': new RedefinitionError('fruit[0].variety'),
-        '''
+        ''',
+        error: new RedefinitionError('fruit[0].variety'));
+      testDocumentFailure(
+        'array of tables cannot overwrite table',
+        input: '''
           # INVALID TOML DOC
           [[fruit]]
             name = "apple"
@@ -163,94 +201,50 @@ main() {
             # This table conflicts with the previous table
             [[fruit.variety]]
               name = "red delicious"
-        ''': new RedefinitionError('fruit[0].variety')
-      };
-      errors.forEach(documentErrorTester);
+        ''',
+        error: new RedefinitionError('fruit[0].variety'));
     });
 
-    test('Inline Tables', () {
-      var cases = {
-        '''
+    group('Inline Tables', () {
+      testDocument(
+        'whitespace around key/value pairs',
+        input: '''
           name = { first = "Tom", last = "Preston-Werner" }
-          point = { x = 1, y = 2 }
-          address = { proto = "http", ip = "10.0.0.1", port = 8080 }
+        ''',
+        output: {
+          'name': {'first': 'Tom', 'last': 'Preston-Werner'}
+        });
+      testDocument(
+        'no whitespace around key/value pairs',
+        input: '''
+          point = {x=1,y=2}
+        ''',
+        output: {
+          'point': {'x': 1, 'y': 2}
+        });
+      testDocument(
+        'newlines are allowed in values',
+        input: '''
           points = [ { x = 1, y = 2, z = 3 },
                      { x = 7, y = 8, z = 9 },
                      { x = 2, y = 4, z = 8 } ]
-        ''': {
-          'name': {'first': 'Tom', 'last': 'Preston-Werner'},
-          'point': {'x': 1, 'y': 2},
-          'address': {'proto': 'http', 'ip': '10.0.0.1', 'port': 8080},
+        ''',
+        output: {
           'points': [
             {'x': 1, 'y': 2, 'z': 3},
             {'x': 7, 'y': 8, 'z': 9},
             {'x': 2, 'y': 4, 'z': 8}
           ]
-        }
-      };
-      cases.forEach(documentTester);
-    });
-
-    test('Example', () {
-      var examples = {
-        '''
-          # This is a TOML document. Boom.
-
-          title = "TOML Example"
-
-          [owner]
-          name = "Lance Uppercut"
-          dob = 1979-05-27T07:32:00-08:00 # First class dates? Why not?
-
-          [database]
-          server = "192.168.1.1"
-          ports = [ 8001, 8001, 8002 ]
-          connection_max = 5000
-          enabled = true
-
-          [servers]
-
-            # You can indent as you please. Tabs or spaces. TOML don't care.
-            [servers.alpha]
-            ip = "10.0.0.1"
-            dc = "eqdc10"
-
-            [servers.beta]
-            ip = "10.0.0.2"
-            dc = "eqdc10"
-
-          [clients]
-          data = [ ["gamma", "delta"], [1, 2] ]
-
-          # Line breaks are OK when inside arrays
-          hosts = [
-            "alpha",
-            "omega"
-          ]
-        ''': {
-          'title': 'TOML Example',
-          'owner': {
-            'name': 'Lance Uppercut',
-            'dob':
-                new DateTime.utc(1979, 5, 27, 7, 32).add(new Duration(hours: 8))
-          },
-          'database': {
-            'server': '192.168.1.1',
-            'ports': [8001, 8001, 8002],
-            'connection_max': 5000,
-            'enabled': true
-          },
-          'servers': {
-            'alpha': {'ip': '10.0.0.1', 'dc': 'eqdc10'},
-            'beta': {'ip': '10.0.0.2', 'dc': 'eqdc10'}
-          },
-          'clients': {
-            'data': [['gamma', 'delta'], [1, 2]],
-            'hosts': ['alpha', 'omega']
+        });
+      testDocumentFailure(
+        'newlines are not allowed in the table',
+        input: '''
+          address = {
+            proto = "http",
+            ip = "10.0.0.1",
+            port = 8080
           }
-        }
-      };
-      examples.forEach(documentTester);
+        ''');
     });
   });
 }

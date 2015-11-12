@@ -9,27 +9,27 @@ import 'dart:async';
 import 'package:test/test.dart';
 import 'package:toml/loader.dart';
 
-/// Tests a TOML and a YAML table for deep equality.
-void _cmpMaps(Map toml, Map yaml) {
+/// Tests a [toml] and a [yaml] table for deep equality.
+void _cmpMaps({Map toml, Map yaml}) {
   toml.forEach((key, tomlValue) {
     var yamlValue = yaml[key];
-    _cmp(tomlValue, yamlValue);
+    _cmp(tomlValue: tomlValue, yamlValue: yamlValue);
   });
 }
 
-/// Tests a TOML and a YAML value for deep equality.
+/// Tests a [tomlValue] and a [yamlValue] value for deep equality.
 ///
-/// Because YAML does not support datetimes, YAML values will be parsed using
-/// [DateTime.parse] if TOML is a [DateTime] such that both can be compared.
-void _cmp(tomlValue, yamlValue) {
+/// Because YAML does not support datetimes, YAML values will be parsed
+/// first if the [tomlValue] is a `DateTime` object.
+void _cmp({tomlValue, yamlValue}) {
   if (tomlValue is Map) {
     expect(yamlValue, new isInstanceOf<Map>());
-    _cmpMaps(tomlValue, yamlValue);
+    _cmpMaps(toml: tomlValue, yaml: yamlValue);
   } else if (tomlValue is Iterable) {
     expect(yamlValue, new isInstanceOf<Iterable>());
     expect(tomlValue.length, equals(yamlValue.length));
     for (int i = 0; i < tomlValue.length; i++) {
-      _cmp(tomlValue[i], yamlValue[i]);
+      _cmp(tomlValue: tomlValue[i], yamlValue: yamlValue[i]);
     }
   } else if (tomlValue is DateTime) {
     expect(tomlValue, equals(DateTime.parse(yamlValue)));
@@ -38,19 +38,13 @@ void _cmp(tomlValue, yamlValue) {
   }
 }
 
-/**
- * Uses `dart_config` to load the configuration files located at
- * `toml/test/config/[name].{toml,yaml}`.
- * Tests the results for deep equality.
- */
-/// Uses `dart_config` to load the configuration files located at
-/// `toml/test/config/[name].toml` and `toml/test/config/[name].yaml`.
-/// Tests the results for deep equality.
-void configTester(String name) {
+/// Loads the TOML and YAML files with the specified [name] located in
+/// the `test/config` directory and compares the resulting hash maps.
+void testConfig(String name) {
   var future = Future.wait([
       loadConfig('test/config/$name.toml'), loadConfig('test/config/$name.yaml')]);
   future.then(expectAsync((res) {
-    _cmpMaps(res[0], res[1]);
+    _cmpMaps(toml: res[0], yaml: res[1]);
   }));
   expect(future, completes);
 }
