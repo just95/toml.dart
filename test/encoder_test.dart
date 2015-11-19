@@ -106,12 +106,12 @@ void main() {
         'mixed arrays are not allowed',
         input: {'a': [[1, 'two']]});
     });
-    
+
     group('Tables', () {
       testEncoder(
         'empty table',
         input: {'A': {}},
-        output: '');
+        output: '[A]');
       testEncoder(
         'non-empty table',
         input: {'A': {'a': 1, 'b': 2}},

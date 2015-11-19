@@ -99,7 +99,7 @@ class TomlDocumentBuilder {
     });
 
     // Encode key/value pairs.
-    if (array || pairs.isNotEmpty) {
+    if (array || pairs.isNotEmpty || table.isEmpty) {
       insertHeader(name, array: array);
       pairs.forEach(insertKeyValuePair);
     }
