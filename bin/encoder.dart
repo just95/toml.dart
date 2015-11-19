@@ -54,5 +54,5 @@ Future main() async {
 
   var json = await loadConfig('config.json');
   var encoder = new TomlEncoder();
-  print(encoder.encode(decodeTable(json)));
+  print(encoder.encode(decodeTable(json)).replaceAll('.000', ''));
 }

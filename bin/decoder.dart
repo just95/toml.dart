@@ -52,7 +52,7 @@ dynamic encodeValue(value) {
   var str = value.toString();
   if (value is DateTime) {
     // In TOML date and time are separated by `T` rather than a space.
-    str = str.replaceFirst(' ', 'T');
+    str = str.replaceFirst(' ', 'T').replaceFirst('.000', '');
   }
   return {'type': getValueType(value), 'value': str};
 }
