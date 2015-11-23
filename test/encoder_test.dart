@@ -60,14 +60,11 @@ void main() {
         output: 'n = -1');
     });
     group('Floats', () {
+      // See also platform specific encoder tests.
       testEncoder(
         'with decimal places',
         input: {'pi': 3.141},
         output: 'pi = 3.141');
-      testEncoder(
-        'without decimal places',
-        input: {'x': 3.0},
-        output: 'x = 3.0');
     });
 
     group('Booleans', () {
@@ -82,26 +79,19 @@ void main() {
     });
 
     group('Arrays', () {
+      // See also platform specific encoder tests.
       testEncoder(
         'array of strings',
         input: {'a': ['x', 'y', 'z']},
         output: "a = ['x', 'y', 'z']");
-      testEncoder(
-        'array of integers',
-        input: {'a': [1, 2, 3]},
-        output: 'a = [1, 2, 3]');
-      testEncoder(
-        'array of floats',
-        input: {'a': [1.0, 2.0, 3.0]},
-        output: 'a = [1.0, 2.0, 3.0]');
       testEncoder(
         'array of booleans',
         input: {'a': [true, false]},
         output: 'a = [true, false]');
       testEncoder(
         'array of arrays',
-        input: {'a': [[1, 2], [1.0, 2.0]]},
-        output: 'a = [[1, 2], [1.0, 2.0]]');
+        input: {'a': [[1, 2], ['a', 'b']]},
+        output: "a = [[1, 2], ['a', 'b']]");
       testEncoderFailure(
         'mixed arrays are not allowed',
         input: {'a': [[1, 'two']]});
