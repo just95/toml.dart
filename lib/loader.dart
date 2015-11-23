@@ -11,8 +11,6 @@ import 'package:yaml/yaml.dart' deferred as yaml;
 import 'package:path/path.dart';
 
 import 'toml.dart';
-import 'loader/http.dart' deferred as http;
-import 'loader/fs.dart' deferred as fs;
 
 /// Interface for configuration file loaders.
 abstract class ConfigLoader {
@@ -28,34 +26,6 @@ abstract class ConfigLoader {
 
   /// Loads the specified file and returns a future of its contents.
   Future<String> loadConfig(String filename);
-}
-
-/// Configures [loadConfig] to load files via HTTP.
-///
-/// This function is deprecated. You should use [http.HttpConfigLoader.use]
-/// instead.
-@deprecated
-Future useHttpConfigLoader() async {
-  ConfigLoader.use(http.loadLibrary().then((_) => new http.HttpConfigLoader()));
-}
-
-/// Configures [loadConfig] to load files from the local file system.
-///
-/// This function is deprecated. You should use
-/// [fs.FilesystemConfigLoader.use] instead.
-@deprecated
-Future useFilesystemConfigLoader() async {
-  ConfigLoader.use(fs.loadLibrary().then(
-      (_) => new fs.FilesystemConfigLoader()));
-}
-
-/// Configures [loadConfig] to load files using a custom [loader].
-///
-/// This function is deprecated. You should use [ConfigLoader.use] or write
-/// your own static `use` method.
-@deprecated
-void useCustomConfigLoader(ConfigLoader loader) {
-  ConfigLoader.use(loader);
 }
 
 /// Loads [filename] using the default loader and parses the contents as either
