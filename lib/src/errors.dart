@@ -8,7 +8,9 @@ library toml.src.errors;
 /// sequence.
 ///
 /// Example:
+///
 ///     dir = "some\windows\path"
+///
 /// throws an [InvalidEscapeSequenceError] with `[escapeSequence] = r'\w'`.
 class InvalidEscapeSequenceError {
 
@@ -32,7 +34,7 @@ class InvalidEscapeSequenceError {
 /// string which cannot be represented by TOML.
 class InvalidStringError {
 
-  /// A messga which describes the error.
+  /// A message which describes the error.
   final String msg;
 
   InvalidStringError(this.msg);
@@ -69,11 +71,13 @@ class RedefinitionError {
 /// a table.
 ///
 /// Example:
+///
 ///     [a]
 ///     b = 1
 ///
 ///     [a.b.c]
 ///     d = 2
+///
 /// throws a [NotATableError] because `a.b.c` fails to create a sub-table of
 /// `a.b` which is an integer rather than not a table.
 class NotATableError {
@@ -97,8 +101,10 @@ class NotATableError {
 /// An error which is thrown when an object cannot be encoded.
 ///
 /// Example:
+///
 ///     var encoder = new TomlEncoder();
 ///     encoder.encode({'a': null});
+///
 /// throws an [UnknownValueTypeError] because `null` is not a valid TOML value.
 class UnknownValueTypeError {
 
@@ -122,8 +128,10 @@ class UnknownValueTypeError {
 /// because it does not have a unique value type.
 ///
 /// Example:
+///
 ///     var encoder = new TomlEncoder();
 ///     encoder.encode({'a': [1, '2']});
+///
 /// throws an [MixedArrayTypesError] because `1` and `'2'` are of different
 /// types.
 class MixedArrayTypesError {
