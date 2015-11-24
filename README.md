@@ -9,6 +9,7 @@ It currently supports version [v0.4.0][] of the TOML specification.
 
 To get started add `toml` as a dependency to your `pubspec.yaml` and run the
 `pub get` command.
+
 ```yaml
 dependencies:
   toml: "^0.4.0"
@@ -16,10 +17,11 @@ dependencies:
 
 ## Usage
 
-This package included three libraries for loading, decoding and encoding TOML
+This package includes three libraries for loading, decoding and encoding TOML
 documents, which are further described below.
 
-If you want to use the both the encoder and decoder a single import suffices:
+If you want to use both the encoder and decoder, a single import suffices:
+
 ```dart
 import 'package:toml/toml.dart';
 ```
@@ -30,10 +32,11 @@ Before any configuration file can be parsed the library needs to know how
 to load it. There are two default methods available, but you can easily
 implement your own loading mechanism as further described below.
 
-If your code is running in the **browser** you probably want to use XHR to
+If your code is running in the **browser**, you probably want to use XHR to
 fetch the file from the server. To do so import the `toml.loader.http` library
 and call the static `HttpConfigLoader.use` method, e.g. from your `main`
 function.
+
 ```dart
 import 'package:toml/loader/http.dart';
 
@@ -43,9 +46,10 @@ void main() {
 }
 ```
 
-If your code is running on the **server** you can load configuration files from
+If your code is running on the **server**, you can load configuration files from
 the local file system. Simply import the `toml.loader.fs` library and call the
 static `FilesystemConfigLoader.use` method, e.g. from your `main` function.
+
 ```dart
 import 'package:toml/loader/fs.dart';
 
@@ -55,10 +59,11 @@ void main() {
 }
 ```
 
-For convenience Both libraries export the `loadConfig` function from the
+For convenience both libraries export the `loadConfig` function from the
 `toml.loader` library. It optionally takes the path to the configuration file
 as its only argument (defaults to `'config.toml'`) and returns a `Future` of
 the parsed configuration options.
+
 ```dart
 Future main() async {
   // ...
@@ -72,6 +77,7 @@ Future main() async {
 To create a custom loader which fits exactly your needs import the
 `toml.loader` library, create a new class and implement the `ConfigLoader`
 interface. You can use this code as a starting point:
+
 ```dart
 library my.config.loader;
 
@@ -91,19 +97,23 @@ class MyConfigLoader implements ConfigLoader {
 
 }
 ```
+
 In your `main` function invoke the `MyConfigLoader.use` method and call the
 `loadConfig` function as usual.
 
 ### Decode TOML
 
-If you only want to decode a string of TOML add the following import directive
+If you only want to decode a string of TOML, add the following import directive
 to your script:
+
 ```dart
 import 'package:toml/decoder.dart';
 ```
+
 This library contains the actual `TomlParser` class whose `parse` method
 takes a `String` and returns a `Result` object. The results `value` property
 holds an unmodifiable `Map` of the parsed document.
+
 ```dart
 var toml = '''
   # ...
@@ -115,13 +125,16 @@ var document = parser.parse(toml).value;
 ### Encode TOML
 
 This package includes a TOML encoder. To use it simply import:
+
 ```dart
 import 'package:toml/encoder.dart';
 ```
+
 The library provides a `TomlEncoder` class whose `encode` method takes
 a `Map` and returns a TOML encoded `String`.
 All values of the map must be natively representable by TOML or implement the
 `TomlEncodable` interface.
+
 ```dart
 var document = {
   // ...
@@ -129,6 +142,7 @@ var document = {
 var encoder = new TomlEncoder();
 var toml = encoder.encode(document);
 ```
+
 Classes which implement the `TomlEncodable` interface define a `toToml` method
 whose return value can be represented by TOML in turn.
 
@@ -139,16 +153,21 @@ through nested `UnmodifiableMapView` objects whose keys are `String`s and
 values `dynamic` read-only representations of the corresponding TOML value or
 sub-table.
 The contents of a table declared by:
+
 ```toml
 [a.b.c]
 key = 'value'
 ```
+
 may be accessed using `[]`:
+
 ```dart
 var table = document['a']['b']['c']; // ok
 var value = table['key'];
 ```
+
 The following, however, is invalid:
+
 ```dart
 var table = document['a.b.c']; // error
 table['key'] = value; // error
@@ -158,6 +177,7 @@ All kinds of **arrays** including **arrays of tables** are stored as
 `UnmodifiableListView` objects. Though the encoder accepts any `Iterable`.
 The items of the list represent either a value or a table.
 Given a document:
+
 ```toml
 [[items]]
 name = 'A'
@@ -168,13 +188,17 @@ name = 'B'
 [[items]]
 name = 'C'
 ```
+
 One might iterate over the items of the list:
+
 ```dart
 document['items'].forEach((Map item) { // ok
   print(item.name);
 });
 ```
+
 But it is not allowed to add, remove or modify its entries:
+
 ```dart
 document['items'].add({ // error
   'name': 'D'
@@ -186,6 +210,7 @@ document['items'][0] = { // error
 
 All **string** variants produce regular dart `String`s.
 These are therefore all equivalent:
+
 ```toml
 str1 = "Hello World!"
 str2 = 'Hello World!'
@@ -204,16 +229,19 @@ integer. This behavior would lead to the generation of invalid numeric
 arrays.
 The `TomlEncoder` addresses this issue by analyzing the contents of numeric
 arrays first.
-If any of its items cannot be represented as an integer all items will be
+If any of its items cannot be represented as an integer, all items will be
 encoded as floats instead.
 Encoding the following map:
+
 ```dart
 var document = {
   'array': [1, 2.0, 3.141]
 };
 ```
+
 would throw an `MixedArrayTypesError` in the vm but yields this document when
 compiled to JavaScript:
+
 ```toml
 array = [1.0, 2.0, 3.141]
 ```
@@ -253,9 +281,6 @@ See the LICENSE file for details.
 
 [toml-test]: https://github.com/BurntSushi/toml-test
   "A language agnostic test suite for TOML encoders and decoders."
-
-[`dart_config`]: https://pub.dartlang.org/packages/dart_config
-  "Config files for the client and server."
 
 [v0.2.0]: https://github.com/toml-lang/toml/blob/master/versions/en/toml-v0.2.0.md
   "Tom's Obvious, Minimal Language v0.2.0"

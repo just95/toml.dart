@@ -22,10 +22,11 @@ Map<String, dynamic> decodeTable(Map<String, dynamic> json) {
 
 /// Decodes a JSON encoded TOML value.
 ///
-/// * If [value] is an `Iterable` it will be treated as an array value.
-/// * If [value] is a `Map` is of the form
+/// * If [value] is an `Iterable`, it will be treated as an array value.
+/// * If [value] is a `Map` of the form
 ///   `{"type": {TTYPE}, "value": {TVALUE}}`
-///   If `{TTYPE}` is not a valid TOML type an error is thrown.
+///   {TVALUE} is parsed as a TOML value of the specified {TTYPE}.
+///   If `{TTYPE}` is not a valid TOML type, an error is thrown.
 /// * All other `Maps` are decoded as a table. See [decodeTable].
 dynamic decodeValue(value) {
   if (value is Iterable) value = {'type': 'array', 'value': value};

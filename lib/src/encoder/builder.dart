@@ -30,7 +30,7 @@ class TomlDocumentBuilder {
   /// [name] is a list of keys. Each item represents one of the dot separated
   /// parts of the table name. The name is written in square brackets.
   ///
-  /// If [array] is set to `true` the table belongs to an array of tables.
+  /// If [array] is set to `true`, the table belongs to an array of tables.
   /// There will be therefore two pairs of square brackets.
   ///
   /// This method does nothing if [name] is empty.
@@ -63,7 +63,7 @@ class TomlDocumentBuilder {
   /// [name] is the qualified name of the [table]. Each item represents one of
   /// the dot separated parts of the table name.
   ///
-  /// If [array] is set to `true` [table] is an item of the array of tables
+  /// If [array] is set to `true`, [table] is an item of the array of tables
   /// called [name].
   ///
   /// The key/value pairs are encoded before the sub-tables of [table].
@@ -172,7 +172,7 @@ class TomlDocumentBuilder {
 
   /// Tests whether all items of an array are of the same type.
   ///
-  /// If the content type of [array] is not unique a [MixedArrayTypesError]
+  /// If the content type of [array] is not unique, a [MixedArrayTypesError]
   /// will be thrown.
   /// Returns the content type or `null` if [array] is empty.
   ///
@@ -204,7 +204,7 @@ class TomlDocumentBuilder {
   ///
   /// The contents of [value] will be validated using [validateArrayType]
   /// before it is encoded.
-  /// If it returns [num] `'.0'` will be inserted behind integer values such
+  /// If it returns `num`, `'.0'` will be inserted behind integer values such
   /// that the value type of the array remains consistent.
   void encodeArray(Iterable value) {
     var type = validateArrayType(value);
@@ -227,13 +227,13 @@ class TomlDocumentBuilder {
   /// By default the literal string encoder is considered the best choise.
   /// If [value] contains any character which is not allowed to appear in
   /// a literal string (that is a single quote or a special character which
-  /// needs to be escaped except for the double quotes and the backslash)
+  /// needs to be escaped except for the double quotes and the backslash),
   /// a basic string is used instead.
   ///
-  /// If [value] contains multiple lines multi-line literal strings are
-  /// preferred over multi-line basic strings which are only used if any line
-  /// contains a character which needs to be escaped except for double
-  /// quotes and the backslash.
+  /// If [value] contains multiple lines, multi-line literal strings are
+  /// preferred over multi-line basic strings. The latter are only used
+  /// if any line contains a character which needs to be escaped except
+  /// for double quotes and the backslash.
   TomlValueEncoder<String> getStringEncoder(String value) {
     var allowedEscSeq = [TomlGrammar.escTable['"'], TomlGrammar.escTable['\\']];
 
