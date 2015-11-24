@@ -16,8 +16,13 @@ dependencies:
 
 ## Usage
 
-> **Note:** I decided to drop support for the [`dart_config`][] package
-> because it seems not to be maintained anymore.
+This package included three libraries for loading, decoding and encoding TOML
+documents, which are further described below.
+
+If you want to use the both the encoder and decoder a single import suffices:
+```dart
+import 'package:toml/toml.dart';
+```
 
 ### Load configuration files.
 
@@ -26,7 +31,8 @@ to load it. There are two default methods available, but you can easily
 implement your own loading mechanism as further described below.
 
 If your code is running in the **browser** you probably want to use XHR to
-fetch the file from the server. To do so import the `toml.loader.http` library and call the static `HttpConfigLoader.use` method, e.g. from your `main`
+fetch the file from the server. To do so import the `toml.loader.http` library
+and call the static `HttpConfigLoader.use` method, e.g. from your `main`
 function.
 ```dart
 import 'package:toml/loader/http.dart';
@@ -88,12 +94,12 @@ class MyConfigLoader implements ConfigLoader {
 In your `main` function invoke the `MyConfigLoader.use` method and call the
 `loadConfig` function as usual.
 
-### Parse TOML
+### Decode TOML
 
-If you only want to parse a string of TOML add the following import directive
+If you only want to decode a string of TOML add the following import directive
 to your script:
 ```dart
-import 'package:toml/toml.dart';
+import 'package:toml/decoder.dart';
 ```
 This library contains the actual `TomlParser` class whose `parse` method
 takes a `String` and returns a `Result` object. The results `value` property
@@ -106,7 +112,7 @@ var parser = new TomlParser();
 var document = parser.parse(toml).value;
 ```
 
-### Encode
+### Encode TOML
 
 This package includes a TOML encoder. To use it simply import:
 ```dart
