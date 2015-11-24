@@ -4,7 +4,7 @@
 
 library toml.example.string;
 
-import 'package:toml/toml.dart';
+import 'package:toml/decoder.dart';
 
 var toml = '''
 [table]
