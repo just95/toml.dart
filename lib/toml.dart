@@ -4,23 +4,6 @@
 
 library toml;
 
-import 'package:petitparser/petitparser.dart';
-
-import 'src/parser.dart';
-import 'src/value_parser.dart';
-
-export 'src/errors.dart';
-
-/// TOML parser.
-class TomlParser extends GrammarParser {
-  TomlParser() : super(new TomlParserDefinition());
-}
-
-/// TOML value parser.
-///
-/// Similar to [TomlParser] but only accepts TOML values rather than entire
-/// documents.
-/// Intended for test purposes.
-class TomlValueParser extends GrammarParser {
-  TomlValueParser() : super(new TomlValueParserDefinition());
-}
+export 'decoder.dart';
+export 'encoder.dart';
+export 'loader.dart';

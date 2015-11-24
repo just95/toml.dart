@@ -2,18 +2,7 @@
 // This software may be modified and distributed under the terms
 // of the MIT license. See the LICENSE file for details.
 
-library toml.src.builder;
-
-import 'errors.dart';
-import 'grammar.dart';
-
-/// An object which can be encoded as a TOML value or table.
-abstract class TomlEncodable {
-
-  /// Converts this object to an object which can natively be represented as
-  /// a TOML value or table.
-  toToml();
-}
+part of toml.encoder;
 
 /// A function which encodes an object as a TOML value.
 typedef void TomlValueEncoder<V>(V value);

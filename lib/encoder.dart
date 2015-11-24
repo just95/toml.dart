@@ -4,16 +4,12 @@
 
 library toml.encoder;
 
-import 'src/builder.dart';
-export 'src/builder.dart' show TomlEncodable;
+import 'decoder.dart';
 
-/// TOML encoder.
-class TomlEncoder {
+part 'src/encoder/builder.dart';
+part 'src/encoder/encodable.dart';
+part 'src/encoder/encoder.dart';
 
-  /// Encodes a TOML [document].
-  String encode(Map<String, dynamic> document) {
-    var builder = new TomlDocumentBuilder();
-    builder.encodeSubTable(document, name: []);
-    return builder.toString();
-  }
-}
+part 'src/encoder/error/invalid_string.dart';
+part 'src/encoder/error/mixed_array_types.dart';
+part 'src/encoder/error/unknown_value_type.dart';

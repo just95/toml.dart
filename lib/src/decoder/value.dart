@@ -2,9 +2,7 @@
 // This software may be modified and distributed under the terms
 // of the MIT license. See the LICENSE file for details.
 
-library toml.src.value_parser;
-
-import 'parser.dart';
+part of toml.decoder;
 
 /// TOML value parser definition.
 ///
@@ -13,4 +11,13 @@ import 'parser.dart';
 /// This class is intended for testing purposes.
 class TomlValueParserDefinition extends TomlParserDefinition {
   start() => ref(value).end();
+}
+
+/// TOML value parser.
+///
+/// Similar to [TomlParser] but only accepts TOML values rather than entire
+/// documents.
+/// Intended for test purposes.
+class TomlValueParser extends GrammarParser {
+  TomlValueParser() : super(new TomlValueParserDefinition());
 }

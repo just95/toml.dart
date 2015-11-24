@@ -2,10 +2,7 @@
 // This software may be modified and distributed under the terms
 // of the MIT license. See the LICENSE file for details.
 
-library toml.src.grammar;
-
-import 'package:petitparser/petitparser.dart';
-import 'package:quiver/collection.dart';
+part of toml.decoder;
 
 /// The grammar definition of TOML.
 class TomlGrammar extends GrammarDefinition {

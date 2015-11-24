@@ -2,12 +2,7 @@
 // This software may be modified and distributed under the terms
 // of the MIT license. See the LICENSE file for details.
 
-library toml.src.parser;
-
-import 'dart:collection';
-
-import 'grammar.dart';
-import 'errors.dart';
+part of toml.decoder;
 
 /// TOML parser definition.
 class TomlParserDefinition extends TomlGrammar {
@@ -189,4 +184,9 @@ class TomlParserDefinition extends TomlGrammar {
 
     return unmodifiable(doc);
   });
+}
+
+/// TOML parser.
+class TomlParser extends GrammarParser {
+  TomlParser() : super(new TomlParserDefinition());
 }
