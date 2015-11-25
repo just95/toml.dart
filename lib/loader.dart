@@ -11,8 +11,6 @@ import 'package:yaml/yaml.dart' deferred as yaml;
 import 'package:path/path.dart';
 
 import 'decoder.dart';
-import 'loader/http.dart' deferred as http;
-import 'loader/fs.dart' deferred as fs;
 
 part 'src/loader/interface.dart';
 part 'src/loader/loader.dart';
