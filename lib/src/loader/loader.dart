@@ -11,7 +11,7 @@ part of toml.loader;
 /// The Future fails if no loader was set, the file could not be loaded or if
 /// it has any syntax errors.
 Future<Map> loadConfig([String filename = 'config.toml']) async {
-  var loader = await ConfigLoader._defaultInstance.future;
+  var loader = ConfigLoader.defaultLoader;
   var contents = loader.loadConfig(filename);
   switch (extension(filename)) {
     case '.json':
