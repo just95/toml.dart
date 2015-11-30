@@ -9,7 +9,12 @@ import 'dart:collection';
 import 'package:petitparser/petitparser.dart';
 import 'package:quiver/collection.dart';
 
+import 'decoder/json.dart';
+import 'decoder/toml.dart';
+import 'decoder/yaml.dart';
+
 part 'src/decoder/grammar.dart';
+part 'src/decoder/interface.dart';
 part 'src/decoder/parser.dart';
 part 'src/decoder/value.dart';
 
