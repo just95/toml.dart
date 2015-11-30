@@ -5,9 +5,7 @@
 library toml.loader;
 
 import 'dart:async';
-import 'dart:convert' deferred as convert;
 
-import 'package:yaml/yaml.dart' deferred as yaml;
 import 'package:path/path.dart';
 
 import 'decoder.dart';

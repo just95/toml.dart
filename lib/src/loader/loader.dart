@@ -4,25 +4,18 @@
 
 part of toml.loader;
 
-/// Loads [filename] using the default loader and parses the contents as either
-/// a TOML, YAML or JSON document depending on the file extension.
+/// Loads [filename] using the default loader and decodes the contents
+/// with the decoder associated with the file extension.
 ///
-/// Returns a Future of the loaded configuration file.
+/// Files with unknown extensions are treated as TOML files by default.
+///
+/// Returns a Future of a hash map which contains the the loaded
+/// configuration options.
 /// The Future fails if no loader was set, the file could not be loaded or if
 /// it has any syntax errors.
 Future<Map> loadConfig([String filename = 'config.toml']) async {
   var loader = ConfigLoader.defaultLoader;
-  var contents = loader.loadConfig(filename);
-  switch (extension(filename)) {
-    case '.json':
-      await convert.loadLibrary();
-      return convert.JSON.decode(await contents);
-    case '.yaml':
-      await yaml.loadLibrary();
-      return yaml.loadYaml(await contents);
-    case '.toml':
-    default:
-      var parser = new TomlParser();
-      return parser.parse(await contents).value;
-  }
+  var decoder = ConfigDecoder.getByExtension(extension(filename));
+  var contents = await loader.loadConfig(filename);
+  return decoder.decodeConfig(contents);
 }
