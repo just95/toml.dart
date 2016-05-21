@@ -22,17 +22,16 @@ class TomlGrammar extends GrammarDefinition {
   });
 
   start() => ref(document).end();
-  token(p, [bool multiLineLeft = false, bool multiLineRight]) {
-    // multiLineRight defaults to the value of multiLineLeft.
-    if (multiLineRight == null) multiLineRight = multiLineLeft;
 
-    // Wrap functions.
-    if (p is Function) p = ref(p);
+  // -----------------------------------------------------------------
+  // Tokens.
+  // -----------------------------------------------------------------
 
-    var left = ref(ignore, multiLineLeft);
-    var right = ref(ignore, multiLineRight);
-    return p.flatten().trim(left, right);
-  }
+  /// Parses the specified string ignoring whitespace on either side.
+  ///
+  /// Optionally allows whitespace on the [left], [right] or [both] sides.
+  token(String str, {bool both: false, bool left, bool right}) =>
+      string(str).trim(ref(ignore, left ?? both), ref(ignore, right ?? both));
 
   // -----------------------------------------------------------------
   // Whitespace and comments.
@@ -62,114 +61,91 @@ class TomlGrammar extends GrammarDefinition {
   // String values.
   // -----------------------------------------------------------------
 
-  /// Generates a new parser for a string.
-  ///
-  /// A string is delimited by a pair of [quotes] and contains any characters
-  /// but [quotes].
-  /// [newline]s are only allowed if [multiline] is set to `true`.
-  /// Special characters can be expressed using [esc]ape sequences.
-  /// The first line of a [multiline] string is skipped if it is empty.
-  Parser _str({Parser quotes, Parser esc, bool multiline: false}) {
-    var start = quotes;
-
-    // Skip first line if it is empty.
-    if (multiline) start = (start & ref(emptyLine).optional()).pick(0);
-
-    // No quotes within strings.
-    var forbidden = quotes;
-
-    // Allow newline only for multiLine strings.
-    if (!multiline) forbidden |= ref(newline);
-
-    var char = forbidden.neg();
-
-    // Allow escape sequences.
-    if (esc != null) char = esc | char;
-
-    return (start & char.star() & quotes)
-        .trim(ref(ignore))
-        .pick(1)
-        .map((List chars) => chars.join());
-  }
-
   str() => ref(multiLineBasicStr) |
       ref(basicStr) |
       ref(multiLineLiteralStr) |
       ref(literalStr);
 
+  strData(String quotes, {bool literal: false, bool multiLine: false}) {
+    var forbidden = string(quotes);
+    if (!literal) forbidden |= char('\\');
+    if (!multiLine) forbidden |= ref(newline);
+    return forbidden.neg().plus();
+  }
+
+  strParser(String quotes, {Parser esc, bool multiLine: false}) {
+    var data = strData(quotes, literal: esc == null, multiLine: multiLine);
+    if (esc != null) data = esc | data;
+    var first = multiLine ? ref(blankLine).optional() : epsilon();
+    return string(quotes) & first & data.star() & string(quotes);
+  }
+
   // -----------------------------------------------------------------
   // Basic strings.
   // -----------------------------------------------------------------
 
-  basicStr() => _str(quotes: char('"'), esc: ref(escSeq));
-
-  escSeq() => char('\\') & (ref(unicodeEscSeq) | ref(simpleEscSeq));
-
-  unicodeEscSeq() => char('u') & ref(hexDigit).times(4).flatten() |
-      char('U') & ref(hexDigit).times(8).flatten();
-  simpleEscSeq() => any();
-
-  hexDigit() => pattern('0-9a-fA-F');
-
-  // -----------------------------------------------------------------
-  // Multi-line basic strings.
-  // -----------------------------------------------------------------
+  basicStr() => strParser('"', esc: ref(escSeq));
 
   multiLineBasicStr() =>
-      _str(quotes: string('"""'), esc: ref(multiLineEscSeq), multiline: true);
-
-  multiLineEscSeq() => ref(whitespaceEscSeq) | ref(escSeq);
-
-  whitespaceEscSeq() =>
-      char('\\') & ref(emptyLine).plus() & ref(whitespace).star();
-
-  emptyLine() => ref(whitespace).star() & ref(newline);
+      strParser('"""', esc: ref(multiLineEscSeq), multiLine: true);
 
   // -----------------------------------------------------------------
   // Literal strings.
   // -----------------------------------------------------------------
 
-  literalStr() => _str(quotes: string("'"));
+  literalStr() => strParser("'");
+
+  multiLineLiteralStr() => strParser("'''", multiLine: true);
 
   // -----------------------------------------------------------------
-  // Multi-line literal strings.
+  // Escape Sequences.
   // -----------------------------------------------------------------
 
-  multiLineLiteralStr() => _str(quotes: string("'''"), multiline: true);
+  escSeq() => char('\\') & (ref(unicodeEscSeq) | ref(compactEscSeq));
+
+  unicodeEscSeq() => char('u') & ref(hexDigit).times(4).flatten() |
+    char('U') & ref(hexDigit).times(8).flatten();
+  hexDigit() => pattern('0-9a-fA-F');
+
+  compactEscSeq() => any();
+
+  multiLineEscSeq() => char('\\') &
+    (ref(whitespaceEscSeq) | ref(unicodeEscSeq) | ref(compactEscSeq));
+
+  whitespaceEscSeq() => ref(blankLine).plus() & ref(whitespace).star();
+
+  blankLine() => ref(whitespace).star() & ref(newline);
 
   // -----------------------------------------------------------------
   // Integer values.
   // -----------------------------------------------------------------
 
-  integer() => ref(token, _integer);
-  _integer() => anyIn('+-').optional() & (char('0') | ref(digits));
-
-  digits() => digit().plus().separatedBy(char('_'));
+  integer() => ref(integralPart);
 
   // -----------------------------------------------------------------
   // Float values.
   // -----------------------------------------------------------------
 
-  float() => ref(token, _float);
-  _float() => ref(_integer) &
+  float() => ref(integralPart) &
       (ref(fractionalPart) & ref(exponentPart).optional() | ref(exponentPart));
 
+  integralPart() => anyIn('+-').optional() & (char('0') | ref(digits));
   fractionalPart() => char('.') & ref(digits);
-  exponentPart() => anyIn('eE') & ref(_integer);
+  exponentPart() => anyIn('eE') & ref(integralPart);
+
+  digits() => digit().plus().separatedBy(char('_'));
 
   // -----------------------------------------------------------------
   // Boolean values.
   // -----------------------------------------------------------------
 
-  boolean() => ref(token, _boolean);
-  _boolean() => string('true') | string('false');
+  boolean() => string('true') | string('false');
 
   // -----------------------------------------------------------------
   // Datetime values. (RFC 3339)
   // -----------------------------------------------------------------
 
-  datetime() => ref(token, _datetime);
-  _datetime() => ref(fullDate) & char('T') & ref(fullTime);
+  datetime() => ref(fullDate) & char('T') & ref(fullTime);
 
   fullDate() => ref(dddd) & char('-') & ref(dd) & char('-') & ref(dd);
 
@@ -199,19 +175,20 @@ class TomlGrammar extends GrammarDefinition {
       arrayOf(array) |
       arrayOf(inlineTable);
 
-  arrayOf(v) => ref(token, char('['), false, true) &
+  arrayOf(v) => token('[', right: true) &
       ref(v)
-          .separatedBy(ref(token, char(','), true),
+          .separatedBy(token(',', both: true),
               optionalSeparatorAtEnd: true, includeSeparators: false)
           .optional([]) &
-      ref(token, char(']'), true, false);
+      token(']', left: true);
 
   // -----------------------------------------------------------------
   // Tables.
   // -----------------------------------------------------------------
 
   table() => ref(tableHeader).trim(ref(ignore, true)) & ref(keyValuePairs);
-  tableHeader() => char('[') & ref(tableName) & char(']');
+  tableHeader() =>
+      token('[', left: true) & ref(keyPath) & token(']', right: true);
 
   // -----------------------------------------------------------------
   // Array of Tables.
@@ -219,36 +196,37 @@ class TomlGrammar extends GrammarDefinition {
 
   tableArray() =>
       ref(tableArrayHeader).trim(ref(ignore, true)) & ref(keyValuePairs);
-  tableArrayHeader() => char('[') & ref(tableHeader) & char(']');
+  tableArrayHeader() =>
+      token('[[', left: true) & ref(keyPath) & token(']]', right: true);
 
   // -----------------------------------------------------------------
   // Inline Tables.
   // -----------------------------------------------------------------
 
-  inlineTable() => ref(token, char('{')) &
-      ref(keyValuePair).separatedBy(token(char(',')),
+  inlineTable() => token('{') &
+      ref(keyValuePair).separatedBy(token(','),
           /// Trailing commas are currently not allowed.
           /// See https://github.com/toml-lang/toml/pull/235#issuecomment-73578529
           optionalSeparatorAtEnd: false, includeSeparators: false).optional(
           []) &
-      ref(token, char('}'));
+      token('}');
 
   // -----------------------------------------------------------------
   // Keys.
   // -----------------------------------------------------------------
 
-  key() => ref(token, bareKey) | ref(quotedKey);
+  key() => ref(bareKey) | ref(quotedKey);
 
   bareKey() => pattern('A-Za-z0-9_-').plus();
   quotedKey() => ref(basicStr);
 
-  tableName() => ref(key).separatedBy(char('.'), includeSeparators: false);
+  keyPath() => ref(key).separatedBy(token('.'), includeSeparators: false);
 
   // -----------------------------------------------------------------
   // Key/value pairs.
   // -----------------------------------------------------------------
 
-  keyValuePair() => ref(key) & char('=') & ref(value);
+  keyValuePair() => ref(key) & token('=') & ref(value);
   keyValuePairs() => ref(keyValuePair)
       .separatedBy(ref(newline) & ref(ignore, true).star(),
           includeSeparators: false, optionalSeparatorAtEnd: true)

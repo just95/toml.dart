@@ -11,17 +11,31 @@ class TomlParserDefinition extends TomlGrammar {
   // Strings values.
   // -----------------------------------------------------------------
 
+  strData(String quotes, {bool literal: false, bool multiLine: false}) =>
+      super.strData(quotes, literal: literal, multiLine: multiLine).flatten();
+
+  strParser(String quotes, {Parser esc, bool multiLine: false}) => super
+      .strParser(quotes, esc: esc, multiLine: multiLine)
+      .pick(2)
+      .map((data) => data.join());
+
+  // -----------------------------------------------------------------
+  // Escape Sequences.
+  // -----------------------------------------------------------------
+
   escSeq() => super.escSeq().pick(1);
 
-  simpleEscSeq() => super.simpleEscSeq().map((String c) {
+  unicodeEscSeq() => super.unicodeEscSeq().pick(1).map(
+      (charCode) => new String.fromCharCode(int.parse(charCode, radix: 16)));
+
+  compactEscSeq() => super.compactEscSeq().map((String c) {
     if (TomlGrammar.escTable.containsKey(c)) {
       return new String.fromCharCode(TomlGrammar.escTable[c]);
     }
     throw new InvalidEscapeSequenceError('\\$c');
   });
 
-  unicodeEscSeq() => super.unicodeEscSeq().pick(1).map(
-      (charCode) => new String.fromCharCode(int.parse(charCode, radix: 16)));
+  multiLineEscSeq() => super.multiLineEscSeq().pick(1);
 
   whitespaceEscSeq() => super.whitespaceEscSeq().map((_) => '');
 
@@ -29,13 +43,13 @@ class TomlParserDefinition extends TomlGrammar {
   // Integer values.
   // -----------------------------------------------------------------
 
-  integer() => super.integer().map((str) => int.parse(str.replaceAll('_', '')));
+  integer() => super.integer().flatten().map((str) => int.parse(str.replaceAll('_', '')));
 
   // -----------------------------------------------------------------
   // Float values.
   // -----------------------------------------------------------------
 
-  float() => super.float().map((str) => double.parse(str.replaceAll('_', '')));
+  float() => super.float().flatten().map((str) => double.parse(str.replaceAll('_', '')));
 
   // -----------------------------------------------------------------
   // Boolean values.
@@ -47,7 +61,7 @@ class TomlParserDefinition extends TomlGrammar {
   // Datetime values.
   // -----------------------------------------------------------------
 
-  datetime() => super.datetime().map(DateTime.parse);
+  datetime() => super.datetime().flatten().map(DateTime.parse);
 
   // -----------------------------------------------------------------
   // Arrays.
@@ -90,6 +104,12 @@ class TomlParserDefinition extends TomlGrammar {
     });
     return map;
   });
+
+  // -----------------------------------------------------------------
+  // Keys.
+  // -----------------------------------------------------------------
+
+  bareKey() => super.bareKey().flatten();
 
   // -----------------------------------------------------------------
   // Key/value pairs.
