@@ -9,7 +9,6 @@ import 'dart:async';
 import 'package:toml/loader.dart';
 
 class MyConfigLoader extends ConfigLoader {
-  
   static void use() {
     ConfigLoader.use(new MyConfigLoader());
   }

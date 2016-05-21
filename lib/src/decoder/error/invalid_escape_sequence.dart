@@ -13,14 +13,14 @@ part of toml.decoder;
 ///
 /// throws an [InvalidEscapeSequenceError] with `[escapeSequence] = r'\w'`.
 class InvalidEscapeSequenceError {
-
   /// The invalid escape sequence.
   final String escapeSequence;
 
   InvalidEscapeSequenceError(this.escapeSequence);
 
   @override
-  bool operator ==(other) => other is InvalidEscapeSequenceError &&
+  bool operator ==(other) =>
+      other is InvalidEscapeSequenceError &&
       other.escapeSequence == escapeSequence;
 
   @override

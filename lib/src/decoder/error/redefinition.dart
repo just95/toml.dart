@@ -13,7 +13,6 @@ part of toml.decoder;
 ///
 /// throws a [RedefinitionError] because `a` is defined twice.
 class RedefinitionError {
-
   /// Fully qualified name of the table or key.
   final String name;
 

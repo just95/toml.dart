@@ -13,7 +13,6 @@ part of toml.encoder;
 ///
 /// throws an [UnknownValueTypeError] because `null` is not a valid TOML value.
 class UnknownValueTypeError {
-
   /// The object which cannot be encoded as a TOML value.
   final value;
 

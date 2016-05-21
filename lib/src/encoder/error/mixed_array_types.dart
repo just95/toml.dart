@@ -15,7 +15,6 @@ part of toml.encoder;
 /// throws an [MixedArrayTypesError] because `1` and `'2'` are of different
 /// types.
 class MixedArrayTypesError {
-
   /// The array which has mixed value types.
   final Iterable array;
 

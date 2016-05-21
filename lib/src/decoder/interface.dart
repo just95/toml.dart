@@ -9,7 +9,6 @@ part of toml.decoder;
 /// There are three default implementations available to hanlde TOML, YAML and
 /// JSON files. They are located in the `lib/decoder/` directory.
 abstract class ConfigDecoder {
-
   /// The instance of this interface which should be returned by
   /// [getByExtension] if no decoder was associated with an extension.
   ///
@@ -21,6 +20,7 @@ abstract class ConfigDecoder {
   static void register(ConfigDecoder decoder, {String extension}) {
     _byExtension[extension] = decoder;
   }
+
   static Map<String, ConfigDecoder> _byExtension = {
     '.toml': new TomlConfigDecoder(),
     '.yaml': new YamlConfigDecoder(),

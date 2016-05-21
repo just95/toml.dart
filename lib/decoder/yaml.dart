@@ -9,8 +9,6 @@ import 'package:yaml/yaml.dart';
 
 /// Implementation of [ConfigDecoder] which handels the YAML format.
 class YamlConfigDecoder implements ConfigDecoder {
-
   @override
   Map<String, dynamic> decodeConfig(String contents) => loadYaml(contents);
-
 }

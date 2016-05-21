@@ -6,20 +6,20 @@ part of toml.decoder;
 
 /// The grammar definition of TOML.
 class TomlGrammar extends GrammarDefinition {
-
   /// Specified escape sequences.
   ///
   /// Additionally any Unicode character may be escaped with the `\uXXXX`
   /// and `\UXXXXXXXX` forms.
-  static final BiMap<String, int> escTable = new BiMap()..addAll({
-    'b': 0x08, // Backspace.
-    't': 0x09, // Tab.
-    'n': 0x0A, // Linefeed.
-    'f': 0x0C, // Form feed.
-    'r': 0x0D, // Carriage return.
-    '"': 0x22, // Quote.
-    r'\': 0x5C // Backslash.
-  });
+  static final BiMap<String, int> escTable = new BiMap()
+    ..addAll({
+      'b': 0x08, // Backspace.
+      't': 0x09, // Tab.
+      'n': 0x0A, // Linefeed.
+      'f': 0x0C, // Form feed.
+      'r': 0x0D, // Carriage return.
+      '"': 0x22, // Quote.
+      r'\': 0x5C // Backslash.
+    });
 
   start() => ref(document).end();
 
@@ -49,7 +49,8 @@ class TomlGrammar extends GrammarDefinition {
   // Values.
   // -----------------------------------------------------------------
 
-  value() => ref(datetime) |
+  value() =>
+      ref(datetime) |
       ref(float) |
       ref(integer) |
       ref(boolean) |
@@ -61,7 +62,8 @@ class TomlGrammar extends GrammarDefinition {
   // String values.
   // -----------------------------------------------------------------
 
-  str() => ref(multiLineBasicStr) |
+  str() =>
+      ref(multiLineBasicStr) |
       ref(basicStr) |
       ref(multiLineLiteralStr) |
       ref(literalStr);
@@ -103,14 +105,16 @@ class TomlGrammar extends GrammarDefinition {
 
   escSeq() => char('\\') & (ref(unicodeEscSeq) | ref(compactEscSeq));
 
-  unicodeEscSeq() => char('u') & ref(hexDigit).times(4).flatten() |
-    char('U') & ref(hexDigit).times(8).flatten();
+  unicodeEscSeq() =>
+      char('u') & ref(hexDigit).times(4).flatten() |
+      char('U') & ref(hexDigit).times(8).flatten();
   hexDigit() => pattern('0-9a-fA-F');
 
   compactEscSeq() => any();
 
-  multiLineEscSeq() => char('\\') &
-    (ref(whitespaceEscSeq) | ref(unicodeEscSeq) | ref(compactEscSeq));
+  multiLineEscSeq() =>
+      char('\\') &
+      (ref(whitespaceEscSeq) | ref(unicodeEscSeq) | ref(compactEscSeq));
 
   whitespaceEscSeq() => ref(blankLine).plus() & ref(whitespace).star();
 
@@ -126,7 +130,8 @@ class TomlGrammar extends GrammarDefinition {
   // Float values.
   // -----------------------------------------------------------------
 
-  float() => ref(integralPart) &
+  float() =>
+      ref(integralPart) &
       (ref(fractionalPart) & ref(exponentPart).optional() | ref(exponentPart));
 
   integralPart() => anyIn('+-').optional() & (char('0') | ref(digits));
@@ -150,7 +155,8 @@ class TomlGrammar extends GrammarDefinition {
   fullDate() => ref(dddd) & char('-') & ref(dd) & char('-') & ref(dd);
 
   fullTime() => ref(partialTime) & ref(timeOffset);
-  partialTime() => ref(dd) &
+  partialTime() =>
+      ref(dd) &
       char(':') &
       ref(dd) &
       char(':') &
@@ -167,7 +173,8 @@ class TomlGrammar extends GrammarDefinition {
   // Arrays.
   // -----------------------------------------------------------------
 
-  array() => arrayOf(datetime) |
+  array() =>
+      arrayOf(datetime) |
       arrayOf(float) |
       arrayOf(integer) |
       arrayOf(boolean) |
@@ -175,7 +182,8 @@ class TomlGrammar extends GrammarDefinition {
       arrayOf(array) |
       arrayOf(inlineTable);
 
-  arrayOf(v) => token('[', right: true) &
+  arrayOf(v) =>
+      token('[', right: true) &
       ref(v)
           .separatedBy(token(',', both: true),
               optionalSeparatorAtEnd: true, includeSeparators: false)
@@ -203,12 +211,16 @@ class TomlGrammar extends GrammarDefinition {
   // Inline Tables.
   // -----------------------------------------------------------------
 
-  inlineTable() => token('{') &
-      ref(keyValuePair).separatedBy(token(','),
-          /// Trailing commas are currently not allowed.
-          /// See https://github.com/toml-lang/toml/pull/235#issuecomment-73578529
-          optionalSeparatorAtEnd: false, includeSeparators: false).optional(
-          []) &
+  inlineTable() =>
+      token('{') &
+      ref(keyValuePair)
+          .separatedBy(token(','),
+
+              /// Trailing commas are currently not allowed.
+              /// See https://github.com/toml-lang/toml/pull/235#issuecomment-73578529
+              optionalSeparatorAtEnd: false,
+              includeSeparators: false)
+          .optional([]) &
       token('}');
 
   // -----------------------------------------------------------------
@@ -236,7 +248,8 @@ class TomlGrammar extends GrammarDefinition {
   // Document.
   // -----------------------------------------------------------------
 
-  document() => ref(ignore, true).star() &
+  document() =>
+      ref(ignore, true).star() &
       ref(keyValuePairs) &
       (ref(table) | ref(tableArray)).star();
 }

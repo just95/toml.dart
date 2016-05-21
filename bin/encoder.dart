@@ -37,13 +37,20 @@ dynamic decodeValue(value) {
         value.containsKey('value')) {
       var type = value['type'];
       switch (type) {
-        case 'string': return value['value'];
-        case 'integer': return int.parse(value['value']);
-        case 'float': return double.parse(value['value']);
-        case 'datetime': return DateTime.parse(value['value']);
-        case 'bool': return value['value'] == 'true';
-        case 'array': return value['value'].map(decodeValue).toList();
-        default: throw new UnsupportedError('Unsupported value type: $type');
+        case 'string':
+          return value['value'];
+        case 'integer':
+          return int.parse(value['value']);
+        case 'float':
+          return double.parse(value['value']);
+        case 'datetime':
+          return DateTime.parse(value['value']);
+        case 'bool':
+          return value['value'] == 'true';
+        case 'array':
+          return value['value'].map(decodeValue).toList();
+        default:
+          throw new UnsupportedError('Unsupported value type: $type');
       }
     }
     return decodeTable(value);

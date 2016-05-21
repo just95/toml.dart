@@ -6,7 +6,6 @@ part of toml.loader;
 
 /// Interface for configuration file loaders.
 abstract class ConfigLoader {
-
   /// Sets [loader] as the the default instance of this interface.
   /// See also [defaultLoader].
   //

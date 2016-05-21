@@ -9,7 +9,6 @@ import 'package:petitparser/petitparser.dart';
 
 /// A matcher which tests whether a parser completes successfully or not.
 class ParserResultMatcher extends Matcher {
-
   /// Expected value for [Result.isSuccess].
   final bool isSuccess;
 

@@ -18,7 +18,6 @@ part of toml.decoder;
 /// throws a [NotATableError] because `a.b.c` fails to create a sub-table of
 /// `a.b` which is an integer rather than a table.
 class NotATableError {
-
   /// The name of the table which could not be created because its parent
   /// is not a table
   final String name;

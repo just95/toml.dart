@@ -7,7 +7,6 @@ part of toml.encoder;
 /// An error which is thrown when the encoder encounters a character in a
 /// string which cannot be represented by TOML.
 class InvalidStringError {
-
   /// A message which describes the error.
   final String msg;
 

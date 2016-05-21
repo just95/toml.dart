@@ -6,7 +6,6 @@ part of toml.encoder;
 
 /// TOML encoder.
 class TomlEncoder {
-
   /// Encodes a TOML [document].
   String encode(Map<String, dynamic> document) {
     var builder = new TomlDocumentBuilder();

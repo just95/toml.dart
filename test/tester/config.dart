@@ -42,7 +42,9 @@ void _cmp({tomlValue, yamlValue}) {
 /// the `test/config` directory and compares the resulting hash maps.
 void testConfig(String name) {
   var future = Future.wait([
-      loadConfig('test/config/$name.toml'), loadConfig('test/config/$name.yaml')]);
+    loadConfig('test/config/$name.toml'),
+    loadConfig('test/config/$name.yaml')
+  ]);
   future.then(expectAsync((res) {
     _cmpMaps(toml: res[0], yaml: res[1]);
   }));

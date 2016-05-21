@@ -9,7 +9,6 @@ typedef void TomlValueEncoder<V>(V value);
 
 /// TOML document builder.
 class TomlDocumentBuilder {
-
   /**
    * Regular expression of a bare key.
    */
@@ -310,10 +309,10 @@ class TomlDocumentBuilder {
   /// Encodes [value] as a multi-line basic string.
   void encodeMultiLineBasicString(String value) => _encodeString(value,
       quotes: '"""',
-      esc: TomlGrammar.escTable.values.where(
-          (c) => c != TomlGrammar.escTable['"'] &&
-              c != TomlGrammar.escTable['n'] &&
-              c != TomlGrammar.escTable['r']),
+      esc: TomlGrammar.escTable.values.where((c) =>
+          c != TomlGrammar.escTable['"'] &&
+          c != TomlGrammar.escTable['n'] &&
+          c != TomlGrammar.escTable['r']),
       multiline: true);
 
   /// Encodes [value] as a literal string.

@@ -10,17 +10,15 @@ import 'dart:io';
 import 'package:toml/loader.dart';
 export 'package:toml/loader.dart' show loadConfig;
 
-/// Implementation of the [ConfigLoader] interface which loads configuration 
+/// Implementation of the [ConfigLoader] interface which loads configuration
 /// files from the local file system.
 class FilesystemConfigLoader implements ConfigLoader {
-
   /// Sets an instance of this class as the default instance of [ConfigLoader].
   static void use() {
     ConfigLoader.use(new FilesystemConfigLoader());
   }
 
   @override
-  Future<String> loadConfig(String filename) => 
+  Future<String> loadConfig(String filename) =>
       new File(filename).readAsString();
-
 }
