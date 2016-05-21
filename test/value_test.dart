@@ -225,7 +225,7 @@ void main() {
       testValue(
         'fractions of a second',
         input: '1979-05-27T00:32:00.999999-07:00',
-        output: new DateTime.utc(1979, 5, 27, 0, 32, 1, 0)
+        output: new DateTime.utc(1979, 5, 27, 0, 32, 0, 999, 999)
             .add(new Duration(hours: 7)));
     });
 
