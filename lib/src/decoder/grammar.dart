@@ -240,7 +240,7 @@ class TomlGrammar extends GrammarDefinition {
 
   keyValuePair() => ref(key) & token('=') & ref(value);
   keyValuePairs() => ref(keyValuePair)
-      .separatedBy(ref(newline) & ref(ignore, true).star(),
+      .separatedBy(ref(ignore).star() & ref(newline) & ref(ignore, true).star(),
           includeSeparators: false, optionalSeparatorAtEnd: true)
       .optional([]);
 
