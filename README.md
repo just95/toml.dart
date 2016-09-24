@@ -260,8 +260,12 @@ To see whether everything is working correctly change into the root directory
 of this package and run the included tests as follows:
 
 ```sh
-pub run test test/
+pub run test
 ```
+
+You may pass the `--platform` command line argument to test the package on
+other platforms than the VM. Run `pub run test --help` for a list of all
+available platforms.
 
 Alternatively you can run [toml-test][] (again from the package root):
 
