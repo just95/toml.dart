@@ -13,6 +13,7 @@ void main() {
   group('Values', () {
     group('Strings', () {
       group('Basic', () {
+        testValue('empty', input: '""', output: '');
         testValue('escape sequences',
             input: '"I\'m a string. '
                 '\\"You can quote me\\". '
@@ -44,6 +45,7 @@ void main() {
       });
 
       group('Literal', () {
+        testValue('empty', input: "''", output: '');
         testValue('windows path',
             input: r"'C:\Users\nodejs\templates'",
             output: r'C:\Users\nodejs\templates');
@@ -151,6 +153,7 @@ void main() {
     });
 
     group('Array', () {
+      testValue('array', input: '[]', output: []);
       testValue('array of integers', input: '[ 1, 2, 3 ]', output: [1, 2, 3]);
       testValue('optional trailing comma', input: '[ 1, 2, ]', output: [1, 2]);
       testValue('array of strings',

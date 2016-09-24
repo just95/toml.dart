@@ -215,6 +215,11 @@ void main() {
     });
 
     group('Inline Tables', () {
+      testDocument('empty',
+          input: '''
+          inline-table = {}
+        ''',
+          output: {'inline-table': {}});
       testDocument('whitespace around key/value pairs',
           input: '''
           name = { first = "Tom", last = "Preston-Werner" }
