@@ -16,9 +16,7 @@ typedef void TomlValueEncoder<V>(V value);
 
 /// TOML document builder.
 class TomlDocumentBuilder {
-  /**
-   * Regular expression of a bare key.
-   */
+  /// Regular expression of a bare key.
   static final RegExp bareKeyRegExp = new RegExp(r'^[A-Za-z0-9_-]+$');
 
   /// A buffer which holds the textual representation of the document.
@@ -140,7 +138,7 @@ class TomlDocumentBuilder {
   ///
   /// Uses [getValueEncoder] to determine which [TomlValueEncoder] to use on
   /// [value].
-  /// Throws an [UnknownTypeError] if there is no matching encoder.
+  /// Throws an [UnknownValueTypeException] if there is no matching encoder.
   void encodeValue(value) {
     value = unwrapValue(value);
     TomlValueEncoder encoder = getValueEncoder(value);

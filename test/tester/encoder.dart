@@ -19,7 +19,7 @@ void testEncoder(String description, {Map input, String output}) {
 
 /// Tests whether the [TomlEncoder] fails to encode [input].
 ///
-/// Optionally tests whether a particular [err]or is thrown.
+/// Optionally tests whether a particular [error] is thrown.
 void testEncoderFailure(String description, {Map input, error: anything}) {
   test(description, () {
     expect(() => _encoder.encode(input), throwsA(error));
