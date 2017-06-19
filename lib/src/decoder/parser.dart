@@ -166,20 +166,22 @@ class TomlParserDefinition extends TomlGrammar {
         content[2].forEach((Map def) {
           // Find parent of the new table.
           var parent = doc;
-          var name = [];
+          var nameParts = [];
           def['parent'].forEach((String key) {
-            parent = parent.putIfAbsent(key, () => {});
-            if (parent is List) {
+            var child = parent.putIfAbsent(key, () => {});
+            if (child is List) {
               key = '$key[${parent.length - 1}]';
-              parent = parent.last;
+              child = child.last;
             }
-            name.add(key);
-            if (parent is! Map) {
-              throw new NotATableException(name.join('.'));
+            nameParts.add(key);
+            if (child is Map) {
+              parent = child;
+            } else {
+              throw new NotATableException(nameParts.join('.'));
             }
           });
-          name.add(def['name']);
-          name = name.join('.');
+          nameParts.add(def['name']);
+          var name = nameParts.join('.');
 
           // Create the table.
           var tbl;
