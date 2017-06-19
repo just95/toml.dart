@@ -25,7 +25,8 @@ class NotATableException implements Exception {
   NotATableException(this.name);
 
   @override
-  bool operator ==(other) => other is NotATableException && other.name == name;
+  bool operator ==(Object other) =>
+      other is NotATableException && other.name == name;
 
   @override
   int get hashCode => name.hashCode;

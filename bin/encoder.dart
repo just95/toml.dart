@@ -1,5 +1,4 @@
 #!/usr/bin/env dart
-
 // Copyright (c) 2015 Justin Andresen. All rights reserved.
 // This software may be modified and distributed under the terms
 // of the MIT license. See the LICENSE file for details.
@@ -29,7 +28,7 @@ Map<String, dynamic> decodeTable(Map<String, dynamic> json) {
 ///   {TVALUE} is parsed as a TOML value of the specified {TTYPE}.
 ///   If `{TTYPE}` is not a valid TOML type, an error is thrown.
 /// * All other `Maps` are decoded as a table. See [decodeTable].
-dynamic decodeValue(value) {
+dynamic decodeValue(dynamic value) {
   if (value is Iterable) value = {'type': 'array', 'value': value};
   if (value is Map) {
     if (value.length == 2 &&

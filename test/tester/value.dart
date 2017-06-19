@@ -12,11 +12,11 @@ var _parser = new TomlValueParser();
 
 /// Tests whether [TomlValueParser] successfully parses the [input] string
 /// and produces the specified [output].
-void testValue(String desciption, {String input, output}) =>
+void testValue(String desciption, {String input, dynamic output}) =>
     testToml(desciption, parser: _parser, input: input, output: output);
 
 /// Tests whether [TomlValueParser] fails to parse [input].
 ///
 /// Optionally tests whether a specific [error] is thrown.
-void testValueFailure(String desciption, {String input, error}) =>
+void testValueFailure(String desciption, {String input, dynamic error}) =>
     testTomlFailure(desciption, parser: _parser, input: input, error: error);

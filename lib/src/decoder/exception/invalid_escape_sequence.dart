@@ -19,7 +19,7 @@ class InvalidEscapeSequenceException implements Exception {
   InvalidEscapeSequenceException(this.escapeSequence);
 
   @override
-  bool operator ==(other) =>
+  bool operator ==(Object other) =>
       other is InvalidEscapeSequenceException &&
       other.escapeSequence == escapeSequence;
 

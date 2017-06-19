@@ -16,7 +16,7 @@ class ParserResultMatcher extends Matcher {
 
   ParserResultMatcher.failure() : this.isSuccess = false;
 
-  bool matches(item, Map matchState) =>
+  bool matches(dynamic item, Map matchState) =>
       item is Result && item.isSuccess == isSuccess;
 
   Description describe(Description description) =>

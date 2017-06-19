@@ -177,17 +177,17 @@ class TomlGrammar extends GrammarDefinition {
   // -----------------------------------------------------------------
 
   Parser array() =>
-      arrayOf(datetime) |
-      arrayOf(float) |
-      arrayOf(integer) |
-      arrayOf(boolean) |
-      arrayOf(str) |
-      arrayOf(array) |
-      arrayOf(inlineTable);
+      arrayOf(ref(datetime)) |
+      arrayOf(ref(float)) |
+      arrayOf(ref(integer)) |
+      arrayOf(ref(boolean)) |
+      arrayOf(ref(str)) |
+      arrayOf(ref(array)) |
+      arrayOf(ref(inlineTable));
 
-  Parser arrayOf(v) =>
+  Parser arrayOf(Parser valueParser) =>
       token('[', right: true) &
-      ref(v)
+      valueParser
           .separatedBy(token(',', both: true),
               optionalSeparatorAtEnd: true, includeSeparators: false)
           .optional([]) &

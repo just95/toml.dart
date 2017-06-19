@@ -13,7 +13,7 @@ class InvalidStringException implements Exception {
   InvalidStringException(this.msg);
 
   @override
-  bool operator ==(other) =>
+  bool operator ==(Object other) =>
       other is InvalidStringException && other.msg == msg;
 
   @override

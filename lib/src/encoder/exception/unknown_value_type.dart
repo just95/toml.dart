@@ -15,12 +15,12 @@ library toml.src.encoder.exception.unknown_value_type;
 /// value.
 class UnknownValueTypeException implements Exception {
   /// The object which cannot be encoded as a TOML value.
-  final value;
+  final dynamic value;
 
   UnknownValueTypeException(this.value);
 
   @override
-  bool operator ==(other) =>
+  bool operator ==(Object other) =>
       other is UnknownValueTypeException && other.value == value;
 
   @override

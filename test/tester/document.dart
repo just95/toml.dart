@@ -12,11 +12,11 @@ var _parser = new TomlParser();
 
 /// Tests whether [TomlParser] successfully parses the [input] string
 /// and produces the specified [output].
-void testDocument(String desciption, {String input, output}) =>
+void testDocument(String desciption, {String input, dynamic output}) =>
     testToml(desciption, parser: _parser, input: input, output: output);
 
 /// Tests whether [TomlParser] fails to parse [input].
 ///
 /// Optionally tests whether a specific [error] is thrown.
-void testDocumentFailure(String desciption, {String input, error}) =>
+void testDocumentFailure(String desciption, {String input, dynamic error}) =>
     testTomlFailure(desciption, parser: _parser, input: input, error: error);

@@ -11,7 +11,8 @@ import '../matcher/parser_result.dart';
 
 /// Tests whether the [parser] successfully parses the [input] and produces
 /// the specified [output].
-void testToml(String desciption, {Parser parser, String input, output}) {
+void testToml(String desciption,
+    {Parser parser, String input, dynamic output}) {
   test(desciption, () {
     var res = parser.parse(input);
     expect(res, isSuccess);
@@ -22,7 +23,8 @@ void testToml(String desciption, {Parser parser, String input, output}) {
 /// Tests whether [parser] fails to parse the [input].
 ///
 /// Optionally tests whether a specific [error] is thrown.
-void testTomlFailure(String desciption, {Parser parser, String input, error}) {
+void testTomlFailure(String desciption,
+    {Parser parser, String input, dynamic error}) {
   test(desciption, () {
     if (error == null) {
       var res = parser.parse(input);

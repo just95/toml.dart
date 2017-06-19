@@ -21,7 +21,7 @@ class MixedArrayTypesException implements Exception {
   MixedArrayTypesException(this.array);
 
   @override
-  bool operator ==(other) =>
+  bool operator ==(Object other) =>
       other is MixedArrayTypesException && other.array == array;
 
   @override

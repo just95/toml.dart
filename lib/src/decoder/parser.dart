@@ -81,7 +81,7 @@ class TomlParserDefinition extends TomlGrammar {
   // Arrays.
   // -----------------------------------------------------------------
 
-  Parser arrayOf(v) => super.arrayOf(v).pick(1);
+  Parser arrayOf(Parser valueParser) => super.arrayOf(valueParser).pick(1);
 
   // -----------------------------------------------------------------
   // Tables.
@@ -209,7 +209,7 @@ class TomlParserDefinition extends TomlGrammar {
           def['pairs'].forEach(addPairsTo(tbl, name));
         });
 
-        dynamic unmodifiable(toml) {
+        dynamic unmodifiable(dynamic toml) {
           if (toml is Map) {
             return new UnmodifiableMapView(new Map.fromIterables(
                 toml.keys, toml.values.map(unmodifiable)));

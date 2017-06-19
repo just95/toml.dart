@@ -56,7 +56,7 @@ class TomlDocumentBuilder {
   /// [TomlEncodable.toToml] will be repeatedly applied on [value] until the
   /// return value is representable by TOML.
   /// Returns [value] if it is not an instance of [TomlEncodable].
-  dynamic unwrapValue(value) {
+  dynamic unwrapValue(dynamic value) {
     while (value is TomlEncodable) value = value.toToml();
     return value;
   }
@@ -118,7 +118,7 @@ class TomlDocumentBuilder {
   /// [key] is the unqualified name of this entry.
   /// [value] is an object which can be represented by TOML or is a
   /// `TomlEncodable`.
-  void insertKeyValuePair(String key, value) {
+  void insertKeyValuePair(String key, dynamic value) {
     insertNewline();
     encodeKey(key);
     _buf.write(' = ');
@@ -139,7 +139,7 @@ class TomlDocumentBuilder {
   /// Uses [getValueEncoder] to determine which [TomlValueEncoder] to use on
   /// [value].
   /// Throws an [UnknownValueTypeException] if there is no matching encoder.
-  void encodeValue(value) {
+  void encodeValue(dynamic value) {
     value = unwrapValue(value);
     TomlValueEncoder encoder = getValueEncoder(value);
     if (encoder == null) throw new UnknownValueTypeException(value);
@@ -149,7 +149,7 @@ class TomlDocumentBuilder {
   /// Selects a [TomlValueEncoder] bases on the runtime type of [value].
   ///
   /// Returns `null` if no matching encoder was found.
-  TomlValueEncoder getValueEncoder(value) {
+  TomlValueEncoder getValueEncoder(dynamic value) {
     if (value is num) return encodeNumber;
     if (value is bool) return encodeBoolean;
     if (value is DateTime) return encodeDatetime;

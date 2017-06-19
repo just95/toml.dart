@@ -19,7 +19,7 @@ class RedefinitionException implements Exception {
   RedefinitionException(this.name);
 
   @override
-  bool operator ==(other) =>
+  bool operator ==(Object other) =>
       other is RedefinitionException && other.name == name;
 
   @override

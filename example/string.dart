@@ -6,7 +6,7 @@ library toml.example.string;
 
 import 'package:toml/decoder.dart';
 
-var toml = '''
+const String toml = '''
 [table]
   [[table.array]]
   key = "Hello, World!"
