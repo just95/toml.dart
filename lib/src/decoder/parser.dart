@@ -170,7 +170,7 @@ class TomlParserDefinition extends TomlGrammar {
           def['parent'].forEach((String key) {
             var child = parent.putIfAbsent(key, () => {});
             if (child is List) {
-              key = '$key[${parent.length - 1}]';
+              key = '$key[${child.length - 1}]';
               child = child.last;
             }
             nameParts.add(key);
