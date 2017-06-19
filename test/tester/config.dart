@@ -45,7 +45,7 @@ void testConfig(String name) {
     loadConfig('test/config/$name.toml'),
     loadConfig('test/config/$name.yaml')
   ]);
-  future.then(expectAsync((res) {
+  future.then(expectAsync1((res) {
     _cmpMaps(toml: res[0], yaml: res[1]);
   }));
   expect(future, completes);
