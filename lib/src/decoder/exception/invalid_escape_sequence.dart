@@ -2,7 +2,7 @@
 // This software may be modified and distributed under the terms
 // of the MIT license. See the LICENSE file for details.
 
-library toml.src.decoder.error.invalid_escape_sequence;
+library toml.src.decoder.exception.invalid_escape_sequence;
 
 /// An error which is thrown when the parser encounters an unspecified escape
 /// sequence.
