@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.5.1 / 2017-06-19
+
+- Upgraded dependencies.
+
 ## 0.5.0 / 2016-07-24
 
 - Removed deprecated `use*ConfigLoader` functions.
