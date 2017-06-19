@@ -2,7 +2,7 @@
 // This software may be modified and distributed under the terms
 // of the MIT license. See the LICENSE file for details.
 
-library toml.src.encoder.mixed_array_types;
+library toml.src.encoder.exception.mixed_array_types;
 
 /// An error which is thrown when an `Iterable` cannot be encoded as an array
 /// because it does not have a unique value type.
@@ -12,17 +12,17 @@ library toml.src.encoder.mixed_array_types;
 ///     var encoder = new TomlEncoder();
 ///     encoder.encode({'a': [1, '2']});
 ///
-/// throws an [MixedArrayTypesError] because `1` and `'2'` are of different
+/// throws an [MixedArrayTypesException] because `1` and `'2'` are of different
 /// types.
-class MixedArrayTypesError {
+class MixedArrayTypesException implements Exception {
   /// The array which has mixed value types.
   final Iterable array;
 
-  MixedArrayTypesError(this.array);
+  MixedArrayTypesException(this.array);
 
   @override
   bool operator ==(other) =>
-      other is MixedArrayTypesError && other.array == array;
+      other is MixedArrayTypesException && other.array == array;
 
   @override
   int get hashCode => array.hashCode;

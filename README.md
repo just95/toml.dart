@@ -239,8 +239,8 @@ var document = {
 };
 ```
 
-would throw an `MixedArrayTypesError` in the vm but yields this document when
-compiled to JavaScript:
+would throw an `MixedArrayTypesException` in the vm but yields this document
+when compiled to JavaScript:
 
 ```toml
 array = [1.0, 2.0, 3.141]

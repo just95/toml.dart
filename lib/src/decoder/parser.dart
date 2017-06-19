@@ -9,9 +9,9 @@ import 'dart:collection';
 import 'package:petitparser/petitparser.dart';
 
 import 'grammar.dart';
-import 'error/invalid_escape_sequence.dart';
-import 'error/not_a_table.dart';
-import 'error/redefinition.dart';
+import 'exception/invalid_escape_sequence.dart';
+import 'exception/not_a_table.dart';
+import 'exception/redefinition.dart';
 
 /// TOML parser definition.
 class TomlParserDefinition extends TomlGrammar {
@@ -40,7 +40,7 @@ class TomlParserDefinition extends TomlGrammar {
         if (TomlGrammar.escTable.containsKey(c)) {
           return new String.fromCharCode(TomlGrammar.escTable[c]);
         }
-        throw new InvalidEscapeSequenceError('\\$c');
+        throw new InvalidEscapeSequenceException('\\$c');
       });
 
   multiLineEscSeq() => super.multiLineEscSeq().pick(1);
@@ -145,7 +145,7 @@ class TomlParserDefinition extends TomlGrammar {
 
         // Add a name to the set above.
         void define(String name) {
-          if (defined.contains(name)) throw new RedefinitionError(name);
+          if (defined.contains(name)) throw new RedefinitionException(name);
           defined.add(name);
         }
 
@@ -155,7 +155,7 @@ class TomlParserDefinition extends TomlGrammar {
               define(name);
 
               if (table.containsKey(pair['key']))
-                throw new RedefinitionError(name);
+                throw new RedefinitionException(name);
               table[pair['key']] = pair['value'];
             };
 
@@ -174,7 +174,9 @@ class TomlParserDefinition extends TomlGrammar {
               parent = parent.last;
             }
             name.add(key);
-            if (parent is! Map) throw new NotATableError(name.join('.'));
+            if (parent is! Map) {
+              throw new NotATableException(name.join('.'));
+            }
           });
           name.add(def['name']);
           name = name.join('.');
@@ -191,7 +193,7 @@ class TomlParserDefinition extends TomlGrammar {
             });
 
             // Overwrite previous table.
-            if (arr is Map) throw new RedefinitionError(name);
+            if (arr is Map) throw new RedefinitionException(name);
 
             var i = arr.length;
             arr.add(tbl = {});

@@ -2,7 +2,7 @@
 // This software may be modified and distributed under the terms
 // of the MIT license. See the LICENSE file for details.
 
-library toml.src.encoder.unknown_value_type;
+library toml.src.encoder.exception.unknown_value_type;
 
 /// An error which is thrown when an object cannot be encoded.
 ///
@@ -11,16 +11,17 @@ library toml.src.encoder.unknown_value_type;
 ///     var encoder = new TomlEncoder();
 ///     encoder.encode({'a': null});
 ///
-/// throws an [UnknownValueTypeError] because `null` is not a valid TOML value.
-class UnknownValueTypeError {
+/// throws an [UnknownValueTypeException] because `null` is not a valid TOML
+/// value.
+class UnknownValueTypeException implements Exception {
   /// The object which cannot be encoded as a TOML value.
   final value;
 
-  UnknownValueTypeError(this.value);
+  UnknownValueTypeException(this.value);
 
   @override
   bool operator ==(other) =>
-      other is UnknownValueTypeError && other.value == value;
+      other is UnknownValueTypeException && other.value == value;
 
   @override
   int get hashCode => value.hashCode;

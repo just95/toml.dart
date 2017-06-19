@@ -9,6 +9,6 @@ export 'src/decoder/interface.dart';
 export 'src/decoder/parser.dart';
 export 'src/decoder/value.dart';
 
-export 'src/decoder/error/invalid_escape_sequence.dart';
-export 'src/decoder/error/not_a_table.dart';
-export 'src/decoder/error/redefinition.dart';
+export 'src/decoder/exception/invalid_escape_sequence.dart';
+export 'src/decoder/exception/not_a_table.dart';
+export 'src/decoder/exception/redefinition.dart';

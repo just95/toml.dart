@@ -2,18 +2,19 @@
 // This software may be modified and distributed under the terms
 // of the MIT license. See the LICENSE file for details.
 
-library toml.src.encoder.error.invalid_string;
+library toml.src.encoder.exception.invalid_string;
 
 /// An error which is thrown when the encoder encounters a character in a
 /// string which cannot be represented by TOML.
-class InvalidStringError {
+class InvalidStringException implements Exception {
   /// A message which describes the error.
   final String msg;
 
-  InvalidStringError(this.msg);
+  InvalidStringException(this.msg);
 
   @override
-  bool operator ==(other) => other is InvalidStringError && other.msg == msg;
+  bool operator ==(other) =>
+      other is InvalidStringException && other.msg == msg;
 
   @override
   int get hashCode => msg.hashCode;

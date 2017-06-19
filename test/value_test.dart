@@ -23,7 +23,7 @@ void main() {
                 'Name\tJos\u00E9\nLocation\tSF.');
         testValueFailure('invalid escape sequences',
             input: r'"some\windows\path"',
-            error: new InvalidEscapeSequenceError(r'\w'));
+            error: new InvalidEscapeSequenceException(r'\w'));
         testValue('multi-line',
             input: '"""Roses are red\n'
                 'Violets are blue"""',

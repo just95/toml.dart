@@ -11,16 +11,16 @@ library toml.src.decoder.error.invalid_escape_sequence;
 ///
 ///     dir = "some\windows\path"
 ///
-/// throws an [InvalidEscapeSequenceError] with `[escapeSequence] = r'\w'`.
-class InvalidEscapeSequenceError {
+/// throws an [InvalidEscapeSequenceException] with `[escapeSequence] = r'\w'`.
+class InvalidEscapeSequenceException implements Exception {
   /// The invalid escape sequence.
   final String escapeSequence;
 
-  InvalidEscapeSequenceError(this.escapeSequence);
+  InvalidEscapeSequenceException(this.escapeSequence);
 
   @override
   bool operator ==(other) =>
-      other is InvalidEscapeSequenceError &&
+      other is InvalidEscapeSequenceException &&
       other.escapeSequence == escapeSequence;
 
   @override

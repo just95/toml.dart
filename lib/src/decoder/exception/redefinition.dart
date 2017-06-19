@@ -2,7 +2,7 @@
 // This software may be modified and distributed under the terms
 // of the MIT license. See the LICENSE file for details.
 
-library toml.src.decoder.error.redefinition;
+library toml.src.decoder.exception.redefinition;
 
 /// An error which is thrown when a table or key is defined more than once.
 ///
@@ -11,15 +11,16 @@ library toml.src.decoder.error.redefinition;
 ///     a = 1
 ///     a = 2
 ///
-/// throws a [RedefinitionError] because `a` is defined twice.
-class RedefinitionError {
+/// throws a [RedefinitionException] because `a` is defined twice.
+class RedefinitionException implements Exception {
   /// Fully qualified name of the table or key.
   final String name;
 
-  RedefinitionError(this.name);
+  RedefinitionException(this.name);
 
   @override
-  bool operator ==(other) => other is RedefinitionError && other.name == name;
+  bool operator ==(other) =>
+      other is RedefinitionException && other.name == name;
 
   @override
   int get hashCode => name.hashCode;

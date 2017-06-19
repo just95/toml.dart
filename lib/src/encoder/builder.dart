@@ -7,9 +7,9 @@ library toml.src.encoder.builder;
 import 'package:toml/decoder.dart';
 
 import 'encodable.dart';
-import 'error/invalid_string.dart';
-import 'error/mixed_array_types.dart';
-import 'error/unknown_value_type.dart';
+import 'exception/invalid_string.dart';
+import 'exception/mixed_array_types.dart';
+import 'exception/unknown_value_type.dart';
 
 /// A function which encodes an object as a TOML value.
 typedef void TomlValueEncoder<V>(V value);
@@ -144,7 +144,7 @@ class TomlDocumentBuilder {
   void encodeValue(value) {
     value = unwrapValue(value);
     TomlValueEncoder encoder = getValueEncoder(value);
-    if (encoder == null) throw new UnknownValueTypeError(value);
+    if (encoder == null) throw new UnknownValueTypeException(value);
     encoder(value);
   }
 
@@ -178,7 +178,7 @@ class TomlDocumentBuilder {
 
   /// Tests whether all items of an array are of the same type.
   ///
-  /// If the content type of [array] is not unique, a [MixedArrayTypesError]
+  /// If the content type of [array] is not unique, a [MixedArrayTypesException]
   /// will be thrown.
   /// Returns the content type or `null` if [array] is empty.
   ///
@@ -201,7 +201,7 @@ class TomlDocumentBuilder {
     }
 
     return array.map((item) => item.runtimeType).reduce((a, b) {
-      if (a != b) throw new MixedArrayTypesError(array);
+      if (a != b) throw new MixedArrayTypesException(array);
       return a;
     });
   }
@@ -276,8 +276,8 @@ class TomlDocumentBuilder {
   /// Encodes [value] as a string delimited by a pair of [quotes].
   /// The start quotes are followed by an empty line for [multiline] strings.
   /// Escapes the code units specified by [esc].
-  /// Throws an [InvalidStringError] if [value] contains some characters which
-  /// are not allowed.
+  /// Throws an [InvalidStringException] if [value] contains some characters
+  /// which are not allowed.
   void _encodeString(String value,
       {String quotes, Iterable<int> esc: const [], bool multiline: false}) {
     // Escape value.
@@ -293,13 +293,13 @@ class TomlDocumentBuilder {
     if (multiline) {
       if (quotes == '"""') value = value.replaceAll('"""', r'\"\"\"');
     } else if (value.contains('\n') || value.contains('\r')) {
-      throw new InvalidStringError(
+      throw new InvalidStringException(
           'Newlines are only allowed in multi-line strings!');
     }
 
     // Unescaped quotes are illegal.
     if (!esc.contains(quotes.codeUnitAt(0)) && value.contains(quotes)) {
-      throw new InvalidStringError(
+      throw new InvalidStringException(
           '"$quotes" are prohibited in non-basic strings.');
     }
 

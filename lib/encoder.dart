@@ -8,6 +8,6 @@ export 'src/encoder/builder.dart';
 export 'src/encoder/encodable.dart';
 export 'src/encoder/encoder.dart';
 
-export 'src/encoder/error/invalid_string.dart';
-export 'src/encoder/error/mixed_array_types.dart';
-export 'src/encoder/error/unknown_value_type.dart';
+export 'src/encoder/exception/invalid_string.dart';
+export 'src/encoder/exception/mixed_array_types.dart';
+export 'src/encoder/exception/unknown_value_type.dart';
