@@ -29,7 +29,10 @@ void _cmp({tomlValue, yamlValue}) {
     expect(yamlValue, new isInstanceOf<Iterable>());
     expect(tomlValue.length, equals(yamlValue.length));
     for (int i = 0; i < tomlValue.length; i++) {
-      _cmp(tomlValue: tomlValue[i], yamlValue: yamlValue[i]);
+      _cmp(
+        tomlValue: tomlValue.elementAt(i),
+        yamlValue: yamlValue.elementAt(i),
+      );
     }
   } else if (tomlValue is DateTime) {
     expect(tomlValue, equals(DateTime.parse(yamlValue)));
