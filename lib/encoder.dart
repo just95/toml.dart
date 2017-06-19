@@ -4,12 +4,10 @@
 
 library toml.encoder;
 
-import 'decoder.dart';
+export 'src/encoder/builder.dart';
+export 'src/encoder/encodable.dart';
+export 'src/encoder/encoder.dart';
 
-part 'src/encoder/builder.dart';
-part 'src/encoder/encodable.dart';
-part 'src/encoder/encoder.dart';
-
-part 'src/encoder/error/invalid_string.dart';
-part 'src/encoder/error/mixed_array_types.dart';
-part 'src/encoder/error/unknown_value_type.dart';
+export 'src/encoder/error/invalid_string.dart';
+export 'src/encoder/error/mixed_array_types.dart';
+export 'src/encoder/error/unknown_value_type.dart';

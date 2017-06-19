@@ -2,7 +2,9 @@
 // This software may be modified and distributed under the terms
 // of the MIT license. See the LICENSE file for details.
 
-part of toml.encoder;
+library toml.src.encoder;
+
+import 'builder.dart';
 
 /// TOML encoder.
 class TomlEncoder {

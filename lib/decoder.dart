@@ -4,20 +4,11 @@
 
 library toml.decoder;
 
-import 'dart:collection';
+export 'src/decoder/grammar.dart';
+export 'src/decoder/interface.dart';
+export 'src/decoder/parser.dart';
+export 'src/decoder/value.dart';
 
-import 'package:petitparser/petitparser.dart';
-import 'package:quiver/collection.dart';
-
-import 'decoder/json.dart';
-import 'decoder/toml.dart';
-import 'decoder/yaml.dart';
-
-part 'src/decoder/grammar.dart';
-part 'src/decoder/interface.dart';
-part 'src/decoder/parser.dart';
-part 'src/decoder/value.dart';
-
-part 'src/decoder/error/invalid_escape_sequence.dart';
-part 'src/decoder/error/not_a_table.dart';
-part 'src/decoder/error/redefinition.dart';
+export 'src/decoder/error/invalid_escape_sequence.dart';
+export 'src/decoder/error/not_a_table.dart';
+export 'src/decoder/error/redefinition.dart';

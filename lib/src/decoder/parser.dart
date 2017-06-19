@@ -2,7 +2,16 @@
 // This software may be modified and distributed under the terms
 // of the MIT license. See the LICENSE file for details.
 
-part of toml.decoder;
+library toml.src.decoder.parser;
+
+import 'dart:collection';
+
+import 'package:petitparser/petitparser.dart';
+
+import 'grammar.dart';
+import 'error/invalid_escape_sequence.dart';
+import 'error/not_a_table.dart';
+import 'error/redefinition.dart';
 
 /// TOML parser definition.
 class TomlParserDefinition extends TomlGrammar {

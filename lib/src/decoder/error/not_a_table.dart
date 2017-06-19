@@ -2,7 +2,7 @@
 // This software may be modified and distributed under the terms
 // of the MIT license. See the LICENSE file for details.
 
-part of toml.decoder;
+library toml.src.decoder.error.not_a_table;
 
 /// An error which is thrown when the parent element of a table is not
 /// a table.

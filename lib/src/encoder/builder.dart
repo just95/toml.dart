@@ -2,7 +2,14 @@
 // This software may be modified and distributed under the terms
 // of the MIT license. See the LICENSE file for details.
 
-part of toml.encoder;
+library toml.src.encoder.builder;
+
+import 'package:toml/decoder.dart';
+
+import 'encodable.dart';
+import 'error/invalid_string.dart';
+import 'error/mixed_array_types.dart';
+import 'error/unknown_value_type.dart';
 
 /// A function which encodes an object as a TOML value.
 typedef void TomlValueEncoder<V>(V value);

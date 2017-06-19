@@ -2,7 +2,11 @@
 // This software may be modified and distributed under the terms
 // of the MIT license. See the LICENSE file for details.
 
-part of toml.decoder;
+library toml.src.decoder.interface;
+
+import 'package:toml/decoder/json.dart';
+import 'package:toml/decoder/toml.dart';
+import 'package:toml/decoder/yaml.dart';
 
 /// Interface for configuration file decoders.
 ///

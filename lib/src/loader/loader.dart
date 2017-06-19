@@ -2,7 +2,14 @@
 // This software may be modified and distributed under the terms
 // of the MIT license. See the LICENSE file for details.
 
-part of toml.loader;
+library toml.src.loader;
+
+import 'dart:async';
+
+import 'package:path/path.dart';
+import 'package:toml/decoder.dart';
+
+import 'interface.dart';
 
 /// Loads [filename] using the default loader and decodes the contents
 /// with the decoder associated with the file extension.

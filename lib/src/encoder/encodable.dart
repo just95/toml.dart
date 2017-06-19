@@ -2,7 +2,7 @@
 // This software may be modified and distributed under the terms
 // of the MIT license. See the LICENSE file for details.
 
-part of toml.encoder;
+library toml.src.encoder.encodable;
 
 /// An object which can be encoded as a TOML value or table.
 abstract class TomlEncodable {

@@ -4,11 +4,5 @@
 
 library toml.loader;
 
-import 'dart:async';
-
-import 'package:path/path.dart';
-
-import 'decoder.dart';
-
-part 'src/loader/interface.dart';
-part 'src/loader/loader.dart';
+export 'src/loader/interface.dart';
+export 'src/loader/loader.dart';
