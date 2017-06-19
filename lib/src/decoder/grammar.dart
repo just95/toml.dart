@@ -24,7 +24,7 @@ class TomlGrammar extends GrammarDefinition {
       r'\': 0x5C // Backslash.
     });
 
-  start() => ref(document).end();
+  Parser start() => ref(document).end();
 
   // -----------------------------------------------------------------
   // Tokens.
@@ -33,26 +33,26 @@ class TomlGrammar extends GrammarDefinition {
   /// Parses the specified string ignoring whitespace on either side.
   ///
   /// Optionally allows whitespace on the [left], [right] or [both] sides.
-  token(String str, {bool both: false, bool left, bool right}) =>
+  Parser token(String str, {bool both: false, bool left, bool right}) =>
       string(str).trim(ref(ignore, left ?? both), ref(ignore, right ?? both));
 
   // -----------------------------------------------------------------
   // Whitespace and comments.
   // -----------------------------------------------------------------
 
-  ignore([bool multiLine = false]) =>
+  Parser ignore([bool multiLine = false]) =>
       multiLine ? ref(ignore) | ref(newline) : ref(whitespace) | ref(comment);
 
-  whitespace() => char(' ') | char('\t');
-  newline() => char('\n') | char('\r') & char('\n');
+  Parser whitespace() => char(' ') | char('\t');
+  Parser newline() => char('\n') | char('\r') & char('\n');
 
-  comment() => char('#') & ref(newline).neg().star();
+  Parser comment() => char('#') & ref(newline).neg().star();
 
   // -----------------------------------------------------------------
   // Values.
   // -----------------------------------------------------------------
 
-  value() =>
+  Parser value() =>
       ref(datetime) |
       ref(float) |
       ref(integer) |
@@ -65,20 +65,20 @@ class TomlGrammar extends GrammarDefinition {
   // String values.
   // -----------------------------------------------------------------
 
-  str() =>
+  Parser str() =>
       ref(multiLineBasicStr) |
       ref(basicStr) |
       ref(multiLineLiteralStr) |
       ref(literalStr);
 
-  strData(String quotes, {bool literal: false, bool multiLine: false}) {
+  Parser strData(String quotes, {bool literal: false, bool multiLine: false}) {
     var forbidden = string(quotes);
     if (!literal) forbidden |= char('\\');
     if (!multiLine) forbidden |= ref(newline);
     return forbidden.neg().plus();
   }
 
-  strParser(String quotes, {Parser esc, bool multiLine: false}) {
+  Parser strParser(String quotes, {Parser esc, bool multiLine: false}) {
     var data = strData(quotes, literal: esc == null, multiLine: multiLine);
     if (esc != null) data = esc | data;
     var first = multiLine ? ref(blankLine).optional() : epsilon();
@@ -89,76 +89,76 @@ class TomlGrammar extends GrammarDefinition {
   // Basic strings.
   // -----------------------------------------------------------------
 
-  basicStr() => strParser('"', esc: ref(escSeq));
+  Parser basicStr() => strParser('"', esc: ref(escSeq));
 
-  multiLineBasicStr() =>
+  Parser multiLineBasicStr() =>
       strParser('"""', esc: ref(multiLineEscSeq), multiLine: true);
 
   // -----------------------------------------------------------------
   // Literal strings.
   // -----------------------------------------------------------------
 
-  literalStr() => strParser("'");
+  Parser literalStr() => strParser("'");
 
-  multiLineLiteralStr() => strParser("'''", multiLine: true);
+  Parser multiLineLiteralStr() => strParser("'''", multiLine: true);
 
   // -----------------------------------------------------------------
   // Escape Sequences.
   // -----------------------------------------------------------------
 
-  escSeq() => char('\\') & (ref(unicodeEscSeq) | ref(compactEscSeq));
+  Parser escSeq() => char('\\') & (ref(unicodeEscSeq) | ref(compactEscSeq));
 
-  unicodeEscSeq() =>
+  Parser unicodeEscSeq() =>
       char('u') & ref(hexDigit).times(4).flatten() |
       char('U') & ref(hexDigit).times(8).flatten();
-  hexDigit() => pattern('0-9a-fA-F');
+  Parser hexDigit() => pattern('0-9a-fA-F');
 
-  compactEscSeq() => any();
+  Parser compactEscSeq() => any();
 
-  multiLineEscSeq() =>
+  Parser multiLineEscSeq() =>
       char('\\') &
       (ref(whitespaceEscSeq) | ref(unicodeEscSeq) | ref(compactEscSeq));
 
-  whitespaceEscSeq() => ref(blankLine).plus() & ref(whitespace).star();
+  Parser whitespaceEscSeq() => ref(blankLine).plus() & ref(whitespace).star();
 
-  blankLine() => ref(whitespace).star() & ref(newline);
+  Parser blankLine() => ref(whitespace).star() & ref(newline);
 
   // -----------------------------------------------------------------
   // Integer values.
   // -----------------------------------------------------------------
 
-  integer() => ref(integralPart);
+  Parser integer() => ref(integralPart);
 
   // -----------------------------------------------------------------
   // Float values.
   // -----------------------------------------------------------------
 
-  float() =>
+  Parser float() =>
       ref(integralPart) &
       (ref(fractionalPart) & ref(exponentPart).optional() | ref(exponentPart));
 
-  integralPart() => anyIn('+-').optional() & (char('0') | ref(digits));
-  fractionalPart() => char('.') & ref(digits);
-  exponentPart() => anyIn('eE') & ref(integralPart);
+  Parser integralPart() => anyIn('+-').optional() & (char('0') | ref(digits));
+  Parser fractionalPart() => char('.') & ref(digits);
+  Parser exponentPart() => anyIn('eE') & ref(integralPart);
 
-  digits() => digit().plus().separatedBy(char('_'));
+  Parser digits() => digit().plus().separatedBy(char('_'));
 
   // -----------------------------------------------------------------
   // Boolean values.
   // -----------------------------------------------------------------
 
-  boolean() => string('true') | string('false');
+  Parser boolean() => string('true') | string('false');
 
   // -----------------------------------------------------------------
   // Datetime values. (RFC 3339)
   // -----------------------------------------------------------------
 
-  datetime() => ref(fullDate) & char('T') & ref(fullTime);
+  Parser datetime() => ref(fullDate) & char('T') & ref(fullTime);
 
-  fullDate() => ref(dddd) & char('-') & ref(dd) & char('-') & ref(dd);
+  Parser fullDate() => ref(dddd) & char('-') & ref(dd) & char('-') & ref(dd);
 
-  fullTime() => ref(partialTime) & ref(timeOffset);
-  partialTime() =>
+  Parser fullTime() => ref(partialTime) & ref(timeOffset);
+  Parser partialTime() =>
       ref(dd) &
       char(':') &
       ref(dd) &
@@ -166,17 +166,17 @@ class TomlGrammar extends GrammarDefinition {
       ref(dd) &
       (char('.') & digit().repeat(1, 6)).optional();
 
-  timeOffset() => char('Z') | ref(timeNumOffset);
-  timeNumOffset() => anyIn('+-') & ref(dd) & char(':') & ref(dd);
+  Parser timeOffset() => char('Z') | ref(timeNumOffset);
+  Parser timeNumOffset() => anyIn('+-') & ref(dd) & char(':') & ref(dd);
 
-  dd() => digit().times(2);
-  dddd() => digit().times(4);
+  Parser dd() => digit().times(2);
+  Parser dddd() => digit().times(4);
 
   // -----------------------------------------------------------------
   // Arrays.
   // -----------------------------------------------------------------
 
-  array() =>
+  Parser array() =>
       arrayOf(datetime) |
       arrayOf(float) |
       arrayOf(integer) |
@@ -185,7 +185,7 @@ class TomlGrammar extends GrammarDefinition {
       arrayOf(array) |
       arrayOf(inlineTable);
 
-  arrayOf(v) =>
+  Parser arrayOf(v) =>
       token('[', right: true) &
       ref(v)
           .separatedBy(token(',', both: true),
@@ -197,24 +197,25 @@ class TomlGrammar extends GrammarDefinition {
   // Tables.
   // -----------------------------------------------------------------
 
-  table() => ref(tableHeader).trim(ref(ignore, true)) & ref(keyValuePairs);
-  tableHeader() =>
+  Parser table() =>
+      ref(tableHeader).trim(ref(ignore, true)) & ref(keyValuePairs);
+  Parser tableHeader() =>
       token('[', left: true) & ref(keyPath) & token(']', right: true);
 
   // -----------------------------------------------------------------
   // Array of Tables.
   // -----------------------------------------------------------------
 
-  tableArray() =>
+  Parser tableArray() =>
       ref(tableArrayHeader).trim(ref(ignore, true)) & ref(keyValuePairs);
-  tableArrayHeader() =>
+  Parser tableArrayHeader() =>
       token('[[', left: true) & ref(keyPath) & token(']]', right: true);
 
   // -----------------------------------------------------------------
   // Inline Tables.
   // -----------------------------------------------------------------
 
-  inlineTable() =>
+  Parser inlineTable() =>
       token('{') &
       ref(keyValuePair)
           .separatedBy(token(','),
@@ -230,19 +231,20 @@ class TomlGrammar extends GrammarDefinition {
   // Keys.
   // -----------------------------------------------------------------
 
-  key() => ref(bareKey) | ref(quotedKey);
+  Parser key() => ref(bareKey) | ref(quotedKey);
 
-  bareKey() => pattern('A-Za-z0-9_-').plus();
-  quotedKey() => ref(basicStr);
+  Parser bareKey() => pattern('A-Za-z0-9_-').plus();
+  Parser quotedKey() => ref(basicStr);
 
-  keyPath() => ref(key).separatedBy(token('.'), includeSeparators: false);
+  Parser keyPath() =>
+      ref(key).separatedBy(token('.'), includeSeparators: false);
 
   // -----------------------------------------------------------------
   // Key/value pairs.
   // -----------------------------------------------------------------
 
-  keyValuePair() => ref(key) & token('=') & ref(value);
-  keyValuePairs() => ref(keyValuePair)
+  Parser keyValuePair() => ref(key) & token('=') & ref(value);
+  Parser keyValuePairs() => ref(keyValuePair)
       .separatedBy(ref(ignore).star() & ref(newline) & ref(ignore, true).star(),
           includeSeparators: false, optionalSeparatorAtEnd: true)
       .optional([]);
@@ -251,7 +253,7 @@ class TomlGrammar extends GrammarDefinition {
   // Document.
   // -----------------------------------------------------------------
 
-  document() =>
+  Parser document() =>
       ref(ignore, true).star() &
       ref(keyValuePairs) &
       (ref(table) | ref(tableArray)).star();

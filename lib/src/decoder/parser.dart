@@ -19,10 +19,10 @@ class TomlParserDefinition extends TomlGrammar {
   // Strings values.
   // -----------------------------------------------------------------
 
-  strData(String quotes, {bool literal: false, bool multiLine: false}) =>
+  Parser strData(String quotes, {bool literal: false, bool multiLine: false}) =>
       super.strData(quotes, literal: literal, multiLine: multiLine).flatten();
 
-  strParser(String quotes, {Parser esc, bool multiLine: false}) => super
+  Parser strParser(String quotes, {Parser esc, bool multiLine: false}) => super
       .strParser(quotes, esc: esc, multiLine: multiLine)
       .pick(2)
       .map((data) => data.join());
@@ -31,27 +31,27 @@ class TomlParserDefinition extends TomlGrammar {
   // Escape Sequences.
   // -----------------------------------------------------------------
 
-  escSeq() => super.escSeq().pick(1);
+  Parser escSeq() => super.escSeq().pick(1);
 
-  unicodeEscSeq() => super.unicodeEscSeq().pick(1).map(
+  Parser unicodeEscSeq() => super.unicodeEscSeq().pick(1).map(
       (charCode) => new String.fromCharCode(int.parse(charCode, radix: 16)));
 
-  compactEscSeq() => super.compactEscSeq().map((String c) {
+  Parser compactEscSeq() => super.compactEscSeq().map((String c) {
         if (TomlGrammar.escTable.containsKey(c)) {
           return new String.fromCharCode(TomlGrammar.escTable[c]);
         }
         throw new InvalidEscapeSequenceException('\\$c');
       });
 
-  multiLineEscSeq() => super.multiLineEscSeq().pick(1);
+  Parser multiLineEscSeq() => super.multiLineEscSeq().pick(1);
 
-  whitespaceEscSeq() => super.whitespaceEscSeq().map((_) => '');
+  Parser whitespaceEscSeq() => super.whitespaceEscSeq().map((_) => '');
 
   // -----------------------------------------------------------------
   // Integer values.
   // -----------------------------------------------------------------
 
-  integer() => super
+  Parser integer() => super
       .integer()
       .flatten()
       .map((str) => int.parse(str.replaceAll('_', '')));
@@ -60,7 +60,7 @@ class TomlParserDefinition extends TomlGrammar {
   // Float values.
   // -----------------------------------------------------------------
 
-  float() => super
+  Parser float() => super
       .float()
       .flatten()
       .map((str) => double.parse(str.replaceAll('_', '')));
@@ -69,49 +69,49 @@ class TomlParserDefinition extends TomlGrammar {
   // Boolean values.
   // -----------------------------------------------------------------
 
-  boolean() => super.boolean().map((str) => str == 'true');
+  Parser boolean() => super.boolean().map((str) => str == 'true');
 
   // -----------------------------------------------------------------
   // Datetime values.
   // -----------------------------------------------------------------
 
-  datetime() => super.datetime().flatten().map(DateTime.parse);
+  Parser datetime() => super.datetime().flatten().map(DateTime.parse);
 
   // -----------------------------------------------------------------
   // Arrays.
   // -----------------------------------------------------------------
 
-  arrayOf(v) => super.arrayOf(v).pick(1);
+  Parser arrayOf(v) => super.arrayOf(v).pick(1);
 
   // -----------------------------------------------------------------
   // Tables.
   // -----------------------------------------------------------------
 
-  table() => super.table().map((List def) => {
+  Parser table() => super.table().map((List def) => {
         'type': 'table',
         'parent': def[0].sublist(0, def[0].length - 1),
         'name': def[0].last,
         'pairs': def[1]
       });
-  tableHeader() => super.tableHeader().pick(1);
+  Parser tableHeader() => super.tableHeader().pick(1);
 
   // -----------------------------------------------------------------
   // Array of Tables.
   // -----------------------------------------------------------------
 
-  tableArray() => super.tableArray().map((List def) => {
+  Parser tableArray() => super.tableArray().map((List def) => {
         'type': 'table-array',
         'parent': def[0].sublist(0, def[0].length - 1),
         'name': def[0].last,
         'pairs': def[1]
       });
-  tableArrayHeader() => super.tableArrayHeader().pick(1);
+  Parser tableArrayHeader() => super.tableArrayHeader().pick(1);
 
   // -----------------------------------------------------------------
   // Inline Tables.
   // -----------------------------------------------------------------
 
-  inlineTable() => super.inlineTable().pick(1).map((List pairs) {
+  Parser inlineTable() => super.inlineTable().pick(1).map((List pairs) {
         var map = {};
         pairs.forEach((Map pair) {
           map[pair['key']] = pair['value'];
@@ -123,13 +123,13 @@ class TomlParserDefinition extends TomlGrammar {
   // Keys.
   // -----------------------------------------------------------------
 
-  bareKey() => super.bareKey().flatten();
+  Parser bareKey() => super.bareKey().flatten();
 
   // -----------------------------------------------------------------
   // Key/value pairs.
   // -----------------------------------------------------------------
 
-  keyValuePair() => super
+  Parser keyValuePair() => super
       .keyValuePair()
       .permute([0, 2]).map((List pair) => {'key': pair[0], 'value': pair[1]});
 
@@ -137,7 +137,7 @@ class TomlParserDefinition extends TomlGrammar {
   // Document.
   // -----------------------------------------------------------------
 
-  document() => super.document().map((List content) {
+  Parser document() => super.document().map((List content) {
         var doc = {};
 
         // Set of names of defined keys and tables.
@@ -209,7 +209,7 @@ class TomlParserDefinition extends TomlGrammar {
           def['pairs'].forEach(addPairsTo(tbl, name));
         });
 
-        unmodifiable(toml) {
+        dynamic unmodifiable(toml) {
           if (toml is Map) {
             return new UnmodifiableMapView(new Map.fromIterables(
                 toml.keys, toml.values.map(unmodifiable)));

@@ -8,5 +8,5 @@ library toml.src.encoder.encodable;
 abstract class TomlEncodable {
   /// Converts this object to an object which can natively be represented as
   /// a TOML value or table.
-  toToml();
+  dynamic toToml();
 }

@@ -56,7 +56,7 @@ class TomlDocumentBuilder {
   /// [TomlEncodable.toToml] will be repeatedly applied on [value] until the
   /// return value is representable by TOML.
   /// Returns [value] if it is not an instance of [TomlEncodable].
-  unwrapValue(value) {
+  dynamic unwrapValue(value) {
     while (value is TomlEncodable) value = value.toToml();
     return value;
   }
