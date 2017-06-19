@@ -13,7 +13,7 @@ class MyConfigLoader extends ConfigLoader {
     ConfigLoader.use(new MyConfigLoader());
   }
 
-  Map<String, String> _cache = {
+  final Map<String, String> _cache = {
     'config.toml': '''
       [table]
         [[table.array]]
