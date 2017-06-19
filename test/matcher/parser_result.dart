@@ -16,9 +16,11 @@ class ParserResultMatcher extends Matcher {
 
   ParserResultMatcher.failure() : this.isSuccess = false;
 
+  @override
   bool matches(dynamic item, Map matchState) =>
       item is Result && item.isSuccess == isSuccess;
 
+  @override
   Description describe(Description description) =>
       description.add('${isSuccess ? 'successful' : 'failed'} parse result');
 }

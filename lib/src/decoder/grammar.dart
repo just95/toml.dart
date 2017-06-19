@@ -24,6 +24,7 @@ class TomlGrammar extends GrammarDefinition {
       r'\': 0x5C // Backslash.
     });
 
+  @override
   Parser start() => ref(document).end();
 
   // -----------------------------------------------------------------

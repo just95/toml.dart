@@ -14,6 +14,7 @@ import 'parser.dart';
 /// such that only TOML values are accepted.
 /// This class is intended for testing purposes.
 class TomlValueParserDefinition extends TomlParserDefinition {
+  @override
   Parser start() => ref(value).end();
 }
 

@@ -19,9 +19,11 @@ class TomlParserDefinition extends TomlGrammar {
   // Strings values.
   // -----------------------------------------------------------------
 
+  @override
   Parser strData(String quotes, {bool literal: false, bool multiLine: false}) =>
       super.strData(quotes, literal: literal, multiLine: multiLine).flatten();
 
+  @override
   Parser strParser(String quotes, {Parser esc, bool multiLine: false}) => super
       .strParser(quotes, esc: esc, multiLine: multiLine)
       .pick(2)
@@ -31,11 +33,14 @@ class TomlParserDefinition extends TomlGrammar {
   // Escape Sequences.
   // -----------------------------------------------------------------
 
+  @override
   Parser escSeq() => super.escSeq().pick(1);
 
+  @override
   Parser unicodeEscSeq() => super.unicodeEscSeq().pick(1).map(
       (charCode) => new String.fromCharCode(int.parse(charCode, radix: 16)));
 
+  @override
   Parser compactEscSeq() => super.compactEscSeq().map((String c) {
         if (TomlGrammar.escTable.containsKey(c)) {
           return new String.fromCharCode(TomlGrammar.escTable[c]);
@@ -43,14 +48,17 @@ class TomlParserDefinition extends TomlGrammar {
         throw new InvalidEscapeSequenceException('\\$c');
       });
 
+  @override
   Parser multiLineEscSeq() => super.multiLineEscSeq().pick(1);
 
+  @override
   Parser whitespaceEscSeq() => super.whitespaceEscSeq().map((_) => '');
 
   // -----------------------------------------------------------------
   // Integer values.
   // -----------------------------------------------------------------
 
+  @override
   Parser integer() => super
       .integer()
       .flatten()
@@ -60,6 +68,7 @@ class TomlParserDefinition extends TomlGrammar {
   // Float values.
   // -----------------------------------------------------------------
 
+  @override
   Parser float() => super
       .float()
       .flatten()
@@ -69,48 +78,56 @@ class TomlParserDefinition extends TomlGrammar {
   // Boolean values.
   // -----------------------------------------------------------------
 
+  @override
   Parser boolean() => super.boolean().map((str) => str == 'true');
 
   // -----------------------------------------------------------------
   // Datetime values.
   // -----------------------------------------------------------------
 
+  @override
   Parser datetime() => super.datetime().flatten().map(DateTime.parse);
 
   // -----------------------------------------------------------------
   // Arrays.
   // -----------------------------------------------------------------
 
+  @override
   Parser arrayOf(Parser valueParser) => super.arrayOf(valueParser).pick(1);
 
   // -----------------------------------------------------------------
   // Tables.
   // -----------------------------------------------------------------
 
+  @override
   Parser table() => super.table().map((List def) => {
         'type': 'table',
         'parent': def[0].sublist(0, def[0].length - 1),
         'name': def[0].last,
         'pairs': def[1]
       });
+  @override
   Parser tableHeader() => super.tableHeader().pick(1);
 
   // -----------------------------------------------------------------
   // Array of Tables.
   // -----------------------------------------------------------------
 
+  @override
   Parser tableArray() => super.tableArray().map((List def) => {
         'type': 'table-array',
         'parent': def[0].sublist(0, def[0].length - 1),
         'name': def[0].last,
         'pairs': def[1]
       });
+  @override
   Parser tableArrayHeader() => super.tableArrayHeader().pick(1);
 
   // -----------------------------------------------------------------
   // Inline Tables.
   // -----------------------------------------------------------------
 
+  @override
   Parser inlineTable() => super.inlineTable().pick(1).map((List pairs) {
         var map = {};
         pairs.forEach((Map pair) {
@@ -123,12 +140,14 @@ class TomlParserDefinition extends TomlGrammar {
   // Keys.
   // -----------------------------------------------------------------
 
+  @override
   Parser bareKey() => super.bareKey().flatten();
 
   // -----------------------------------------------------------------
   // Key/value pairs.
   // -----------------------------------------------------------------
 
+  @override
   Parser keyValuePair() => super
       .keyValuePair()
       .permute([0, 2]).map((List pair) => {'key': pair[0], 'value': pair[1]});
@@ -137,6 +156,7 @@ class TomlParserDefinition extends TomlGrammar {
   // Document.
   // -----------------------------------------------------------------
 
+  @override
   Parser document() => super.document().map((List content) {
         var doc = {};
 
