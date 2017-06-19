@@ -24,5 +24,6 @@ class TomlValueParserDefinition extends TomlParserDefinition {
 /// documents.
 /// Intended for test purposes.
 class TomlValueParser extends GrammarParser {
+  /// Creates a new parser for TOML values.
   TomlValueParser() : super(new TomlValueParserDefinition());
 }

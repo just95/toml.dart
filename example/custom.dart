@@ -8,11 +8,15 @@ import 'dart:async';
 
 import 'package:toml/loader.dart';
 
-class MyConfigLoader extends ConfigLoader {
+/// A custom implementation of the [ConfigLoader] interface that loads
+/// configuration files from an internal cache.
+class MyConfigLoader implements ConfigLoader {
+  /// Sets an instance of this class as the default instance of [ConfigLoader].
   static void use() {
     ConfigLoader.use(new MyConfigLoader());
   }
 
+  /// The cached configuration files by filename.
   final Map<String, String> _cache = {
     'config.toml': '''
       [table]

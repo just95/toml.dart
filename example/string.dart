@@ -6,6 +6,7 @@ library toml.example.string;
 
 import 'package:toml/decoder.dart';
 
+/// The contents of the toml document to parse.
 const String toml = '''
 [table]
   [[table.array]]

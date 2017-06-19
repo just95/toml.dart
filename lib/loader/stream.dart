@@ -19,6 +19,7 @@ class StreamConfigLoader implements ConfigLoader {
   /// A stream of input data.
   final Stream<String> stream;
 
+  /// Creates a new config loader that reads from the given string.
   StreamConfigLoader(this.stream);
 
   @override

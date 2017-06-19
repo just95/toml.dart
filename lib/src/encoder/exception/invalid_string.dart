@@ -4,12 +4,15 @@
 
 library toml.src.encoder.exception.invalid_string;
 
-/// An error which is thrown when the encoder encounters a character in a
+/// An exception which is thrown when the encoder encounters a character in a
 /// string which cannot be represented by TOML.
 class InvalidStringException implements Exception {
-  /// A message which describes the error.
+  /// A message which describes the exception.
   final String msg;
 
+  /// Creates a new exception for an invalid string.
+  ///
+  /// The given message [msg] describes the reason why the string is invalid.
   InvalidStringException(this.msg);
 
   @override

@@ -4,8 +4,8 @@
 
 library toml.src.encoder.exception.mixed_array_types;
 
-/// An error which is thrown when an `Iterable` cannot be encoded as an array
-/// because it does not have a unique value type.
+/// An exception which is thrown when an `Iterable` cannot be encoded as an
+/// array because it does not have a unique value type.
 ///
 /// Example:
 ///
@@ -18,6 +18,7 @@ class MixedArrayTypesException implements Exception {
   /// The array which has mixed value types.
   final Iterable array;
 
+  /// Creates a new exception for the given [array].
   MixedArrayTypesException(this.array);
 
   @override

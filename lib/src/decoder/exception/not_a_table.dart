@@ -4,7 +4,7 @@
 
 library toml.src.decoder.exception.not_a_table;
 
-/// An error which is thrown when the parent element of a table is not
+/// An exception which is thrown when the parent element of a table is not
 /// a table.
 ///
 /// Example:
@@ -22,6 +22,7 @@ class NotATableException implements Exception {
   /// is not a table
   final String name;
 
+  /// Creates a new exception for a table with the given [name].
   NotATableException(this.name);
 
   @override

@@ -4,7 +4,7 @@
 
 library toml.src.decoder.exception.redefinition;
 
-/// An error which is thrown when a table or key is defined more than once.
+/// An exception which is thrown when a table or key is defined more than once.
 ///
 /// Example:
 ///
@@ -16,6 +16,7 @@ class RedefinitionException implements Exception {
   /// Fully qualified name of the table or key.
   final String name;
 
+  /// Creates a new exception for the table or key with the given name.
   RedefinitionException(this.name);
 
   @override

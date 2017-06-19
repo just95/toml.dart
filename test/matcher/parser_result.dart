@@ -12,8 +12,10 @@ class ParserResultMatcher extends Matcher {
   /// Expected value for [Result.isSuccess].
   final bool isSuccess;
 
+  /// Creates a new matcher that expects a parser to complete successfully.
   ParserResultMatcher.success() : this.isSuccess = true;
 
+  /// Creates a new matcher that expects a parser to failed.
   ParserResultMatcher.failure() : this.isSuccess = false;
 
   @override

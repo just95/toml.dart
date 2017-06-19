@@ -17,6 +17,7 @@ class UnknownValueTypeException implements Exception {
   /// The object which cannot be encoded as a TOML value.
   final dynamic value;
 
+  /// Creates a new exception for the given [value].
   UnknownValueTypeException(this.value);
 
   @override

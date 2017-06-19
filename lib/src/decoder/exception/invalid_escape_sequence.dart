@@ -4,8 +4,8 @@
 
 library toml.src.decoder.exception.invalid_escape_sequence;
 
-/// An error which is thrown when the parser encounters an unspecified escape
-/// sequence.
+/// An exception which is thrown when the parser encounters an unspecified
+/// escape sequence.
 ///
 /// Example:
 ///
@@ -16,6 +16,7 @@ class InvalidEscapeSequenceException implements Exception {
   /// The invalid escape sequence.
   final String escapeSequence;
 
+  /// Creates a new exception for the given invalid [escapeSequence].
   InvalidEscapeSequenceException(this.escapeSequence);
 
   @override

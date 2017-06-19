@@ -245,7 +245,8 @@ class TomlParserDefinition extends TomlGrammar {
       });
 }
 
-/// TOML parser.
+/// A TOML document parser.
 class TomlParser extends GrammarParser {
+  /// Creates a new parser for TOML documents.
   TomlParser() : super(new TomlParserDefinition());
 }
