@@ -7,7 +7,7 @@ library toml.test.tester.encoder;
 import 'package:test/test.dart';
 import 'package:toml/encoder.dart';
 
-var _encoder = new TomlEncoder();
+var _encoder = TomlEncoder();
 
 /// Tests whether the result of encoding the [input] is the specified [output].
 void testEncoder(String description, {Map input, String output}) {

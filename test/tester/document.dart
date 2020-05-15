@@ -8,7 +8,7 @@ import 'package:toml/toml.dart';
 
 import 'toml.dart';
 
-var _parser = new TomlParser();
+var _parser = TomlParser();
 
 /// Tests whether [TomlParser] successfully parses the [input] string
 /// and produces the specified [output].

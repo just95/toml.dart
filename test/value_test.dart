@@ -23,7 +23,7 @@ void main() {
                 'Name\tJos\u00E9\nLocation\tSF.');
         testValueFailure('invalid escape sequences',
             input: r'"some\windows\path"',
-            error: new InvalidEscapeSequenceError(r'\w'));
+            error: InvalidEscapeSequenceError(r'\w'));
         testValue('multi-line',
             input: '"""Roses are red\n'
                 'Violets are blue"""',
@@ -141,15 +141,15 @@ void main() {
     group('Datetime', () {
       testValue('utc',
           input: '1979-05-27T07:32:00Z',
-          output: new DateTime.utc(1979, 5, 27, 7, 32, 0));
+          output: DateTime.utc(1979, 5, 27, 7, 32, 0));
       testValue('timezone',
           input: '1979-05-27T00:32:00-07:00',
-          output: new DateTime.utc(1979, 5, 27, 0, 32, 0)
-              .add(new Duration(hours: 7)));
+          output: DateTime.utc(1979, 5, 27, 0, 32, 0)
+              .add(Duration(hours: 7)));
       testValue('fractions of a second',
           input: '1979-05-27T00:32:00.999999-07:00',
-          output: new DateTime.utc(1979, 5, 27, 0, 32, 0, 999, 999)
-              .add(new Duration(hours: 7)));
+          output: DateTime.utc(1979, 5, 27, 0, 32, 0, 999, 999)
+              .add(Duration(hours: 7)));
     });
 
     group('Array', () {

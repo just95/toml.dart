@@ -24,7 +24,7 @@ class ParserResultMatcher extends Matcher {
 }
 
 /// A matcher which tests whether a parser succeeded.
-ParserResultMatcher isSuccess = new ParserResultMatcher.success();
+ParserResultMatcher isSuccess = ParserResultMatcher.success();
 
 /// A matcher which tests whether a parser failed.
-ParserResultMatcher isFailure = new ParserResultMatcher.failure();
+ParserResultMatcher isFailure = ParserResultMatcher.failure();

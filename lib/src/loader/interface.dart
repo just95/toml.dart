@@ -12,7 +12,7 @@ abstract class ConfigLoader {
   /// Throws an exception if the default instance has been set already.
   static void use(ConfigLoader loader) {
     if (_defaultLoader != null) {
-      throw new StateError('Default config loader has been set already.');
+      throw StateError('Default config loader has been set already.');
     }
     _defaultLoader = loader;
   }

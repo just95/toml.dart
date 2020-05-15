@@ -87,7 +87,7 @@ export 'package:toml/loader.dart' show loadConfig;
 class MyConfigLoader implements ConfigLoader {
 
   static void use() {
-    ConfigLoader.use(new MyConfigLoader());
+    ConfigLoader.use(MyConfigLoader());
   }
 
   @override
@@ -118,7 +118,7 @@ holds an unmodifiable `Map` of the parsed document.
 var toml = '''
   # ...
 ''';
-var parser = new TomlParser();
+var parser = TomlParser();
 var document = parser.parse(toml).value;
 ```
 
@@ -139,7 +139,7 @@ All values of the map must be natively representable by TOML or implement the
 var document = {
   // ...
 };
-var encoder = new TomlEncoder();
+var encoder = TomlEncoder();
 var toml = encoder.encode(document);
 ```
 

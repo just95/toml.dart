@@ -67,7 +67,7 @@ String getValueType(value) {
   if (value is double) return 'float';
   if (value is DateTime) return 'datetime';
   if (value is bool) return 'bool';
-  throw new UnsupportedError('Unsupported value type: $value');
+  throw UnsupportedError('Unsupported value type: $value');
 }
 
 Future main() async {

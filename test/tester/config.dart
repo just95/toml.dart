@@ -23,10 +23,10 @@ void _cmpMaps({Map toml, Map yaml}) {
 /// first if the [tomlValue] is a `DateTime` object.
 void _cmp({tomlValue, yamlValue}) {
   if (tomlValue is Map) {
-    expect(yamlValue, new isInstanceOf<Map>());
+    expect(yamlValue, isInstanceOf<Map>());
     _cmpMaps(toml: tomlValue, yaml: yamlValue);
   } else if (tomlValue is Iterable) {
-    expect(yamlValue, new isInstanceOf<Iterable>());
+    expect(yamlValue, isInstanceOf<Iterable>());
     expect(tomlValue.length, equals(yamlValue.length));
     for (int i = 0; i < tomlValue.length; i++) {
       _cmp(

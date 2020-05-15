@@ -10,7 +10,7 @@ class TomlGrammar extends GrammarDefinition {
   ///
   /// Additionally any Unicode character may be escaped with the `\uXXXX`
   /// and `\UXXXXXXXX` forms.
-  static final BiMap<String, int> escTable = new BiMap()
+  static final BiMap<String, int> escTable = BiMap()
     ..addAll({
       'b': 0x08, // Backspace.
       't': 0x09, // Tab.

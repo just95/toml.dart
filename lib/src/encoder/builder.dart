@@ -12,10 +12,10 @@ class TomlDocumentBuilder {
   /**
    * Regular expression of a bare key.
    */
-  static final RegExp bareKeyRegExp = new RegExp(r'^[A-Za-z0-9_-]+$');
+  static final RegExp bareKeyRegExp = RegExp(r'^[A-Za-z0-9_-]+$');
 
   /// A buffer which holds the textual representation of the document.
-  final StringBuffer _buf = new StringBuffer();
+  final StringBuffer _buf = StringBuffer();
 
   /// Inserts a new line.
   ///
@@ -137,7 +137,7 @@ class TomlDocumentBuilder {
   void encodeValue(value) {
     value = unwrapValue(value);
     TomlValueEncoder encoder = getValueEncoder(value);
-    if (encoder == null) throw new UnknownValueTypeError(value);
+    if (encoder == null) throw UnknownValueTypeError(value);
     encoder(value);
   }
 
@@ -194,7 +194,7 @@ class TomlDocumentBuilder {
     }
 
     return array.map((item) => item.runtimeType).reduce((a, b) {
-      if (a != b) throw new MixedArrayTypesError(array);
+      if (a != b) throw MixedArrayTypesError(array);
       return a;
     });
   }
@@ -243,7 +243,7 @@ class TomlDocumentBuilder {
     // Multi-line string.
     if (value.contains('\n') || value.contains('\r')) {
       // There is a line which contains a character that must be escaped.
-      if (value.split(new RegExp('\n|\r')).any(containsEscSeq)) {
+      if (value.split(RegExp('\n|\r')).any(containsEscSeq)) {
         return encodeMultiLineBasicString;
       }
       return encodeMultiLineLiteralString;
@@ -279,20 +279,20 @@ class TomlDocumentBuilder {
         if (esc.contains(codeUnit)) {
           return '\\${TomlGrammar.escTable.inverse[codeUnit]}';
         }
-        return new String.fromCharCode(codeUnit);
+        return String.fromCharCode(codeUnit);
       }).join();
     }
 
     if (multiline) {
       if (quotes == '"""') value = value.replaceAll('"""', r'\"\"\"');
     } else if (value.contains('\n') || value.contains('\r')) {
-      throw new InvalidStringError(
+      throw InvalidStringError(
           'Newlines are only allowed in multi-line strings!');
     }
 
     // Unescaped quotes are illegal.
     if (!esc.contains(quotes.codeUnitAt(0)) && value.contains(quotes)) {
-      throw new InvalidStringError(
+      throw InvalidStringError(
           '"$quotes" are prohibited in non-basic strings.');
     }
 

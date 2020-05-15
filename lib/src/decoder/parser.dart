@@ -25,13 +25,13 @@ class TomlParserDefinition extends TomlGrammar {
   escSeq() => super.escSeq().pick(1);
 
   unicodeEscSeq() => super.unicodeEscSeq().pick(1).map(
-      (charCode) => new String.fromCharCode(int.parse(charCode, radix: 16)));
+      (charCode) => String.fromCharCode(int.parse(charCode, radix: 16)));
 
   compactEscSeq() => super.compactEscSeq().map((String c) {
         if (TomlGrammar.escTable.containsKey(c)) {
-          return new String.fromCharCode(TomlGrammar.escTable[c]);
+          return String.fromCharCode(TomlGrammar.escTable[c]);
         }
-        throw new InvalidEscapeSequenceError('\\$c');
+        throw InvalidEscapeSequenceError('\\$c');
       });
 
   multiLineEscSeq() => super.multiLineEscSeq().pick(1);
@@ -132,11 +132,11 @@ class TomlParserDefinition extends TomlGrammar {
         var doc = {};
 
         // Set of names of defined keys and tables.
-        var defined = new Set();
+        var defined = Set();
 
         // Add a name to the set above.
         void define(String name) {
-          if (defined.contains(name)) throw new RedefinitionError(name);
+          if (defined.contains(name)) throw RedefinitionError(name);
           defined.add(name);
         }
 
@@ -146,7 +146,7 @@ class TomlParserDefinition extends TomlGrammar {
               define(name);
 
               if (table.containsKey(pair['key']))
-                throw new RedefinitionError(name);
+                throw RedefinitionError(name);
               table[pair['key']] = pair['value'];
             };
 
@@ -165,7 +165,7 @@ class TomlParserDefinition extends TomlGrammar {
               parent = parent.last;
             }
             name.add(key);
-            if (parent is! Map) throw new NotATableError(name.join('.'));
+            if (parent is! Map) throw NotATableError(name.join('.'));
           });
           name.add(def['name']);
           name = name.join('.');
@@ -182,7 +182,7 @@ class TomlParserDefinition extends TomlGrammar {
             });
 
             // Overwrite previous table.
-            if (arr is Map) throw new RedefinitionError(name);
+            if (arr is Map) throw RedefinitionError(name);
 
             var i = arr.length;
             arr.add(tbl = {});
@@ -198,11 +198,11 @@ class TomlParserDefinition extends TomlGrammar {
 
         unmodifiable(toml) {
           if (toml is Map) {
-            return new UnmodifiableMapView(new Map.fromIterables(
+            return UnmodifiableMapView(Map.fromIterables(
                 toml.keys, toml.values.map(unmodifiable)));
           }
           if (toml is List) {
-            return new UnmodifiableListView(toml.map(unmodifiable));
+            return UnmodifiableListView(toml.map(unmodifiable));
           }
 
           return toml;
@@ -214,5 +214,5 @@ class TomlParserDefinition extends TomlGrammar {
 
 /// TOML parser.
 class TomlParser extends GrammarParser {
-  TomlParser() : super(new TomlParserDefinition());
+  TomlParser() : super(TomlParserDefinition());
 }

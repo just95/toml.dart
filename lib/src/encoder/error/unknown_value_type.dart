@@ -8,7 +8,7 @@ part of toml.encoder;
 ///
 /// Example:
 ///
-///     var encoder = new TomlEncoder();
+///     var encoder = TomlEncoder();
 ///     encoder.encode({'a': null});
 ///
 /// throws an [UnknownValueTypeError] because `null` is not a valid TOML value.

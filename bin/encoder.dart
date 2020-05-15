@@ -50,18 +50,18 @@ dynamic decodeValue(value) {
         case 'array':
           return value['value'].map(decodeValue).toList();
         default:
-          throw new UnsupportedError('Unsupported value type: $type');
+          throw UnsupportedError('Unsupported value type: $type');
       }
     }
     return decodeTable(value);
   }
-  throw new UnsupportedError('Unsupported value: $value');
+  throw UnsupportedError('Unsupported value: $value');
 }
 
 Future main() async {
   StreamConfigLoader.use(stdin.transform(utf8.decoder));
 
   var json = await loadConfig('config.json');
-  var encoder = new TomlEncoder();
+  var encoder = TomlEncoder();
   print(encoder.encode(decodeTable(json)).replaceAll('.000', ''));
 }

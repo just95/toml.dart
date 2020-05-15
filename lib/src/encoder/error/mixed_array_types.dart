@@ -9,7 +9,7 @@ part of toml.encoder;
 ///
 /// Example:
 ///
-///     var encoder = new TomlEncoder();
+///     var encoder = TomlEncoder();
 ///     encoder.encode({'a': [1, '2']});
 ///
 /// throws an [MixedArrayTypesError] because `1` and `'2'` are of different

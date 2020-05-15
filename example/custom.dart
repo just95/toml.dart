@@ -10,7 +10,7 @@ import 'package:toml/loader.dart';
 
 class MyConfigLoader extends ConfigLoader {
   static void use() {
-    ConfigLoader.use(new MyConfigLoader());
+    ConfigLoader.use(MyConfigLoader());
   }
 
   Map<String, String> _cache = {
@@ -23,7 +23,7 @@ class MyConfigLoader extends ConfigLoader {
 
   @override
   Future<String> loadConfig(String filename) {
-    return new Future.value(_cache[filename]);
+    return Future.value(_cache[filename]);
   }
 }
 

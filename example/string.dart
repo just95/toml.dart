@@ -13,7 +13,7 @@ var toml = '''
 ''';
 
 void main() {
-  var parser = new TomlParser();
+  var parser = TomlParser();
   var result = parser.parse(toml);
   var config = result.value;
   print(config['table']['array'][0]['key']);
