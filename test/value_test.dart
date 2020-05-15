@@ -144,8 +144,7 @@ void main() {
           output: DateTime.utc(1979, 5, 27, 7, 32, 0));
       testValue('timezone',
           input: '1979-05-27T00:32:00-07:00',
-          output: DateTime.utc(1979, 5, 27, 0, 32, 0)
-              .add(Duration(hours: 7)));
+          output: DateTime.utc(1979, 5, 27, 0, 32, 0).add(Duration(hours: 7)));
       testValue('fractions of a second',
           input: '1979-05-27T00:32:00.999999-07:00',
           output: DateTime.utc(1979, 5, 27, 0, 32, 0, 999, 999)
@@ -171,17 +170,13 @@ void main() {
             [1, 2],
             ['a', 'b', 'c']
           ]);
-      testValue('there can be newlines in an array',
-          input: '''[
+      testValue('there can be newlines in an array', input: '''[
           1, 2, 3
-        ]''',
-          output: [1, 2, 3]);
-      testValue('there can be comments in an array',
-          input: '''[
+        ]''', output: [1, 2, 3]);
+      testValue('there can be comments in an array', input: '''[
           1,
           2, # this is ok
-        ]''',
-          output: [1, 2]);
+        ]''', output: [1, 2]);
       testValueFailure('arrays of mixed types are not allowed',
           input: '[ 1, 2.0 ]');
       testValueFailure(

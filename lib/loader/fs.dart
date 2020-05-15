@@ -19,6 +19,5 @@ class FilesystemConfigLoader implements ConfigLoader {
   }
 
   @override
-  Future<String> loadConfig(String filename) =>
-      File(filename).readAsString();
+  Future<String> loadConfig(String filename) => File(filename).readAsString();
 }

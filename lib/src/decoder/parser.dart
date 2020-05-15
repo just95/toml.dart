@@ -24,8 +24,10 @@ class TomlParserDefinition extends TomlGrammar {
 
   escSeq() => super.escSeq().pick(1);
 
-  unicodeEscSeq() => super.unicodeEscSeq().pick(1).map(
-      (charCode) => String.fromCharCode(int.parse(charCode, radix: 16)));
+  unicodeEscSeq() => super
+      .unicodeEscSeq()
+      .pick(1)
+      .map((charCode) => String.fromCharCode(int.parse(charCode, radix: 16)));
 
   compactEscSeq() => super.compactEscSeq().map((String c) {
         if (TomlGrammar.escTable.containsKey(c)) {
@@ -145,8 +147,7 @@ class TomlParserDefinition extends TomlGrammar {
                   tableName == null ? pair['key'] : '$tableName.${pair['key']}';
               define(name);
 
-              if (table.containsKey(pair['key']))
-                throw RedefinitionError(name);
+              if (table.containsKey(pair['key'])) throw RedefinitionError(name);
               table[pair['key']] = pair['value'];
             };
 
@@ -198,8 +199,8 @@ class TomlParserDefinition extends TomlGrammar {
 
         unmodifiable(toml) {
           if (toml is Map) {
-            return UnmodifiableMapView(Map.fromIterables(
-                toml.keys, toml.values.map(unmodifiable)));
+            return UnmodifiableMapView(
+                Map.fromIterables(toml.keys, toml.values.map(unmodifiable)));
           }
           if (toml is List) {
             return UnmodifiableListView(toml.map(unmodifiable));
