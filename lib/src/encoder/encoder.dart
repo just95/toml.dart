@@ -8,7 +8,7 @@ part of toml.encoder;
 class TomlEncoder {
   /// Encodes a TOML [document].
   String encode(Map<String, dynamic> document) {
-    var builder = TomlDocumentBuilder();
+    final builder = TomlDocumentBuilder();
     builder.encodeSubTable(document, name: []);
     return builder.toString();
   }

@@ -68,8 +68,8 @@ class TomlDocumentBuilder {
   /// The key/value pairs are encoded before the sub-tables of [table].
   void encodeSubTable(Map<String, dynamic> table,
       {List<String> name, bool array: false}) {
-    var pairs = {};
-    var sections = {};
+    final pairs = {};
+    final sections = {};
     table.forEach((key, value) {
       value = unwrapValue(value);
       if (value is Map) {
