@@ -71,8 +71,8 @@ String getValueType(value) {
 }
 
 Future main() async {
-  StreamConfigLoader.use(stdin.transform(UTF8.decoder));
+  StreamConfigLoader.use(stdin.transform(utf8.decoder));
 
   var toml = await loadConfig();
-  print(JSON.encode(encodeTable(toml)));
+  print(json.encode(encodeTable(toml)));
 }
