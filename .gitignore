@@ -1,7 +1,19 @@
-# Files and directories created by pub.
+# See also https://dart.dev/guides/libraries/private-files
+
+## Files and directories created by pub.
+.dart_tool
 .packages
-.pub
+build/
 pubspec.lock
 
-.idea
-.dart_tool
+## Directory created by dartdoc.
+doc/api/
+
+## IntelliJ
+*.iml
+*.ipr
+*.iws
+.idea/
+
+## Mac
+.DS_Store
