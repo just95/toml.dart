@@ -14,6 +14,33 @@ import 'exception/unknown_value_type.dart';
 /// A function which encodes an object as a TOML value.
 typedef void TomlValueEncoder<V>(V value);
 
+// Possible types of TOML values.
+enum TomlType {
+  /// The type of a TOML array.
+  array,
+
+  /// The type of a boolean value.
+  boolean,
+
+  /// The type of a datetime.
+  datetime,
+
+  /// The type of a floating point number.
+  float,
+
+  /// The type of an integer.
+  integer,
+
+  /// The type of an interger or floating point number in JavaScript.
+  number,
+
+  /// The type of all variations of TOML strings.
+  string,
+
+  /// The type of an inline table.
+  table
+}
+
 /// TOML document builder.
 class TomlDocumentBuilder {
   /// Regular expression of a bare key.
@@ -73,22 +100,22 @@ class TomlDocumentBuilder {
   /// The key/value pairs are encoded before the sub-tables of [table].
   void encodeSubTable(Map<String, dynamic> table,
       {List<String> name, bool array: false}) {
-    var pairs = {};
-    var sections = {};
-    table.forEach((key, value) {
-      value = unwrapValue(value);
+    var pairs = <String, dynamic>{};
+    var sections = <String, dynamic>{};
+    table.forEach((key, wrapableValue) {
+      final value = unwrapValue(wrapableValue);
       if (value is Map) {
         sections[key] = value;
-        return;
-      }
-      if (value is Iterable && value.length > 0) {
-        value = value.map(unwrapValue);
-        if (value.every((item) => item is Map)) {
-          sections[key] = value;
-          return;
+      } else if (value is Iterable && value.length > 0) {
+        final items = value.map(unwrapValue);
+        if (items.every((item) => item is Map)) {
+          sections[key] = items;
+        } else {
+          pairs[key] = items;
         }
+      } else {
+        pairs[key] = value;
       }
-      pairs[key] = value;
     });
 
     // Encode key/value pairs.
@@ -101,12 +128,14 @@ class TomlDocumentBuilder {
     sections.forEach((key, value) {
       name.add(key);
 
-      if (value is Map) {
+      if (value is Map<String, dynamic>) {
         encodeSubTable(value, name: name);
-      } else if (value is Iterable) {
+      } else if (value is Iterable<Map<String, dynamic>>) {
         value.forEach((item) {
           encodeSubTable(item, name: name, array: true);
         });
+      } else {
+        throw new UnknownValueTypeException(value);
       }
 
       name.removeLast();
@@ -134,29 +163,18 @@ class TomlDocumentBuilder {
     }
   }
 
-  /// Applies a [TomlValueEncoder] on [value].
+  /// Applies the right `encode*` method on the given [value] based on its
+  /// runtime type.
   ///
-  /// Uses [getValueEncoder] to determine which [TomlValueEncoder] to use on
-  /// [value].
   /// Throws an [UnknownValueTypeException] if there is no matching encoder.
   void encodeValue(dynamic value) {
     value = unwrapValue(value);
-    TomlValueEncoder encoder = getValueEncoder(value);
-    if (encoder == null) throw new UnknownValueTypeException(value);
-    encoder(value);
-  }
-
-  /// Selects a [TomlValueEncoder] bases on the runtime type of [value].
-  ///
-  /// Returns `null` if no matching encoder was found.
-  TomlValueEncoder getValueEncoder(dynamic value) {
-    if (value is num) return encodeNumber;
-    if (value is bool) return encodeBoolean;
-    if (value is DateTime) return encodeDatetime;
-    if (value is String) return encodeString;
-    if (value is Iterable) return encodeArray;
-
-    return null;
+    if (value is num) return encodeNumber(value);
+    if (value is bool) return encodeBoolean(value);
+    if (value is DateTime) return encodeDatetime(value);
+    if (value is String) return encodeString(value);
+    if (value is Iterable) return encodeArray(value);
+    throw new UnknownValueTypeException(value);
   }
 
   /// Encodes an integer or float.
@@ -187,7 +205,7 @@ class TomlDocumentBuilder {
   /// a float.
   /// To prevent the generation of malformed arrays `'.0'` sould be inserted
   /// behind an integer in this case.
-  Type validateArrayType(Iterable array) {
+  TomlType validateArrayType(Iterable array) {
     if (array.isEmpty) return null;
 
     // JavaScript: Numeric array with mixed content types.
@@ -195,13 +213,27 @@ class TomlDocumentBuilder {
         array.every((item) => item is num) &&
         array.any((item) => item is int) &&
         array.any((item) => item is! int)) {
-      return num;
+      return TomlType.number;
     }
 
-    return array.map((item) => item.runtimeType).reduce((a, b) {
+    return array.map(tomlValueTypeOf).reduce((a, b) {
       if (a != b) throw new MixedArrayTypesException(array);
       return a;
     });
+  }
+
+  /// Gets the type of the given value.
+  ///
+  /// Throws an [UnknownValueTypeException] exception if the type is not known.
+  TomlType tomlValueTypeOf(dynamic value) {
+    if (value is Iterable) return TomlType.array;
+    if (value is bool) return TomlType.boolean;
+    if (value is DateTime) return TomlType.datetime;
+    if (value is double) return TomlType.float;
+    if (value is Map<String, dynamic>) return TomlType.table;
+    if (value is int) return TomlType.integer;
+    if (value is String) return TomlType.string;
+    throw new UnknownValueTypeException(value);
   }
 
   /// Encodes an array.
@@ -220,7 +252,7 @@ class TomlDocumentBuilder {
 
       encodeValue(item);
       // Mixed numeric array.
-      if (type == num && item is int) _buf.write('.0');
+      if (type == TomlType.number && item is int) _buf.write('.0');
     }
     _buf.write(']');
   }

@@ -8,7 +8,7 @@ import 'package:petitparser/petitparser.dart';
 
 import 'parser.dart';
 
-/// TOML value parser definition.
+/// Parser definition for TOML values.
 ///
 /// This is very similar to [TomlParserDefinition] but the start rule is set
 /// such that only TOML values are accepted.

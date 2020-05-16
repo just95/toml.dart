@@ -11,5 +11,9 @@ import 'package:toml/decoder.dart';
 /// Implementation of [ConfigDecoder] which handels the JSON format.
 class JsonConfigDecoder implements ConfigDecoder {
   @override
-  Map<String, dynamic> decodeConfig(String contents) => json.decode(contents);
+  Map<String, dynamic> decodeConfig(String contents) {
+    dynamic document = json.decode(contents);
+    if (document is Map<String, dynamic>) return document;
+    throw new FormatException("Expected object at top-level of JSON document.");
+  }
 }

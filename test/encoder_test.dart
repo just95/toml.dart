@@ -86,7 +86,8 @@ void main() {
     });
 
     group('Tables', () {
-      testEncoder('empty table', input: {'A': {}}, output: '[A]');
+      testEncoder('empty table',
+          input: {'A': <String, dynamic>{}}, output: '[A]');
       testEncoder('non-empty table',
           input: {
             'A': {'a': 1, 'b': 2}

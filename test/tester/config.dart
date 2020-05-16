@@ -24,7 +24,9 @@ void _cmpMaps({Map toml, Map yaml}) {
 void _cmp({tomlValue, yamlValue}) {
   if (tomlValue is Map) {
     expect(yamlValue, isA<Map>());
-    _cmpMaps(toml: tomlValue, yaml: yamlValue);
+    if (yamlValue is Map) {
+      _cmpMaps(toml: tomlValue, yaml: yamlValue);
+    }
   } else if (tomlValue is Iterable) {
     expect(yamlValue, isA<Iterable>());
     expect(tomlValue.length, equals(yamlValue.length));
@@ -35,7 +37,10 @@ void _cmp({tomlValue, yamlValue}) {
       );
     }
   } else if (tomlValue is DateTime) {
-    expect(tomlValue, equals(DateTime.parse(yamlValue)));
+    expect(yamlValue, isA<String>());
+    if (yamlValue is String) {
+      expect(tomlValue, equals(DateTime.parse(yamlValue)));
+    }
   } else {
     expect(tomlValue, equals(yamlValue));
   }

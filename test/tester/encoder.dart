@@ -10,7 +10,8 @@ import 'package:toml/encoder.dart';
 var _encoder = new TomlEncoder();
 
 /// Tests whether the result of encoding the [input] is the specified [output].
-void testEncoder(String description, {Map input, String output}) {
+void testEncoder(String description,
+    {Map<String, dynamic> input, String output}) {
   test(description, () {
     var result = _encoder.encode(input);
     expect(result, equals(output));
@@ -21,7 +22,7 @@ void testEncoder(String description, {Map input, String output}) {
 ///
 /// Optionally tests whether a particular [error] is thrown.
 void testEncoderFailure(String description,
-    {Map input, dynamic error: anything}) {
+    {Map<String, dynamic> input, dynamic error: anything}) {
   test(description, () {
     expect(() => _encoder.encode(input), throwsA(error));
   });

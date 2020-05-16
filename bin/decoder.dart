@@ -12,8 +12,8 @@ import 'package:toml/loader/stream.dart';
 
 /// Encodes a table.
 Map<String, dynamic> encodeTable(Map<String, dynamic> toml) {
-  var table = {};
-  toml.forEach((String key, value) {
+  var table = <String, dynamic>{};
+  toml.forEach((String key, dynamic value) {
     table[key] = encodeValue(value);
   });
   return table;
@@ -25,8 +25,9 @@ Map<String, dynamic> encodeTable(Map<String, dynamic> toml) {
 /// * All other arrays are encoded as JSON objects of the form
 ///   `{"type": "array", "value": [...]}`.
 dynamic encodeArray(Iterable items) {
-  var encodedItems = items.map(encodeValue).toList();
-  if (items.isEmpty || !items.every((item) => item is Map)) {
+  var encodedItems = items.map<dynamic>(encodeValue).toList();
+  if (items.isEmpty ||
+      !items.every((dynamic item) => item is Map<String, dynamic>)) {
     return {'type': 'array', 'value': encodedItems};
   }
   return encodedItems;
@@ -46,7 +47,7 @@ dynamic encodeValue(dynamic value) {
   while (value is TomlEncodable) value = value.toToml();
 
   // Special cases for tables and arrays.
-  if (value is Map) return encodeTable(value);
+  if (value is Map<String, dynamic>) return encodeTable(value);
   if (value is Iterable) return encodeArray(value);
 
   var str = value.toString();

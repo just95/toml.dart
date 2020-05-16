@@ -14,7 +14,7 @@ Future main() async {
   var elem = document.getElementById('text');
   try {
     var cfg = await loadConfig();
-    elem.text = cfg['table']['array'][0]['key'];
+    elem.text = cfg['table']['array'][0]['key'].toString();
   } catch (e) {
     elem.style.color = 'red';
     elem.text = 'ERROR: $e';

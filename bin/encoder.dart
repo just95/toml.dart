@@ -13,8 +13,8 @@ import 'package:toml/toml.dart';
 
 /// Decodes a JSON encoded TOML table.
 Map<String, dynamic> decodeTable(Map<String, dynamic> json) {
-  var table = {};
-  json.forEach((String key, value) {
+  var table = <String, dynamic>{};
+  json.forEach((String key, dynamic value) {
     table[key] = decodeValue(value);
   });
   return table;
@@ -29,21 +29,23 @@ Map<String, dynamic> decodeTable(Map<String, dynamic> json) {
 ///   If `{TTYPE}` is not a valid TOML type, an error is thrown.
 /// * All other `Maps` are decoded as a table. See [decodeTable].
 dynamic decodeValue(dynamic value) {
-  if (value is Iterable) value = {'type': 'array', 'value': value};
-  if (value is Map) {
+  if (value is Iterable) {
+    value = <String, dynamic>{'type': 'array', 'value': value};
+  }
+  if (value is Map<String, dynamic>) {
     if (value.length == 2 &&
         value.containsKey('type') &&
         value.containsKey('value')) {
-      var type = value['type'];
+      var type = value['type'] as String;
       switch (type) {
         case 'string':
           return value['value'];
         case 'integer':
-          return int.parse(value['value']);
+          return int.parse(value['value'] as String);
         case 'float':
-          return double.parse(value['value']);
+          return double.parse(value['value'] as String);
         case 'datetime':
-          return DateTime.parse(value['value']);
+          return DateTime.parse(value['value'] as String);
         case 'bool':
           return value['value'] == 'true';
         case 'array':

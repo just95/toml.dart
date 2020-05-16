@@ -23,7 +23,7 @@ void main() {
           });
       testDocument('unquoted keys', input: '[a.b.c]', output: {
         'a': {
-          'b': {'c': {}}
+          'b': {'c': <String, dynamic>{}}
         }
       });
       testDocument('whitespace after opening and before closing brackets',
@@ -35,7 +35,7 @@ void main() {
           });
       testDocument('whitespace around keys', input: '[ g .  h  . i ]', output: {
         'g': {
-          'h': {'i': {}}
+          'h': {'i': <String, dynamic>{}}
         }
       });
       testDocument('non latin letters in table names',
@@ -45,20 +45,18 @@ void main() {
               'ʞ': {'l': {}}
             }
           });
-      testDocument('empty super-tables are not required',
-          input: '''
+      testDocument('empty super-tables are not required', input: '''
           # [x] you
           # [x.y] don't
           # [x.y.z] need these
           [x.y.z.w] # for this to work
-        ''',
-          output: {
-            'x': {
-              'y': {
-                'z': {'w': {}}
-              }
-            }
-          });
+        ''', output: {
+        'x': {
+          'y': {
+            'z': {'w': <String, dynamic>{}}
+          }
+        }
+      });
       testDocument('super-tables do not need to preceed their children',
           input: '''
           [a.b]
@@ -125,8 +123,7 @@ void main() {
     });
 
     group('Array of Tables', () {
-      testDocument('empty table',
-          input: '''
+      testDocument('empty table', input: '''
           [[products]]
           name = "Hammer"
           sku = 738594937
@@ -137,16 +134,14 @@ void main() {
           name = "Nail"
           sku = 284758393
           color = "gray"
-        ''',
-          output: {
-            'products': [
-              {'name': 'Hammer', 'sku': 738594937},
-              {},
-              {'name': 'Nail', 'sku': 284758393, 'color': 'gray'}
-            ]
-          });
-      testDocument('sub-tables',
-          input: '''
+        ''', output: {
+        'products': [
+          {'name': 'Hammer', 'sku': 738594937},
+          <String, dynamic>{},
+          {'name': 'Nail', 'sku': 284758393, 'color': 'gray'}
+        ]
+      });
+      testDocument('sub-tables', input: '''
           [[fruit]]
             name = "apple"
 
@@ -165,25 +160,24 @@ void main() {
 
             [[fruit.variety]]
               name = "plantain"
-        ''',
-          output: {
-            'fruit': [
-              {
-                'name': 'apple',
-                'physical': {'color': 'red', 'shape': 'round'},
-                'variety': [
-                  {'name': 'red delicious'},
-                  {'name': 'granny smith'}
-                ]
-              },
-              {
-                'name': 'banana',
-                'variety': [
-                  {'name': 'plantain'}
-                ]
-              }
+        ''', output: {
+        'fruit': [
+          {
+            'name': 'apple',
+            'physical': {'color': 'red', 'shape': 'round'},
+            'variety': [
+              {'name': 'red delicious'},
+              {'name': 'granny smith'}
             ]
-          });
+          },
+          {
+            'name': 'banana',
+            'variety': [
+              {'name': 'plantain'}
+            ]
+          }
+        ]
+      });
       testDocumentFailure('table cannot overwrite array of tables',
           input: '''
           # INVALID TOML DOC
@@ -215,40 +209,31 @@ void main() {
     });
 
     group('Inline Tables', () {
-      testDocument('empty',
-          input: '''
+      testDocument('empty', input: '''
           inline-table = {}
-        ''',
-          output: {'inline-table': {}});
-      testDocument('whitespace around key/value pairs',
-          input: '''
+        ''', output: {'inline-table': <String, dynamic>{}});
+      testDocument('whitespace around key/value pairs', input: '''
           name = { first = "Tom", last = "Preston-Werner" }
-        ''',
-          output: {
-            'name': {'first': 'Tom', 'last': 'Preston-Werner'}
-          });
-      testDocument('no whitespace around key/value pairs',
-          input: '''
+        ''', output: {
+        'name': {'first': 'Tom', 'last': 'Preston-Werner'}
+      });
+      testDocument('no whitespace around key/value pairs', input: '''
           point = {x=1,y=2}
-        ''',
-          output: {
-            'point': {'x': 1, 'y': 2}
-          });
-      testDocument('newlines are allowed in values',
-          input: '''
+        ''', output: {
+        'point': {'x': 1, 'y': 2}
+      });
+      testDocument('newlines are allowed in values', input: '''
           points = [ { x = 1, y = 2, z = 3 },
                      { x = 7, y = 8, z = 9 },
                      { x = 2, y = 4, z = 8 } ]
-        ''',
-          output: {
-            'points': [
-              {'x': 1, 'y': 2, 'z': 3},
-              {'x': 7, 'y': 8, 'z': 9},
-              {'x': 2, 'y': 4, 'z': 8}
-            ]
-          });
-      testDocumentFailure('newlines are not allowed in the table',
-          input: '''
+        ''', output: {
+        'points': [
+          {'x': 1, 'y': 2, 'z': 3},
+          {'x': 7, 'y': 8, 'z': 9},
+          {'x': 2, 'y': 4, 'z': 8}
+        ]
+      });
+      testDocumentFailure('newlines are not allowed in the table', input: '''
           address = {
             proto = "http",
             ip = "10.0.0.1",

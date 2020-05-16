@@ -10,5 +10,19 @@ import 'package:yaml/yaml.dart';
 /// Implementation of [ConfigDecoder] which handels the YAML format.
 class YamlConfigDecoder implements ConfigDecoder {
   @override
-  Map<String, dynamic> decodeConfig(String contents) => loadYaml(contents);
+  Map<String, dynamic> decodeConfig(String contents) {
+    dynamic document = loadYaml(contents);
+    if (document is YamlMap) {
+      if (document.keys.every((key) => key is String)) {
+        return new Map.fromIterables(
+          document.keys.cast<String>(),
+          document.values,
+        );
+      }
+    }
+    throw new FormatException(
+      "Expected map at top-level of YAML document, "
+      "got ${document.runtimeType}",
+    );
+  }
 }

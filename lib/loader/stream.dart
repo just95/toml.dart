@@ -12,7 +12,7 @@ export 'package:toml/loader.dart' show loadConfig;
 /// Implementation of the [ConfigLoader] interface which reads from a stream.
 class StreamConfigLoader implements ConfigLoader {
   /// Sets an instance of this class as the default instance of [ConfigLoader].
-  static void use(Stream stream) {
+  static void use(Stream<String> stream) {
     ConfigLoader.use(new StreamConfigLoader(stream));
   }
 

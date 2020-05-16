@@ -20,12 +20,13 @@ class TomlParserDefinition extends TomlGrammar {
   // -----------------------------------------------------------------
 
   @override
-  Parser strData(String quotes, {bool literal: false, bool multiLine: false}) =>
+  Parser strData(Parser quotes, {bool literal: false, bool multiLine: false}) =>
       super.strData(quotes, literal: literal, multiLine: multiLine).flatten();
 
   @override
-  Parser strParser(String quotes, {Parser esc, bool multiLine: false}) => super
+  Parser strParser(Parser quotes, {Parser esc, bool multiLine: false}) => super
       .strParser(quotes, esc: esc, multiLine: multiLine)
+      .castList()
       .pick(2)
       .map((data) => data.join());
 
@@ -34,14 +35,16 @@ class TomlParserDefinition extends TomlGrammar {
   // -----------------------------------------------------------------
 
   @override
-  Parser escSeq() => super.escSeq().pick(1);
+  Parser escSeq() => super.escSeq().castList().pick(1);
 
   @override
-  Parser unicodeEscSeq() => super.unicodeEscSeq().pick(1).map(
-      (charCode) => new String.fromCharCode(int.parse(charCode, radix: 16)));
+  Parser unicodeEscSeq() =>
+      super.unicodeEscSeq().castList().pick<String>(1).map((charCode) =>
+          new String.fromCharCode(int.parse(charCode, radix: 16)));
 
   @override
-  Parser compactEscSeq() => super.compactEscSeq().map((String c) {
+  Parser compactEscSeq() =>
+      super.compactEscSeq().cast<String>().map((String c) {
         if (TomlGrammar.escTable.containsKey(c)) {
           return new String.fromCharCode(TomlGrammar.escTable[c]);
         }
@@ -49,7 +52,7 @@ class TomlParserDefinition extends TomlGrammar {
       });
 
   @override
-  Parser multiLineEscSeq() => super.multiLineEscSeq().pick(1);
+  Parser multiLineEscSeq() => super.multiLineEscSeq().castList().pick(1);
 
   @override
   Parser whitespaceEscSeq() => super.whitespaceEscSeq().map((_) => '');
@@ -93,45 +96,47 @@ class TomlParserDefinition extends TomlGrammar {
   // -----------------------------------------------------------------
 
   @override
-  Parser arrayOf(Parser valueParser) => super.arrayOf(valueParser).pick(1);
+  Parser arrayOf(Parser valueParser) =>
+      super.arrayOf(valueParser).castList().pick(1);
 
   // -----------------------------------------------------------------
   // Tables.
   // -----------------------------------------------------------------
 
   @override
-  Parser table() => super.table().map((List def) => {
+  Parser table() => super.table().castList().map((List def) => {
         'type': 'table',
         'parent': def[0].sublist(0, def[0].length - 1),
         'name': def[0].last,
         'pairs': def[1]
       });
   @override
-  Parser tableHeader() => super.tableHeader().pick(1);
+  Parser tableHeader() => super.tableHeader().castList().pick(1);
 
   // -----------------------------------------------------------------
   // Array of Tables.
   // -----------------------------------------------------------------
 
   @override
-  Parser tableArray() => super.tableArray().map((List def) => {
+  Parser tableArray() => super.tableArray().castList().map((List def) => {
         'type': 'table-array',
         'parent': def[0].sublist(0, def[0].length - 1),
         'name': def[0].last,
         'pairs': def[1]
       });
   @override
-  Parser tableArrayHeader() => super.tableArrayHeader().pick(1);
+  Parser tableArrayHeader() => super.tableArrayHeader().castList().pick(1);
 
   // -----------------------------------------------------------------
   // Inline Tables.
   // -----------------------------------------------------------------
 
   @override
-  Parser inlineTable() => super.inlineTable().pick(1).map((List pairs) {
-        var map = {};
+  Parser inlineTable() =>
+      super.inlineTable().castList().pick<List<Map>>(1).map((List<Map> pairs) {
+        var map = <String, dynamic>{};
         pairs.forEach((Map pair) {
-          map[pair['key']] = pair['value'];
+          map[pair['key'] as String] = pair['value'];
         });
         return map;
       });
@@ -150,6 +155,7 @@ class TomlParserDefinition extends TomlGrammar {
   @override
   Parser keyValuePair() => super
       .keyValuePair()
+      .castList()
       .permute([0, 2]).map((List pair) => {'key': pair[0], 'value': pair[1]});
 
   // -----------------------------------------------------------------
@@ -157,8 +163,8 @@ class TomlParserDefinition extends TomlGrammar {
   // -----------------------------------------------------------------
 
   @override
-  Parser document() => super.document().map((List content) {
-        var doc = {};
+  Parser document() => super.document().castList().map((List content) {
+        var doc = <String, dynamic>{};
 
         // Set of names of defined keys and tables.
         var defined = new Set();
@@ -169,9 +175,11 @@ class TomlParserDefinition extends TomlGrammar {
           defined.add(name);
         }
 
-        Function addPairsTo(Map table, [String tableName]) => (Map pair) {
-              var name =
-                  tableName == null ? pair['key'] : '$tableName.${pair['key']}';
+        Function addPairsTo(Map table, [String tableName]) =>
+            (Map<String, dynamic> pair) {
+              var name = tableName == null
+                  ? pair['key'] as String
+                  : '$tableName.${pair['key']}';
               define(name);
 
               if (table.containsKey(pair['key']))
@@ -179,22 +187,24 @@ class TomlParserDefinition extends TomlGrammar {
               table[pair['key']] = pair['value'];
             };
 
-        // add top level key/value pairs
-        content[1].forEach(addPairsTo(doc));
+        // add top-level key/value pairs
+        var topLevelDefinitions = content[1].cast<Map<String, dynamic>>();
+        topLevelDefinitions.forEach(addPairsTo(doc));
 
         // Iterate over table definitions.
-        content[2].forEach((Map def) {
+        var tableDefinitions = content[2].cast<Map<String, dynamic>>();
+        tableDefinitions.forEach((Map<String, dynamic> def) {
           // Find parent of the new table.
           var parent = doc;
           var nameParts = [];
-          def['parent'].forEach((String key) {
-            var child = parent.putIfAbsent(key, () => {});
+          def['parent'].cast<String>().forEach((String key) {
+            var child = parent.putIfAbsent(key, () => <String, dynamic>{});
             if (child is List) {
               key = '$key[${child.length - 1}]';
               child = child.last;
             }
             nameParts.add(key);
-            if (child is Map) {
+            if (child is Map<String, dynamic>) {
               parent = child;
             } else {
               throw new NotATableException(nameParts.join('.'));
@@ -204,33 +214,49 @@ class TomlParserDefinition extends TomlGrammar {
           var name = nameParts.join('.');
 
           // Create the table.
-          var tbl;
+          var table = <String, dynamic>{};
 
           // Array of Tables.
           if (def['type'] == 'table-array') {
-            var arr = parent.putIfAbsent(def['name'], () {
+            var arr = parent.putIfAbsent(def['name'] as String, () {
               // Define array.
               define(name);
               return [];
             });
 
-            // Overwrite previous table.
-            if (arr is Map) throw new RedefinitionException(name);
-
-            var i = arr.length;
-            arr.add(tbl = {});
-            name = '$name[$i]'; // Tables in arrays are qualified by index.
+            // Add new table to array of tables or throw an error if this
+            // is not an array of tables.
+            if (arr is List) {
+              // The name of the table is qualified with
+              var i = arr.length;
+              arr.add(table);
+              name = '$name[$i]';
+              define(name);
+            } else {
+              throw new RedefinitionException(name);
+            }
           } else {
-            tbl = parent.putIfAbsent(def['name'], () => {});
+            // Add table to parent table or lookup implicitly created table.
+            var tbl = parent.putIfAbsent(def['name'] as String, () => table);
+            define(name);
+
+            // Throw an exception if the parent table does contain a value
+            // already which is not an implicitly created table.
+            if (tbl is Map<String, dynamic>) {
+              table = tbl;
+            } else {
+              throw new NotATableException(name);
+            }
           }
 
           // Add key/value pairs.
-          define(name);
-          def['pairs'].forEach(addPairsTo(tbl, name));
+          def['pairs']
+              .cast<Map<String, dynamic>>()
+              .forEach(addPairsTo(table, name));
         });
 
         dynamic unmodifiable(dynamic toml) {
-          if (toml is Map) {
+          if (toml is Map<String, dynamic>) {
             return new UnmodifiableMapView(new Map.fromIterables(
                 toml.keys, toml.values.map(unmodifiable)));
           }
@@ -249,4 +275,9 @@ class TomlParserDefinition extends TomlGrammar {
 class TomlParser extends GrammarParser {
   /// Creates a new parser for TOML documents.
   TomlParser() : super(new TomlParserDefinition());
+
+  /// Since [GrammarParser] does not have a type argument, we have to
+  /// override [parse] to fix the return type.
+  Result<Map<String, dynamic>> parse(String input) =>
+      super.parse(input).map((dynamic res) => res as Map<String, dynamic>);
 }

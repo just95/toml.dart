@@ -20,7 +20,8 @@ import 'interface.dart';
 /// configuration options.
 /// The Future fails if no loader was set, the file could not be loaded or if
 /// it has any syntax errors.
-Future<Map> loadConfig([String filename = 'config.toml']) async {
+Future<Map<String, dynamic>> loadConfig(
+    [String filename = 'config.toml']) async {
   var loader = ConfigLoader.defaultLoader;
   var decoder = ConfigDecoder.getByExtension(extension(filename));
   var contents = await loader.loadConfig(filename);

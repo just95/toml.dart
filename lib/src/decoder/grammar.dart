@@ -86,8 +86,8 @@ class TomlGrammar extends GrammarDefinition {
   /// The string is not allowed to contain [quotes].
   /// Only [literal] strings are allowed to contain a backslash character.
   /// Only [multiLine] strings are allowed to contain newlines.
-  Parser strData(String quotes, {bool literal: false, bool multiLine: false}) {
-    var forbidden = string(quotes);
+  Parser strData(Parser quotes, {bool literal: false, bool multiLine: false}) {
+    var forbidden = quotes;
     if (!literal) forbidden |= char('\\');
     if (!multiLine) forbidden |= ref(newline);
     return forbidden.neg().plus();
@@ -99,11 +99,11 @@ class TomlGrammar extends GrammarDefinition {
   /// [esc] is a parser for the allowed escape sequences.
   /// [multiLine] strings are allowed to contain newline characters and
   /// may start with a blank line that is ignored.
-  Parser strParser(String quotes, {Parser esc, bool multiLine: false}) {
+  Parser strParser(Parser quotes, {Parser esc, bool multiLine: false}) {
     var data = strData(quotes, literal: esc == null, multiLine: multiLine);
     if (esc != null) data = esc | data;
-    var first = multiLine ? ref(blankLine).optional() : epsilon();
-    return string(quotes) & first & data.star() & string(quotes);
+    var first = multiLine ? ref(blankLine).optional() : epsilon(null);
+    return quotes & first & data.star() & quotes;
   }
 
   // -----------------------------------------------------------------
@@ -111,21 +111,21 @@ class TomlGrammar extends GrammarDefinition {
   // -----------------------------------------------------------------
 
   /// Creates a parser for a basic string.
-  Parser basicStr() => strParser('"', esc: ref(escSeq));
+  Parser basicStr() => strParser(string('"'), esc: ref(escSeq));
 
   /// Creates a parser for a multi-line basic string.
   Parser multiLineBasicStr() =>
-      strParser('"""', esc: ref(multiLineEscSeq), multiLine: true);
+      strParser(string('"""'), esc: ref(multiLineEscSeq), multiLine: true);
 
   // -----------------------------------------------------------------
   // Literal strings.
   // -----------------------------------------------------------------
 
   /// Creates a parser for a literal string.
-  Parser literalStr() => strParser("'");
+  Parser literalStr() => strParser(string("'"));
 
   /// Creates a parser for a multi-line literal string.
-  Parser multiLineLiteralStr() => strParser("'''", multiLine: true);
+  Parser multiLineLiteralStr() => strParser(string("'''"), multiLine: true);
 
   // -----------------------------------------------------------------
   // Escape Sequences.
@@ -302,13 +302,13 @@ class TomlGrammar extends GrammarDefinition {
   Parser inlineTable() =>
       token('{') &
       ref(keyValuePair)
-          .separatedBy(token(','),
+          .separatedBy<Map<String, dynamic>>(token(','),
 
               /// Trailing commas are currently not allowed.
               /// See https://github.com/toml-lang/toml/pull/235#issuecomment-73578529
               optionalSeparatorAtEnd: false,
               includeSeparators: false)
-          .optional([]) &
+          .optional(<Map<String, dynamic>>[]) &
       token('}');
 
   // -----------------------------------------------------------------
@@ -326,7 +326,7 @@ class TomlGrammar extends GrammarDefinition {
 
   /// Create a parser for a list of `.` separated keys.
   Parser keyPath() =>
-      ref(key).separatedBy(token('.'), includeSeparators: false);
+      ref(key).separatedBy<String>(token('.'), includeSeparators: false);
 
   // -----------------------------------------------------------------
   // Key/value pairs.
@@ -340,9 +340,11 @@ class TomlGrammar extends GrammarDefinition {
   /// The list may be empty.
   /// Every key/value pair starts on a new line.
   Parser keyValuePairs() => ref(keyValuePair)
-      .separatedBy(ref(ignore).star() & ref(newline) & ref(ignore, true).star(),
-          includeSeparators: false, optionalSeparatorAtEnd: true)
-      .optional([]);
+      .separatedBy<Map<String, dynamic>>(
+          ref(ignore).star() & ref(newline) & ref(ignore, true).star(),
+          includeSeparators: false,
+          optionalSeparatorAtEnd: true)
+      .optional(<Map<String, dynamic>>[]);
 
   // -----------------------------------------------------------------
   // Document.
