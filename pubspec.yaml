@@ -4,11 +4,11 @@ author: Justin Andresen <jan.dresen.95@gmail.com>
 description: Parser and encoder for TOML v0.4.0 (Tom's Obvious, Minimal Language) configuration files.
 homepage: https://github.com/just95/toml.dart
 environment:
-  sdk: '>=1.9.1 <2.0.0'
+  sdk: '>=2.7.0 <3.0.0'
 dependencies:
-  path: '^1.4.2'
-  petitparser: '^1.5.1'
-  quiver: '^0.25.0'
-  yaml: '^2.1.12'
+  path: ^1.7.0
+  petitparser: ^3.0.2
+  quiver: ^2.1.3
+  yaml: ^2.2.1
 dev_dependencies:
   test: any

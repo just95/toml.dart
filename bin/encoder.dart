@@ -58,7 +58,7 @@ dynamic decodeValue(dynamic value) {
 }
 
 Future main() async {
-  StreamConfigLoader.use(stdin.transform(UTF8.decoder));
+  StreamConfigLoader.use(stdin.transform(utf8.decoder));
 
   var json = await loadConfig('config.json');
   var encoder = new TomlEncoder();
