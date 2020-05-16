@@ -181,7 +181,7 @@ class TomlGrammar extends GrammarDefinition {
   /// The integral part of a float.
   ///
   /// Starts with an optional sign.
-  Parser integralPart() => anyIn('+-').optional() & (char('0') | ref(digits));
+  Parser integralPart() => anyOf('+-').optional() & (char('0') | ref(digits));
 
   /// The fractional part of a float.
   ///
@@ -191,7 +191,7 @@ class TomlGrammar extends GrammarDefinition {
   /// The exponent part of a float.
   ///
   /// An integer part that is preceded by an `e` or `E`.
-  Parser exponentPart() => anyIn('eE') & ref(integralPart);
+  Parser exponentPart() => anyOf('eE') & ref(integralPart);
 
   /// Creates a parser for one or more digits.
   ///
@@ -232,7 +232,7 @@ class TomlGrammar extends GrammarDefinition {
   Parser timeOffset() => char('Z') | ref(timeNumOffset);
 
   /// Creates a parser for a numerical time zone offset.
-  Parser timeNumOffset() => anyIn('+-') & ref(dd) & char(':') & ref(dd);
+  Parser timeNumOffset() => anyOf('+-') & ref(dd) & char(':') & ref(dd);
 
   /// Creates a parser for two digits.
   Parser dd() => digit().times(2);
