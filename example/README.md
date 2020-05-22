@@ -11,6 +11,8 @@ This directory contains examples for the usage of the `toml.dart` package.
  - [`./toml_encoder`][toml-dart/example/toml_encoder] contains an example for how to use the `TomlEncoder` from the `toml.encoder` library to encode a `Map` as a TOML document.
 
  - [`./toml_parser`][toml-dart/example/toml_parser] contains an example for how to use the `TomlParser` from the `toml.decoder` library to decode a TOML document from a string.
+ 
+ - [`./flutter_example`][toml-dart/example/flutter_example] contains a Flutter example for how to use the `toml.dart` library to decode a TOML document as an asset string.
 
 [toml-dart/example/custom_config_loader]:
   https://github.com/just95/toml.dart/tree/master/example/custom_config_loader
@@ -31,3 +33,7 @@ This directory contains examples for the usage of the `toml.dart` package.
 [toml-dart/example/toml_parser]:
   https://github.com/just95/toml.dart/tree/master/example/toml_parser
   "TomlParser Example | toml.dart"
+  
+[toml-dart/example/flutter_example]:
+  https://github.com/just95/toml.dart/tree/master/example/flutter_example
+  "Flutter Example | toml.dart"
