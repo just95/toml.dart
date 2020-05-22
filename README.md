@@ -1,7 +1,6 @@
 # toml.dart
 
-This package provides an implementation of a TOML (Tom's Obvious, Minimal
-Language) parser and encoder for Dart.
+This package provides an implementation of a TOML (Tom's Obvious, Minimal Language) parser and encoder for Dart.
 
 It currently supports version [v0.4.0][] of the TOML specification.
 
@@ -17,10 +16,9 @@ dependencies:
 
 ## Usage
 
-This package includes three libraries for loading, decoding and encoding TOML
-documents, which are further described below.
+This package includes three libraries for loading, decoding and encoding TOML documents, which are further described below.
 
-If you want to use both the encoder and decoder, a single import suffices:
+If you want to use both the encoder and decoder, a single import suffices.
 
 ```dart
 import 'package:toml/toml.dart';
@@ -28,14 +26,12 @@ import 'package:toml/toml.dart';
 
 ### Load configuration files.
 
-Before any configuration file can be parsed the library needs to know how
-to load it. There are two default methods available, but you can easily
-implement your own loading mechanism as further described below.
+Before any configuration file can be parsed the library needs to know how to load it.
+There are two default methods available, but you can easily implement your own loading mechanism as further described below.
 
 If your code is running in the **browser**, you probably want to use XHR to
-fetch the file from the server. To do so import the `toml.loader.http` library
-and call the static `HttpConfigLoader.use` method, e.g. from your `main`
-function.
+fetch the file from the server.
+To do so import the `toml.loader.http` library and call the static `HttpConfigLoader.use` method, e.g., from your `main` function.
 
 ```dart
 import 'package:toml/loader/http.dart';
@@ -46,9 +42,8 @@ void main() {
 }
 ```
 
-If your code is running on the **server**, you can load configuration files from
-the local file system. Simply import the `toml.loader.fs` library and call the
-static `FilesystemConfigLoader.use` method, e.g. from your `main` function.
+If your code is running on the **server**, you can load configuration files from the local file system.
+Simply import the `toml.loader.fs` library and call the static `FilesystemConfigLoader.use` method, e.g., from your `main` function.
 
 ```dart
 import 'package:toml/loader/fs.dart';
@@ -59,10 +54,8 @@ void main() {
 }
 ```
 
-For convenience both libraries export the `loadConfig` function from the
-`toml.loader` library. It optionally takes the path to the configuration file
-as its only argument (defaults to `'config.toml'`) and returns a `Future` of
-the parsed configuration options.
+For convenience both libraries export the `loadConfig` function from the `toml.loader` library.
+It optionally takes the path to the configuration file as its only argument (defaults to `'config.toml'`) and returns a `Future` of the parsed configuration options.
 
 ```dart
 Future main() async {
@@ -74,9 +67,8 @@ Future main() async {
 
 ### Implement a custom loader.
 
-To create a custom loader which fits exactly your needs import the
-`toml.loader` library, create a new class and implement the `ConfigLoader`
-interface. You can use this code as a starting point:
+To create a custom loader which fits exactly your needs import the `toml.loader` library, create a new class and implement the `ConfigLoader` interface.
+You can use the following template as a starting point.
 
 ```dart
 library my.config.loader;
@@ -98,21 +90,18 @@ class MyConfigLoader implements ConfigLoader {
 }
 ```
 
-In your `main` function invoke the `MyConfigLoader.use` method and call the
-`loadConfig` function as usual.
+In your `main` function invoke the `MyConfigLoader.use` method and call the `loadConfig` function as usual.
 
 ### Decode TOML
 
-If you only want to decode a string of TOML, add the following import directive
-to your script:
+If you only want to decode a string of TOML, add the following import directive to your script.
 
 ```dart
 import 'package:toml/decoder.dart';
 ```
 
-This library contains the actual `TomlParser` class whose `parse` method
-takes a `String` and returns a `Result` object. The results `value` property
-holds an unmodifiable `Map` of the parsed document.
+This library contains the actual `TomlParser` class whose `parse` method takes a `String` and returns a `Result` object.
+The results `value` property holds an unmodifiable `Map` of the parsed document.
 
 ```dart
 var toml = '''
@@ -124,16 +113,15 @@ var document = parser.parse(toml).value;
 
 ### Encode TOML
 
-This package includes a TOML encoder. To use it simply import:
+This package includes a TOML encoder.
+To use it add the following import.
 
 ```dart
 import 'package:toml/encoder.dart';
 ```
 
-The library provides a `TomlEncoder` class whose `encode` method takes
-a `Map` and returns a TOML encoded `String`.
-All values of the map must be natively representable by TOML or implement the
-`TomlEncodable` interface.
+The library provides a `TomlEncoder` class whose `encode` method takes a `Map` and returns a TOML encoded `String`.
+All values of the map must be natively representable by TOML or implement the `TomlEncodable` interface.
 
 ```dart
 var document = {
@@ -143,40 +131,36 @@ var encoder = new TomlEncoder();
 var toml = encoder.encode(document);
 ```
 
-Classes which implement the `TomlEncodable` interface define a `toToml` method
-whose return value can be represented by TOML in turn.
+Classes which implement the `TomlEncodable` interface define a `toToml` method whose return value can be represented by TOML in turn.
 
 ## Data Structure
 
-TOML **documents** and **tables** as well as **inline tables** are represented
-through nested `UnmodifiableMapView` objects whose keys are `String`s and
-values `dynamic` read-only representations of the corresponding TOML value or
-sub-table.
-The contents of a table declared by:
+TOML **documents** and **tables** as well as **inline tables** are represented through nested `UnmodifiableMapView` objects whose keys are `String`s and values `dynamic` read-only representations of the corresponding TOML value or sub-table.
+The contents of a table declared by
 
 ```toml
 [a.b.c]
 key = 'value'
 ```
 
-may be accessed using `[]`:
+may be accessed using `[]` as shown in the listing below.
 
 ```dart
 var table = document['a']['b']['c']; // ok
 var value = table['key'];
 ```
 
-The following, however, is invalid:
+The following, however, is invalid.
 
 ```dart
 var table = document['a.b.c']; // error
 table['key'] = value; // error
 ```
 
-All kinds of **arrays** including **arrays of tables** are stored as
-`UnmodifiableListView` objects. Though the encoder accepts any `Iterable`.
+All kinds of **arrays** including **arrays of tables** are stored as `UnmodifiableListView` objects.
+Though the encoder accepts any `Iterable`.
 The items of the list represent either a value or a table.
-Given a document:
+Consider the document that contains an array of tables.
 
 ```toml
 [[items]]
@@ -189,7 +173,7 @@ name = 'B'
 name = 'C'
 ```
 
-One might iterate over the items of the list:
+It is possible to iterate over the tables in the array.
 
 ```dart
 document['items'].forEach((Map item) { // ok
@@ -197,7 +181,7 @@ document['items'].forEach((Map item) { // ok
 });
 ```
 
-But it is not allowed to add, remove or modify its entries:
+However, it is not allowed to add, remove or modify its entries.
 
 ```dart
 document['items'].add({ // error
@@ -209,7 +193,7 @@ document['items'][0] = { // error
 ```
 
 All **string** variants produce regular dart `String`s.
-These are therefore all equivalent:
+All of the following are therefore equivalent.
 
 ```toml
 str1 = "Hello World!"
@@ -221,17 +205,13 @@ str3 = """
 str4 = '''Hello World!'''
 ```
 
-**Integers** are of type `int` and **float**ing point numbers are represented
-as `double`s.
+**Integers** are of type `int` and **float**ing point numbers are represented as `double`s.
 When compiled to JavaScript these two types are not distinct.
-Thus a float without decimal places might accidentally be encoded as an
-integer. This behavior would lead to the generation of invalid numeric
-arrays.
-The `TomlEncoder` addresses this issue by analyzing the contents of numeric
-arrays first.
-If any of its items cannot be represented as an integer, all items will be
-encoded as floats instead.
-Encoding the following map:
+Thus a float without decimal places might accidentally be encoded as an integer.
+This behavior would lead to the generation of invalid numeric arrays.
+The `TomlEncoder` addresses this issue by analyzing the contents of numeric arrays first.
+If any of its items cannot be represented as an integer, all items will be encoded as floats instead.
+Encoding the following map, for example, would throw an `MixedArrayTypesException` in the VM.
 
 ```dart
 var document = {
@@ -239,8 +219,7 @@ var document = {
 };
 ```
 
-would throw an `MixedArrayTypesException` in the vm but yields this document
-when compiled to JavaScript:
+However, in JavaScript, the encoder yields the following TOML document.
 
 ```toml
 array = [1.0, 2.0, 3.141]
@@ -252,20 +231,18 @@ array = [1.0, 2.0, 3.141]
 
 ## Examples
 
-Check out the scripts located in the `'/example'` directory.
+Check out the scripts located in the `./example` directory.
 
 ## Testing
 
-To see whether everything is working correctly change into the root directory
-of this package and run the included tests as follows:
+To see whether everything is working correctly change into the root directory of this package and run the included tests as follows:
 
 ```sh
 pub run test
 ```
 
-You may pass the `--platform` command line argument to test the package on
-other platforms than the VM. Run `pub run test --help` for a list of all
-available platforms.
+You may pass the `--platform` command line argument to test the package on other platforms than the VM.
+Run `pub run test --help` for a list of all available platforms.
 
 Alternatively, you can run [`toml-test`][] (again from the package root):
 
@@ -280,7 +257,7 @@ We will fix the failing tests in an upcoming release of this library soon.
 
 ## License
 
-toml.dart is licensed under the MIT license agreement.
+`toml.dart` is licensed under the MIT license agreement.
 See the LICENSE file for details.
 
 [toml-test]: https://github.com/BurntSushi/toml-test

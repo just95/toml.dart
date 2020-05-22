@@ -12,18 +12,14 @@
 ## 0.4.0 / 2015-06-05
 
 - Removed deprecated `toml.browser` and `toml.server` libraries.
-- Dropped support for `dart_config`. There is now a custom `ConfigLoader`
-  interface with two default implementations.
-- The `use*ConfigLoader` functions are still available for backward
-  compatibility, but are deprecated and will be removed in the next
-  release. Each of the `ConfigLoader` implementations has a static `use`
-  method which you should use instead.
+- Dropped support for `dart_config`. There is now a custom `ConfigLoader` interface with two default implementations.
+- The `use*ConfigLoader` functions are still available for backward compatibility, but are deprecated and will be removed in the next release.
+  Each of the `ConfigLoader` implementations has a static `use` method which you should use instead.
 
 ## 0.3.0 / 2015-04-08
 
 - Introduced new `toml.loader` library.
-- The `toml.browser` and `toml.server` libraries are now deprecated and will
-  be removed in the next release. Use the new `toml.loader` library instead.
+- The `toml.browser` and `toml.server` libraries are now deprecated and will be removed in the next release. Use the new `toml.loader` library instead.
 
 ## 0.2.0 / 2015-02-12
 
