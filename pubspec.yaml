@@ -12,3 +12,8 @@ dependencies:
   yaml: ^2.2.1
 dev_dependencies:
   test: any
+  # Dependencies for `webdev`.
+  # See also https://dart.dev/tools/webdev#depending-on-build_-packages.
+  build_runner: any
+  build_test: any
+  build_web_compilers: any
