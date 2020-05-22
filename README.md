@@ -161,6 +161,8 @@ var toml = encoder.encode(document);
 
 Classes which implement the `TomlEncodable` interface define a `toToml` method whose return value can be represented by TOML in turn.
 
+An example for using the `TomlEncoder` and the `TomlEncodable` interface to encode a `Map` can be found in [`./example/toml_encoder`][toml-dart/example/toml_encoder].
+
 ## Data Structure
 
 TOML **documents** and **tables** as well as **inline tables** are represented through nested `UnmodifiableMapView` objects whose keys are `String`s and values `dynamic` read-only representations of the corresponding TOML value or sub-table.
@@ -303,6 +305,9 @@ See the LICENSE file for details.
 [toml-dart/example/toml_parser]:
   https://github.com/just95/toml.dart/tree/master/example/toml_parser
   "TomlParser Example | toml.dart"
+[toml-dart/example/toml_encoder]:
+  https://github.com/just95/toml.dart/tree/master/example/toml_encoder
+  "TomlEncoder Example | toml.dart"
 [toml-dart/LICENSE]:
   https://github.com/just95/toml.dart/blob/master/LICENSE
   "MIT License | toml.dart"
