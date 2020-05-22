@@ -4,6 +4,19 @@ This package provides an implementation of a TOML (Tom's Obvious, Minimal Langua
 
 It currently supports version [v0.4.0][] of the TOML specification.
 
+## Table of Contents
+
+ 1. [Installation](#installation)
+ 2. [Usage](#usage)
+    1. [Load Configuration Files](#load-configuration-files)
+    2. [Implement a Custom Loader](#implement-a-custom-loader)
+    3. [Decode TOML](#decode-toml)
+    4. [Encode TOML](#encode-toml)
+ 3. [Data Structure](#data-structure)
+ 4. [Examples](#examples)
+ 5. [Testing](#testing)
+ 5. [License](#license)
+
 ## Installation
 
 To get started add `toml` as a dependency to your `pubspec.yaml` and run the
@@ -24,7 +37,7 @@ If you want to use both the encoder and decoder, a single import suffices.
 import 'package:toml/toml.dart';
 ```
 
-### Load configuration files.
+### Load Configuration Files
 
 Before any configuration file can be parsed the library needs to know how to load it.
 There are two default methods available, but you can easily implement your own loading mechanism as further described below.
@@ -65,7 +78,7 @@ Future main() async {
 }
 ```
 
-### Implement a custom loader.
+### Implement a Custom Loader
 
 To create a custom loader which fits exactly your needs import the `toml.loader` library, create a new class and implement the `ConfigLoader` interface.
 You can use the following template as a starting point.
