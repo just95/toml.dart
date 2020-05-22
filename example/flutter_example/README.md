@@ -24,7 +24,7 @@ cd ./example/flutter_example
 Before you can run the example, first download the required dependencies.
 
 ```bash
-flutter packages get
+flutter pub get
 ```
 
 Now you can run the example as follows.
