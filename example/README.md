@@ -8,20 +8,26 @@ This directory contains examples for the usage of the `toml.dart` package.
 
  - [`./http_config_loader`][toml-dart/example/http_config_loader] contains an example for how to load a configuration file in the browser via HTTP.
 
+ - [`./toml_encoder`][toml-dart/example/toml_encoder] contains an example for how to use the `TomlEncoder` from the `toml.encoder` library to encode a `Map` as a TOML document.
+
  - [`./toml_parser`][toml-dart/example/toml_parser] contains an example for how to use the `TomlParser` from the `toml.decoder` library to decode a TOML document from a string.
 
 [toml-dart/example/custom_config_loader]:
   https://github.com/just95/toml.dart/tree/master/example/custom_config_loader
-  "custom_config_loader Example | toml.dart"
+  "CustomConfigLoader Example | toml.dart"
 
 [toml-dart/example/filesystem_config_loader]:
   https://github.com/just95/toml.dart/tree/master/example/filesystem_config_loader
-  "filesystem_config_loader Example | toml.dart"
+  "FilesystemConfigLoader Example | toml.dart"
 
 [toml-dart/example/http_config_loader]:
   https://github.com/just95/toml.dart/tree/master/example/http_config_loader
-  "http_config_loader Example | toml.dart"
+  "HttpConfigLoader Example | toml.dart"
+
+[toml-dart/example/toml_encoder]:
+  https://github.com/just95/toml.dart/tree/master/example/toml_encoder
+  "TomlEncoder Example | toml.dart"
 
 [toml-dart/example/toml_parser]:
   https://github.com/just95/toml.dart/tree/master/example/toml_parser
-  "toml_parser Example | toml.dart"
+  "TomlParser Example | toml.dart"
