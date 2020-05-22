@@ -11,7 +11,7 @@
 ## 0.5.0 / 2016-07-24
 
 - Removed deprecated `use*ConfigLoader` functions.
-- Improved testing and added support for BurntSushi's [toml-test][] suite.
+- Improved testing and added support for BurntSushi's [`toml-test`][toml-test] suite.
 
 ## 0.4.0 / 2015-06-05
 
@@ -41,5 +41,6 @@
 
 - Initial version, implements v0.3.1 of the TOML spec.
 
-[toml-test]: https://github.com/BurntSushi/toml-test
+[toml-test]:
+  https://github.com/BurntSushi/toml-test
   "A language agnostic test suite for TOML parsers."

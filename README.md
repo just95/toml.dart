@@ -1,11 +1,11 @@
 # toml.dart
 
-[![Pub Package](https://img.shields.io/pub/v/toml.svg)](https://pub.dev/packages/toml)
-[![GitHub License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/just95/toml.dart/blob/master/LICENSE)
+[![Pub Package](https://img.shields.io/pub/v/toml.svg)][pub/toml]
+[![GitHub License](https://img.shields.io/badge/license-MIT-blue.svg)][toml-dart/LICENSE]
 
 This package provides an implementation of a TOML (Tom's Obvious, Minimal Language) parser and encoder for Dart.
 
-It currently supports version [v0.4.0][] of the TOML specification.
+It currently supports version [0.4.0][toml-spec/v0.4.0] of the TOML specification.
 
 ## Table of Contents
 
@@ -260,7 +260,7 @@ pub run test
 You may pass the `--platform` command line argument to test the package on other platforms than the VM.
 Run `pub run test --help` for a list of all available platforms.
 
-Alternatively, you can run [`toml-test`][] (again from the package root):
+Alternatively, you can run [`toml-test`][toml-test] (again from the package root):
 
 ```sh
 $GOPATH/bin/toml-test bin/decoder.dart
@@ -268,7 +268,7 @@ $GOPATH/bin/toml-test -encoder bin/encoder.dart
 ```
 
 Unfortunately, some tests from `toml-test` are failing at the moment.
-Thus, `toml.dart` is not fully [v0.4.0][] compliant at the moment.
+Thus, `toml.dart` is not fully TOML [0.4.0][toml-spec/v0.4.0] compliant at the moment.
 We will fix the failing tests in an upcoming release of this library soon.
 
 ## License
@@ -276,8 +276,18 @@ We will fix the failing tests in an upcoming release of this library soon.
 `toml.dart` is licensed under the MIT license agreement.
 See the LICENSE file for details.
 
-[toml-test]: https://github.com/BurntSushi/toml-test
-  "A language agnostic test suite for TOML encoders and decoders."
+[pub/toml]:
+  https://pub.dev/packages/toml
+  "toml ­| Dart Package"
 
-[v0.4.0]: https://github.com/toml-lang/toml/blob/master/versions/en/toml-v0.4.0.md
+[toml-dart/LICENSE]:
+  https://github.com/just95/toml.dart/blob/master/LICENSE
+  "MIT License | toml.dart"
+
+[toml-spec/v0.4.0]:
+  https://github.com/toml-lang/toml/blob/master/versions/en/toml-v0.4.0.md
   "Tom's Obvious, Minimal Language v0.4.0"
+
+[toml-test]:
+  https://github.com/BurntSushi/toml-test
+  "A language agnostic test suite for TOML encoders and decoders."
