@@ -4,6 +4,8 @@
 
 library toml.src.ast.value.float;
 
+import 'package:petitparser/petitparser.dart';
+
 import 'package:toml/src/ast/value.dart';
 
 /// AST node that represents a TOML floating point number.
@@ -26,6 +28,18 @@ import 'package:toml/src/ast/value.dart';
 /// TODO The special values `inf` and `nan` were added in TOML 0.5.0 and are
 /// not supported yet.
 class TomlFloat extends TomlValue<double> {
+  /// Parser for a TOML floating point value.
+  static final Parser<TomlFloat> parser = (() {
+    var digits = digit().plus().separatedBy(char('_'));
+    var decimal = anyOf('+-').optional() & (char('0') | digits);
+    var exp = anyOf('eE') & anyOf('+-').optional() & digits;
+    var frac = char('.') & digits;
+    var float = decimal & (exp | frac & exp.optional());
+    return float
+        .flatten()
+        .map((str) => new TomlFloat(double.parse(str.replaceAll('_', ''))));
+  })();
+
   @override
   final double value;
 

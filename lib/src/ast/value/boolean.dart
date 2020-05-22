@@ -4,6 +4,8 @@
 
 library toml.src.ast.value.boolean;
 
+import 'package:petitparser/petitparser.dart';
+
 import 'package:toml/src/ast/value.dart';
 
 /// AST node that represents a boolean TOML value.
@@ -13,6 +15,11 @@ import 'package:toml/src/ast/value.dart';
 ///     true    = %x74.72.75.65     ; true
 ///     false   = %x66.61.6C.73.65  ; false
 class TomlBoolean extends TomlValue<bool> {
+  /// Parser for a boolean TOML value.
+  static final Parser<TomlBoolean> parser =
+      (string('true').map((_) => kTrue) | string('false').map((_) => kFalse))
+          .cast<TomlBoolean>();
+
   /// The boolean TOML value `true`.
   static final TomlBoolean kTrue = new TomlBoolean(true);
 

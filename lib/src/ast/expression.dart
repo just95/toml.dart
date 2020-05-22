@@ -4,7 +4,12 @@
 
 library toml.src.ast.expression;
 
+import 'package:petitparser/petitparser.dart';
+
+import 'package:toml/src/ast/key_value_pair.dart';
 import 'package:toml/src/ast/node.dart';
+import 'package:toml/src/ast/table.dart';
+import 'package:toml/src/parser/util/whitespace.dart';
 
 /// Base class of all TOML expression nodes.
 ///
@@ -13,4 +18,13 @@ import 'package:toml/src/ast/node.dart';
 ///     expression =  ws [ comment ]
 ///     expression =/ ws keyval ws [ comment ]
 ///     expression =/ ws table ws [ comment ]
-abstract class TomlExpression extends TomlNode {}
+abstract class TomlExpression extends TomlNode {
+  /// Parser for TOML expressions.
+  ///
+  /// Returns `null` if the expression is just a blank line or comment.
+  static final Parser<TomlExpression> parser = (tomlWhitespace &
+          (TomlKeyValuePair.parser | TomlTable.parser).optional() &
+          tomlWhitespace &
+          tomlComment.optional())
+      .pick<TomlExpression>(1);
+}

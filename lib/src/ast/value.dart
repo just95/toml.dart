@@ -4,7 +4,17 @@
 
 library toml.src.ast.value;
 
+import 'package:petitparser/petitparser.dart';
+
 import 'package:toml/src/ast/node.dart';
+import 'package:toml/src/ast/value/array.dart';
+import 'package:toml/src/ast/value/boolean.dart';
+import 'package:toml/src/ast/value/datetime.dart';
+import 'package:toml/src/ast/value/float.dart';
+import 'package:toml/src/ast/value/integer.dart';
+import 'package:toml/src/ast/value/string.dart';
+import 'package:toml/src/ast/value/table.dart';
+import 'package:toml/src/parser/util/non_strict.dart';
 
 /// The possible types of [TomlValue]s.
 enum TomlType {
@@ -40,6 +50,30 @@ enum TomlType {
 ///         / float
 ///         / integer
 abstract class TomlValue<V> extends TomlNode {
+  /// Parser for a TOML value.
+  ///
+  /// We have to use a [NonStrictParser] since values (arrays for example)
+  /// can contain values themselves. If we didn't use [NonStrictParser], the
+  /// initialization of [parser] would be cyclic which is not allowed.
+  ///
+  /// It is important that `TomlDateTime` and `TomlFloat` and are parsed before
+  /// `TomlInteger`, since a `TomlDateTime` and a `TomlFloat` can start with a
+  /// `TomlInteger`.
+  static final Parser<TomlValue> parser = new NonStrictParser(() =>
+      (TomlDateTime.parser |
+              TomlFloat.parser |
+              TomlInteger.parser |
+              TomlBoolean.parser |
+              TomlString.parser |
+              TomlArray.parser |
+              TomlInlineTable.parser)
+          .cast<TomlValue>());
+
+  /// Parses the given TOML value.
+  ///
+  /// Throws a [ParserException] if there is a syntax error.
+  static TomlValue parse(String input) => parser.end().parse(input).value;
+
   /// The Dart value of the TOML value represented by this AST node.
   V get value;
 
