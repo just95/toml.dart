@@ -2,11 +2,9 @@
 // This software may be modified and distributed under the terms
 // of the MIT license. See the LICENSE file for details.
 
-library toml.example.string;
-
 import 'package:toml/decoder.dart';
 
-/// The contents of the toml document to parse.
+/// The contents of the TOML document to parse.
 const String toml = '''
 [table]
   [[table.array]]

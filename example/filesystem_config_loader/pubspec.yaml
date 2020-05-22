@@ -1,0 +1,9 @@
+name: example
+description: An example that demonstrates how to load a configuration file from a local file.
+repository: https://github.com/just95/toml.dart/tree/master/example/filesystem_config_loader
+publish_to: none
+environment:
+  sdk: '>=2.7.0 <3.0.0'
+dependencies:
+  toml:
+    path: ../../

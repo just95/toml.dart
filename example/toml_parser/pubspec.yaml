@@ -1,0 +1,9 @@
+name: example
+description: An example that demonstrates how decode a TOML document from a string.
+repository: https://github.com/just95/toml.dart/tree/master/example/toml_Parser
+publish_to: none
+environment:
+  sdk: '>=2.7.0 <3.0.0'
+dependencies:
+  toml:
+    path: ../../

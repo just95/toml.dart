@@ -16,8 +16,7 @@ It currently supports version [0.4.0][toml-spec/v0.4.0] of the TOML specificatio
     3. [Decode TOML](#decode-toml)
     4. [Encode TOML](#encode-toml)
  3. [Data Structure](#data-structure)
- 4. [Examples](#examples)
- 5. [Testing](#testing)
+ 4. [Testing](#testing)
  5. [License](#license)
 
 ## Installation
@@ -32,9 +31,12 @@ dependencies:
 
 ## Usage
 
-This package includes three libraries for loading, decoding and encoding TOML documents, which are further described below.
+The `toml.dart` package includes three libraries for loading, decoding and encoding TOML documents.
+The usage of the individual libraries is described in the subsequent sections in more detail.
+Additional examples for the usage of the `toml.dart` package can be found in the [`./example`][toml-dart/example] directory.
 
-If you want to use both the encoder and decoder, a single import suffices.
+All three libraries `toml.decoder`, `toml.encoder` and `toml.loader` are reexported by the `toml` library.
+Thus, a single import usually suffices.
 
 ```dart
 import 'package:toml/toml.dart';
@@ -42,8 +44,8 @@ import 'package:toml/toml.dart';
 
 ### Load Configuration Files
 
-Before any configuration file can be parsed the library needs to know how to load it.
-There are two default methods available, but you can easily implement your own loading mechanism as further described below.
+Before any configuration file can be parsed, the library needs to know how to load it.
+There are two default methods available, but you can easily implement your own loading mechanism as described in the next section.
 
 If your code is running in the **browser**, you probably want to use XHR to
 fetch the file from the server.
@@ -58,7 +60,9 @@ void main() {
 }
 ```
 
-If your code is running on the **server**, you can load configuration files from the local file system.
+An example for loading a configuration file via HTTP can be found in [`./example/http_config_loader`][toml-dart/example/http_config_loader].
+
+If your code is running in the **Dart VM**, you can load configuration files from the local file system.
 Simply import the `toml.loader.fs` library and call the static `FilesystemConfigLoader.use` method, e.g., from your `main` function.
 
 ```dart
@@ -69,6 +73,8 @@ void main() {
   // ...
 }
 ```
+
+An example for loading a configuration file from a file can be found in [`./example/filesystem_config_loader`][toml-dart/example/filesystem_config_loader].
 
 For convenience both libraries export the `loadConfig` function from the `toml.loader` library.
 It optionally takes the path to the configuration file as its only argument (defaults to `'config.toml'`) and returns a `Future` of the parsed configuration options.
@@ -108,16 +114,20 @@ class MyConfigLoader implements ConfigLoader {
 
 In your `main` function invoke the `MyConfigLoader.use` method and call the `loadConfig` function as usual.
 
+An example for writing a custom configuration file loader can be found in [`./example/custom_config_loader`][toml-dart/example/custom_config_loader].
+
 ### Decode TOML
 
-If you only want to decode a string of TOML, add the following import directive to your script.
+When you are using the `toml.loader` library, you don't have to decode TOML documents manually.
+The decoding is performed by `loadConfig` already.
+However, if you have a `String` and want to decode its contents as a TOML document, you can use the `toml.decoder` library.
 
 ```dart
 import 'package:toml/decoder.dart';
 ```
 
 This library contains the actual `TomlParser` class whose `parse` method takes a `String` and returns a `Result` object.
-The results `value` property holds an unmodifiable `Map` of the parsed document.
+The result's `value` property holds an unmodifiable `Map` of the parsed document.
 
 ```dart
 var toml = '''
@@ -126,6 +136,8 @@ var toml = '''
 var parser = new TomlParser();
 var document = parser.parse(toml).value;
 ```
+
+An example for using `TomlParser` to decode a string can be found in [`./example/toml_parser`][toml-dart/example/toml_parser].
 
 ### Encode TOML
 
@@ -245,10 +257,6 @@ array = [1.0, 2.0, 3.141]
 
 **Datetime** values are UTC `DateTime` objects.
 
-## Examples
-
-Check out the scripts located in the `./example` directory.
-
 ## Testing
 
 To see whether everything is working correctly change into the root directory of this package and run the included tests as follows:
@@ -280,6 +288,21 @@ See the LICENSE file for details.
   https://pub.dev/packages/toml
   "toml ­| Dart Package"
 
+[toml-dart/example]:
+  https://github.com/just95/toml.dart/tree/master/example
+  "toml.dart Examples"
+[toml-dart/example/custom_config_loader]:
+  https://github.com/just95/toml.dart/tree/master/example/custom_config_loader
+  "CustomConfigLoader Example | toml.dart"
+[toml-dart/example/filesystem_config_loader]:
+  https://github.com/just95/toml.dart/tree/master/example/filesystem_config_loader
+  "FilesystemConfigLoader Example | toml.dart"
+[toml-dart/example/http_config_loader]:
+  https://github.com/just95/toml.dart/tree/master/example/http_config_loader
+  "HttpConfigLoader Example | toml.dart"
+[toml-dart/example/toml_parser]:
+  https://github.com/just95/toml.dart/tree/master/example/toml_parser
+  "TomlParser Example | toml.dart"
 [toml-dart/LICENSE]:
   https://github.com/just95/toml.dart/blob/master/LICENSE
   "MIT License | toml.dart"

@@ -2,8 +2,6 @@
 // This software may be modified and distributed under the terms
 // of the MIT license. See the LICENSE file for details.
 
-library toml.example.server;
-
 import 'dart:async';
 
 import 'package:toml/loader/fs.dart';
