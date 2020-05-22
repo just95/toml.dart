@@ -1,16 +1,40 @@
-# flutter_example
+# **Flutter** example
 
-A new Flutter project.
+The example demonstrates how to load and parse a TOML asset and display `Hello, World!` in a `Text` 
+widget.
 
-## Getting Started
+## Requirements
 
-This project is a starting point for a Flutter application.
+You need to have [installed](https://flutter.dev/docs/get-started/install) Flutter SDK.
 
-A few resources to get you started if this is your first Flutter project:
+## Running on a device
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+Connect your device or start your emulator and see that it's connected using:
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+```
+flutter devices
+```
+
+All of the following commands have to be executed in the root directory of this example.
+
+```bash
+cd ./example/flutter_example
+```
+
+Before you can run the example, first download the required dependencies.
+
+```bash
+flutter packages get
+```
+
+Now you can run the example as follows.
+
+```bash
+flutter run
+```
+
+Or given a device name from `flutter devices`.
+
+```bash
+flutter run -d <device-name>
+```

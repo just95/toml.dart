@@ -43,20 +43,10 @@ class _MyHomePageState extends State<MyHomePage> {
               child: CircularProgressIndicator(),
             );
           }
-          String text = snapshot.data;
+          final String text = snapshot.data;
           final Map<String, dynamic> toml = tomlParser.parse(text.trim()).value;
-          return Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Text(toml['str'] as String),
-              SizedBox(height: 12),
-              Text(toml['literal_str'] as String),
-              SizedBox(height: 12),
-              Text(toml['multiline_str'] as String),
-              SizedBox(height: 12),
-              Text(toml['literal_multiline_str'] as String),
-            ],
+          return Center(
+            child: Text(toml['str'] as String),
           );
         },
       ),
