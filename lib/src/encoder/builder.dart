@@ -130,8 +130,9 @@ class TomlDocumentBuilder {
 
       if (value is Map<String, dynamic>) {
         encodeSubTable(value, name: name);
-      } else if (value is Iterable<Map<String, dynamic>>) {
-        value.forEach((item) {
+      } else if (value is Iterable &&
+          value.every((item) => item is Map<String, dynamic>)) {
+        value.cast<Map<String, dynamic>>().forEach((item) {
           encodeSubTable(item, name: name, array: true);
         });
       } else {
