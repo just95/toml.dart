@@ -267,16 +267,16 @@ You may pass the `--platform` command line argument to test the package on
 other platforms than the VM. Run `pub run test --help` for a list of all
 available platforms.
 
-Alternatively you can run [toml-test][] (again from the package root):
+Alternatively, you can run [`toml-test`][] (again from the package root):
 
 ```sh
 $GOPATH/bin/toml-test bin/decoder.dart
 $GOPATH/bin/toml-test -encoder bin/encoder.dart
 ```
 
-However, note that `toml-test` currently supports [v0.2.0][] only.
-Thus a workaround is needed at the time to fix datetimes which have
-changed slightly since then.
+Unfortunately, some tests from `toml-test` are failing at the moment.
+Thus, `toml.dart` is not fully [v0.4.0][] compliant at the moment.
+We will fix the failing tests in an upcoming release of this library soon.
 
 ## License
 
@@ -285,9 +285,6 @@ See the LICENSE file for details.
 
 [toml-test]: https://github.com/BurntSushi/toml-test
   "A language agnostic test suite for TOML encoders and decoders."
-
-[v0.2.0]: https://github.com/toml-lang/toml/blob/master/versions/en/toml-v0.2.0.md
-  "Tom's Obvious, Minimal Language v0.2.0"
 
 [v0.4.0]: https://github.com/toml-lang/toml/blob/master/versions/en/toml-v0.4.0.md
   "Tom's Obvious, Minimal Language v0.4.0"
