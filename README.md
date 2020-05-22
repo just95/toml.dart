@@ -284,7 +284,7 @@ We will fix the failing tests in an upcoming release of this library soon.
 ## License
 
 `toml.dart` is licensed under the MIT license agreement.
-See the LICENSE file for details.
+See the [LICENSE][toml-dart/LICENSE] file for details.
 
 [pub/toml]:
   https://pub.dev/packages/toml
