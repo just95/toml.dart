@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.6.0 / 2020-05-22
+
+- Upgraded to Dart 2.
+
 ## 0.5.1 / 2017-06-19
 
 - Upgraded dependencies.
