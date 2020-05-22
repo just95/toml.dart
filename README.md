@@ -1,5 +1,8 @@
 # toml.dart
 
+[![Pub Package](https://img.shields.io/pub/v/toml.svg)](https://pub.dev/packages/toml)
+[![GitHub License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/just95/toml.dart/blob/master/LICENSE)
+
 This package provides an implementation of a TOML (Tom's Obvious, Minimal Language) parser and encoder for Dart.
 
 It currently supports version [v0.4.0][] of the TOML specification.
