@@ -1,11 +1,6 @@
 name: flutter_example
 description: toml flutter example
-
-# The following line prevents the package from being accidentally published to
-# pub.dev using `pub publish`. This is preferred for private packages.
-publish_to: 'none' # Remove this line if you wish to publish to pub.dev
-
-version: 1.0.0+1
+publish_to: 'none'
 
 environment:
   sdk: ">=2.7.0 <3.0.0"
@@ -13,7 +8,6 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-
   toml:
     path: ../../
 
@@ -21,17 +15,8 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
 
-# For information on the generic Dart part of this file, see the
-# following page: https://dart.dev/tools/pub/pubspec
-
-# The following section is specific to Flutter.
 flutter:
-
-  # The following line ensures that the Material Icons font is
-  # included with your application, so that you can use the icons in
-  # the material Icons class.
   uses-material-design: true
 
-  # To add assets to your application, add an assets section, like this:
   assets:
     - assets/example.toml
