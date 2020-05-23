@@ -5,6 +5,8 @@ This directory contains examples for the usage of the `toml.dart` package.
  - [`./custom_config_loader`][toml-dart/example/custom_config_loader] contains an example for how to extend the configuration file loading mechanism of `toml.dart` by supplying your own instance of the `ConfigLoader` interface.
 
  - [`./filesystem_config_loader`][toml-dart/example/filesystem_config_loader] contains an example for how to load a configuration file in the Dart VM from the local filesystem.
+ 
+ - [`./flutter_example`][toml-dart/example/flutter_example] contains a Flutter example for how to use the `toml.dart` library to decode a TOML document as an asset string.
 
  - [`./http_config_loader`][toml-dart/example/http_config_loader] contains an example for how to load a configuration file in the browser via HTTP.
 
@@ -19,6 +21,10 @@ This directory contains examples for the usage of the `toml.dart` package.
 [toml-dart/example/filesystem_config_loader]:
   https://github.com/just95/toml.dart/tree/master/example/filesystem_config_loader
   "FilesystemConfigLoader Example | toml.dart"
+  
+[toml-dart/example/flutter_example]:
+  https://github.com/just95/toml.dart/tree/master/example/flutter_example
+  "Flutter Example | toml.dart"
 
 [toml-dart/example/http_config_loader]:
   https://github.com/just95/toml.dart/tree/master/example/http_config_loader
