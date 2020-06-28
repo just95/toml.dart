@@ -291,25 +291,25 @@ See the [LICENSE][toml-dart/LICENSE] file for details.
   "toml ­| Dart Package"
 
 [toml-dart/example]:
-  https://github.com/just95/toml.dart/tree/master/example
+  https://github.com/just95/toml.dart/tree/main/example
   "toml.dart Examples"
 [toml-dart/example/custom_config_loader]:
-  https://github.com/just95/toml.dart/tree/master/example/custom_config_loader
+  https://github.com/just95/toml.dart/tree/main/example/custom_config_loader
   "CustomConfigLoader Example | toml.dart"
 [toml-dart/example/filesystem_config_loader]:
-  https://github.com/just95/toml.dart/tree/master/example/filesystem_config_loader
+  https://github.com/just95/toml.dart/tree/main/example/filesystem_config_loader
   "FilesystemConfigLoader Example | toml.dart"
 [toml-dart/example/http_config_loader]:
-  https://github.com/just95/toml.dart/tree/master/example/http_config_loader
+  https://github.com/just95/toml.dart/tree/main/example/http_config_loader
   "HttpConfigLoader Example | toml.dart"
 [toml-dart/example/toml_parser]:
-  https://github.com/just95/toml.dart/tree/master/example/toml_parser
+  https://github.com/just95/toml.dart/tree/main/example/toml_parser
   "TomlParser Example | toml.dart"
 [toml-dart/example/toml_encoder]:
-  https://github.com/just95/toml.dart/tree/master/example/toml_encoder
+  https://github.com/just95/toml.dart/tree/main/example/toml_encoder
   "TomlEncoder Example | toml.dart"
 [toml-dart/LICENSE]:
-  https://github.com/just95/toml.dart/blob/master/LICENSE
+  https://github.com/just95/toml.dart/blob/main/LICENSE
   "MIT License | toml.dart"
 
 [toml-spec/v0.4.0]:

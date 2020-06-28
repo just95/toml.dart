@@ -1,6 +1,6 @@
 name: example
 description: An example that demonstrates how encode a TOML document.
-repository: https://github.com/just95/toml.dart/tree/master/example/toml_Parser
+repository: https://github.com/just95/toml.dart/tree/main/example/toml_parser
 publish_to: none
 environment:
   sdk: '>=2.7.0 <3.0.0'
