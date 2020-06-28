@@ -30,7 +30,7 @@ void _cmp({tomlValue, yamlValue}) {
   } else if (tomlValue is Iterable) {
     expect(yamlValue, isA<Iterable>());
     expect(tomlValue.length, equals(yamlValue.length));
-    for (int i = 0; i < tomlValue.length; i++) {
+    for (var i = 0; i < tomlValue.length; i++) {
       _cmp(
         tomlValue: tomlValue.elementAt(i),
         yamlValue: yamlValue.elementAt(i),

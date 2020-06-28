@@ -13,10 +13,10 @@ class ParserResultMatcher extends Matcher {
   final bool isSuccess;
 
   /// Creates a new matcher that expects a parser to complete successfully.
-  ParserResultMatcher.success() : this.isSuccess = true;
+  ParserResultMatcher.success() : isSuccess = true;
 
   /// Creates a new matcher that expects a parser to failed.
-  ParserResultMatcher.failure() : this.isSuccess = false;
+  ParserResultMatcher.failure() : isSuccess = false;
 
   @override
   bool matches(dynamic item, Map matchState) =>
@@ -28,7 +28,7 @@ class ParserResultMatcher extends Matcher {
 }
 
 /// A matcher which tests whether a parser succeeded.
-ParserResultMatcher isSuccess = new ParserResultMatcher.success();
+ParserResultMatcher isSuccess = ParserResultMatcher.success();
 
 /// A matcher which tests whether a parser failed.
-ParserResultMatcher isFailure = new ParserResultMatcher.failure();
+ParserResultMatcher isFailure = ParserResultMatcher.failure();

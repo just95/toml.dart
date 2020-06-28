@@ -20,11 +20,12 @@ class TomlParserDefinition extends TomlGrammar {
   // -----------------------------------------------------------------
 
   @override
-  Parser strData(Parser quotes, {bool literal: false, bool multiLine: false}) =>
+  Parser strData(Parser quotes,
+          {bool literal = false, bool multiLine = false}) =>
       super.strData(quotes, literal: literal, multiLine: multiLine).flatten();
 
   @override
-  Parser strParser(Parser quotes, {Parser esc, bool multiLine: false}) => super
+  Parser strParser(Parser quotes, {Parser esc, bool multiLine = false}) => super
       .strParser(quotes, esc: esc, multiLine: multiLine)
       .castList()
       .pick(2)
@@ -38,17 +39,19 @@ class TomlParserDefinition extends TomlGrammar {
   Parser escSeq() => super.escSeq().castList().pick(1);
 
   @override
-  Parser unicodeEscSeq() =>
-      super.unicodeEscSeq().castList().pick<String>(1).map((charCode) =>
-          new String.fromCharCode(int.parse(charCode, radix: 16)));
+  Parser unicodeEscSeq() => super
+      .unicodeEscSeq()
+      .castList()
+      .pick<String>(1)
+      .map((charCode) => String.fromCharCode(int.parse(charCode, radix: 16)));
 
   @override
   Parser compactEscSeq() =>
       super.compactEscSeq().cast<String>().map((String c) {
         if (TomlGrammar.escTable.containsKey(c)) {
-          return new String.fromCharCode(TomlGrammar.escTable[c]);
+          return String.fromCharCode(TomlGrammar.escTable[c]);
         }
-        throw new InvalidEscapeSequenceException('\\$c');
+        throw InvalidEscapeSequenceException('\\$c');
       });
 
   @override
@@ -167,11 +170,11 @@ class TomlParserDefinition extends TomlGrammar {
         var doc = <String, dynamic>{};
 
         // Set of names of defined keys and tables.
-        var defined = new Set();
+        var defined = <String>{};
 
         // Add a name to the set above.
         void define(String name) {
-          if (defined.contains(name)) throw new RedefinitionException(name);
+          if (defined.contains(name)) throw RedefinitionException(name);
           defined.add(name);
         }
 
@@ -182,8 +185,9 @@ class TomlParserDefinition extends TomlGrammar {
                   : '$tableName.${pair['key']}';
               define(name);
 
-              if (table.containsKey(pair['key']))
-                throw new RedefinitionException(name);
+              if (table.containsKey(pair['key'])) {
+                throw RedefinitionException(name);
+              }
               table[pair['key']] = pair['value'];
             };
 
@@ -207,7 +211,7 @@ class TomlParserDefinition extends TomlGrammar {
             if (child is Map<String, dynamic>) {
               parent = child;
             } else {
-              throw new NotATableException(nameParts.join('.'));
+              throw NotATableException(nameParts.join('.'));
             }
           });
           nameParts.add(def['name']);
@@ -233,7 +237,7 @@ class TomlParserDefinition extends TomlGrammar {
               name = '$name[$i]';
               define(name);
             } else {
-              throw new RedefinitionException(name);
+              throw RedefinitionException(name);
             }
           } else {
             // Add table to parent table or lookup implicitly created table.
@@ -245,7 +249,7 @@ class TomlParserDefinition extends TomlGrammar {
             if (tbl is Map<String, dynamic>) {
               table = tbl;
             } else {
-              throw new NotATableException(name);
+              throw NotATableException(name);
             }
           }
 
@@ -257,11 +261,11 @@ class TomlParserDefinition extends TomlGrammar {
 
         dynamic unmodifiable(dynamic toml) {
           if (toml is Map<String, dynamic>) {
-            return new UnmodifiableMapView(new Map.fromIterables(
-                toml.keys, toml.values.map(unmodifiable)));
+            return UnmodifiableMapView(
+                Map.fromIterables(toml.keys, toml.values.map(unmodifiable)));
           }
           if (toml is List) {
-            return new UnmodifiableListView(toml.map(unmodifiable));
+            return UnmodifiableListView(toml.map(unmodifiable));
           }
 
           return toml;
@@ -274,10 +278,11 @@ class TomlParserDefinition extends TomlGrammar {
 /// A TOML document parser.
 class TomlParser extends GrammarParser {
   /// Creates a new parser for TOML documents.
-  TomlParser() : super(new TomlParserDefinition());
+  TomlParser() : super(TomlParserDefinition());
 
   /// Since [GrammarParser] does not have a type argument, we have to
   /// override [parse] to fix the return type.
+  @override
   Result<Map<String, dynamic>> parse(String input) =>
       super.parse(input).map((dynamic res) => res as Map<String, dynamic>);
 }

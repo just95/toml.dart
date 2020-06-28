@@ -13,7 +13,7 @@ class TomlGrammar extends GrammarDefinition {
   ///
   /// Additionally any Unicode character may be escaped with the `\uXXXX`
   /// and `\UXXXXXXXX` forms.
-  static final BiMap<String, int> escTable = new BiMap()
+  static final BiMap<String, int> escTable = BiMap()
     ..addAll({
       'b': 0x08, // Backspace.
       't': 0x09, // Tab.
@@ -34,7 +34,7 @@ class TomlGrammar extends GrammarDefinition {
   /// Parses the specified string ignoring whitespace on either side.
   ///
   /// Optionally allows newlines on the [left], [right] or [both] sides.
-  Parser token(String str, {bool both: false, bool left, bool right}) =>
+  Parser token(String str, {bool both = false, bool left, bool right}) =>
       string(str).trim(ref(ignore, left ?? both), ref(ignore, right ?? both));
 
   // -----------------------------------------------------------------
@@ -86,7 +86,8 @@ class TomlGrammar extends GrammarDefinition {
   /// The string is not allowed to contain [quotes].
   /// Only [literal] strings are allowed to contain a backslash character.
   /// Only [multiLine] strings are allowed to contain newlines.
-  Parser strData(Parser quotes, {bool literal: false, bool multiLine: false}) {
+  Parser strData(Parser quotes,
+      {bool literal = false, bool multiLine = false}) {
     var forbidden = quotes;
     if (!literal) forbidden |= char('\\');
     if (!multiLine) forbidden |= ref(newline);
@@ -99,7 +100,7 @@ class TomlGrammar extends GrammarDefinition {
   /// [esc] is a parser for the allowed escape sequences.
   /// [multiLine] strings are allowed to contain newline characters and
   /// may start with a blank line that is ignored.
-  Parser strParser(Parser quotes, {Parser esc, bool multiLine: false}) {
+  Parser strParser(Parser quotes, {Parser esc, bool multiLine = false}) {
     var data = strData(quotes, literal: esc == null, multiLine: multiLine);
     if (esc != null) data = esc | data;
     var first = multiLine ? ref(blankLine).optional() : epsilon(null);

@@ -14,6 +14,6 @@ class JsonConfigDecoder implements ConfigDecoder {
   Map<String, dynamic> decodeConfig(String contents) {
     dynamic document = json.decode(contents);
     if (document is Map<String, dynamic>) return document;
-    throw new FormatException("Expected object at top-level of JSON document.");
+    throw FormatException('Expected object at top-level of JSON document.');
   }
 }

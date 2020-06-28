@@ -10,7 +10,7 @@ import 'builder.dart';
 class TomlEncoder {
   /// Encodes a TOML [document].
   String encode(Map<String, dynamic> document) {
-    var builder = new TomlDocumentBuilder();
+    var builder = TomlDocumentBuilder();
     builder.encodeSubTable(document, name: []);
     return builder.toString();
   }

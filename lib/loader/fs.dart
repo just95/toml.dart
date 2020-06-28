@@ -15,10 +15,9 @@ export 'package:toml/loader.dart' show loadConfig;
 class FilesystemConfigLoader implements ConfigLoader {
   /// Sets an instance of this class as the default instance of [ConfigLoader].
   static void use() {
-    ConfigLoader.use(new FilesystemConfigLoader());
+    ConfigLoader.use(FilesystemConfigLoader());
   }
 
   @override
-  Future<String> loadConfig(String filename) =>
-      new File(filename).readAsString();
+  Future<String> loadConfig(String filename) => File(filename).readAsString();
 }

@@ -9,7 +9,7 @@ import 'package:toml/decoder.dart';
 /// Implementation of [ConfigDecoder] which handels the TOML format.
 class TomlConfigDecoder implements ConfigDecoder {
   /// The parser used by [decodeConfig].
-  static final TomlParser parser = new TomlParser();
+  static final TomlParser parser = TomlParser();
 
   @override
   Map<String, dynamic> decodeConfig(String contents) =>

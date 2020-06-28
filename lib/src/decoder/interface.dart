@@ -18,17 +18,17 @@ abstract class ConfigDecoder {
   ///
   /// By default configuration files with unknown extensions are treated as
   /// `.toml` files.
-  static ConfigDecoder defaultDecoder = new TomlConfigDecoder();
+  static ConfigDecoder defaultDecoder = TomlConfigDecoder();
 
   /// Associates a [decoder] with the specified file extension.
   static void register(ConfigDecoder decoder, {String extension}) {
     _byExtension[extension] = decoder;
   }
 
-  static Map<String, ConfigDecoder> _byExtension = {
-    '.toml': new TomlConfigDecoder(),
-    '.yaml': new YamlConfigDecoder(),
-    '.json': new JsonConfigDecoder()
+  static final Map<String, ConfigDecoder> _byExtension = {
+    '.toml': TomlConfigDecoder(),
+    '.yaml': YamlConfigDecoder(),
+    '.json': JsonConfigDecoder()
   };
 
   /// Gets the decoder for a file with the specified [extension].
@@ -40,7 +40,7 @@ abstract class ConfigDecoder {
   static ConfigDecoder getByExtension(String extension) {
     if (_byExtension.containsKey(extension)) return _byExtension[extension];
     if (defaultDecoder != null) return defaultDecoder;
-    throw new StateError('There is no decoder for `$extension` files.');
+    throw StateError('There is no decoder for `$extension` files.');
   }
 
   /// Parses the [contents] of a configuration file and returns

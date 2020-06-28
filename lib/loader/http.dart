@@ -15,7 +15,7 @@ export 'package:toml/loader.dart' show loadConfig;
 class HttpConfigLoader implements ConfigLoader {
   /// Sets an instance of this class as the default instance of [ConfigLoader].
   static void use() {
-    ConfigLoader.use(new HttpConfigLoader());
+    ConfigLoader.use(HttpConfigLoader());
   }
 
   @override

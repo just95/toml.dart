@@ -12,7 +12,7 @@ import 'exception/mixed_array_types.dart';
 import 'exception/unknown_value_type.dart';
 
 /// A function which encodes an object as a TOML value.
-typedef void TomlValueEncoder<V>(V value);
+typedef TomlValueEncoder<V> = void Function(V value);
 
 // Possible types of TOML values.
 enum TomlType {
@@ -44,10 +44,10 @@ enum TomlType {
 /// TOML document builder.
 class TomlDocumentBuilder {
   /// Regular expression of a bare key.
-  static final RegExp bareKeyRegExp = new RegExp(r'^[A-Za-z0-9_-]+$');
+  static final RegExp bareKeyRegExp = RegExp(r'^[A-Za-z0-9_-]+$');
 
   /// A buffer which holds the textual representation of the document.
-  final StringBuffer _buf = new StringBuffer();
+  final StringBuffer _buf = StringBuffer();
 
   /// Inserts a new line.
   ///
@@ -65,12 +65,12 @@ class TomlDocumentBuilder {
   /// There will be therefore two pairs of square brackets.
   ///
   /// This method does nothing if [name] is empty.
-  void insertHeader(List<String> name, {bool array: false}) {
+  void insertHeader(List<String> name, {bool array = false}) {
     if (name.isNotEmpty) {
       insertNewline();
       insertNewline();
       _buf.write(array ? '[[' : '[');
-      for (int i = 0; i < name.length; i++) {
+      for (var i = 0; i < name.length; i++) {
         if (i != 0) _buf.write('.');
         encodeKey(name[i]);
       }
@@ -84,7 +84,9 @@ class TomlDocumentBuilder {
   /// return value is representable by TOML.
   /// Returns [value] if it is not an instance of [TomlEncodable].
   dynamic unwrapValue(dynamic value) {
-    while (value is TomlEncodable) value = value.toToml();
+    while (value is TomlEncodable) {
+      value = value.toToml();
+    }
     return value;
   }
 
@@ -99,14 +101,14 @@ class TomlDocumentBuilder {
   ///
   /// The key/value pairs are encoded before the sub-tables of [table].
   void encodeSubTable(Map<String, dynamic> table,
-      {List<String> name, bool array: false}) {
+      {List<String> name, bool array = false}) {
     var pairs = <String, dynamic>{};
     var sections = <String, dynamic>{};
     table.forEach((key, wrapableValue) {
       final value = unwrapValue(wrapableValue);
       if (value is Map) {
         sections[key] = value;
-      } else if (value is Iterable && value.length > 0) {
+      } else if (value is Iterable && value.isNotEmpty) {
         final items = value.map(unwrapValue);
         if (items.every((item) => item is Map)) {
           sections[key] = items;
@@ -136,7 +138,7 @@ class TomlDocumentBuilder {
           encodeSubTable(item, name: name, array: true);
         });
       } else {
-        throw new UnknownValueTypeException(value);
+        throw UnknownValueTypeException(value);
       }
 
       name.removeLast();
@@ -175,7 +177,7 @@ class TomlDocumentBuilder {
     if (value is DateTime) return encodeDatetime(value);
     if (value is String) return encodeString(value);
     if (value is Iterable) return encodeArray(value);
-    throw new UnknownValueTypeException(value);
+    throw UnknownValueTypeException(value);
   }
 
   /// Encodes an integer or float.
@@ -218,7 +220,7 @@ class TomlDocumentBuilder {
     }
 
     return array.map(tomlValueTypeOf).reduce((a, b) {
-      if (a != b) throw new MixedArrayTypesException(array);
+      if (a != b) throw MixedArrayTypesException(array);
       return a;
     });
   }
@@ -234,7 +236,7 @@ class TomlDocumentBuilder {
     if (value is Map<String, dynamic>) return TomlType.table;
     if (value is int) return TomlType.integer;
     if (value is String) return TomlType.string;
-    throw new UnknownValueTypeException(value);
+    throw UnknownValueTypeException(value);
   }
 
   /// Encodes an array.
@@ -281,7 +283,7 @@ class TomlDocumentBuilder {
     // Multi-line string.
     if (value.contains('\n') || value.contains('\r')) {
       // There is a line which contains a character that must be escaped.
-      if (value.split(new RegExp('\n|\r')).any(containsEscSeq)) {
+      if (value.split(RegExp('\n|\r')).any(containsEscSeq)) {
         return encodeMultiLineBasicString;
       }
       return encodeMultiLineLiteralString;
@@ -310,27 +312,27 @@ class TomlDocumentBuilder {
   /// Throws an [InvalidStringException] if [value] contains some characters
   /// which are not allowed.
   void _encodeString(String value,
-      {String quotes, Iterable<int> esc: const [], bool multiline: false}) {
+      {String quotes, Iterable<int> esc = const [], bool multiline = false}) {
     // Escape value.
     if (esc.isNotEmpty) {
       value = value.codeUnits.map((int codeUnit) {
         if (esc.contains(codeUnit)) {
           return '\\${TomlGrammar.escTable.inverse[codeUnit]}';
         }
-        return new String.fromCharCode(codeUnit);
+        return String.fromCharCode(codeUnit);
       }).join();
     }
 
     if (multiline) {
       if (quotes == '"""') value = value.replaceAll('"""', r'\"\"\"');
     } else if (value.contains('\n') || value.contains('\r')) {
-      throw new InvalidStringException(
+      throw InvalidStringException(
           'Newlines are only allowed in multi-line strings!');
     }
 
     // Unescaped quotes are illegal.
     if (!esc.contains(quotes.codeUnitAt(0)) && value.contains(quotes)) {
-      throw new InvalidStringException(
+      throw InvalidStringException(
           '"$quotes" are prohibited in non-basic strings.');
     }
 

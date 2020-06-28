@@ -81,7 +81,7 @@ void main() {
           [a]
           c = 2
         ''',
-          error: new RedefinitionException('a'));
+          error: RedefinitionException('a'));
       testDocumentFailure('tables cannot overwrite keys',
           input: '''
           # DO NOT DO THIS EITHER
@@ -92,7 +92,7 @@ void main() {
           [a.b]
           c = 2
         ''',
-          error: new RedefinitionException('a.b'));
+          error: RedefinitionException('a.b'));
       testDocumentFailure('parent of table must be table',
           input: '''
           [a]
@@ -101,7 +101,7 @@ void main() {
           [a.b.c]
           d = 2
         ''',
-          error: new NotATableException('a.b'));
+          error: NotATableException('a.b'));
       testDocumentFailure(
           'an implicitly created super-table cannot be overwritten',
           input: '''
@@ -111,7 +111,7 @@ void main() {
           [a]
           b = 2
         ''',
-          error: new RedefinitionException('a.b'));
+          error: RedefinitionException('a.b'));
       testDocumentFailure('table name must not be empty', input: '[]');
       testDocumentFailure('table name must not end with a dot', input: '[a.]');
       testDocumentFailure('table name must not contain empty parts',
@@ -191,7 +191,7 @@ void main() {
             [fruit.variety]
              name = "granny smith"
         ''',
-          error: new RedefinitionException('fruit[0].variety'));
+          error: RedefinitionException('fruit[0].variety'));
       testDocumentFailure('array of tables cannot overwrite table',
           input: '''
           # INVALID TOML DOC
@@ -205,7 +205,7 @@ void main() {
             [[fruit.variety]]
               name = "red delicious"
         ''',
-          error: new RedefinitionException('fruit[0].variety'));
+          error: RedefinitionException('fruit[0].variety'));
     });
 
     group('Inline Tables', () {

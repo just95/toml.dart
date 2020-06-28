@@ -14,15 +14,15 @@ class YamlConfigDecoder implements ConfigDecoder {
     dynamic document = loadYaml(contents);
     if (document is YamlMap) {
       if (document.keys.every((key) => key is String)) {
-        return new Map.fromIterables(
+        return Map.fromIterables(
           document.keys.cast<String>(),
           document.values,
         );
       }
     }
-    throw new FormatException(
-      "Expected map at top-level of YAML document, "
-      "got ${document.runtimeType}",
+    throw FormatException(
+      'Expected map at top-level of YAML document, '
+      'got ${document.runtimeType}',
     );
   }
 }
