@@ -12,3 +12,5 @@ dev_dependencies:
   # See also https://dart.dev/tools/webdev#depending-on-build_-packages.
   build_runner: any
   build_web_compilers: any
+  # Dependencies for `dartanalyzer`.
+  pedantic: ^1.9.0

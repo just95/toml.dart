@@ -11,7 +11,7 @@ import 'package:toml/loader.dart';
 class CustomConfigLoader implements ConfigLoader {
   /// Sets an instance of this class as the default instance of [ConfigLoader].
   static void use() {
-    ConfigLoader.use(new CustomConfigLoader());
+    ConfigLoader.use(CustomConfigLoader());
   }
 
   /// The cached configuration files by filename.
@@ -25,7 +25,7 @@ class CustomConfigLoader implements ConfigLoader {
 
   @override
   Future<String> loadConfig(String filename) {
-    return new Future.value(_cache[filename]);
+    return Future.value(_cache[filename]);
   }
 }
 

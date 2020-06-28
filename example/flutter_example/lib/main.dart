@@ -43,8 +43,8 @@ class _MyHomePageState extends State<MyHomePage> {
               child: CircularProgressIndicator(),
             );
           }
-          final String text = snapshot.data;
-          final Map<String, dynamic> toml = tomlParser.parse(text.trim()).value;
+          final text = snapshot.data;
+          final toml = tomlParser.parse(text.trim()).value;
           return Center(
             child: Text(toml['str'] as String),
           );

@@ -2,8 +2,6 @@ include: package:pedantic/analysis_options.1.9.0.yaml
 
 analyzer:
   exclude:
-    # Examples are excluded from analysis since they have their own analysis
-    # options files.
     - 'example/**'
   strong-mode:
     implicit-casts: false
