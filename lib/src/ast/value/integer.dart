@@ -46,7 +46,7 @@ class TomlInteger extends TomlValue<int> {
     var decimal = anyOf('+-').optional() & (char('0') | digits);
     return decimal
         .flatten()
-        .map((str) => new TomlInteger(int.parse(str.replaceAll('_', ''))));
+        .map((str) => TomlInteger(int.parse(str.replaceAll('_', ''))));
   })();
 
   @override

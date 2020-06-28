@@ -24,9 +24,7 @@ class TomlLiteralString extends TomlString {
         range('\x28', '\x7E') |
         tomlNonAscii;
     var literalString = char("'") & literalChar.star().flatten() & char("'");
-    return literalString
-        .pick<String>(1)
-        .map((str) => new TomlLiteralString(str));
+    return literalString.pick<String>(1).map((str) => TomlLiteralString(str));
   })();
 
   @override

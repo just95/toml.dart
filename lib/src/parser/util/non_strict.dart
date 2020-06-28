@@ -7,7 +7,7 @@ library toml.src.parser.non_strict;
 import 'package:petitparser/petitparser.dart';
 
 /// A function that is used by [NonStrictParser] to build the underlying parser.
-typedef Parser<T> NonStrictParserBuilder<T>();
+typedef NonStrictParserBuilder<T> = Parser<T> Function();
 
 /// Since Dart is a strict programming language, we cannot construct a
 /// cyclic parsing expression. This class simulates non-strictness by
@@ -49,5 +49,5 @@ class NonStrictParser<T> extends DelegateParser<T> {
       getOrBuildDelegate().fastParseOn(buffer, position);
 
   @override
-  NonStrictParser<T> copy() => NonStrictParser<T>._(this._builder, delegate);
+  NonStrictParser<T> copy() => NonStrictParser<T>._(_builder, delegate);
 }

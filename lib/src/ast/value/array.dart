@@ -43,10 +43,10 @@ class TomlArray<T> extends TomlValue<Iterable<T>> {
   /// Creates a new array value from the given [items] but throws an
   /// [FormatException] if multiple element types are mixed.
   static TomlArray<T> fromHomogeneous<T>(Iterable<TomlValue<T>> items) {
-    var array = new TomlArray(items);
+    var array = TomlArray(items);
     var types = array.itemTypes.toSet();
     if (types.length > 1) {
-      throw new FormatException(
+      throw FormatException(
         'The items of "$array" must all be of the same type! '
         'Got the following item types: ${types.join(', ')}',
       );

@@ -26,14 +26,14 @@ class TomlKey extends TomlNode {
   static final Parser<TomlKey> parser = TomlSimpleKey.parser
       .separatedBy<TomlSimpleKey>(tomlWhitespace & char('.') & tomlWhitespace,
           includeSeparators: false)
-      .map((List<TomlSimpleKey> parts) => new TomlKey(parts));
+      .map((List<TomlSimpleKey> parts) => TomlKey(parts));
 
   /// The individual [TomlSimpleKey]s that make up this dotted key.
   final List<TomlSimpleKey> parts;
 
   /// Creates a new dotted key.
   TomlKey(Iterable<TomlSimpleKey> parts)
-      : parts = new List.from(parts, growable: false);
+      : parts = List.from(parts, growable: false);
 }
 
 /// Base class of all AST nodes that represent simple TOML keys
@@ -57,7 +57,7 @@ class TomlQuotedKey extends TomlSimpleKey {
   static final Parser<TomlQuotedKey> parser =
       (TomlBasicString.parser | TomlLiteralString.parser)
           .cast<TomlString>()
-          .map((TomlString string) => new TomlQuotedKey(string));
+          .map((TomlString string) => TomlQuotedKey(string));
 
   /// The string literal that represents this key.
   final TomlString string;
@@ -77,7 +77,7 @@ class TomlUnquotedKey extends TomlSimpleKey {
   static final Parser<TomlUnquotedKey> parser = pattern('A-Za-z0-9_-')
       .plus()
       .flatten()
-      .map((String name) => new TomlUnquotedKey(name));
+      .map((String name) => TomlUnquotedKey(name));
 
   @override
   final String name;

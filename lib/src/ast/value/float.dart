@@ -37,7 +37,7 @@ class TomlFloat extends TomlValue<double> {
     var float = decimal & (exp | frac & exp.optional());
     return float
         .flatten()
-        .map((str) => new TomlFloat(double.parse(str.replaceAll('_', ''))));
+        .map((str) => TomlFloat(double.parse(str.replaceAll('_', ''))));
   })();
 
   @override

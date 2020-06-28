@@ -17,14 +17,9 @@ import 'package:toml/src/ast/value.dart';
 class TomlBoolean extends TomlValue<bool> {
   /// Parser for a boolean TOML value.
   static final Parser<TomlBoolean> parser =
-      (string('true').map((_) => kTrue) | string('false').map((_) => kFalse))
+      (string('true').map((_) => TomlBoolean(true)) |
+              string('false').map((_) => TomlBoolean(false)))
           .cast<TomlBoolean>();
-
-  /// The boolean TOML value `true`.
-  static final TomlBoolean kTrue = new TomlBoolean(true);
-
-  /// The boolean TOML value `false`.
-  static final TomlBoolean kFalse = new TomlBoolean(false);
 
   @override
   final bool value;

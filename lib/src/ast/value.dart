@@ -59,7 +59,7 @@ abstract class TomlValue<V> extends TomlNode {
   /// It is important that `TomlDateTime` and `TomlFloat` and are parsed before
   /// `TomlInteger`, since a `TomlDateTime` and a `TomlFloat` can start with a
   /// `TomlInteger`.
-  static final Parser<TomlValue> parser = new NonStrictParser(() =>
+  static final Parser<TomlValue> parser = NonStrictParser(() =>
       (TomlDateTime.parser |
               TomlFloat.parser |
               TomlInteger.parser |

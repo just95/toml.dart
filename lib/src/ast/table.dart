@@ -39,7 +39,7 @@ class TomlStandardTable extends TomlTable {
   static final Parser<TomlStandardTable> parser =
       (char('[') & tomlWhitespace & TomlKey.parser & tomlWhitespace & char(']'))
           .pick<TomlKey>(2)
-          .map((TomlKey key) => new TomlStandardTable(key));
+          .map((TomlKey key) => TomlStandardTable(key));
 
   /// Creates a new TOML standard table.
   TomlStandardTable(TomlKey name) : super(name);
@@ -60,7 +60,7 @@ class TomlArrayTable extends TomlTable {
           tomlWhitespace &
           string(']]'))
       .pick<TomlKey>(2)
-      .map((TomlKey key) => new TomlArrayTable(key));
+      .map((TomlKey key) => TomlArrayTable(key));
 
   /// Creates a new TOML array table.
   TomlArrayTable(TomlKey name) : super(name);

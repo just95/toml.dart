@@ -21,8 +21,8 @@ class TomlDocument extends TomlNode {
   /// are not part of the AST and must be filtered out.
   static final Parser<TomlDocument> parser = TomlExpression.parser
       .separatedBy<TomlExpression>(tomlNewline, includeSeparators: false)
-      .map((expressions) => new TomlDocument(
-          expressions.where((expression) => expression != null)));
+      .map((expressions) =>
+          TomlDocument(expressions.where((expression) => expression != null)));
 
   /// Parses the given TOML document.
   ///

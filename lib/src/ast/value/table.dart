@@ -35,17 +35,17 @@ class TomlInlineTable extends TomlValue<Map<String, dynamic>> {
           tomlWhitespace &
           char('}'))
       .pick<List<TomlKeyValuePair>>(2)
-      .map((List<TomlKeyValuePair> pairs) => new TomlInlineTable(pairs));
+      .map((List<TomlKeyValuePair> pairs) => TomlInlineTable(pairs));
 
   /// The key/value pairs of the inline table.
   final List<TomlKeyValuePair> pairs;
 
   /// Creates a new inline table.
   TomlInlineTable(Iterable<TomlKeyValuePair> pairs)
-      : pairs = new List.from(pairs, growable: false);
+      : pairs = List.from(pairs, growable: false);
 
   @override
-  Map<String, dynamic> get value => new Map.fromIterables(
+  Map<String, dynamic> get value => Map.fromIterables(
       pairs.map((pair) => pair.key.name),
       pairs.map((pair) => pair.value.value));
 

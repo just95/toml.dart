@@ -26,7 +26,7 @@ class TomlKeyValuePair extends TomlExpression {
           char('=') &
           tomlWhitespace &
           TomlValue.parser)
-      .permute([0, 4]).map((List pair) => new TomlKeyValuePair(
+      .permute([0, 4]).map((List pair) => TomlKeyValuePair(
             pair[0] as TomlSimpleKey,
             pair[1] as TomlValue,
           ));

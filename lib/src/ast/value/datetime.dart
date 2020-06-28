@@ -58,7 +58,7 @@ class TomlDateTime extends TomlValue<DateTime> {
   /// See also [RFC 3339](https://tools.ietf.org/html/rfc3339).
   static final Parser<TomlDateTime> parser = _datetime
       .flatten()
-      .map((String str) => new TomlDateTime(DateTime.parse(str)));
+      .map((String str) => TomlDateTime(DateTime.parse(str)));
 
   static final Parser _dd = digit().times(2);
   static final Parser _dddd = digit().times(4);
