@@ -20,10 +20,10 @@ import 'package:toml/src/ast/value/string/ml_literal.dart';
 ///            / literal-string
 abstract class TomlString extends TomlValue<String> {
   /// Parser for a TOML string value.
-  static final Parser<TomlString> parser = (TomlBasicString.parser |
-          TomlMultilineBasicString.parser |
-          TomlLiteralString.parser |
-          TomlMultilineLiteralString.parser)
+  static final Parser<TomlString> parser = (TomlMultilineBasicString.parser |
+          TomlBasicString.parser |
+          TomlMultilineLiteralString.parser |
+          TomlLiteralString.parser)
       .cast<TomlString>();
 
   @override

@@ -36,9 +36,9 @@ class TomlMultilineBasicString extends TomlString {
   ///     ml-basic-body =
   ///       *mlb-content *( mlb-quotes 1*mlb-content ) [ mlb-quotes ]
   static final Parser<String> bodyParser = (charParser.star().join() &
-          (quotesParser & charParser.plus().join()).join().star() &
+          (quotesParser & charParser.plus().join()).join().star().join() &
           quotesParser.optional(''))
-      .cast<List<String>>()
+      .castList<String>()
       .join();
 
   /// Parser for one or two quotation marks.
@@ -48,8 +48,9 @@ class TomlMultilineBasicString extends TomlString {
   /// quotes have to be escaped.
   ///
   ///     mlb-quotes = 1*2quotation-mark
-  static final Parser<String> quotesParser =
-      char(TomlBasicString.delimiter).repeat(1, 2).join();
+  static final Parser<String> quotesParser = char(TomlBasicString.delimiter)
+      .repeatLazy(char(TomlBasicString.delimiter).not(), 1, 2)
+      .join();
 
   /// Parser for a single character of a multiline basic TOML string.
   ///
