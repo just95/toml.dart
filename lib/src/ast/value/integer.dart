@@ -23,8 +23,6 @@ import 'package:toml/src/ast/value.dart';
 ///     oct-int = oct-prefix digit0-7 *( digit0-7 / underscore digit0-7 )
 ///     bin-int = bin-prefix digit0-1 *( digit0-1 / underscore digit0-1 )
 ///
-///     HEXDIG = DIGIT / "A" / "B" / "C" / "D" / "E" / "F"
-///
 /// TODO hexadecimal, octal and binary notation was added in TOML 0.5.0 and
 /// is not supported yet.
 class TomlInteger extends TomlValue<int> {

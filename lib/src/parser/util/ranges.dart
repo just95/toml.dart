@@ -2,13 +2,20 @@
 // This software may be modified and distributed under the terms
 // of the MIT license. See the LICENSE file for details.
 
-library toml.src.parser.ranges;
+library toml.src.parser.util.ranges;
 
 import 'package:petitparser/petitparser.dart';
 
+/// Parser for hexadecimal digits.
+///
+///     HEXDIG = DIGIT / "A" / "B" / "C" / "D" / "E" / "F"
+Parser<String> hexDigit([String message = 'hexadecimal digit expected']) =>
+    pattern('0-9a-fA-F', message);
+
 /// Parser for non-EOL characters that are allowed in TOML comments.
 ///     non-eol = %x09 / %x20-7F / non-ascii
-final Parser tomlNonEol = char(0x09) | range(0x20, 0x7F) | tomlNonAscii;
+final Parser<String> tomlNonEol =
+    (char(0x09) | range(0x20, 0x7F) | tomlNonAscii).cast<String>();
 
 /// Parser for non-ASCII characters that are allowed in TOML comments and
 /// literal strings.
@@ -18,18 +25,18 @@ final Parser tomlNonEol = char(0x09) | range(0x20, 0x7F) | tomlNonAscii;
 /// The subrange `%x10000-10FFFF` is represented as surrogate pairs by Dart.
 /// Since `petitparser` can only work with 16-Bit code units, we have to
 /// parse the surrogate pairs manually.
-final Parser tomlNonAscii =
-    range(0x80, 0xD7FF) | range(0xE000, 0xFFFF) | tomlSurrogatePair;
+final Parser<String> tomlNonAscii =
+    (range(0x80, 0xD7FF) | range(0xE000, 0xFFFF) | tomlSurrogatePair)
+        .cast<String>();
 
 /// Parser for a UTF-16 surrogate pair.
 ///
 /// Returns the combined Unicode code-point of the surrogate pair.
-final Parser<int> tomlSurrogatePair = (tomlHighSurrogate & tomlLowSurrogate)
-    .flatten()
-    .map((str) => str.runes.first);
+final Parser<String> tomlSurrogatePair =
+    (tomlHighSurrogate & tomlLowSurrogate).flatten();
 
 /// Parser for high surrogates (`%xD800-DBFF`).
-final Parser tomlHighSurrogate = range(0xD800, 0xDBFF);
+final Parser<String> tomlHighSurrogate = range(0xD800, 0xDBFF);
 
 /// Parser for low surrogates (`%xDC00-DFFF`).
-final Parser tomlLowSurrogate = range(0xDC00, 0xDFFF);
+final Parser<String> tomlLowSurrogate = range(0xDC00, 0xDFFF);

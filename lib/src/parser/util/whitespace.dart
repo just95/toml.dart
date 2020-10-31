@@ -2,21 +2,23 @@
 // This software may be modified and distributed under the terms
 // of the MIT license. See the LICENSE file for details.
 
-library toml.src.parser.whitespace;
+library toml.src.parser.util.whitespace;
 
 import 'package:petitparser/petitparser.dart';
 
+import 'package:toml/src/parser/util/join.dart';
 import 'package:toml/src/parser/util/ranges.dart';
 
 /// Parser for TOML whitespace.
 ///
 ///     ws = *wschar
-final Parser tomlWhitespace = tomlWhitespaceChar.star();
+final Parser<String> tomlWhitespace = tomlWhitespaceChar.star().join();
 
 /// Parser for a single TOML whitepsace character.
 ///     wschar =  %x20  ; Space
 ///     wschar =/ %x09  ; Horizontal tab
-final Parser tomlWhitespaceChar = char(' ') | char('\t');
+final Parser<String> tomlWhitespaceChar =
+    (char(' ') | char('\t')).cast<String>();
 
 /// Parser for a TOML newline.
 ///

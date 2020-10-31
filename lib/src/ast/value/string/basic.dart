@@ -7,28 +7,48 @@ library toml.src.ast.value.string.basic;
 import 'package:petitparser/petitparser.dart';
 
 import 'package:toml/src/ast/value/string.dart';
+import 'package:toml/src/ast/value/string/escape.dart';
+import 'package:toml/src/parser/util/join.dart';
+import 'package:toml/src/parser/util/ranges.dart';
+import 'package:toml/src/parser/util/whitespace.dart';
 
 /// AST node that represents basic TOML strings.
 ///
 ///     basic-string = quotation-mark *basic-char quotation-mark
-///
-///     quotation-mark = %x22            ; "
-///
-///     basic-char = basic-unescaped / escaped
-///     basic-unescaped = wschar / %x21 / %x23-5B / %x5D-7E / non-ascii
-///     escaped = escape escape-seq-char
-///
-///     escape = %x5C                   ; \
-///     escape-seq-char =  %x22         ; "    quotation mark  U+0022
-///     escape-seq-char =/ %x5C         ; \    reverse solidus U+005C
-///     escape-seq-char =/ %x62         ; b    backspace       U+0008
-///     escape-seq-char =/ %x66         ; f    form feed       U+000C
-///     escape-seq-char =/ %x6E         ; n    line feed       U+000A
-///     escape-seq-char =/ %x72         ; r    carriage return U+000D
-///     escape-seq-char =/ %x74         ; t    tab             U+0009
-///     escape-seq-char =/ %x75 4HEXDIG ; uXXXX                U+XXXX
-///     escape-seq-char =/ %x55 8HEXDIG ; UXXXXXXXX            U+XXXXXXXX
-abstract class TomlBasicString extends TomlString {
-  /// Parser for a TOML string value.
-  static final Parser<TomlBasicString> parser = failure('not yet implemented');
+class TomlBasicString extends TomlString {
+  /// Delimiter for basic TOML strings.
+  ///
+  ///     quotation-mark = %x22            ; "
+  static final String delimiter = '"';
+
+  /// Parser for a basic TOML string value.
+  static final Parser<TomlBasicString> parser =
+      (char(delimiter) & charParser.star().join() & char(delimiter))
+          .pick<String>(1)
+          .map((value) => TomlBasicString(value));
+
+  /// Parser for a single character of a basic TOMl string.
+  ///
+  ///     basic-char = basic-unescaped / escaped
+  static final Parser<String> charParser =
+      (unescapedParser | TomlEscapedChar.parser).cast<String>();
+
+  /// Parser for a single unescaped character of a basic TOMl string.
+  ///
+  ///     basic-unescaped = wschar / %x21 / %x23-5B / %x5D-7E / non-ascii
+  ///
+  ///  This range excludes `%x22` which is the `quotation-mark` character `"`
+  ///  and `%x5C` which is the `escape` character `\`.
+  static final Parser<String> unescapedParser = (tomlWhitespaceChar |
+          char(0x21) |
+          range(0x23, 0x5B) |
+          range(0x5D, 0x7E) |
+          tomlNonAscii)
+      .cast<String>();
+
+  @override
+  final String value;
+
+  /// Creates a new basic TOML string value with the given contents.
+  TomlBasicString(this.value);
 }
