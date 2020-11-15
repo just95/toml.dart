@@ -4,7 +4,7 @@
 
 library toml.src.encoder.builder;
 
-import 'package:toml/decoder.dart';
+import 'package:toml/src/ast/value/string/escape.dart';
 
 import 'encodable.dart';
 import 'exception/invalid_string.dart';
@@ -274,9 +274,12 @@ class TomlDocumentBuilder {
   /// if any line contains a character which needs to be escaped except
   /// for double quotes and the backslash.
   TomlValueEncoder<String> getStringEncoder(String value) {
-    var allowedEscSeq = [TomlGrammar.escTable['"'], TomlGrammar.escTable['\\']];
+    var allowedEscSeq = [
+      TomlEscapedChar.escapableChars['"'],
+      TomlEscapedChar.escapableChars['\\']
+    ];
 
-    bool containsEscSeq(String s) => TomlGrammar.escTable.values
+    bool containsEscSeq(String s) => TomlEscapedChar.escapableChars.values
         .where((codeUnit) => !allowedEscSeq.contains(codeUnit))
         .any(s.codeUnits.contains);
 
@@ -317,7 +320,7 @@ class TomlDocumentBuilder {
     if (esc.isNotEmpty) {
       value = value.codeUnits.map((int codeUnit) {
         if (esc.contains(codeUnit)) {
-          return '\\${TomlGrammar.escTable.inverse[codeUnit]}';
+          return '\\${TomlEscapedChar.escapableChars.inverse[codeUnit]}';
         }
         return String.fromCharCode(codeUnit);
       }).join();
@@ -343,16 +346,16 @@ class TomlDocumentBuilder {
   }
 
   /// Encodes [value] as a basic string.
-  void encodeBasicString(String value) =>
-      _encodeString(value, quotes: '"', esc: TomlGrammar.escTable.values);
+  void encodeBasicString(String value) => _encodeString(value,
+      quotes: '"', esc: TomlEscapedChar.escapableChars.values);
 
   /// Encodes [value] as a multi-line basic string.
   void encodeMultiLineBasicString(String value) => _encodeString(value,
       quotes: '"""',
-      esc: TomlGrammar.escTable.values.where((c) =>
-          c != TomlGrammar.escTable['"'] &&
-          c != TomlGrammar.escTable['n'] &&
-          c != TomlGrammar.escTable['r']),
+      esc: TomlEscapedChar.escapableChars.values.where((c) =>
+          c != TomlEscapedChar.escapableChars['"'] &&
+          c != TomlEscapedChar.escapableChars['n'] &&
+          c != TomlEscapedChar.escapableChars['r']),
       multiline: true);
 
   /// Encodes [value] as a literal string.

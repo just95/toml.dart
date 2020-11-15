@@ -178,7 +178,7 @@ void main() {
           2, # this is ok
         ]''', output: [1, 2]);
       testValueFailure('arrays of mixed types are not allowed',
-          input: '[ 1, 2.0 ]');
+          input: '[ 1, 2.0 ]', error: isA<FormatException>());
       testValueFailure(
           'the opening bracket must be on the same line as the key',
           input: '\n[ 1, 2, 3 ]');

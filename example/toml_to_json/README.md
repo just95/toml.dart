@@ -1,4 +1,4 @@
-# `TomlParser` example
+# TOML to JSON example
 
 This example contains an application for the conversion of TOML documents to JSON.
 

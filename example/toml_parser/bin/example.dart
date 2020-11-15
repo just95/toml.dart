@@ -2,7 +2,7 @@
 // This software may be modified and distributed under the terms
 // of the MIT license. See the LICENSE file for details.
 
-import 'package:toml/decoder.dart';
+import 'package:toml/ast.dart';
 
 /// The contents of the TOML document to parse.
 const String toml = '''
@@ -12,8 +12,6 @@ const String toml = '''
 ''';
 
 void main() {
-  var parser = TomlParser();
-  var result = parser.parse(toml);
-  var config = result.value;
+  var config = TomlDocument.parse(toml).toMap();
   print(config['table']['array'][0]['key']);
 }

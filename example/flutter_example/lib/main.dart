@@ -27,8 +27,6 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  final tomlParser = TomlParser();
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -44,7 +42,7 @@ class _MyHomePageState extends State<MyHomePage> {
             );
           }
           final text = snapshot.data;
-          final toml = tomlParser.parse(text.trim()).value;
+          final toml = TomlDocument.parse(text).toMap();
           return Center(
             child: Text(toml['str'] as String),
           );
