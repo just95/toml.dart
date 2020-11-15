@@ -8,6 +8,7 @@ import 'package:petitparser/petitparser.dart';
 
 import 'package:toml/src/ast/expression.dart';
 import 'package:toml/src/ast/node.dart';
+import 'package:toml/src/decoder/map_builder.dart';
 import 'package:toml/src/parser/util/whitespace.dart';
 
 /// Abstract syntax tree for a TOML document.
@@ -35,4 +36,11 @@ class TomlDocument extends TomlNode {
   /// Creates a TOML document with the given expressions.
   TomlDocument(Iterable<TomlExpression> expressions)
       : expressions = List.from(expressions, growable: false);
+
+  /// Converts this document to a map from keys to values.
+  Map<String, dynamic> toMap() {
+    var builder = TomlMapBuilder();
+    expressions.forEach(builder.visit);
+    return builder.build();
+  }
 }

@@ -34,6 +34,16 @@ class TomlKey extends TomlNode {
   /// Creates a new dotted key.
   TomlKey(Iterable<TomlSimpleKey> parts)
       : parts = List.from(parts, growable: false);
+
+  /// Gets a key for the parent table of this key.
+  ///
+  /// If this key identifies does not have a parent table (i.e., if it
+  /// identifies the top-level table), a key for the top-level table is
+  /// returned.
+  TomlKey get parent => TomlKey(parts.take(parts.length - 1));
+
+  /// Gets the last key part (i.e., the name of this key within [parent]).
+  TomlSimpleKey get child => parts.last;
 }
 
 /// Base class of all AST nodes that represent simple TOML keys
@@ -62,6 +72,7 @@ class TomlQuotedKey extends TomlSimpleKey {
   /// The string literal that represents this key.
   final TomlString string;
 
+  /// Creates a new quoted key node.
   TomlQuotedKey(this.string);
 
   @override
@@ -82,5 +93,6 @@ class TomlUnquotedKey extends TomlSimpleKey {
   @override
   final String name;
 
+  /// Creates a new unquoted key node.
   TomlUnquotedKey(this.name);
 }

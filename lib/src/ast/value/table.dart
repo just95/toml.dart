@@ -6,8 +6,9 @@ library toml.src.ast.value.table;
 
 import 'package:petitparser/petitparser.dart';
 
-import 'package:toml/src/ast/key_value_pair.dart';
+import 'package:toml/src/ast/expression/key_value_pair.dart';
 import 'package:toml/src/ast/value.dart';
+import 'package:toml/src/decoder/map_builder.dart';
 import 'package:toml/src/parser/util/whitespace.dart';
 
 /// AST node that represents a TOML inline table.
@@ -45,9 +46,11 @@ class TomlInlineTable extends TomlValue<Map<String, dynamic>> {
       : pairs = List.from(pairs, growable: false);
 
   @override
-  Map<String, dynamic> get value => Map.fromIterables(
-      pairs.map((pair) => pair.key.name),
-      pairs.map((pair) => pair.value.value));
+  Map<String, dynamic> get value {
+    var builder = TomlMapBuilder();
+    pairs.forEach(builder.visit);
+    return builder.build();
+  }
 
   @override
   TomlType get type => TomlType.table;
