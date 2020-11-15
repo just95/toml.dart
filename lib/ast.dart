@@ -6,10 +6,11 @@ library toml.ast;
 
 export 'src/ast/document.dart';
 export 'src/ast/expression.dart';
-export 'src/ast/key_value_pair.dart';
+export 'src/ast/expression/key_value_pair.dart';
+export 'src/ast/expression/table.dart';
+export 'src/ast/expression/visitor.dart';
 export 'src/ast/key.dart';
 export 'src/ast/node.dart';
-export 'src/ast/table.dart';
 export 'src/ast/value.dart';
 export 'src/ast/value/array.dart';
 export 'src/ast/value/boolean.dart';

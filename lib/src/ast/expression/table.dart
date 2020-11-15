@@ -2,11 +2,12 @@
 // This software may be modified and distributed under the terms
 // of the MIT license. See the LICENSE file for details.
 
-library toml.src.ast.table;
+library toml.src.ast.expression.table;
 
 import 'package:petitparser/petitparser.dart';
 
 import 'package:toml/src/ast/expression.dart';
+import 'package:toml/src/ast/expression/visitor.dart';
 import 'package:toml/src/ast/key.dart';
 import 'package:toml/src/parser/util/whitespace.dart';
 
@@ -43,6 +44,10 @@ class TomlStandardTable extends TomlTable {
 
   /// Creates a new TOML standard table.
   TomlStandardTable(TomlKey name) : super(name);
+
+  @override
+  T accept<T>(TomlExpressionVisitor<T> visitor) =>
+      visitor.visitStandardTable(this);
 }
 
 /// A TOML expression AST node that represents the header of an entry of
@@ -64,4 +69,8 @@ class TomlArrayTable extends TomlTable {
 
   /// Creates a new TOML array table.
   TomlArrayTable(TomlKey name) : super(name);
+
+  @override
+  T accept<T>(TomlExpressionVisitor<T> visitor) =>
+      visitor.visitArrayTable(this);
 }

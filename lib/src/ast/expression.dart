@@ -6,9 +6,10 @@ library toml.src.ast.expression;
 
 import 'package:petitparser/petitparser.dart';
 
-import 'package:toml/src/ast/key_value_pair.dart';
+import 'package:toml/src/ast/expression/key_value_pair.dart';
+import 'package:toml/src/ast/expression/table.dart';
+import 'package:toml/src/ast/expression/visitor.dart';
 import 'package:toml/src/ast/node.dart';
-import 'package:toml/src/ast/table.dart';
 import 'package:toml/src/parser/util/whitespace.dart';
 
 /// Base class of all TOML expression nodes.
@@ -27,4 +28,8 @@ abstract class TomlExpression extends TomlNode {
           tomlWhitespace &
           tomlComment.optional())
       .pick<TomlExpression>(1);
+
+  /// Invokes the correct `visit*` method for this expression of the given
+  /// visitor.
+  T accept<T>(TomlExpressionVisitor<T> visitor);
 }

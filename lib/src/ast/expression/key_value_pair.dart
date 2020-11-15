@@ -2,11 +2,12 @@
 // This software may be modified and distributed under the terms
 // of the MIT license. See the LICENSE file for details.
 
-library toml.src.ast.key_value_pair;
+library toml.src.ast.expression.key_value_pair;
 
 import 'package:petitparser/petitparser.dart';
 
 import 'package:toml/src/ast/expression.dart';
+import 'package:toml/src/ast/expression/visitor.dart';
 import 'package:toml/src/ast/key.dart';
 import 'package:toml/src/ast/value.dart';
 import 'package:toml/src/parser/util/whitespace.dart';
@@ -39,4 +40,8 @@ class TomlKeyValuePair extends TomlExpression {
 
   /// Creates a new key/value pair.
   TomlKeyValuePair(this.key, this.value);
+
+  @override
+  T accept<T>(TomlExpressionVisitor<T> visitor) =>
+      visitor.visitKeyValuePair(this);
 }
