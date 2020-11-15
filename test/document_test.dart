@@ -5,6 +5,7 @@
 library toml.test.document_test;
 
 import 'package:test/test.dart';
+import 'package:toml/ast.dart';
 import 'package:toml/toml.dart';
 
 import 'tester/document.dart';
@@ -81,7 +82,7 @@ void main() {
           [a]
           c = 2
         ''',
-          error: RedefinitionException('a'));
+          error: TomlRedefinitionException(TomlKey.parse('a')));
       testDocumentFailure('tables cannot overwrite keys',
           input: '''
           # DO NOT DO THIS EITHER
@@ -92,7 +93,7 @@ void main() {
           [a.b]
           c = 2
         ''',
-          error: RedefinitionException('a.b'));
+          error: TomlRedefinitionException(TomlKey.parse('a.b')));
       testDocumentFailure('parent of table must be table',
           input: '''
           [a]
@@ -101,7 +102,7 @@ void main() {
           [a.b.c]
           d = 2
         ''',
-          error: NotATableException('a.b'));
+          error: TomlNotATableException(TomlKey.parse('a.b.c')));
       testDocumentFailure(
           'an implicitly created super-table cannot be overwritten',
           input: '''
@@ -111,7 +112,7 @@ void main() {
           [a]
           b = 2
         ''',
-          error: RedefinitionException('a.b'));
+          error: TomlRedefinitionException(TomlKey.parse('a.b')));
       testDocumentFailure('table name must not be empty', input: '[]');
       testDocumentFailure('table name must not end with a dot', input: '[a.]');
       testDocumentFailure('table name must not contain empty parts',
@@ -191,7 +192,7 @@ void main() {
             [fruit.variety]
              name = "granny smith"
         ''',
-          error: RedefinitionException('fruit[0].variety'));
+          error: TomlRedefinitionException(TomlKey.parse('fruit.variety')));
       testDocumentFailure('array of tables cannot overwrite table',
           input: '''
           # INVALID TOML DOC
@@ -205,7 +206,7 @@ void main() {
             [[fruit.variety]]
               name = "red delicious"
         ''',
-          error: RedefinitionException('fruit[0].variety'));
+          error: TomlRedefinitionException(TomlKey.parse('fruit.variety')));
     });
 
     group('Inline Tables', () {

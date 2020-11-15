@@ -5,10 +5,9 @@
 library toml.exception;
 
 /// Base class for all TOML related exceptions.
-class TomlException implements Exception {
-  final String message;
-
-  TomlException(this.message);
+abstract class TomlException implements Exception {
+  /// A human readable description of the error.
+  String get message;
 
   @override
   String toString() => 'TOML exception: $message';

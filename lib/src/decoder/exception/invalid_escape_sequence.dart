@@ -4,6 +4,8 @@
 
 library toml.src.decoder.exception.invalid_escape_sequence;
 
+import 'package:toml/exception.dart';
+
 /// An exception which is thrown when the parser encounters an unspecified
 /// escape sequence.
 ///
@@ -12,21 +14,21 @@ library toml.src.decoder.exception.invalid_escape_sequence;
 ///     dir = "some\windows\path"
 ///
 /// throws an [InvalidEscapeSequenceException] with `[escapeSequence] = r'\w'`.
-class InvalidEscapeSequenceException implements Exception {
+class TomlInvalidEscapeSequenceException extends TomlException {
   /// The invalid escape sequence.
   final String escapeSequence;
 
   /// Creates a new exception for the given invalid [escapeSequence].
-  InvalidEscapeSequenceException(this.escapeSequence);
+  TomlInvalidEscapeSequenceException(this.escapeSequence);
 
   @override
   bool operator ==(Object other) =>
-      other is InvalidEscapeSequenceException &&
+      other is TomlInvalidEscapeSequenceException &&
       other.escapeSequence == escapeSequence;
 
   @override
   int get hashCode => escapeSequence.hashCode;
 
   @override
-  String toString() => 'The escape sequence "$escapeSequence" is invalid!';
+  String get message => 'The escape sequence "$escapeSequence" is invalid!';
 }

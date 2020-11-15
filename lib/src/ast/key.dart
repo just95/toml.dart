@@ -5,6 +5,8 @@
 library toml.src.ast.key;
 
 import 'package:petitparser/petitparser.dart';
+import 'package:quiver/core.dart';
+import 'package:quiver/collection.dart';
 
 import 'package:toml/src/ast/node.dart';
 import 'package:toml/src/ast/value/string.dart';
@@ -28,22 +30,40 @@ class TomlKey extends TomlNode {
           includeSeparators: false)
       .map((List<TomlSimpleKey> parts) => TomlKey(parts));
 
+  /// Parses the given TOML key.
+  ///
+  /// Throws a [ParserException] if there is a syntax error.
+  static TomlKey parse(String input) => parser.end().parse(input).value;
+
+  /// A key that identifies the top-level table.
+  static TomlKey topLevel = TomlKey([]);
+
   /// The individual [TomlSimpleKey]s that make up this dotted key.
   final List<TomlSimpleKey> parts;
 
-  /// Creates a new dotted key.
+  /// Creates a new dotted key with the given parts.
   TomlKey(Iterable<TomlSimpleKey> parts)
       : parts = List.from(parts, growable: false);
 
   /// Gets a key for the parent table of this key.
   ///
-  /// If this key identifies does not have a parent table (i.e., if it
-  /// identifies the top-level table), a key for the top-level table is
-  /// returned.
-  TomlKey get parent => TomlKey(parts.take(parts.length - 1));
+  /// If this key identifies the [topLevel] table, a key for the [topLevel]
+  /// table is returned.
+  TomlKey get parentKey => TomlKey(parts.take(parts.length - 1));
 
   /// Gets the last key part (i.e., the name of this key within [parent]).
-  TomlSimpleKey get child => parts.last;
+  TomlSimpleKey get childKey => parts.last;
+
+  /// Creates a new key that identifies the given child in the table identified
+  /// by this key.
+  TomlKey child(TomlSimpleKey child) => TomlKey(parts + [child]);
+
+  @override
+  int get hashCode => hashObjects(parts);
+
+  @override
+  bool operator ==(Object other) =>
+      other is TomlKey && listsEqual(parts, other.parts);
 }
 
 /// Base class of all AST nodes that represent simple TOML keys
@@ -57,6 +77,13 @@ abstract class TomlSimpleKey extends TomlNode {
 
   /// The actual name of this key.
   String get name;
+
+  @override
+  int get hashCode => name.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      other is TomlSimpleKey && name == other.name;
 }
 
 /// AST node that represents a quoted key.

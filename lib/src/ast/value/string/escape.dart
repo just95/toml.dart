@@ -7,7 +7,9 @@ library toml.src.parser.escape;
 import 'package:petitparser/petitparser.dart';
 import 'package:quiver/collection.dart';
 
+import 'package:toml/src/decoder/exception/invalid_escape_sequence.dart';
 import 'package:toml/src/parser/util/ranges.dart';
+import 'package:toml/src/parser/util/whitespace.dart';
 
 abstract class TomlEscapedChar {
   /// The character that is used to escape other characters.
@@ -44,14 +46,16 @@ abstract class TomlEscapedChar {
   ///     escape-seq-char =/ %x72         ; r    carriage return U+000D
   ///     escape-seq-char =/ %x74         ; t    tab             U+0009
   ///
-  /// This parser accepts any character and throws a 'FormatException' if the
-  /// parsed character is not escapable.
-  static final Parser<String> escapedCharParser = anyOf(
-          escapableChars.keys.join(),
-          'escapable character (i.e., any of ' +
-              escapableChars.keys.join(', ') +
-              ') expected')
-      .map((shortcut) => String.fromCharCode(escapableChars[shortcut]));
+  /// This parser accepts any non-whitespace and non-newline character and
+  /// throws a [TomlInvalidEscapeSequenceException] if the parsed character
+  /// is not escapable.
+  static final Parser<String> escapedCharParser =
+      (tomlNewline | tomlWhitespaceChar).neg().map((shortcut) {
+    if (!escapableChars.containsKey(shortcut)) {
+      throw TomlInvalidEscapeSequenceException('\\${shortcut}');
+    }
+    return String.fromCharCode(escapableChars[shortcut]);
+  });
 
   /// Parser for unicode escape sequences.
   ///

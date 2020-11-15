@@ -1,7 +1,9 @@
 library toml.src.ast.decoder.map_builder;
 
 import 'package:toml/ast.dart';
-import 'package:toml/exception.dart';
+
+import 'exception/redefinition.dart';
+import 'exception/not_a_table.dart';
 
 /// A visitor for [TomlExpression]s that builds a [Map] for
 class TomlMapBuilder extends TomlExpressionVisitor<void> {
@@ -19,7 +21,7 @@ class TomlMapBuilder extends TomlExpressionVisitor<void> {
   _TomlTreeMap _current;
 
   /// Creates a map builder.
-  TomlMapBuilder() : _topLevel = _TomlTreeMap() {
+  TomlMapBuilder() : _topLevel = _TomlTreeMap(TomlKey.topLevel) {
     _current = _topLevel;
   }
 
@@ -28,45 +30,52 @@ class TomlMapBuilder extends TomlExpressionVisitor<void> {
 
   @override
   void visitKeyValuePair(TomlKeyValuePair pair) {
-    _current.addChild(pair.key, _TomlTreeLeaf.fromValue(pair.value));
+    _current.addChild(
+      pair.key,
+      _TomlTreeLeaf(_current.nodeName.child(pair.key), pair.value.value),
+    );
   }
 
   @override
   void visitStandardTable(TomlStandardTable table) {
     // Create the standard table.
-    var parent = _topLevel.findOrAddChild(table.name.parent);
-    var child = parent.getOrAddChild(table.name.child, () => _TomlTreeMap());
+    var parent = _topLevel.findOrAddChild(table.name.parentKey),
+        child = parent.getOrAddChild(
+          table.name.childKey,
+          () => _TomlTreeMap(table.name),
+        );
 
     // Throw an exception if the table has been defined explicitly already or
     // there is another entity with the same name.
     if (child is _TomlTreeMap) {
       if (child.isExplicitlyDefined) {
-        throw TomlException('Cannot redefine table ${table.name}.');
+        throw TomlRedefinitionException(table.name);
       }
       // The table does not exist or has been defined implicitly only.
       child.isExplicitlyDefined = true;
       _current = child;
     } else {
-      throw TomlException('Cannot create table ${table.name}: '
-          'Entity with same name exists already.');
+      throw TomlRedefinitionException(table.name);
     }
   }
 
   @override
   void visitArrayTable(TomlArrayTable table) {
-    var parent = _topLevel.findOrAddChild(table.name.parent);
-    var child = parent.getOrAddChild(table.name.child, () => _TomlTreeList());
+    var parent = _topLevel.findOrAddChild(table.name.parentKey),
+        child = parent.getOrAddChild(
+          table.name.childKey,
+          () => _TomlTreeList(table.name),
+        );
 
     // Create a new array entry or throw an exception if there is a non-array
     // of tables entity with the same name already.
     if (child is _TomlTreeList) {
-      var next = _TomlTreeMap();
+      var next = _TomlTreeMap(table.name);
       next.isExplicitlyDefined = true;
       child.elements.add(next);
       _current = next;
     } else {
-      throw TomlException('Cannot create array of tables ${table.name}: '
-          'Entity with same name exists already.');
+      throw TomlRedefinitionException(table.name);
     }
   }
 }
@@ -78,6 +87,12 @@ class TomlMapBuilder extends TomlExpressionVisitor<void> {
 /// arrays of tables. Edges are labeled with keys and the leafs store the
 /// values.
 abstract class _TomlTree<V> {
+  /// The key that identifies this node.
+  final TomlKey nodeName;
+
+  /// Creates a new node of the tree.
+  _TomlTree(this.nodeName);
+
   /// The value of this node.
   ///
   /// The value of inner nodes is a [Map] for tables and a [List] of [Map]s
@@ -89,11 +104,18 @@ abstract class _TomlTree<V> {
   /// such edge already.
   _TomlTree getOrAddChild(TomlSimpleKey key, _TomlTree Function() buildChild);
 
-  /// TODO
+  /// Traverses the tree along the edges identified by the given [key] and
+  /// returns the final sub-tree.
+  ///
+  /// If a node does not exist, a new [_TomlTreeMap] is created. This behavior
+  /// corresponds to the implicit creation of parent tables in TOML.
   _TomlTree findOrAddChild(TomlKey key) {
     _TomlTree current = this;
     for (var part in key.parts) {
-      current = current.getOrAddChild(part, () => _TomlTreeMap());
+      current = current.getOrAddChild(
+        part,
+        () => _TomlTreeMap(current.nodeName.child(part)),
+      );
     }
     return current;
   }
@@ -105,22 +127,12 @@ class _TomlTreeLeaf<V> extends _TomlTree<V> {
   @override
   final V value;
 
-  /// The TOML type of the stored value.
-  ///
-  /// This is only used to improve error messages.
-  final TomlType valueType;
-
   /// Creates a new leaf node that stores the given value of the given type.
-  _TomlTreeLeaf(this.value, this.valueType);
-
-  /// Creates a new leaf node for the given [TomlValue].
-  factory _TomlTreeLeaf.fromValue(TomlValue<V> node) =>
-      _TomlTreeLeaf(node.value, node.type);
+  _TomlTreeLeaf(TomlKey nodeName, this.value) : super(nodeName);
 
   @override
   _TomlTree getOrAddChild(TomlSimpleKey key, _TomlTree Function() buildChild) {
-    throw TomlException(
-        'Cannot get or add child ${key} for value of type ${valueType}.');
+    throw TomlNotATableException(nodeName.child(key));
   }
 }
 
@@ -138,10 +150,13 @@ class _TomlTreeMap extends _TomlTree<Map<String, dynamic>> {
   /// the flag is set to `true` for the corresponding table. This information
   /// is needed to reject TOML documents that explicitly define the same table
   /// twice.
-  bool isExplicitlyDefined = false;
+  bool isExplicitlyDefined;
 
   /// Creates a new node for a standard table.
-  _TomlTreeMap([Map<String, _TomlTree> children]) : children = children ?? {};
+  _TomlTreeMap(TomlKey nodeName)
+      : children = {},
+        isExplicitlyDefined = false,
+        super(nodeName);
 
   @override
   Map<String, dynamic> get value =>
@@ -151,7 +166,7 @@ class _TomlTreeMap extends _TomlTree<Map<String, dynamic>> {
   /// already.
   void addChild(TomlSimpleKey key, _TomlTree child) {
     if (children.containsKey(key.name)) {
-      throw TomlException('Cannot redefine ${key}.');
+      throw TomlRedefinitionException(nodeName.child(key));
     }
     children[key.name] = child;
   }
@@ -168,7 +183,9 @@ class _TomlTreeList extends _TomlTree<List<Map<String, dynamic>>> {
   final List<_TomlTreeMap> elements;
 
   /// Creates a new node for an array of tables.
-  _TomlTreeList([List<_TomlTreeMap> elements]) : elements = elements ?? [];
+  _TomlTreeList(TomlKey nodeName)
+      : elements = [],
+        super(nodeName);
 
   @override
   List<Map<String, dynamic>> get value => elements.map((v) => v.value).toList();

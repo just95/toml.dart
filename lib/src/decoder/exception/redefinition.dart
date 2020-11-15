@@ -4,6 +4,9 @@
 
 library toml.src.decoder.exception.redefinition;
 
+import 'package:toml/ast.dart';
+import 'package:toml/exception.dart';
+
 /// An exception which is thrown when a table or key is defined more than once.
 ///
 /// Example:
@@ -12,20 +15,20 @@ library toml.src.decoder.exception.redefinition;
 ///     a = 2
 ///
 /// throws a [RedefinitionException] because `a` is defined twice.
-class RedefinitionException implements Exception {
+class TomlRedefinitionException extends TomlException {
   /// Fully qualified name of the table or key.
-  final String name;
+  final TomlKey name;
 
   /// Creates a new exception for the table or key with the given name.
-  RedefinitionException(this.name);
+  TomlRedefinitionException(this.name);
 
   @override
   bool operator ==(Object other) =>
-      other is RedefinitionException && other.name == name;
+      other is TomlRedefinitionException && other.name == name;
 
   @override
   int get hashCode => name.hashCode;
 
   @override
-  String toString() => 'Cannot redefine "$name"!';
+  String get message => 'Cannot redefine "$name"!';
 }

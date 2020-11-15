@@ -4,8 +4,11 @@
 
 library toml.src.decoder.exception.not_a_table;
 
+import 'package:toml/ast.dart';
+import 'package:toml/exception.dart';
+
 /// An exception which is thrown when the parent element of a table is not
-/// a table.
+/// a table or array of tables.
 ///
 /// Example:
 ///
@@ -15,23 +18,23 @@ library toml.src.decoder.exception.not_a_table;
 ///     [a.b.c]
 ///     d = 2
 ///
-/// throws a [NotATableException] because `a.b.c` fails to create a sub-table of
-/// `a.b` which is an integer rather than a table.
-class NotATableException implements Exception {
+/// throws a [TomlNotATableException] because `a.b.c` fails to create a
+/// sub-table of `a.b` which is an integer rather than a table.
+class TomlNotATableException extends TomlException {
   /// The name of the table which could not be created because its parent
-  /// is not a table
-  final String name;
+  /// is not a table.
+  final TomlKey name;
 
   /// Creates a new exception for a table with the given [name].
-  NotATableException(this.name);
+  TomlNotATableException(this.name);
 
   @override
   bool operator ==(Object other) =>
-      other is NotATableException && other.name == name;
+      other is TomlNotATableException && other.name == name;
 
   @override
   int get hashCode => name.hashCode;
 
   @override
-  String toString() => 'Cannot define table "$name"! Parent must be a table!';
+  String get message => 'Cannot define table "$name"! Parent must be a table!';
 }
