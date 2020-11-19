@@ -1,5 +1,6 @@
 # toml.dart
 
+[![Dart CI](https://github.com/just95/toml.dart/workflows/Dart%20CI/badge.svg?branch=main)][toml-dart/actions]
 [![Pub Package](https://img.shields.io/pub/v/toml.svg)][pub/toml]
 [![GitHub License](https://img.shields.io/badge/license-MIT-blue.svg)][toml-dart/LICENSE]
 
@@ -290,6 +291,9 @@ See the [LICENSE][toml-dart/LICENSE] file for details.
   https://pub.dev/packages/toml
   "toml ­| Dart Package"
 
+[toml-dart/actions]:
+  https://github.com/just95/toml.dart/actions
+  "toml.dart CI Pipeline"
 [toml-dart/example]:
   https://github.com/just95/toml.dart/tree/main/example
   "toml.dart Examples"
