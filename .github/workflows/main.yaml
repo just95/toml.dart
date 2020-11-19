@@ -57,4 +57,4 @@ jobs:
       - name: Install Dependencies
         run: dart pub get
       - name: Run Unit Tests
-        run: dart test
+        run: dart test --reporter expanded
