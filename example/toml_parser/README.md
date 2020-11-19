@@ -17,13 +17,13 @@ cd ./example/toml_parser
 Before you can execute the example, first download the required dependencies.
 
 ```bash
-pub get
+dart pub get
 ```
 
 Now you can run the example as follows.
 
 ```bash
-pub run example
+dart pub run example
 ```
 
 The command above should print `Hello, World!`.

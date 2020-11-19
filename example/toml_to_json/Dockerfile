@@ -10,7 +10,7 @@ ADD ./example/toml_to_json/bin /app/example/toml_to_json/bin
 
 # Install dependencies.
 WORKDIR /app/example/toml_to_json
-RUN pub get
+RUN dart pub get
 
 CMD []
 ENTRYPOINT ["/usr/bin/dart", "bin/toml-to-json.dart"]
