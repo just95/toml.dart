@@ -34,7 +34,7 @@ Now you can start a local web server and compile the `./web/example.dart` code t
 webdev serve
 ```
 
-Now open a browser and navigate to <localhost:8080>.
+Now open a browser and navigate to <http://localhost:8080>.
 You should see a simple web page that displays `Loading...` until the `./web/config.toml` file has been loaded and decoded.
 Once the configuration file has been loaded successfully, the text should change to `Hello, World!`.
 

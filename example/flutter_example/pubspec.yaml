@@ -1,6 +1,6 @@
 name: flutter_example
-description: toml flutter example
-publish_to: 'none'
+description: An example that demonstrates how to load a configuration file from an asset in Flutter.
+publish_to: none
 
 environment:
   sdk: ">=2.7.0 <3.0.0"
@@ -14,7 +14,7 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  pedantic: ^1.9.0
+  pedantic: ^1.9.2
 
 flutter:
   uses-material-design: true
