@@ -20,8 +20,11 @@ class TomlMapBuilder extends TomlExpressionVisitor<void> {
   /// and it is opened.
   _TomlTreeMap _current;
 
-  /// Creates a map builder.
-  TomlMapBuilder() : _topLevel = _TomlTreeMap(TomlKey.topLevel) {
+  /// Creates a map builder for the top-level table.
+  factory TomlMapBuilder() => TomlMapBuilder.withPrefix(TomlKey.topLevel);
+
+  /// Creates a map builder for the table with the given name.
+  TomlMapBuilder.withPrefix(TomlKey prefix) : _topLevel = _TomlTreeMap(prefix) {
     _current = _topLevel;
   }
 
@@ -30,10 +33,9 @@ class TomlMapBuilder extends TomlExpressionVisitor<void> {
 
   @override
   void visitKeyValuePair(TomlKeyValuePair pair) {
-    _current.addChild(
-      pair.key,
-      _TomlTreeLeaf(_current.nodeName.child(pair.key), pair.value.value),
-    );
+    var key = _current.nodeName.child(pair.key),
+        value = pair.value.buildValue(key);
+    _current.addChild(pair.key, _TomlTreeLeaf(key, value));
   }
 
   @override

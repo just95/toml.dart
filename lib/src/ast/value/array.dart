@@ -6,6 +6,7 @@ library toml.src.ast.value.array;
 
 import 'package:petitparser/petitparser.dart';
 
+import 'package:toml/src/ast/key.dart';
 import 'package:toml/src/ast/value.dart';
 import 'package:toml/src/ast/value/visitor.dart';
 import 'package:toml/src/parser/util/whitespace.dart';
@@ -66,7 +67,11 @@ class TomlArray<V> extends TomlValue<Iterable<V>> {
   Iterable<TomlType> get itemTypes => items.map((item) => item.type);
 
   @override
-  Iterable<V> get value => items.map((item) => item.value);
+  Iterable<V> get value => buildValue(TomlKey.topLevel);
+
+  @override
+  Iterable<V> buildValue(TomlKey key) =>
+      items.map((item) => item.buildValue(key));
 
   @override
   TomlType get type => TomlType.array;

@@ -241,6 +241,20 @@ void main() {
             port = 8080
           }
         ''');
+      testDocumentFailure(
+          'keys of inline table cannot be overwritten within the inline table',
+          input: '''
+            a = { x = 1, x = 2 }
+          ''',
+          error: TomlRedefinitionException(TomlKey.parse('a.x')));
+      testDocumentFailure('tables cannot extend inline tables',
+          input: '''
+            a = { x = 1 }
+
+            [a.b]
+            y = 2
+          ''',
+          error: TomlNotATableException(TomlKey.parse('a.b')));
     });
   });
 }
