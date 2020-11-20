@@ -64,6 +64,7 @@ abstract class TomlEscapedChar {
   static final Parser<String> escapedUnicodeParser = (char('u') &
               hexDigit().times(4).flatten() |
           char('U') & hexDigit().times(8).flatten())
+      .cast<List>()
       .pick<String>(1)
       .map((charCode) => String.fromCharCode(int.parse(charCode, radix: 16)));
 }

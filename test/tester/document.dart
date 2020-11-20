@@ -4,6 +4,7 @@
 
 library toml.test.tester.document;
 
+import 'package:petitparser/petitparser.dart';
 import 'package:toml/ast.dart';
 
 import 'toml.dart';
