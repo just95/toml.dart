@@ -84,6 +84,10 @@ abstract class TomlSimpleKey extends TomlNode {
   @override
   bool operator ==(Object other) =>
       other is TomlSimpleKey && name == other.name;
+
+  /// Invokes the correct `visit*` method for this value of the given
+  /// visitor.
+  T acceptSimpleKeyVisitor<T>(TomlSimpleKeyVisitor<T> visitor);
 }
 
 /// AST node that represents a quoted key.
@@ -104,6 +108,10 @@ class TomlQuotedKey extends TomlSimpleKey {
 
   @override
   String get name => string.value;
+
+  @override
+  T acceptSimpleKeyVisitor<T>(TomlSimpleKeyVisitor<T> visitor) =>
+      visitor.visitQuotedKey(this);
 }
 
 /// AST node that represents an unquoted key.
@@ -122,4 +130,8 @@ class TomlUnquotedKey extends TomlSimpleKey {
 
   /// Creates a new unquoted key node.
   TomlUnquotedKey(this.name);
+
+  @override
+  T acceptSimpleKeyVisitor<T>(TomlSimpleKeyVisitor<T> visitor) =>
+      visitor.visitUnquotedKey(this);
 }

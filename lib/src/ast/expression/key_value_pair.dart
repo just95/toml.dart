@@ -7,7 +7,7 @@ library toml.src.ast.expression.key_value_pair;
 import 'package:petitparser/petitparser.dart';
 
 import 'package:toml/src/ast/expression.dart';
-import 'package:toml/src/ast/expression/visitor.dart';
+import 'package:toml/src/ast/visitor/expression.dart';
 import 'package:toml/src/ast/key.dart';
 import 'package:toml/src/ast/value.dart';
 import 'package:toml/src/parser/util/whitespace.dart';
@@ -42,6 +42,6 @@ class TomlKeyValuePair extends TomlExpression {
   TomlKeyValuePair(this.key, this.value);
 
   @override
-  T accept<T>(TomlExpressionVisitor<T> visitor) =>
+  T acceptExpressionVisitor<T>(TomlExpressionVisitor<T> visitor) =>
       visitor.visitKeyValuePair(this);
 }

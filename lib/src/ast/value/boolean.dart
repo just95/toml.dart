@@ -7,7 +7,7 @@ library toml.src.ast.value.boolean;
 import 'package:petitparser/petitparser.dart';
 
 import 'package:toml/src/ast/value.dart';
-import 'package:toml/src/ast/value/visitor.dart';
+import 'package:toml/src/ast/visitor/value.dart';
 
 /// AST node that represents a boolean TOML value.
 ///
@@ -32,5 +32,6 @@ class TomlBoolean extends TomlValue<bool> {
   TomlType get type => TomlType.boolean;
 
   @override
-  T accept<T>(TomlValueVisitor<T> visitor) => visitor.visitBoolean(this);
+  T acceptValueVisitor<T>(TomlValueVisitor<T> visitor) =>
+      visitor.visitBoolean(this);
 }

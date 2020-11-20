@@ -11,7 +11,8 @@ import 'package:toml/src/ast/value/string/basic.dart';
 import 'package:toml/src/ast/value/string/literal.dart';
 import 'package:toml/src/ast/value/string/ml_basic.dart';
 import 'package:toml/src/ast/value/string/ml_literal.dart';
-import 'package:toml/src/ast/value/visitor.dart';
+import 'package:toml/src/ast/visitor/value/string.dart';
+import 'package:toml/src/ast/visitor/value.dart';
 
 /// Base class for AST nodes that represent a TOML strings.
 ///
@@ -31,5 +32,11 @@ abstract class TomlString extends TomlValue<String> {
   TomlType get type => TomlType.string;
 
   @override
-  T accept<T>(TomlValueVisitor<T> visitor) => visitor.visitString(this);
+  T acceptValueVisitor<T>(TomlValueVisitor<T> visitor) =>
+      visitor.visitString(this);
+
+  /// Invokes the correct `visit*` method for this string value of the given
+  /// visitor.
+  T acceptStringVisitor<T>(TomlStringVisitor<T> visitor) =>
+      visitor.visitString(this);
 }

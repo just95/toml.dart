@@ -7,7 +7,7 @@ library toml.src.ast.expression.table;
 import 'package:petitparser/petitparser.dart';
 
 import 'package:toml/src/ast/expression.dart';
-import 'package:toml/src/ast/expression/visitor.dart';
+import 'package:toml/src/ast/visitor/expression.dart';
 import 'package:toml/src/ast/key.dart';
 import 'package:toml/src/parser/util/whitespace.dart';
 
@@ -46,7 +46,7 @@ class TomlStandardTable extends TomlTable {
   TomlStandardTable(TomlKey name) : super(name);
 
   @override
-  T accept<T>(TomlExpressionVisitor<T> visitor) =>
+  T acceptExpressionVisitor<T>(TomlExpressionVisitor<T> visitor) =>
       visitor.visitStandardTable(this);
 }
 
@@ -71,6 +71,6 @@ class TomlArrayTable extends TomlTable {
   TomlArrayTable(TomlKey name) : super(name);
 
   @override
-  T accept<T>(TomlExpressionVisitor<T> visitor) =>
+  T acceptExpressionVisitor<T>(TomlExpressionVisitor<T> visitor) =>
       visitor.visitArrayTable(this);
 }

@@ -1,4 +1,8 @@
-library toml.src.ast.value.visitor;
+// Copyright (c) 2015 Justin Andresen. All rights reserved.
+// This software may be modified and distributed under the terms
+// of the MIT license. See the LICENSE file for details.
+
+library toml.src.ast.visitor.value;
 
 import 'package:toml/src/ast/value.dart';
 import 'package:toml/src/ast/value/array.dart';
@@ -34,7 +38,7 @@ abstract class TomlValueVisitor<T> {
 
   /// Visits the given [value].
   ///
-  /// This method is uses [TomlValue.accept] to invoke the right visitor
-  /// method from above.
-  T visitValue(TomlValue value) => value.accept(this);
+  /// This method is using [TomlValue.acceptValueVisitor] to invoke the right
+  /// visitor method from above.
+  T visitValue(TomlValue value) => value.acceptValueVisitor(this);
 }

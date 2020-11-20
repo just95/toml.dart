@@ -9,7 +9,7 @@ import 'package:petitparser/petitparser.dart';
 import 'package:toml/src/ast/expression/key_value_pair.dart';
 import 'package:toml/src/ast/key.dart';
 import 'package:toml/src/ast/value.dart';
-import 'package:toml/src/ast/value/visitor.dart';
+import 'package:toml/src/ast/visitor/value.dart';
 import 'package:toml/src/decoder/map_builder.dart';
 import 'package:toml/src/parser/util/whitespace.dart';
 
@@ -61,5 +61,6 @@ class TomlInlineTable extends TomlValue<Map<String, dynamic>> {
   TomlType get type => TomlType.table;
 
   @override
-  T accept<T>(TomlValueVisitor<T> visitor) => visitor.visitInlineTable(this);
+  T acceptValueVisitor<T>(TomlValueVisitor<T> visitor) =>
+      visitor.visitInlineTable(this);
 }

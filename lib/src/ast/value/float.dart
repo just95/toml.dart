@@ -7,7 +7,7 @@ library toml.src.ast.value.float;
 import 'package:petitparser/petitparser.dart';
 
 import 'package:toml/src/ast/value.dart';
-import 'package:toml/src/ast/value/visitor.dart';
+import 'package:toml/src/ast/visitor/value.dart';
 
 /// AST node that represents a TOML floating point number.
 ///
@@ -51,5 +51,6 @@ class TomlFloat extends TomlValue<double> {
   TomlType get type => TomlType.float;
 
   @override
-  T accept<T>(TomlValueVisitor<T> visitor) => visitor.visitFloat(this);
+  T acceptValueVisitor<T>(TomlValueVisitor<T> visitor) =>
+      visitor.visitFloat(this);
 }

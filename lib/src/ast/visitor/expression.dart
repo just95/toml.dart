@@ -1,4 +1,8 @@
-library toml.src.ast.expression.visitor;
+// Copyright (c) 2015 Justin Andresen. All rights reserved.
+// This software may be modified and distributed under the terms
+// of the MIT license. See the LICENSE file for details.
+
+library toml.src.ast.visitor.expression;
 
 import 'package:toml/src/ast/expression.dart';
 import 'package:toml/src/ast/expression/key_value_pair.dart';
@@ -17,7 +21,8 @@ abstract class TomlExpressionVisitor<T> {
 
   /// Visits the given [expression].
   ///
-  /// This method is uses [TomlExpression.accept] to invoke the right visitor
-  /// method from above.
-  T visitExpression(TomlExpression expression) => expression.accept(this);
+  /// This method is using [TomlExpression.acceptExpressionVisitor] to invoke
+  /// the right visitor method from above.
+  T visitExpression(TomlExpression expression) =>
+      expression.acceptExpressionVisitor(this);
 }

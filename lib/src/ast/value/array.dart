@@ -8,7 +8,7 @@ import 'package:petitparser/petitparser.dart';
 
 import 'package:toml/src/ast/key.dart';
 import 'package:toml/src/ast/value.dart';
-import 'package:toml/src/ast/value/visitor.dart';
+import 'package:toml/src/ast/visitor/value.dart';
 import 'package:toml/src/parser/util/whitespace.dart';
 
 /// AST node that represents a TOML array of values of type [T].
@@ -77,5 +77,6 @@ class TomlArray<V> extends TomlValue<Iterable<V>> {
   TomlType get type => TomlType.array;
 
   @override
-  T accept<T>(TomlValueVisitor<T> visitor) => visitor.visitArray(this);
+  T acceptValueVisitor<T>(TomlValueVisitor<T> visitor) =>
+      visitor.visitArray(this);
 }
