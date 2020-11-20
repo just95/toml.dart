@@ -25,7 +25,7 @@ class TomlLiteralString extends TomlString {
           .pick<String>(1)
           .map((value) => TomlLiteralString(value));
 
-  /// Parser for a single character of a basic TOMl string.
+  /// Parser for a single character of a basic TOML string.
   ///
   ///     literal-char = %x09 / %x20-26 / %x28-7E / non-ascii
   ///

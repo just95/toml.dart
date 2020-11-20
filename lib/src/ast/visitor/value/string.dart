@@ -16,13 +16,13 @@ abstract class TomlStringVisitor<T> {
   T visitBasicString(TomlBasicString string);
 
   /// Visits the given literal string.
-  T visitLiteralString(TomlLiteralString literal);
+  T visitLiteralString(TomlLiteralString string);
 
   /// Visits the given multiline basic string.
   T visitMultilineBasicString(TomlMultilineBasicString string);
 
   /// Visits the given multiline literal string.
-  T visitMultilineLiteralString(TomlMultilineLiteralString literal);
+  T visitMultilineLiteralString(TomlMultilineLiteralString string);
 
   /// Visits the given [value].
   ///

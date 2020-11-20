@@ -27,13 +27,13 @@ class TomlBasicString extends TomlString {
           .pick<String>(1)
           .map((value) => TomlBasicString(value));
 
-  /// Parser for a single character of a basic TOMl string.
+  /// Parser for a single character of a basic TOML string.
   ///
   ///     basic-char = basic-unescaped / escaped
   static final Parser<String> charParser =
       (unescapedParser | TomlEscapedChar.parser).cast<String>();
 
-  /// Parser for a single unescaped character of a basic TOMl string.
+  /// Parser for a single unescaped character of a basic TOML string.
   ///
   ///     basic-unescaped = wschar / %x21 / %x23-5B / %x5D-7E / non-ascii
   ///
@@ -45,6 +45,16 @@ class TomlBasicString extends TomlString {
           range(0x5D, 0x7E) |
           tomlNonAscii)
       .cast<String>();
+
+  /// Escapes all characters of the given string that are not allowed to
+  /// occur unescaped in a basic string.
+  static String escape(String value) {
+    var buffer = StringBuffer();
+    for (var rune in value.runes) {
+      TomlEscapedChar.writeEscapedChar(rune, buffer, unescapedParser);
+    }
+    return buffer.toString();
+  }
 
   @override
   final String value;

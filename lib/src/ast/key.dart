@@ -12,21 +12,27 @@ import 'package:toml/src/ast/node.dart';
 import 'package:toml/src/ast/value/string.dart';
 import 'package:toml/src/ast/value/string/basic.dart';
 import 'package:toml/src/ast/value/string/literal.dart';
+import 'package:toml/src/ast/visitor/key.dart';
 import 'package:toml/src/parser/util/whitespace.dart';
 
 /// AST node that represents a dot separated list of [TomlSimpleKey]s.
 ///
 ///     key = simple-key / dotted-key
 ///     dotted-key = simple-key 1*( dot-sep simple-key )
-///     dot-sep   = ws %x2E ws  ; . Period
 ///
 /// TODO `dotted-keys` were added in TOML 0.5.0 and have not been fully
 /// implemented yet. The keys in key/value pairs must be [TomlSimpleKey]s at
 /// the moment. This class is used to represent the names of tables.
 class TomlKey extends TomlNode {
+  /// Separator for dotted keys.
+  ///
+  ///     dot-sep   = ws %x2E ws  ; . Period
+  static final String separator = '.';
+
   /// Parser for a dotted TOML key.
   static final Parser<TomlKey> parser = TomlSimpleKey.parser
-      .separatedBy<TomlSimpleKey>(tomlWhitespace & char('.') & tomlWhitespace,
+      .separatedBy<TomlSimpleKey>(
+          tomlWhitespace & char(separator) & tomlWhitespace,
           includeSeparators: false)
       .map((List<TomlSimpleKey> parts) => TomlKey(parts));
 

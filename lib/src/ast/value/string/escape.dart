@@ -67,4 +67,29 @@ abstract class TomlEscapedChar {
       .cast<List>()
       .pick<String>(1)
       .map((charCode) => String.fromCharCode(int.parse(charCode, radix: 16)));
+
+  /// Writes the given [rune] into the [buffer] and escapes it if necessary.
+  ///
+  /// The [unescapedParser] is a parser that accepts all strings that don't
+  /// have to be encoded.
+  static void writeEscapedChar(
+    int rune,
+    StringBuffer buffer,
+    Parser unescapedParser,
+  ) {
+    if (unescapedParser.accept(String.fromCharCode(rune))) {
+      // The current rune can be encoded unescaped.
+      buffer.writeCharCode(rune);
+    } else if (escapableChars.inverse.containsKey(rune)) {
+      // The current rune must be escaped and there is a shortcut.
+      buffer.write(escapeChar);
+      buffer.write(escapableChars.inverse[rune]);
+    } else {
+      // The current rune must be escaped but there is no shortcut, i.e., the
+      // Unicode code point must be escaped.
+      buffer.write(escapeChar);
+      buffer.write(rune & 0xffff == rune ? r'u' : r'U');
+      buffer.write(rune.toRadixString(16));
+    }
+  }
 }

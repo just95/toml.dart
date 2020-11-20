@@ -28,5 +28,5 @@ class UnknownValueTypeException implements Exception {
   int get hashCode => value.hashCode;
 
   @override
-  String toString() => '"$value" cannot be encoded as a TOMl value!';
+  String toString() => '"$value" cannot be encoded as a TOML value!';
 }

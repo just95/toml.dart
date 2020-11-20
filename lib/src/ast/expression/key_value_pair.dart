@@ -15,16 +15,20 @@ import 'package:toml/src/parser/util/whitespace.dart';
 /// A TOML expression AST node that represents a key/value pair.
 ///
 ///     keyval = key keyval-sep val
-///     keyval-sep = ws %x3D ws ; =
 ///
 /// TODO `dotted-key`s were added in TOML 0.5.0 and are not fully implemented
 /// yet. The left-hand side of a key/value pair must be a [TomlSimpleKey] at
 /// the moment.
 class TomlKeyValuePair extends TomlExpression {
+  /// The separator between the key and value.
+  ///
+  ///     keyval-sep = ws %x3D ws ; =
+  static final String separator = '=';
+
   /// Parser for a TOML key/value pair.
   static final Parser<TomlKeyValuePair> parser = (TomlSimpleKey.parser &
           tomlWhitespace &
-          char('=') &
+          char(separator) &
           tomlWhitespace &
           TomlValue.parser)
       .permute([0, 4]).map((List pair) => TomlKeyValuePair(

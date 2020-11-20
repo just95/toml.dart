@@ -18,25 +18,36 @@ import 'package:toml/src/parser/util/whitespace.dart';
 ///     inline-table =
 ///         inline-table-open [ inline-table-keyvals ] inline-table-close
 ///
-///     inline-table-open  = %x7B ws     ; {
-///     inline-table-close = ws %x7D     ; }
-///     inline-table-sep   = ws %x2C ws  ; , Comma
-///
 ///     inline-table-keyvals = keyval [ inline-table-sep inline-table-keyvals ]
 class TomlInlineTable extends TomlValue<Map<String, dynamic>> {
+  /// The opening delimiter of inline tables.
+  ///
+  ///     inline-table-open  = %x7B ws     ; {
+  static final String openingDelimiter = '{';
+
+  /// The separator for the key/value pairs in inline tables.
+  ///
+  ///     inline-table-sep   = ws %x2C ws  ; , Comma
+  static final String separator = ',';
+
+  /// The closing delimiter of inline tables.
+  ///
+  ///     inline-table-close = ws %x7D     ; }
+  static final String closingDelimiter = '}';
+
   /// Parser for a TOML inline-table.
   ///
   /// Trailing commas are currently not allowed.
   /// See https://github.com/toml-lang/toml/pull/235#issuecomment-73578529
-  static final Parser<TomlInlineTable> parser = (char('{') &
+  static final Parser<TomlInlineTable> parser = (char(openingDelimiter) &
           tomlWhitespace &
           (TomlKeyValuePair.parser.separatedBy<TomlKeyValuePair>(
-            tomlWhitespace & char(',') & tomlWhitespace,
+            tomlWhitespace & char(separator) & tomlWhitespace,
             includeSeparators: false,
             optionalSeparatorAtEnd: false,
           )).optional(<TomlKeyValuePair>[]) &
           tomlWhitespace &
-          char('}'))
+          char(closingDelimiter))
       .pick<List<TomlKeyValuePair>>(2)
       .map((List<TomlKeyValuePair> pairs) => TomlInlineTable(pairs));
 

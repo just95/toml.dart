@@ -32,15 +32,24 @@ abstract class TomlTable extends TomlExpression {
 /// table.
 ///
 ///     std-table = std-table-open key std-table-close
-///
-///     std-table-open  = %x5B ws     ; [ Left square bracket
-///     std-table-close = ws %x5D     ; ] Right square bracket
 class TomlStandardTable extends TomlTable {
+  /// The opening delimited of the standard table header.
+  ///
+  ///     std-table-open  = %x5B ws     ; [ Left square bracket
+  static final String openingDelimiter = '[';
+
+  /// The opening delimited of the standard table header.
+  ///     std-table-close = ws %x5D     ; ] Right square bracket
+  static final String closingDelimiter = ']';
+
   /// Parser for a standard TOML table header.
-  static final Parser<TomlStandardTable> parser =
-      (char('[') & tomlWhitespace & TomlKey.parser & tomlWhitespace & char(']'))
-          .pick<TomlKey>(2)
-          .map((TomlKey key) => TomlStandardTable(key));
+  static final Parser<TomlStandardTable> parser = (char(openingDelimiter) &
+          tomlWhitespace &
+          TomlKey.parser &
+          tomlWhitespace &
+          char(closingDelimiter))
+      .pick<TomlKey>(2)
+      .map((TomlKey key) => TomlStandardTable(key));
 
   /// Creates a new TOML standard table.
   TomlStandardTable(TomlKey name) : super(name);
@@ -54,10 +63,17 @@ class TomlStandardTable extends TomlTable {
 /// an array of tables.
 ///
 ///     array-table = array-table-open key array-table-close
-///
-///     array-table-open  = %x5B.5B ws  ; [[ Double left square bracket
-///     array-table-close = ws %x5D.5D  ; ]] Double right square bracket
 class TomlArrayTable extends TomlTable {
+  /// The opening delimited of the array of tables header.
+  ///
+  ///     array-table-open  = %x5B.5B ws  ; [[ Double left square bracket
+  static final String openingDelimiter = '[';
+
+  /// The opening delimited of the array of tables header.
+  ///
+  ///     array-table-close = ws %x5D.5D  ; ]] Double right square bracket
+  static final String closingDelimiter = ']';
+
   /// Parser for a TOML array of tables header.
   static final Parser<TomlArrayTable> parser = (string('[[') &
           tomlWhitespace &

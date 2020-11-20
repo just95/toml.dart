@@ -85,6 +85,27 @@ class TomlMultilineBasicString extends TomlString {
               (tomlWhitespaceChar | tomlNewline).star())
           .map((_) => '');
 
+  /// Escapes all characters of the given string that are not allowed to
+  /// occur unescaped in a multiline basic string.
+  static String escape(String value) {
+    var buffer = StringBuffer();
+    var unescapedOrNewline = unescapedParser | tomlNewline;
+    var quotes = 0;
+    for (var rune in value.runes) {
+      // If the current rune is a quotation mark and it is preceeded by less
+      // than two quotation marks, it does not have to be escaped, because only
+      // three or more quotation marks can be confused for a closing delimiter.
+      if (rune == TomlBasicString.delimiter.runes.first && quotes < 2) {
+        buffer.writeCharCode(rune);
+        quotes++;
+      } else {
+        TomlEscapedChar.writeEscapedChar(rune, buffer, unescapedOrNewline);
+        quotes = 0;
+      }
+    }
+    return buffer.toString();
+  }
+
   @override
   final String value;
 
