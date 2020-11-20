@@ -14,6 +14,7 @@ import 'package:toml/src/ast/value/float.dart';
 import 'package:toml/src/ast/value/integer.dart';
 import 'package:toml/src/ast/value/string.dart';
 import 'package:toml/src/ast/value/table.dart';
+import 'package:toml/src/ast/value/visitor.dart';
 import 'package:toml/src/parser/util/non_strict.dart';
 
 /// The possible types of [TomlValue]s.
@@ -79,4 +80,8 @@ abstract class TomlValue<V> extends TomlNode {
 
   /// The type of the TOML value represented by this AST node.
   TomlType get type;
+
+  /// Invokes the correct `visit*` method for this value of the given
+  /// visitor.
+  T accept<T>(TomlValueVisitor<T> visitor);
 }

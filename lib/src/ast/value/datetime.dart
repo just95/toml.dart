@@ -7,6 +7,7 @@ library toml.src.ast.value.datetime;
 import 'package:petitparser/petitparser.dart';
 
 import 'package:toml/src/ast/value.dart';
+import 'package:toml/src/ast/value/visitor.dart';
 
 /// AST node that represents a TOML date-time value.
 ///
@@ -81,4 +82,7 @@ class TomlDateTime extends TomlValue<DateTime> {
 
   @override
   TomlType get type => TomlType.datetime;
+
+  @override
+  T accept<T>(TomlValueVisitor<T> visitor) => visitor.visitDateTime(this);
 }

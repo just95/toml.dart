@@ -19,5 +19,5 @@ abstract class TomlExpressionVisitor<T> {
   ///
   /// This method is uses [TomlExpression.accept] to invoke the right visitor
   /// method from above.
-  T visit(TomlExpression expression) => expression.accept(this);
+  T visitExpression(TomlExpression expression) => expression.accept(this);
 }

@@ -40,7 +40,7 @@ class TomlDocument extends TomlNode {
   /// Converts this document to a map from keys to values.
   Map<String, dynamic> toMap() {
     var builder = TomlMapBuilder();
-    expressions.forEach(builder.visit);
+    expressions.forEach(builder.visitExpression);
     return builder.build();
   }
 }

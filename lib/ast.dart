@@ -23,3 +23,4 @@ export 'src/ast/value/string/literal.dart';
 export 'src/ast/value/string/ml_basic.dart';
 export 'src/ast/value/string/ml_literal.dart';
 export 'src/ast/value/table.dart';
+export 'src/ast/value/visitor.dart';

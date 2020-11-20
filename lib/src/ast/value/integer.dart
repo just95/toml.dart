@@ -7,6 +7,7 @@ library toml.src.ast.value.integer;
 import 'package:petitparser/petitparser.dart';
 
 import 'package:toml/src/ast/value.dart';
+import 'package:toml/src/ast/value/visitor.dart';
 
 /// AST node that represents a TOML integer.
 ///
@@ -55,4 +56,7 @@ class TomlInteger extends TomlValue<int> {
 
   @override
   TomlType get type => TomlType.integer;
+
+  @override
+  T accept<T>(TomlValueVisitor<T> visitor) => visitor.visitInteger(this);
 }
