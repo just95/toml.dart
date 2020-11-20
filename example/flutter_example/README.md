@@ -1,11 +1,10 @@
 # **Flutter** example
 
-The example demonstrates how to load and parse a TOML asset and display `Hello, World!` in a `Text` 
-widget.
+This example demonstrates how to load and parse a TOML asset and display `Hello, World!` in a `Text` widget.
 
 ## Requirements
 
-You need to have [installed](https://flutter.dev/docs/get-started/install) Flutter SDK.
+You need to have installed the [Flutter SDK][flutter-sdk].
 
 ## Running on a device
 
@@ -38,3 +37,7 @@ Or given a device name from `flutter devices`.
 ```bash
 flutter run -d <device-name>
 ```
+
+[flutter-sdk]:
+  https://flutter.dev/docs/get-started/install
+  "Install - Flutter"

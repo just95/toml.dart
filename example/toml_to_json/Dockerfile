@@ -1,4 +1,4 @@
-FROM google/dart:2.9
+FROM google/dart:2.10
 
 # Add files for `toml.dart`.
 ADD ./pubspec.yaml /app/
@@ -10,7 +10,7 @@ ADD ./example/toml_to_json/bin /app/example/toml_to_json/bin
 
 # Install dependencies.
 WORKDIR /app/example/toml_to_json
-RUN pub get
+RUN dart pub get
 
 CMD []
 ENTRYPOINT ["/usr/bin/dart", "bin/toml-to-json.dart"]

@@ -13,13 +13,13 @@ cd ./example/toml_to_json
 Before you can execute the example, first download the required dependencies.
 
 ```bash
-pub get
+dart pub get
 ```
 
 Now you can run the example as follows.
 
 ```bash
-pub run toml-to-json <INPUT-FILE...>
+dart pub run toml-to-json <INPUT-FILE...>
 ```
 
 The given input file is converted to JSON and printed to the console.
@@ -36,7 +36,7 @@ If multiple input files are specified, the hash maps of all documents are merged
 You can install this example application to your path with the following command.
 
 ```bash
-pub global activate -s path .
+dart pub global activate -s path .
 ```
 
 Make sure that `~/.pub-cache/bin` is in your `PATH` and type `toml-to-json --help` to confirm that the installation was successful.

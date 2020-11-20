@@ -1,5 +1,6 @@
 # toml.dart
 
+[![Dart CI](https://github.com/just95/toml.dart/workflows/Dart%20CI/badge.svg?branch=main)][toml-dart/actions]
 [![Pub Package](https://img.shields.io/pub/v/toml.svg)][pub/toml]
 [![GitHub License](https://img.shields.io/badge/license-MIT-blue.svg)][toml-dart/LICENSE]
 
@@ -22,11 +23,11 @@ It currently supports version [0.4.0][toml-spec/v0.4.0] of the TOML specificatio
 ## Installation
 
 To get started add `toml` as a dependency to your `pubspec.yaml` and run the
-`pub get` command.
+`dart pub get` or `flutter pub get` command.
 
 ```yaml
 dependencies:
-  toml: "^0.6.0"
+  toml: "^0.6.1"
 ```
 
 ## Usage
@@ -264,11 +265,11 @@ array = [1.0, 2.0, 3.141]
 To see whether everything is working correctly change into the root directory of this package and run the included tests as follows:
 
 ```sh
-pub run test
+dart test
 ```
 
 You may pass the `--platform` command line argument to test the package on other platforms than the VM.
-Run `pub run test --help` for a list of all available platforms.
+Run `dart test --help` for a list of all available platforms.
 
 Alternatively, you can run [`toml-test`][toml-test] (again from the package root):
 
@@ -290,6 +291,9 @@ See the [LICENSE][toml-dart/LICENSE] file for details.
   https://pub.dev/packages/toml
   "toml ­| Dart Package"
 
+[toml-dart/actions]:
+  https://github.com/just95/toml.dart/actions
+  "toml.dart CI Pipeline"
 [toml-dart/example]:
   https://github.com/just95/toml.dart/tree/main/example
   "toml.dart Examples"
