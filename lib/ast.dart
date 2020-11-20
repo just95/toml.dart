@@ -24,5 +24,6 @@ export 'src/ast/value/string/ml_literal.dart';
 export 'src/ast/value/table.dart';
 export 'src/ast/visitor/expression.dart';
 export 'src/ast/visitor/key.dart';
+export 'src/ast/visitor/node.dart';
 export 'src/ast/visitor/value.dart';
 export 'src/ast/visitor/value/string.dart';

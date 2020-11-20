@@ -7,6 +7,7 @@ library toml.src.ast.value.string.literal;
 import 'package:petitparser/petitparser.dart';
 
 import 'package:toml/src/ast/value/string.dart';
+import 'package:toml/src/ast/visitor/value/string.dart';
 import 'package:toml/src/parser/util/join.dart';
 import 'package:toml/src/parser/util/ranges.dart';
 
@@ -40,4 +41,8 @@ class TomlLiteralString extends TomlString {
 
   /// Creates a new literal string value with the given contents.
   TomlLiteralString(this.value);
+
+  @override
+  T acceptStringVisitor<T>(TomlStringVisitor<T> visitor) =>
+      visitor.visitLiteralString(this);
 }

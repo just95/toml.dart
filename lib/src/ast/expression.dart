@@ -9,6 +9,7 @@ import 'package:petitparser/petitparser.dart';
 import 'package:toml/src/ast/expression/key_value_pair.dart';
 import 'package:toml/src/ast/expression/table.dart';
 import 'package:toml/src/ast/visitor/expression.dart';
+import 'package:toml/src/ast/visitor/node.dart';
 import 'package:toml/src/ast/node.dart';
 import 'package:toml/src/parser/util/whitespace.dart';
 
@@ -32,4 +33,7 @@ abstract class TomlExpression extends TomlNode {
   /// Invokes the correct `visit*` method for this expression of the given
   /// visitor.
   T acceptExpressionVisitor<T>(TomlExpressionVisitor<T> visitor);
+
+  @override
+  T acceptVisitor<T>(TomlVisitor<T> visitor) => visitor.visitExpression(this);
 }

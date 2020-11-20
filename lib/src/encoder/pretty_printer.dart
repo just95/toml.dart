@@ -11,7 +11,7 @@ import 'package:toml/ast.dart';
 /// To pretty print an AST node, call the corresponding `visit*` method.
 /// To get the TOML formatted string of the visited AST node call the
 /// [toString] method of the pretty printer.
-class TomlPrettyPrinter extends Object
+class TomlPrettyPrinter extends TomlVisitor<void>
     with
         TomlExpressionVisitor<void>,
         TomlKeyVisitor<void>,
@@ -54,13 +54,28 @@ class TomlPrettyPrinter extends Object
   void _separatedBy<T>(
     Iterable<T> nodes, {
     void Function(T node) write,
-    void Function() writeSeparator,
+    void Function(T node) writeSeparator,
   }) {
     write(nodes.first);
     for (var node in nodes.skip(1)) {
-      writeSeparator();
+      writeSeparator(node);
       write(node);
     }
+  }
+
+  // --------------------------------------------------------------------------
+  // Documents
+  // --------------------------------------------------------------------------
+
+  @override
+  void visitDocument(TomlDocument document) {
+    _separatedBy(
+      document.expressions,
+      write: visitExpression,
+      writeSeparator: (TomlExpression next) {
+        if (next is TomlTable) _writeNewline();
+      },
+    );
   }
 
   // --------------------------------------------------------------------------
@@ -100,7 +115,7 @@ class TomlPrettyPrinter extends Object
     _separatedBy(
       key.parts,
       write: visitSimpleKey,
-      writeSeparator: () => _writeToken(TomlKey.separator),
+      writeSeparator: (_) => _writeToken(TomlKey.separator),
     );
   }
 
@@ -124,7 +139,8 @@ class TomlPrettyPrinter extends Object
     _separatedBy(
       array.items,
       write: visitValue,
-      writeSeparator: () => _writeToken(TomlInlineTable.separator, after: true),
+      writeSeparator: (_) =>
+          _writeToken(TomlInlineTable.separator, after: true),
     );
     _writeToken(TomlArray.closingDelimiter);
   }
@@ -150,7 +166,8 @@ class TomlPrettyPrinter extends Object
     _separatedBy(
       inlineTable.pairs,
       write: visitKeyValuePair,
-      writeSeparator: () => _writeToken(TomlInlineTable.separator, after: true),
+      writeSeparator: (_) =>
+          _writeToken(TomlInlineTable.separator, after: true),
     );
     _writeToken(TomlInlineTable.closingDelimiter, before: true);
   }

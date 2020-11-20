@@ -8,6 +8,7 @@ import 'package:petitparser/petitparser.dart';
 
 import 'package:toml/src/ast/value/string.dart';
 import 'package:toml/src/ast/value/string/escape.dart';
+import 'package:toml/src/ast/visitor/value/string.dart';
 import 'package:toml/src/parser/util/join.dart';
 import 'package:toml/src/parser/util/ranges.dart';
 import 'package:toml/src/parser/util/whitespace.dart';
@@ -61,4 +62,8 @@ class TomlBasicString extends TomlString {
 
   /// Creates a new basic TOML string value with the given contents.
   TomlBasicString(this.value);
+
+  @override
+  T acceptStringVisitor<T>(TomlStringVisitor<T> visitor) =>
+      visitor.visitBasicString(this);
 }

@@ -37,6 +37,5 @@ abstract class TomlString extends TomlValue<String> {
 
   /// Invokes the correct `visit*` method for this string value of the given
   /// visitor.
-  T acceptStringVisitor<T>(TomlStringVisitor<T> visitor) =>
-      visitor.visitString(this);
+  T acceptStringVisitor<T>(TomlStringVisitor<T> visitor);
 }

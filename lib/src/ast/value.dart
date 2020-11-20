@@ -15,6 +15,7 @@ import 'package:toml/src/ast/value/float.dart';
 import 'package:toml/src/ast/value/integer.dart';
 import 'package:toml/src/ast/value/string.dart';
 import 'package:toml/src/ast/value/table.dart';
+import 'package:toml/src/ast/visitor/node.dart';
 import 'package:toml/src/ast/visitor/value.dart';
 import 'package:toml/src/parser/util/non_strict.dart';
 
@@ -92,4 +93,7 @@ abstract class TomlValue<V> extends TomlNode {
   /// Invokes the correct `visit*` method for this value of the given
   /// visitor.
   T acceptValueVisitor<T>(TomlValueVisitor<T> visitor);
+
+  @override
+  T acceptVisitor<T>(TomlVisitor<T> visitor) => visitor.visitValue(this);
 }

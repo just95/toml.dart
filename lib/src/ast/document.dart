@@ -8,6 +8,7 @@ import 'package:petitparser/petitparser.dart';
 
 import 'package:toml/src/ast/expression.dart';
 import 'package:toml/src/ast/node.dart';
+import 'package:toml/src/ast/visitor/node.dart';
 import 'package:toml/src/decoder/map_builder.dart';
 import 'package:toml/src/parser/util/whitespace.dart';
 
@@ -43,4 +44,7 @@ class TomlDocument extends TomlNode {
     expressions.forEach(builder.visitExpression);
     return builder.build();
   }
+
+  @override
+  T acceptVisitor<T>(TomlVisitor<T> visitor) => visitor.visitDocument(this);
 }

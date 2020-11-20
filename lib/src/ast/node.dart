@@ -4,5 +4,19 @@
 
 library toml.src.ast.node;
 
+import 'package:toml/src/ast/visitor/node.dart';
+import 'package:toml/src/encoder/pretty_printer.dart';
+
 /// Base class of all TOML AST nodes.
-abstract class TomlNode {}
+abstract class TomlNode {
+  /// Invokes the correct `visit*` method for this value of the given
+  /// visitor.
+  T acceptVisitor<T>(TomlVisitor<T> visitor);
+
+  @override
+  String toString() {
+    var printer = TomlPrettyPrinter();
+    printer.visit(this);
+    return printer.toString();
+  }
+}

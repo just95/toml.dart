@@ -13,6 +13,7 @@ import 'package:toml/src/ast/value/string.dart';
 import 'package:toml/src/ast/value/string/basic.dart';
 import 'package:toml/src/ast/value/string/literal.dart';
 import 'package:toml/src/ast/visitor/key.dart';
+import 'package:toml/src/ast/visitor/node.dart';
 import 'package:toml/src/parser/util/whitespace.dart';
 
 /// AST node that represents a dot separated list of [TomlSimpleKey]s.
@@ -70,6 +71,9 @@ class TomlKey extends TomlNode {
   @override
   bool operator ==(Object other) =>
       other is TomlKey && listsEqual(parts, other.parts);
+
+  @override
+  T acceptVisitor<T>(TomlVisitor<T> visitor) => visitor.visitKey(this);
 }
 
 /// Base class of all AST nodes that represent simple TOML keys
@@ -94,6 +98,9 @@ abstract class TomlSimpleKey extends TomlNode {
   /// Invokes the correct `visit*` method for this value of the given
   /// visitor.
   T acceptSimpleKeyVisitor<T>(TomlSimpleKeyVisitor<T> visitor);
+
+  @override
+  T acceptVisitor<T>(TomlVisitor<T> visitor) => visitor.visitSimpleKey(this);
 }
 
 /// AST node that represents a quoted key.

@@ -8,6 +8,7 @@ import 'package:petitparser/petitparser.dart';
 
 import 'package:toml/src/ast/value/string.dart';
 import 'package:toml/src/ast/value/string/literal.dart';
+import 'package:toml/src/ast/visitor/value/string.dart';
 import 'package:toml/src/parser/util/join.dart';
 import 'package:toml/src/parser/util/whitespace.dart';
 import 'package:toml/src/parser/util/ranges.dart';
@@ -71,4 +72,8 @@ class TomlMultilineLiteralString extends TomlString {
 
   /// Creates a new multiline literal TOML string value with the given contents.
   TomlMultilineLiteralString(this.value);
+
+  @override
+  T acceptStringVisitor<T>(TomlStringVisitor<T> visitor) =>
+      visitor.visitMultilineLiteralString(this);
 }
