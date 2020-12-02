@@ -4,6 +4,7 @@
 
 library toml.encoder;
 
+export 'src/encoder/ast_builder.dart';
 export 'src/encoder/builder.dart';
 export 'src/encoder/encodable.dart';
 export 'src/encoder/encoder.dart';

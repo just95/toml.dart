@@ -17,7 +17,7 @@ import 'package:toml/src/parser/util/ranges.dart';
 ///
 ///     ml-literal-string =
 ///         ml-literal-string-delim ml-literal-body ml-literal-string-delim
-class TomlMultilineLiteralString extends TomlString {
+class TomlMultilineLiteralString extends TomlMultilineString {
   /// Delimiter for multiline literal TOML strings.
   ///
   ///     ml-literal-string-delim = 3apostrophe
@@ -66,6 +66,12 @@ class TomlMultilineLiteralString extends TomlString {
           tomlNonAscii |
           tomlNewline)
       .flatten();
+
+  /// Tests whether the given string can be represented as a literal string.
+  ///
+  /// The string must only contain characters matched by [charParser] or up
+  /// to two consequtive `apostrophe`s.
+  static bool canEncode(String str) => bodyParser.end().accept(str);
 
   @override
   final String value;

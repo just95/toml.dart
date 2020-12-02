@@ -67,19 +67,19 @@ class TomlArrayTable extends TomlTable {
   /// The opening delimited of the array of tables header.
   ///
   ///     array-table-open  = %x5B.5B ws  ; [[ Double left square bracket
-  static final String openingDelimiter = '[';
+  static final String openingDelimiter = '[[';
 
   /// The opening delimited of the array of tables header.
   ///
   ///     array-table-close = ws %x5D.5D  ; ]] Double right square bracket
-  static final String closingDelimiter = ']';
+  static final String closingDelimiter = ']]';
 
   /// Parser for a TOML array of tables header.
-  static final Parser<TomlArrayTable> parser = (string('[[') &
+  static final Parser<TomlArrayTable> parser = (string(openingDelimiter) &
           tomlWhitespace &
           TomlKey.parser &
           tomlWhitespace &
-          string(']]'))
+          string(closingDelimiter))
       .pick<TomlKey>(2)
       .map((TomlKey key) => TomlArrayTable(key));
 

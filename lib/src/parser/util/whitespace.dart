@@ -26,6 +26,9 @@ final Parser<String> tomlWhitespaceChar =
 ///     newline =/ %x0D.0A  ; CRLF
 final Parser tomlNewline = char('\n') | char('\r') & char('\n');
 
+/// A regular expression for [tomlNewline].
+final RegExp tomlNewlinePattern = RegExp('\n|\r\n');
+
 /// Parser for a TOML comment.
 ///
 ///     comment-start-symbol = %x23 ; #

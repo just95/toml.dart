@@ -10,8 +10,6 @@ import 'package:quiver/collection.dart';
 
 import 'package:toml/src/ast/node.dart';
 import 'package:toml/src/ast/value/string.dart';
-import 'package:toml/src/ast/value/string/basic.dart';
-import 'package:toml/src/ast/value/string/literal.dart';
 import 'package:toml/src/ast/visitor/key.dart';
 import 'package:toml/src/ast/visitor/node.dart';
 import 'package:toml/src/parser/util/whitespace.dart';
@@ -108,13 +106,11 @@ abstract class TomlSimpleKey extends TomlNode {
 ///     quoted-key = basic-string / literal-string
 class TomlQuotedKey extends TomlSimpleKey {
   /// Parser for a quoted TOML key.
-  static final Parser<TomlQuotedKey> parser =
-      (TomlBasicString.parser | TomlLiteralString.parser)
-          .cast<TomlString>()
-          .map((TomlString string) => TomlQuotedKey(string));
+  static final Parser<TomlQuotedKey> parser = TomlSinglelineString.parser
+      .map((TomlSinglelineString string) => TomlQuotedKey(string));
 
   /// The string literal that represents this key.
-  final TomlString string;
+  final TomlSinglelineString string;
 
   /// Creates a new quoted key node.
   TomlQuotedKey(this.string);
@@ -137,6 +133,9 @@ class TomlUnquotedKey extends TomlSimpleKey {
       .plus()
       .flatten()
       .map((String name) => TomlUnquotedKey(name));
+
+  /// Tests whether the given key does not have to be quoted.
+  static bool canEncode(String key) => parser.end().accept(key);
 
   @override
   final String name;

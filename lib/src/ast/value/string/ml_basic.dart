@@ -18,7 +18,7 @@ import 'package:toml/src/parser/util/whitespace.dart';
 ///
 ///     ml-basic-string =
 ///         ml-basic-string-delim ml-basic-body ml-basic-string-delim
-class TomlMultilineBasicString extends TomlString {
+class TomlMultilineBasicString extends TomlMultilineString {
   /// Delimiter for multiline basic TOML strings.
   ///
   ///     ml-basic-string-delim = 3quotation-mark

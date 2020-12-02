@@ -14,7 +14,7 @@ import 'package:toml/src/parser/util/ranges.dart';
 /// AST node that represents literal TOML strings.
 ///
 ///     literal-string = apostrophe *literal-char apostrophe
-class TomlLiteralString extends TomlString {
+class TomlLiteralString extends TomlSinglelineString {
   /// Delimiter for basic TOML strings.
   ///
   ///     apostrophe = %x27 ; ' apostrophe
@@ -35,6 +35,11 @@ class TomlLiteralString extends TomlString {
   static final Parser<String> charParser =
       (char('\x09') | range(0x20, 0x26) | range(0x28, 0x7E) | tomlNonAscii)
           .flatten();
+
+  /// Tests whether the given string can be represented as a literal string.
+  ///
+  /// The string must only contain characters matched by [charParser].
+  static bool canEncode(String str) => charParser.star().end().accept(str);
 
   @override
   final String value;

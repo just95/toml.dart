@@ -5,19 +5,20 @@
 library toml.src.ast.value;
 
 import 'package:petitparser/petitparser.dart';
-
-import 'package:toml/src/ast/node.dart';
-import 'package:toml/src/ast/key.dart';
-import 'package:toml/src/ast/value/array.dart';
-import 'package:toml/src/ast/value/boolean.dart';
-import 'package:toml/src/ast/value/datetime.dart';
-import 'package:toml/src/ast/value/float.dart';
-import 'package:toml/src/ast/value/integer.dart';
-import 'package:toml/src/ast/value/string.dart';
-import 'package:toml/src/ast/value/table.dart';
-import 'package:toml/src/ast/visitor/node.dart';
-import 'package:toml/src/ast/visitor/value.dart';
+import 'package:toml/encoder.dart';
 import 'package:toml/src/parser/util/non_strict.dart';
+
+import 'node.dart';
+import 'key.dart';
+import 'value/array.dart';
+import 'value/boolean.dart';
+import 'value/datetime.dart';
+import 'value/float.dart';
+import 'value/integer.dart';
+import 'value/string.dart';
+import 'value/table.dart';
+import 'visitor/node.dart';
+import 'visitor/value.dart';
 
 /// The possible types of [TomlValue]s.
 enum TomlType {
@@ -77,6 +78,17 @@ abstract class TomlValue<V> extends TomlNode {
   /// Throws a [ParserException] if there is a syntax error.
   static TomlValue parse(String input) => parser.end().parse(input).value;
 
+  /// Since there is a factory constructor, we have to provide the default
+  /// constructor explicitly such that instances of subclasses can be created.
+  TomlValue();
+
+  /// Converts the given value to a TOML value.
+  ///
+  /// Throws a [UnknownValueTypeException] when the given value cannot be
+  /// encoded by TOML.
+  factory TomlValue.from(V value) =>
+      TomlAstBuilder().buildValue(value) as TomlValue<V>;
+
   /// The Dart value of the TOML value represented by this AST node.
   V get value;
 
@@ -86,7 +98,7 @@ abstract class TomlValue<V> extends TomlNode {
   /// Builds the Dart [value] of the TOML value represented by this AST node.
   ///
   /// This should always return the same value as the [value] getter but the
-  /// given fully/qualified name of the key/value pair can be used to improve
+  /// given fully qualified name of the key/value pair can be used to improve
   /// error messages.
   V buildValue(TomlKey key) => value;
 

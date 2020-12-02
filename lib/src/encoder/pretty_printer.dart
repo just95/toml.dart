@@ -2,7 +2,7 @@
 // This software may be modified and distributed under the terms
 // of the MIT license. See the LICENSE file for details.
 
-library toml.src.ast.encoder.pretty_printer;
+library toml.src.encoder.pretty_printer;
 
 import 'package:toml/ast.dart';
 
@@ -152,7 +152,7 @@ class TomlPrettyPrinter extends TomlVisitor<void>
 
   @override
   void visitDateTime(TomlDateTime datetime) {
-    _writeToken(datetime.value.toString().replaceFirst(' ', 'T'));
+    _writeToken(datetime.value.toIso8601String());
   }
 
   @override

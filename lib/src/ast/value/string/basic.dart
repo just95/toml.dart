@@ -16,7 +16,7 @@ import 'package:toml/src/parser/util/whitespace.dart';
 /// AST node that represents basic TOML strings.
 ///
 ///     basic-string = quotation-mark *basic-char quotation-mark
-class TomlBasicString extends TomlString {
+class TomlBasicString extends TomlSinglelineString {
   /// Delimiter for basic TOML strings.
   ///
   ///     quotation-mark = %x22            ; "
