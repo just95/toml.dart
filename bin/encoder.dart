@@ -7,7 +7,6 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:toml/encoder.dart';
 import 'package:toml/loader/stream.dart';
 import 'package:toml/toml.dart';
 
@@ -63,6 +62,7 @@ Future main() async {
   StreamConfigLoader.use(stdin.transform(utf8.decoder));
 
   var json = await loadConfig('config.json');
-  var encoder = TomlEncoder();
-  print(encoder.encode(decodeTable(json)).replaceAll('.000', ''));
+  print(TomlDocument.fromMap(decodeTable(json))
+      .toString()
+      .replaceAll('.000', ''));
 }

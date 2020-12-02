@@ -5,15 +5,13 @@
 library toml.test.tester.encoder;
 
 import 'package:test/test.dart';
-import 'package:toml/encoder.dart';
-
-var _encoder = TomlEncoder();
+import 'package:toml/ast.dart';
 
 /// Tests whether the result of encoding the [input] is the specified [output].
 void testEncoder(String description,
     {Map<String, dynamic> input, String output}) {
   test(description, () {
-    var result = _encoder.encode(input);
+    var result = TomlDocument.fromMap(input).toString();
     expect(result, equals(output));
   });
 }
@@ -24,6 +22,6 @@ void testEncoder(String description,
 void testEncoderFailure(String description,
     {Map<String, dynamic> input, dynamic error = anything}) {
   test(description, () {
-    expect(() => _encoder.encode(input), throwsA(error));
+    expect(() => TomlDocument.fromMap(input).toString(), throwsA(error));
   });
 }

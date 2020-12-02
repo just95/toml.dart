@@ -87,9 +87,10 @@ abstract class TomlEscapedChar {
     } else {
       // The current rune must be escaped but there is no shortcut, i.e., the
       // Unicode code point must be escaped.
+      var length = rune & 0xffff == rune ? 4 : 8;
       buffer.write(escapeChar);
-      buffer.write(rune & 0xffff == rune ? r'u' : r'U');
-      buffer.write(rune.toRadixString(16));
+      buffer.write(length == 4 ? r'u' : r'U');
+      buffer.write(rune.toRadixString(16).padLeft(length, '0'));
     }
   }
 }

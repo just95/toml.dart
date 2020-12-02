@@ -4,6 +4,7 @@
 
 library toml;
 
+export 'ast.dart';
 export 'decoder.dart';
 export 'encoder.dart';
 export 'loader.dart';
