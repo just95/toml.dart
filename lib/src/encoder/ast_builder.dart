@@ -152,7 +152,7 @@ class TomlAstBuilder {
     if (value is String) return buildString(value);
     if (value is Iterable) return buildArray(value);
     if (value is Map<String, dynamic>) return buildInlineTable(value);
-    throw UnknownValueTypeException(value);
+    throw TomlUnknownValueTypeException(value);
   }
 
   /// Converts the given string to a [TomlString].
@@ -210,7 +210,7 @@ class TomlAstBuilder {
       }
 
       // Otherwise arrays must be homogenous.
-      throw MixedArrayTypesException(items);
+      throw TomlMixedArrayTypesException(array);
     }
 
     // The array is homogenous.

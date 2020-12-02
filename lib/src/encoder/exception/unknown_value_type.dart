@@ -4,6 +4,8 @@
 
 library toml.src.encoder.exception.unknown_value_type;
 
+import 'package:toml/exception.dart';
+
 /// An error which is thrown when an object cannot be encoded.
 ///
 /// Example:
@@ -11,22 +13,22 @@ library toml.src.encoder.exception.unknown_value_type;
 ///     var encoder = new TomlEncoder();
 ///     encoder.encode({'a': null});
 ///
-/// throws an [UnknownValueTypeException] because `null` is not a valid TOML
-/// value.
-class UnknownValueTypeException implements Exception {
+/// throws an [TomlUnknownValueTypeException] because `null` is not a valid
+/// TOML value.
+class TomlUnknownValueTypeException extends TomlException {
   /// The object which cannot be encoded as a TOML value.
   final dynamic value;
 
   /// Creates a new exception for the given [value].
-  UnknownValueTypeException(this.value);
+  TomlUnknownValueTypeException(this.value);
 
   @override
   bool operator ==(Object other) =>
-      other is UnknownValueTypeException && other.value == value;
+      other is TomlUnknownValueTypeException && other.value == value;
 
   @override
   int get hashCode => value.hashCode;
 
   @override
-  String toString() => '"$value" cannot be encoded as a TOML value!';
+  String get message => '"$value" cannot be encoded as a TOML value!';
 }
