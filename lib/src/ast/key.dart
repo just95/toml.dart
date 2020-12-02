@@ -63,6 +63,16 @@ class TomlKey extends TomlNode {
   /// by this key.
   TomlKey child(TomlSimpleKey child) => TomlKey(parts + [child]);
 
+  /// Tests whether the [parts] of the given key start with all parts of
+  /// this key.
+  bool isPrefixOf(TomlKey child) {
+    if (child.parts.length < parts.length) return false;
+    for (var i = 0; i < parts.length; i++) {
+      if (parts[i] != child.parts[i]) return false;
+    }
+    return true;
+  }
+
   @override
   int get hashCode => hashObjects(parts);
 

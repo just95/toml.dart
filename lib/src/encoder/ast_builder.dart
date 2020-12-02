@@ -16,7 +16,9 @@ class TomlAstBuilder {
   /// Builds a TOML document from the given map.
   TomlDocument buildDocument(Map<String, dynamic> map) {
     var pairs = map.entries.map(buildKeyValuePair);
-    var expressions = _expandKeyValuePairs(pairs, prefix: TomlKey.topLevel);
+    var expressions = _removeRedundantHeaders(
+      _expandKeyValuePairs(pairs, prefix: TomlKey.topLevel),
+    );
     return TomlDocument(expressions);
   }
 
@@ -62,6 +64,42 @@ class TomlAstBuilder {
     for (var table in tables) {
       yield* table();
     }
+  }
+
+  /// Removes standard table headers that are not needed because the table
+  /// contains no key/value pairs or arrays of tables.
+  ///
+  /// This method assumes that the tables are sorted such that parent tables
+  /// immediately preceed their child tables A table header can be removed
+  /// if the corresponding expression is followed by a a table header for
+  /// a child table immediately.
+  Iterable<TomlExpression> _removeRedundantHeaders(
+    Iterable<TomlExpression> expressions,
+  ) sync* {
+    TomlStandardTable lastTable;
+    for (var expression in expressions) {
+      if (expression is TomlStandardTable) {
+        if (lastTable != null && !lastTable.name.isPrefixOf(expression.name)) {
+          // The last table header is not redundant even though the table
+          // does not have any key/value pairs because this table header
+          // does not create it implicitly. We keep the table header to
+          // preserve the empty table.
+          yield lastTable;
+        }
+        lastTable = expression;
+        continue;
+      } else if (lastTable != null) {
+        // The last table header is followed by a key/value pair or an array
+        // of tables. Thus, we need to keep it.
+        yield lastTable;
+        lastTable = null;
+      }
+      yield expression;
+    }
+
+    // If there is an empty table at the end of the document, we want to
+    // preserve it.
+    if (lastTable != null) yield lastTable;
   }
 
   // --------------------------------------------------------------------------

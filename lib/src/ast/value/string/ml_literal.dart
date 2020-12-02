@@ -25,7 +25,7 @@ class TomlMultilineLiteralString extends TomlMultilineString {
 
   /// Parser for a TOML string value.
   ///
-  /// A newline immediatly following the opening delimiter is trimmed.
+  /// A newline immediately following the opening delimiter is trimmed.
   static final Parser<TomlMultilineLiteralString> parser = (string(delimiter) &
           tomlNewline.optional() &
           bodyParser &
