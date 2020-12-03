@@ -39,6 +39,8 @@ void main() {
           'h': {'i': <String, dynamic>{}}
         }
       });
+      testDocumentFailure('no newline after header',
+          input: '[error] this = "should not be here"');
       testDocument('non latin letters in table names',
           input: '[ j . "ʞ" . l ]',
           output: {
@@ -255,6 +257,18 @@ void main() {
             y = 2
           ''',
           error: TomlNotATableException(TomlKey.parse('a.b')));
+    });
+
+    group('Comments', () {
+      testDocument('comments at end of file with newlines',
+          input: '''# This is a comment with newline\n''',
+          output: <String, dynamic>{});
+      testDocument('comments at end of file without newlines',
+          input: '''# This is a comment without newline''',
+          output: <String, dynamic>{});
+      testDocument('comments at end of file without newlines after key',
+          input: '''key = "value" # This is a comment without newline''',
+          output: {'key': 'value'});
     });
   });
 }
