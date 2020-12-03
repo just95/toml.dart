@@ -158,6 +158,7 @@ class TomlPrettyPrinter extends TomlVisitor<void>
   @override
   void visitFloat(TomlFloat float) {
     _writeToken(float.value.toString());
+    if (float.value is int) _writeToken('.0');
   }
 
   @override

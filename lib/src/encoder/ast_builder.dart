@@ -206,7 +206,9 @@ class TomlAstBuilder {
           types.length == 2 &&
           types.contains(TomlType.integer) &&
           types.contains(TomlType.float)) {
-        return TomlArray(array.items.map((item) => TomlFloat(item as double)));
+        return TomlArray(
+          array.items.map((item) => TomlFloat(item.value as double)),
+        );
       }
 
       // Otherwise arrays must be homogenous.
