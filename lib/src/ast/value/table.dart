@@ -5,13 +5,13 @@
 library toml.src.ast.value.table;
 
 import 'package:petitparser/petitparser.dart';
-
-import 'package:toml/src/ast/expression/key_value_pair.dart';
-import 'package:toml/src/ast/key.dart';
-import 'package:toml/src/ast/value.dart';
-import 'package:toml/src/ast/visitor/value.dart';
 import 'package:toml/src/decoder/map_builder.dart';
-import 'package:toml/src/parser/util/whitespace.dart';
+import 'package:toml/src/decoder/parser/util/whitespace.dart';
+
+import '../expression/key_value_pair.dart';
+import '../key.dart';
+import '../value.dart';
+import '../visitor/value.dart';
 
 /// AST node that represents a TOML inline table.
 ///

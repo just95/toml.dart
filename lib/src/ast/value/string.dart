@@ -6,13 +6,13 @@ library toml.src.ast.value.string;
 
 import 'package:petitparser/petitparser.dart';
 
-import 'package:toml/src/ast/value.dart';
-import 'package:toml/src/ast/value/string/basic.dart';
-import 'package:toml/src/ast/value/string/literal.dart';
-import 'package:toml/src/ast/value/string/ml_basic.dart';
-import 'package:toml/src/ast/value/string/ml_literal.dart';
-import 'package:toml/src/ast/visitor/value/string.dart';
-import 'package:toml/src/ast/visitor/value.dart';
+import '../value.dart';
+import '../visitor/value.dart';
+import '../visitor/value/string.dart';
+import 'string/basic.dart';
+import 'string/literal.dart';
+import 'string/ml_basic.dart';
+import 'string/ml_literal.dart';
 
 /// Base class for AST nodes that represent a TOML strings.
 ///

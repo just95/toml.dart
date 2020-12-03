@@ -4,14 +4,14 @@
 
 library toml.src.ast.visitor.value;
 
-import 'package:toml/src/ast/value.dart';
-import 'package:toml/src/ast/value/array.dart';
-import 'package:toml/src/ast/value/boolean.dart';
-import 'package:toml/src/ast/value/datetime.dart';
-import 'package:toml/src/ast/value/float.dart';
-import 'package:toml/src/ast/value/integer.dart';
-import 'package:toml/src/ast/value/string.dart';
-import 'package:toml/src/ast/value/table.dart';
+import '../value.dart';
+import '../value/array.dart';
+import '../value/boolean.dart';
+import '../value/datetime.dart';
+import '../value/float.dart';
+import '../value/integer.dart';
+import '../value/string.dart';
+import '../value/table.dart';
 
 /// Interface for visitors of [TomlValue]s.
 abstract class TomlValueVisitor<T> {

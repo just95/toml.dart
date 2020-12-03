@@ -8,6 +8,7 @@ import 'dart:async';
 import 'dart:html';
 
 import 'package:toml/loader.dart';
+
 export 'package:toml/loader.dart' show loadConfig;
 
 /// Implementation of the [ConfigLoader] interface which uses XHR to load

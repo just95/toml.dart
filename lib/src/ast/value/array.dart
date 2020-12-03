@@ -5,11 +5,11 @@
 library toml.src.ast.value.array;
 
 import 'package:petitparser/petitparser.dart';
+import 'package:toml/src/decoder/parser/util/whitespace.dart';
 
-import 'package:toml/src/ast/key.dart';
-import 'package:toml/src/ast/value.dart';
-import 'package:toml/src/ast/visitor/value.dart';
-import 'package:toml/src/parser/util/whitespace.dart';
+import '../key.dart';
+import '../value.dart';
+import '../visitor/value.dart';
 
 /// AST node that represents a TOML array of values of type [T].
 ///

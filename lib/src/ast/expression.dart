@@ -5,13 +5,13 @@
 library toml.src.ast.expression;
 
 import 'package:petitparser/petitparser.dart';
+import 'package:toml/src/decoder/parser/util/whitespace.dart';
 
-import 'package:toml/src/ast/expression/key_value_pair.dart';
-import 'package:toml/src/ast/expression/table.dart';
-import 'package:toml/src/ast/visitor/expression.dart';
-import 'package:toml/src/ast/visitor/node.dart';
-import 'package:toml/src/ast/node.dart';
-import 'package:toml/src/parser/util/whitespace.dart';
+import 'expression/key_value_pair.dart';
+import 'expression/table.dart';
+import 'node.dart';
+import 'visitor/expression.dart';
+import 'visitor/node.dart';
 
 /// Base class of all TOML expression nodes.
 ///

@@ -6,8 +6,8 @@ library toml.src.ast.decoder.map_builder;
 
 import 'package:toml/ast.dart';
 
-import 'exception/redefinition.dart';
 import 'exception/not_a_table.dart';
+import 'exception/redefinition.dart';
 
 /// A visitor for [TomlExpression]s that builds a [Map] for
 class TomlMapBuilder extends TomlExpressionVisitor<void> {

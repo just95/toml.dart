@@ -7,6 +7,7 @@ library toml.loader.stream;
 import 'dart:async';
 
 import 'package:toml/loader.dart';
+
 export 'package:toml/loader.dart' show loadConfig;
 
 /// Implementation of the [ConfigLoader] interface which reads from a stream.

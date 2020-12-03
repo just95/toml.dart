@@ -4,7 +4,7 @@
 
 library toml.decoder.yaml;
 
-import 'package:toml/decoder.dart';
+import 'package:toml/toml.dart';
 import 'package:yaml/yaml.dart';
 
 /// Implementation of [ConfigDecoder] which handels the YAML format.

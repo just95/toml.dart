@@ -4,11 +4,11 @@
 
 library toml.src.ast.value.visitor.string;
 
-import 'package:toml/src/ast/value/string.dart';
-import 'package:toml/src/ast/value/string/basic.dart';
-import 'package:toml/src/ast/value/string/literal.dart';
-import 'package:toml/src/ast/value/string/ml_basic.dart';
-import 'package:toml/src/ast/value/string/ml_literal.dart';
+import '../../value/string.dart';
+import '../../value/string/basic.dart';
+import '../../value/string/literal.dart';
+import '../../value/string/ml_basic.dart';
+import '../../value/string/ml_literal.dart';
 
 /// Interface for visitors of [TomlStrings]s.
 abstract class TomlStringVisitor<T> {

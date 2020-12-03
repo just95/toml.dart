@@ -4,9 +4,9 @@
 
 library toml.src.ast.visitor.expression;
 
-import 'package:toml/src/ast/expression.dart';
-import 'package:toml/src/ast/expression/key_value_pair.dart';
-import 'package:toml/src/ast/expression/table.dart';
+import '../expression.dart';
+import '../expression/key_value_pair.dart';
+import '../expression/table.dart';
 
 /// Interface for visitors of [TomlExpression]s.
 abstract class TomlExpressionVisitor<T> {

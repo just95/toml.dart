@@ -6,7 +6,7 @@ library toml.src.ast.value;
 
 import 'package:petitparser/petitparser.dart';
 import 'package:toml/encoder.dart';
-import 'package:toml/src/parser/util/non_strict.dart';
+import 'package:toml/src/decoder/parser/util/non_strict.dart';
 
 import 'node.dart';
 import 'key.dart';

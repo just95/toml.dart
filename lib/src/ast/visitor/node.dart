@@ -4,13 +4,13 @@
 
 library toml.src.ast.visitor.node;
 
-import 'package:toml/src/ast/document.dart';
-import 'package:toml/src/ast/expression.dart';
-import 'package:toml/src/ast/key.dart';
-import 'package:toml/src/ast/node.dart';
-import 'package:toml/src/ast/value.dart';
+import '../document.dart';
+import '../expression.dart';
+import '../key.dart';
+import '../node.dart';
+import '../value.dart';
 
-///
+/// Interface for visitors of [TomlNode]s.
 abstract class TomlVisitor<T> {
   /// Visits the given document.
   T visitDocument(TomlDocument document);

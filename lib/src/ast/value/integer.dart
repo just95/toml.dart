@@ -6,8 +6,8 @@ library toml.src.ast.value.integer;
 
 import 'package:petitparser/petitparser.dart';
 
-import 'package:toml/src/ast/value.dart';
-import 'package:toml/src/ast/visitor/value.dart';
+import '../value.dart';
+import '../visitor/value.dart';
 
 /// AST node that represents a TOML integer.
 ///

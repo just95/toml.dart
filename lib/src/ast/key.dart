@@ -5,14 +5,14 @@
 library toml.src.ast.key;
 
 import 'package:petitparser/petitparser.dart';
-import 'package:quiver/core.dart';
 import 'package:quiver/collection.dart';
+import 'package:quiver/core.dart';
+import 'package:toml/src/decoder/parser/util/whitespace.dart';
 
-import 'package:toml/src/ast/node.dart';
-import 'package:toml/src/ast/value/string.dart';
-import 'package:toml/src/ast/visitor/key.dart';
-import 'package:toml/src/ast/visitor/node.dart';
-import 'package:toml/src/parser/util/whitespace.dart';
+import 'node.dart';
+import 'value/string.dart';
+import 'visitor/key.dart';
+import 'visitor/node.dart';
 
 /// AST node that represents a dot separated list of [TomlSimpleKey]s.
 ///

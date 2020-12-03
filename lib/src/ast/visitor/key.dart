@@ -4,7 +4,7 @@
 
 library toml.src.ast.visitor.key;
 
-import 'package:toml/ast.dart';
+import '../key.dart';
 
 /// Interface for visitors of [TomlKey]s.
 abstract class TomlKeyVisitor<T> {

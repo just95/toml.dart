@@ -4,8 +4,9 @@
 
 library toml.src.ast.node;
 
-import 'package:toml/src/ast/visitor/node.dart';
-import 'package:toml/src/encoder/pretty_printer.dart';
+import 'package:toml/encoder.dart';
+
+import 'visitor/node.dart';
 
 /// Base class of all TOML AST nodes.
 abstract class TomlNode {

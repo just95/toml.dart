@@ -8,6 +8,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:toml/loader.dart';
+
 export 'package:toml/loader.dart' show loadConfig;
 
 /// Implementation of the [ConfigLoader] interface which loads configuration

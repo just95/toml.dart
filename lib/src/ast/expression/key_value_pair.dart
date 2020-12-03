@@ -5,12 +5,12 @@
 library toml.src.ast.expression.key_value_pair;
 
 import 'package:petitparser/petitparser.dart';
+import 'package:toml/src/decoder/parser/util/whitespace.dart';
 
-import 'package:toml/src/ast/expression.dart';
-import 'package:toml/src/ast/visitor/expression.dart';
-import 'package:toml/src/ast/key.dart';
-import 'package:toml/src/ast/value.dart';
-import 'package:toml/src/parser/util/whitespace.dart';
+import '../expression.dart';
+import '../key.dart';
+import '../value.dart';
+import '../visitor/expression.dart';
 
 /// A TOML expression AST node that represents a key/value pair.
 ///

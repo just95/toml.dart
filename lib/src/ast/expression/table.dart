@@ -5,11 +5,11 @@
 library toml.src.ast.expression.table;
 
 import 'package:petitparser/petitparser.dart';
+import 'package:toml/src/decoder/parser/util/whitespace.dart';
 
-import 'package:toml/src/ast/expression.dart';
-import 'package:toml/src/ast/visitor/expression.dart';
-import 'package:toml/src/ast/key.dart';
-import 'package:toml/src/parser/util/whitespace.dart';
+import '../expression.dart';
+import '../key.dart';
+import '../visitor/expression.dart';
 
 /// Base class of all TOML table header expressions.
 ///

@@ -5,7 +5,7 @@
 library toml.src.encoder.ast_builder;
 
 import 'package:toml/ast.dart';
-import 'package:toml/src/parser/util/whitespace.dart';
+import 'package:toml/src/decoder/parser/util/whitespace.dart';
 
 import 'encodable.dart';
 import 'exception/unknown_value_type.dart';

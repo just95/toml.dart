@@ -5,14 +5,14 @@
 library toml.src.ast.value.string.ml_basic;
 
 import 'package:petitparser/petitparser.dart';
+import 'package:toml/src/decoder/parser/util/join.dart';
+import 'package:toml/src/decoder/parser/util/ranges.dart';
+import 'package:toml/src/decoder/parser/util/whitespace.dart';
 
-import 'package:toml/src/ast/value/string.dart';
-import 'package:toml/src/ast/value/string/basic.dart';
-import 'package:toml/src/ast/value/string/escape.dart';
-import 'package:toml/src/ast/visitor/value/string.dart';
-import 'package:toml/src/parser/util/join.dart';
-import 'package:toml/src/parser/util/ranges.dart';
-import 'package:toml/src/parser/util/whitespace.dart';
+import '../../visitor/value/string.dart';
+import '../string.dart';
+import 'basic.dart';
+import 'escape.dart';
 
 /// AST node that represents multiline basic TOML strings.
 ///

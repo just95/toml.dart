@@ -6,10 +6,9 @@ library toml.src.parser.escape;
 
 import 'package:petitparser/petitparser.dart';
 import 'package:quiver/collection.dart';
-
 import 'package:toml/src/decoder/exception/invalid_escape_sequence.dart';
-import 'package:toml/src/parser/util/ranges.dart';
-import 'package:toml/src/parser/util/whitespace.dart';
+import 'package:toml/src/decoder/parser/util/ranges.dart';
+import 'package:toml/src/decoder/parser/util/whitespace.dart';
 
 abstract class TomlEscapedChar {
   /// The character that is used to escape other characters.

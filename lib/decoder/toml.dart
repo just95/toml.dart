@@ -4,8 +4,7 @@
 
 library toml.decoder.toml;
 
-import 'package:toml/decoder.dart';
-import 'package:toml/ast.dart';
+import 'package:toml/toml.dart';
 
 /// Implementation of [ConfigDecoder] which handels the TOML format.
 class TomlConfigDecoder implements ConfigDecoder {

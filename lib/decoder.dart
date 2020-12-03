@@ -4,9 +4,8 @@
 
 library toml.decoder;
 
-export 'src/decoder/interface.dart';
-export 'src/decoder/map_builder.dart';
-
 export 'src/decoder/exception/invalid_escape_sequence.dart';
 export 'src/decoder/exception/not_a_table.dart';
 export 'src/decoder/exception/redefinition.dart';
+export 'src/decoder/interface.dart';
+export 'src/decoder/map_builder.dart';
