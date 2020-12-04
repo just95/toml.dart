@@ -56,10 +56,12 @@ class TomlPrettyPrinter extends TomlVisitor<void>
     void Function(T node) write,
     void Function(T node) writeSeparator,
   }) {
-    write(nodes.first);
-    for (var node in nodes.skip(1)) {
-      writeSeparator(node);
-      write(node);
+    if (nodes.isNotEmpty) {
+      write(nodes.first);
+      for (var node in nodes.skip(1)) {
+        writeSeparator(node);
+        write(node);
+      }
     }
   }
 

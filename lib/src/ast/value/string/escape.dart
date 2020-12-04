@@ -60,12 +60,22 @@ abstract class TomlEscapedChar {
   ///
   ///     escape-seq-char =/ %x75 4HEXDIG ; uXXXX                U+XXXX
   ///     escape-seq-char =/ %x55 8HEXDIG ; UXXXXXXXX            U+XXXXXXXX
-  static final Parser<String> escapedUnicodeParser = (char('u') &
-              hexDigit().times(4).flatten() |
-          char('U') & hexDigit().times(8).flatten())
-      .cast<List>()
-      .pick<String>(1)
-      .map((charCode) => String.fromCharCode(int.parse(charCode, radix: 16)));
+  static final Parser<String> escapedUnicodeParser =
+      (char('u') & hexDigit().times(4).flatten() |
+              char('U') & hexDigit().times(8).flatten())
+          .cast<List>()
+          .pick<String>(1)
+          .map((charCodeStr) {
+    // Test whether the code point is a scalar Unicode value.
+    var charCode = int.parse(charCodeStr, radix: 16);
+    if (0x0000 <= charCode && charCode <= 0xD7FF ||
+        0xE000 <= charCode && charCode <= 0x10FFFF) {
+      return String.fromCharCode(charCode);
+    }
+    throw TomlInvalidEscapeSequenceException(
+      charCodeStr.length == 4 ? '\\u$charCodeStr' : '\\U$charCodeStr',
+    );
+  });
 
   /// Writes the given [rune] into the [buffer] and escapes it if necessary.
   ///

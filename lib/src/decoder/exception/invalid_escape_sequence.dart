@@ -13,7 +13,18 @@ import 'package:toml/exception.dart';
 ///
 ///     dir = "some\windows\path"
 ///
-/// throws an [InvalidEscapeSequenceException] with `[escapeSequence] = r'\w'`.
+/// throws an [TomlInvalidEscapeSequenceException] with [escapeSequence]
+/// set to `r'\w'`.
+///
+/// An exception of thos type is also thrown when there are Unicode escape
+/// sequences for non-scalar values.
+///
+/// Example:
+///
+///     invalid = "\uD801"
+///
+/// throws an [TomlInvalidEscapeSequenceException] with [escapeSequence]
+/// set to `r'\uD801'` because `0xD800` is a high-surrogate code unit.
 class TomlInvalidEscapeSequenceException extends TomlException {
   /// The invalid escape sequence.
   final String escapeSequence;
