@@ -101,5 +101,7 @@ jobs:
         with:
           name: toml-test-decoder
           path: build/bin
+      - name: Set Decoder Executable Permissions
+        run: chmod +x build/bin/decoder
       - name: Run `toml-test` Against Decoder
         run: $GOPATH/bin/toml-test build/bin/decoder
