@@ -278,9 +278,17 @@ $GOPATH/bin/toml-test bin/decoder.dart
 $GOPATH/bin/toml-test -encoder bin/encoder.dart
 ```
 
-Unfortunately, some tests from `toml-test` are failing at the moment.
-Thus, `toml.dart` is not fully TOML [0.4.0][toml-spec/v0.4.0] compliant at the moment.
-We will fix the failing tests in an upcoming release of this library soon.
+To speedup the tests, it is recommended to compile the encoder and decoder scripts before running `toml-test`.
+
+```sh
+dart compile exe -o bin/decoder bin/decoder.dart
+dart compile exe -o bin/encoder bin/encoder.dart
+
+$GOPATH/bin/toml-test bin/decoder
+$GOPATH/bin/toml-test -encoder bin/encoder
+```
+
+Unfortunately, some encoder tests from `toml-test` are failing at the moment because date times are always encoded as UTC and the encoder never generates inline tables.
 
 ## License
 
