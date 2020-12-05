@@ -90,6 +90,7 @@ jobs:
     runs-on: ubuntu-latest
     container:
       image: golang:1.15.6
+    needs: compile-toml-test
     steps:
       - name: Checkout
         uses: actions/checkout@v2
