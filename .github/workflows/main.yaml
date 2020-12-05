@@ -100,5 +100,6 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: toml-test-decoder
+          path: build/bin
       - name: Run `toml-test` Against Decoder
         run: $GOPATH/bin/toml-test build/bin/decoder
