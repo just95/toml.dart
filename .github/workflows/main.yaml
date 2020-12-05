@@ -5,6 +5,7 @@ on:
   push:
     branches:
       - 'main'
+      - 'ast' # TODO: remove me
 
 jobs:
 
