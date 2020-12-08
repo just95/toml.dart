@@ -12,10 +12,10 @@ It currently supports version [0.4.0][toml-spec/v0.4.0] of the TOML specificatio
 
  1. [Installation](#installation)
  2. [Usage](#usage)
-    1. [Load Configuration Files](#load-configuration-files)
-    2. [Implement a Custom Loader](#implement-a-custom-loader)
-    3. [Decode TOML](#decode-toml)
-    4. [Encode TOML](#encode-toml)
+    1. [Loading TOML](#loading-toml)
+    1. [Parsing TOML](#parsing-toml)
+    3. [Decoding TOML](#decoding-toml)
+    4. [Encoding TOML](#encoding-toml)
  3. [Data Structure](#data-structure)
  4. [Testing](#testing)
  5. [License](#license)
@@ -32,141 +32,85 @@ dependencies:
 
 ## Usage
 
-The `toml.dart` package includes three libraries for loading, decoding and encoding TOML documents.
-The usage of the individual libraries is described in the subsequent sections in more detail.
-Additional examples for the usage of the `toml.dart` package can be found in the [`./example`][toml-dart/example] directory.
-
-All three libraries `toml.decoder`, `toml.encoder` and `toml.loader` are reexported by the `toml` library.
-Thus, a single import usually suffices.
+The `toml.dart` package can be used for loading, decoding and encoding TOML documents.
+To get started, just add the following import.
 
 ```dart
 import 'package:toml/toml.dart';
 ```
 
-### Load Configuration Files
+The subsequent sections describe how to use the library in more detail.
+Additional examples can be found in the [`./example`][toml-dart/example] directory.
 
-Before any configuration file can be parsed, the library needs to know how to load it.
-There are two default methods available, but you can easily implement your own loading mechanism as described in the next section.
+### Loading TOML
 
-If your code is running in the **browser**, you probably want to use XHR to
-fetch the file from the server.
-To do so import the `toml.loader.http` library and call the static `HttpConfigLoader.use` method, e.g., from your `main` function.
+In order to load a TOML document, invoke the static `TomlDocument.load` method and pass the name of the configuration file to load.
+The method returns a `Future` of the loaded `TomlDocument`.
 
 ```dart
-import 'package:toml/loader/http.dart';
-
-void main() {
-  HttpConfigLoader.use();
+void main() async {
+  var document = await TomlDocument.load('config.toml');
   // ...
 }
 ```
 
-An example for loading a configuration file via HTTP can be found in [`./example/http_config_loader`][toml-dart/example/http_config_loader].
+When the code is running in the browser, HTTP is used to fetch the configuration file.
+When the code is running on the Dart VM or natively, the file is loaded from
+the local file system.
 
-If your code is running in the **Dart VM**, you can load configuration files from the local file system.
-Simply import the `toml.loader.fs` library and call the static `FilesystemConfigLoader.use` method, e.g., from your `main` function.
+Full examples for loading a configuration file via HTTP and from a file can be found in [`./example/http_config_loader`][toml-dart/example/http_config_loader] and [`./example/filesystem_config_loader`][toml-dart/example/filesystem_config_loader], respectively.
+
+### Parsing TOML
+
+Sometimes the two default mechanisms for loading TOML documents with `TomlDocument.load` are not sufficient.
+In those cases, you can simply load the contents of the configuration file yourself and parse them as a TOML document manually using the static `TomlDocument.parse` function.
 
 ```dart
-import 'package:toml/loader/fs.dart';
-
-void main() {
-  FilesystemConfigLoader.use();
+void main() async {
+  var contents = '...';
+  var document = TomlDocument.parse(contents);
   // ...
 }
 ```
 
-An example for loading a configuration file from a file can be found in [`./example/filesystem_config_loader`][toml-dart/example/filesystem_config_loader].
+An example for writing a custom configuration file loader and parsing the loaded file manually can be found in [`./example/toml_parser`][toml-dart/example/toml_parser].
 
-For convenience both libraries export the `loadConfig` function from the `toml.loader` library.
-It optionally takes the path to the configuration file as its only argument (defaults to `'config.toml'`) and returns a `Future` of the parsed configuration options.
+### Decoding TOML
+
+In the last two subsections we've learned how to load or parse a `TomlDocument`.
+Such a `TomlDocument` is an abstract representation of the syntax of a TOML document.
+In order to access the configuration options that are stored in the TOML document, we first have to convert it to a hash map with the `TomlDocument.toMap` method.
 
 ```dart
-Future main() async {
-  // ...
-  var cfg = await loadConfig();
+void main() async {
+  var config = TomlDocument.parse('...').toMap();
   // ...
 }
 ```
 
-### Implement a Custom Loader
+In the [next section](#data-structure) the type and structure of the generated hash map will be elaborated in more detail.
 
-To create a custom loader which fits exactly your needs import the `toml.loader` library, create a new class and implement the `ConfigLoader` interface.
-You can use the following template as a starting point.
+### Encoding TOML
 
-```dart
-library my.config.loader;
-
-import 'package:toml/loader.dart';
-export 'package:toml/loader.dart' show loadConfig;
-
-class MyConfigLoader implements ConfigLoader {
-
-  static void use() {
-    ConfigLoader.use(new MyConfigLoader());
-  }
-
-  @override
-  Future<String> loadConfig(String filename) {
-    // ...
-  }
-
-}
-```
-
-In your `main` function invoke the `MyConfigLoader.use` method and call the `loadConfig` function as usual.
-
-An example for writing a custom configuration file loader can be found in [`./example/custom_config_loader`][toml-dart/example/custom_config_loader].
-
-### Decode TOML
-
-When you are using the `toml.loader` library, you don't have to decode TOML documents manually.
-The decoding is performed by `loadConfig` already.
-However, if you have a `String` and want to decode its contents as a TOML document, you can use the `toml.decoder` library.
+This package also includes a TOML encoder that can convert a hash map to a TOML document.
+Simply use the `TomlDocument.fromMap` factory constructor to convert the hash map into the internal representation.
+The resulting document can be converted to a TOML encoded string using the `toString` method.
 
 ```dart
-import 'package:toml/decoder.dart';
-```
-
-This library contains the actual `TomlParser` class whose `parse` method takes a `String` and returns a `Result` object.
-The result's `value` property holds an unmodifiable `Map` of the parsed document.
-
-```dart
-var toml = '''
-  # ...
-''';
-var parser = new TomlParser();
-var document = parser.parse(toml).value;
-```
-
-An example for using `TomlParser` to decode a string can be found in [`./example/toml_parser`][toml-dart/example/toml_parser].
-
-### Encode TOML
-
-This package includes a TOML encoder.
-To use it add the following import.
-
-```dart
-import 'package:toml/encoder.dart';
-```
-
-The library provides a `TomlEncoder` class whose `encode` method takes a `Map` and returns a TOML encoded `String`.
-All values of the map must be natively representable by TOML or implement the `TomlEncodable` interface.
-
-```dart
-var document = {
+var document = TomlDocument.fromMap({
   // ...
-};
-var encoder = new TomlEncoder();
-var toml = encoder.encode(document);
+}).toString();
 ```
 
-Classes which implement the `TomlEncodable` interface define a `toToml` method whose return value can be represented by TOML in turn.
+The type and structure of the hash map should match the format described in the [next section](#data-structure).
+Additionally, the map may contain arbitrary values that implement the `TomlEncoder` interface.
+Classes which implement the `TomlEncodable` interface must define a `toToml` method whose return value is either an instance of `TomlEncodable` itself or is natively encodable by TOML.
 
 An example for using the `TomlEncoder` and the `TomlEncodable` interface to encode a `Map` can be found in [`./example/toml_encoder`][toml-dart/example/toml_encoder].
 
 ## Data Structure
 
-TOML **documents** and **tables** as well as **inline tables** are represented through nested `UnmodifiableMapView` objects whose keys are `String`s and values `dynamic` read-only representations of the corresponding TOML value or sub-table.
+TOML **documents** and **tables** as well as **inline tables** are represented through nested `Map` objects whose keys are `String`s and values `dynamic` representations of the corresponding TOML value or sub-table.
 The contents of a table declared by
 
 ```toml
@@ -181,15 +125,15 @@ var table = document['a']['b']['c']; // ok
 var value = table['key'];
 ```
 
-The following, however, is invalid.
+The following, on the other hand, is invalid.
 
 ```dart
 var table = document['a.b.c']; // error
 table['key'] = value; // error
 ```
 
-All kinds of **arrays** including **arrays of tables** are stored as `UnmodifiableListView` objects.
-Though the encoder accepts any `Iterable`.
+All kinds of **arrays** including **arrays of tables** are stored as `List` objects.
+The encoder accepts any `Iterable`, though.
 The items of the list represent either a value or a table.
 Consider the document that contains an array of tables.
 
@@ -207,20 +151,9 @@ name = 'C'
 It is possible to iterate over the tables in the array.
 
 ```dart
-document['items'].forEach((Map item) { // ok
+document['items'].forEach((Map<String, dynamic> item) { // ok
   print(item.name);
 });
-```
-
-However, it is not allowed to add, remove or modify its entries.
-
-```dart
-document['items'].add({ // error
-  'name': 'D'
-});
-document['items'][0] = { // error
-  'name': 'E'
-};
 ```
 
 All **string** variants produce regular dart `String`s.
@@ -240,9 +173,9 @@ str4 = '''Hello World!'''
 When compiled to JavaScript these two types are not distinct.
 Thus a float without decimal places might accidentally be encoded as an integer.
 This behavior would lead to the generation of invalid numeric arrays.
-The `TomlEncoder` addresses this issue by analyzing the contents of numeric arrays first.
+The TOML encoder addresses this issue by analyzing the contents of numeric arrays first.
 If any of its items cannot be represented as an integer, all items will be encoded as floats instead.
-Encoding the following map, for example, would throw an `MixedArrayTypesException` in the VM.
+Encoding the following map, for example, would throw an `TomlMixedArrayTypesException` in the VM.
 
 ```dart
 var document = {
@@ -281,11 +214,12 @@ $GOPATH/bin/toml-test -encoder bin/encoder.dart
 To speedup the tests, it is recommended to compile the encoder and decoder scripts before running `toml-test`.
 
 ```sh
-dart compile exe -o bin/decoder bin/decoder.dart
-dart compile exe -o bin/encoder bin/encoder.dart
+mkdir -p build/bin
+dart compile exe -o build/bin/decoder bin/decoder.dart
+dart compile exe -o build/bin/encoder bin/encoder.dart
 
-$GOPATH/bin/toml-test bin/decoder
-$GOPATH/bin/toml-test -encoder bin/encoder
+$GOPATH/bin/toml-test build/bin/decoder
+$GOPATH/bin/toml-test -encoder build/bin/encoder
 ```
 
 Unfortunately, some encoder tests from `toml-test` are failing at the moment because date times are always encoded as UTC and the encoder never generates inline tables.
@@ -305,9 +239,6 @@ See the [LICENSE][toml-dart/LICENSE] file for details.
 [toml-dart/example]:
   https://github.com/just95/toml.dart/tree/main/example
   "toml.dart Examples"
-[toml-dart/example/custom_config_loader]:
-  https://github.com/just95/toml.dart/tree/main/example/custom_config_loader
-  "CustomConfigLoader Example | toml.dart"
 [toml-dart/example/filesystem_config_loader]:
   https://github.com/just95/toml.dart/tree/main/example/filesystem_config_loader
   "FilesystemConfigLoader Example | toml.dart"
