@@ -8,6 +8,7 @@ import 'package:petitparser/petitparser.dart';
 import 'package:toml/decoder.dart';
 import 'package:toml/encoder.dart';
 import 'package:toml/src/decoder/parser/util/whitespace.dart';
+import 'package:toml/src/loader.dart';
 
 import 'expression.dart';
 import 'node.dart';
@@ -31,6 +32,17 @@ class TomlDocument extends TomlNode {
   ///
   /// Throws a [ParserException] if there is a syntax error.
   static TomlDocument parse(String input) => parser.end().parse(input).value;
+
+  /// Loads the file with the given name and [parse]s the contents as a
+  /// TOML document.
+  ///
+  /// Throws a [ParserException] if there is a syntax error.
+  ///
+  /// Uses HTTP to load the file when the code is running in the browser and
+  /// loads the file from the local file system when the code is running in
+  /// the Dart VM or natively.
+  static Future<TomlDocument> load(String filename) async =>
+      parse(await loadFile(filename));
 
   /// The table headers and key/value pairs of the TOML document.
   final List<TomlExpression> expressions;

@@ -8,6 +8,8 @@ This is a major update that does not only bring along many changes to the intern
   Use `TomlDocument.parse` and `TomlDocument.toMap` instead.
 - Removed the `TomlEncoder` class.
   Use `TomlDocument.fromMap` and `TomlDocument.toString` instead.
+- Removed the `toml.loader` library.
+  Use `TomlDocument.load` instead.
 - In preparation to support TOML v0.5.0 in an upcoming version of the library, the parser is now based on TOML's official ABNF.
 
 ## 0.6.1 / 2020-11-19

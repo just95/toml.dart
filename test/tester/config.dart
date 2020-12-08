@@ -7,7 +7,9 @@ library toml.test.tester.config;
 import 'dart:async';
 
 import 'package:test/test.dart';
-import 'package:toml/loader.dart';
+import 'package:toml/toml.dart';
+import 'package:toml/src/loader.dart';
+import 'package:yaml/yaml.dart';
 
 /// Tests a [toml] and a [yaml] table for deep equality.
 void _cmpMaps({Map toml, Map yaml}) {
@@ -46,12 +48,33 @@ void _cmp({tomlValue, yamlValue}) {
   }
 }
 
+/// Loads a TOML document from the given file.
+Future<Map<String, dynamic>> loadTomlConfig(String filename) =>
+    TomlDocument.load(filename).then((document) => document.toMap());
+
+/// Loads a YAML document from the given file.
+Future<Map<String, dynamic>> loadYamlConfig(String filename) async {
+  var contents = await loadFile(filename);
+  var document = loadYaml(contents);
+  if (document is YamlMap) {
+    if (document.keys.every((key) => key is String)) {
+      return Map.fromIterables(
+        document.keys.cast<String>(),
+        document.values,
+      );
+    }
+  }
+  throw FormatException(
+    'Expected map at top-level of YAML document, got ${document.runtimeType}',
+  );
+}
+
 /// Loads the TOML and YAML files with the specified [name] located in
 /// the `test/config` directory and compares the resulting hash maps.
 void testConfig(String name) {
   var future = Future.wait([
-    loadConfig('test/config/$name.toml'),
-    loadConfig('test/config/$name.yaml')
+    loadTomlConfig('test/config/$name.toml'),
+    loadYamlConfig('test/config/$name.yaml')
   ]);
   future.then(expectAsync1((res) {
     _cmpMaps(toml: res[0], yaml: res[1]);

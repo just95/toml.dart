@@ -190,7 +190,7 @@ class TomlAstBuilder {
   /// Converts the given items to TOML values and creates a [TomlArray]
   /// from those values.
   ///
-  /// If there are values of different types a [MixedArrayTypesException]
+  /// If there are values of different types a [TomlMixedArrayTypesException]
   /// is thrown. In JavaScript the array is allowed to contain integers
   /// and floats. This is because [int] and [double] cannot be distinguished
   /// in this case. If different number types are mixed, all value of the

@@ -7,16 +7,15 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:toml/encoder.dart';
-import 'package:toml/loader/stream.dart';
+import 'package:toml/toml.dart';
 
 /// Encodes a table.
-Map<String, dynamic> encodeTable(Map<String, dynamic> toml) {
-  var table = <String, dynamic>{};
-  toml.forEach((String key, dynamic value) {
-    table[key] = encodeValue(value);
+Map<String, dynamic> encodeTable(Map<String, dynamic> table) {
+  var result = <String, dynamic>{};
+  table.forEach((String key, dynamic value) {
+    result[key] = encodeValue(value);
   });
-  return table;
+  return result;
 }
 
 /// Encodes an array.
@@ -73,8 +72,7 @@ String getValueType(dynamic value) {
 }
 
 Future main() async {
-  StreamConfigLoader.use(stdin.transform(utf8.decoder));
-
-  var toml = await loadConfig();
-  print(json.encode(encodeTable(toml)));
+  var input = await stdin.transform(utf8.decoder).join();
+  var document = TomlDocument.parse(input).toMap();
+  print(json.encode(encodeTable(document)));
 }

@@ -2,7 +2,8 @@
 // This software may be modified and distributed under the terms
 // of the MIT license. See the LICENSE file for details.
 
-library toml.loader;
+library toml.src.loader;
 
-export 'src/loader/interface.dart';
-export 'src/loader/loader.dart';
+export 'loader/stub.dart'
+    if (dart.library.io) 'loader/io.dart'
+    if (dart.library.js) 'loader/js.dart';

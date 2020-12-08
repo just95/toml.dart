@@ -7,16 +7,15 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:toml/loader/stream.dart';
 import 'package:toml/toml.dart';
 
 /// Decodes a JSON encoded TOML table.
-Map<String, dynamic> decodeTable(Map<String, dynamic> json) {
-  var table = <String, dynamic>{};
-  json.forEach((String key, dynamic value) {
-    table[key] = decodeValue(value);
+Map<String, dynamic> decodeTable(Map<String, dynamic> table) {
+  var result = <String, dynamic>{};
+  table.forEach((String key, dynamic value) {
+    result[key] = decodeValue(value);
   });
-  return table;
+  return result;
 }
 
 /// Decodes a JSON encoded TOML value.
@@ -59,10 +58,13 @@ dynamic decodeValue(dynamic value) {
 }
 
 Future main() async {
-  StreamConfigLoader.use(stdin.transform(utf8.decoder));
-
-  var json = await loadConfig('config.json');
-  print(TomlDocument.fromMap(decodeTable(json))
-      .toString()
-      .replaceAll('.000', ''));
+  var input = await stdin.transform(utf8.decoder).join();
+  var document = json.decode(input);
+  if (document is Map<String, dynamic>) {
+    print(TomlDocument.fromMap(decodeTable(document))
+        .toString()
+        .replaceAll('.000', ''));
+  } else {
+    throw FormatException('Expected object at top-level of JSON document.');
+  }
 }

@@ -5,13 +5,11 @@
 @TestOn('vm')
 library toml.test.config_test;
 
-import 'package:toml/loader/fs.dart';
 import 'package:test/test.dart';
 
 import 'tester/config.dart';
 
 void main() {
-  FilesystemConfigLoader.use();
   group('config test:', () {
     test('Example', () {
       testConfig('example');
