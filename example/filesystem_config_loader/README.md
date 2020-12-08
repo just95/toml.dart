@@ -1,4 +1,4 @@
-# `FilesystemConfigLoader` example
+# `dart:io` example
 
 This example demonstrates how to load a configuration file in the Dart VM from the local filesystem.
 

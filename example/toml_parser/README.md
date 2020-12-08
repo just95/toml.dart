@@ -1,4 +1,4 @@
-# TOML Parser Example
+# TOML parser example
 
 This example demonstrates how to parse a TOML document from a string.
 

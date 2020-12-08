@@ -1,4 +1,4 @@
-# `HttpConfigLoader` example
+# HTTP example
 
 This example demonstrates how to load a configuration file in the browser from via HTTP.
 

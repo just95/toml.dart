@@ -1,4 +1,4 @@
-# `TomlEncoder` example
+# TOML encoder example
 
 This example demonstrates how to encode a `Map` as a TOML document.
 
