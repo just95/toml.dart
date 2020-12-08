@@ -69,8 +69,8 @@ Future<Map<String, dynamic>> loadYamlConfig(String filename) async {
 /// the `test/config` directory and compares the resulting hash maps.
 void testConfig(String name) {
   var future = Future.wait([
-    loadTomlConfig('test/config/$name.toml'),
-    loadYamlConfig('test/config/$name.yaml')
+    loadTomlConfig('test/old/config/$name.toml'),
+    loadYamlConfig('test/old/config/$name.yaml')
   ]);
   future.then(expectAsync1((res) {
     _cmpMaps(toml: res[0], yaml: res[1]);
