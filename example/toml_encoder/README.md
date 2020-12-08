@@ -8,7 +8,7 @@ The resulting TOML document is printed to the console.
 
 The `document` contains value of a custom type `Point`.
 The class `Point` is an example for a `TomlEncodable` value.
-Objects whose classes implement the `TomlEncodable` interface are implicitly converted to a value that can be encoded by the `TomlEncoder` using their `toToml` method.
+Objects whose classes implement the `TomlEncodable` interface are implicitly converted to a value that can be encoded by `TomlDocument.fromMap` using their `toToml` method.
 
 ## Running locally
 

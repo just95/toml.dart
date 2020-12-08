@@ -4,13 +4,13 @@
 
 import 'dart:async';
 
-import 'package:toml/loader/fs.dart';
+import 'package:toml/toml.dart';
 
 Future main() async {
-  FilesystemConfigLoader.use();
   try {
-    var cfg = await loadConfig();
-    print(cfg['table']['array'][0]['key']);
+    var document = await TomlDocument.load('config.toml');
+    var config = document.toMap();
+    print(config['table']['array'][0]['key']);
   } catch (e) {
     print('ERROR: $e');
   }

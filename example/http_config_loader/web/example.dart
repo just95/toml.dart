@@ -5,14 +5,14 @@
 import 'dart:async';
 import 'dart:html';
 
-import 'package:toml/loader/http.dart';
+import 'package:toml/toml.dart';
 
 Future main() async {
-  HttpConfigLoader.use();
   var elem = document.getElementById('text');
   try {
-    var cfg = await loadConfig();
-    elem.text = cfg['table']['array'][0]['key'].toString();
+    var document = await TomlDocument.load('config.toml');
+    var config = document.toMap();
+    elem.text = config['table']['array'][0]['key'].toString();
   } catch (e) {
     elem.style.color = 'red';
     elem.text = 'ERROR: $e';

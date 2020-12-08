@@ -10,7 +10,7 @@ You need to have installed the [Flutter SDK][flutter-sdk].
 
 Connect your device or start your emulator and see that it's connected using:
 
-```
+```bash
 flutter devices
 ```
 

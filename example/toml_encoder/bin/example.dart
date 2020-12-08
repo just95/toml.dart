@@ -2,7 +2,7 @@
 // This software may be modified and distributed under the terms
 // of the MIT license. See the LICENSE file for details.
 
-import 'package:toml/encoder.dart';
+import 'package:toml/toml.dart';
 
 /// Example for a class that can be encoded by the TOML encoder even though
 /// it is not a TOML value.
@@ -31,7 +31,6 @@ const Map<String, dynamic> document = {
 };
 
 void main() {
-  var encoder = new TomlEncoder();
-  var toml = encoder.encode(document);
+  var toml = TomlDocument.fromMap(document).toString();
   print(toml);
 }

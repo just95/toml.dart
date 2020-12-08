@@ -2,16 +2,13 @@
 // This software may be modified and distributed under the terms
 // of the MIT license. See the LICENSE file for details.
 
-import 'package:toml/ast.dart';
+import 'dart:convert';
+import 'dart:io';
 
-/// The contents of the TOML document to parse.
-const String toml = '''
-[table]
-  [[table.array]]
-  key = "Hello, World!"
-''';
+import 'package:toml/toml.dart';
 
-void main() {
-  var config = TomlDocument.parse(toml).toMap();
+Future main() async {
+  var input = await stdin.transform(utf8.decoder).join();
+  var config = TomlDocument.parse(input).toMap();
   print(config['table']['array'][0]['key']);
 }

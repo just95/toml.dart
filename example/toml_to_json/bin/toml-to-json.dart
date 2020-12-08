@@ -7,16 +7,13 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:toml/loader/fs.dart';
-import 'package:toml/loader/stream.dart';
+import 'package:toml/toml.dart';
 
 /// A script that converts TOML documents to JSON.
 ///
 /// If multiple TOML documents are converted, the contents of the documents
 /// is [merge]d.
 Future main(List<String> args) async {
-  FilesystemConfigLoader.use();
-
   if (args.isEmpty || args.any((arg) => arg == '--help')) {
     print('Usage: ${Platform.script.pathSegments.last} <INPUT-FILE...>');
     print('');
@@ -29,8 +26,8 @@ Future main(List<String> args) async {
   // Load every input file and merge the resulting hash maps.
   var merged = <String, dynamic>{};
   for (var file in args) {
-    var toml = await loadConfig(file);
-    merged = merge(merged, toml);
+    var document = await TomlDocument.load(file);
+    merged = merge(merged, document.toMap());
   }
 
   // Convert the merged hash map to a JSON document.
