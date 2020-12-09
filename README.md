@@ -103,10 +103,10 @@ var document = TomlDocument.fromMap({
 ```
 
 The type and structure of the hash map should match the format described in the [next section](#data-structure).
-Additionally, the map may contain arbitrary values that implement the `TomlEncoder` interface.
+Additionally, the map may contain arbitrary values that implement the `TomlEncodable` interface.
 Classes which implement the `TomlEncodable` interface must define a `toToml` method whose return value is either an instance of `TomlEncodable` itself or is natively encodable by TOML.
 
-An example for using the `TomlEncoder` and the `TomlEncodable` interface to encode a `Map` can be found in [`./example/toml_encoder`][toml-dart/example/toml_encoder].
+An example for using the encoder and the `TomlEncodable` interface to encode a `Map` can be found in [`./example/toml_encoder`][toml-dart/example/toml_encoder].
 
 ## Data Structure
 
@@ -240,16 +240,16 @@ See the [LICENSE][toml-dart/LICENSE] file for details.
   "toml.dart Examples"
 [toml-dart/example/filesystem_config_loader]:
   https://github.com/just95/toml.dart/tree/main/example/filesystem_config_loader
-  "FilesystemConfigLoader Example | toml.dart"
+  "dart:io Example | toml.dart"
 [toml-dart/example/http_config_loader]:
   https://github.com/just95/toml.dart/tree/main/example/http_config_loader
-  "HttpConfigLoader Example | toml.dart"
+  "HTTP Example | toml.dart"
 [toml-dart/example/toml_parser]:
   https://github.com/just95/toml.dart/tree/main/example/toml_parser
-  "TomlParser Example | toml.dart"
+  "TOML Parser Example | toml.dart"
 [toml-dart/example/toml_encoder]:
   https://github.com/just95/toml.dart/tree/main/example/toml_encoder
-  "TomlEncoder Example | toml.dart"
+  "TOML Encoder Example | toml.dart"
 [toml-dart/LICENSE]:
   https://github.com/just95/toml.dart/blob/main/LICENSE
   "MIT License | toml.dart"
