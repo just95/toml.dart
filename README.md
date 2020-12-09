@@ -122,14 +122,12 @@ may be accessed using `[]` as shown in the listing below.
 
 ```dart
 var table = document['a']['b']['c']; // ok
-var value = table['key'];
 ```
 
 The following, on the other hand, is invalid.
 
 ```dart
 var table = document['a.b.c']; // error
-table['key'] = value; // error
 ```
 
 All kinds of **arrays** including **arrays of tables** are stored as `List` objects.
@@ -148,11 +146,11 @@ name = 'B'
 name = 'C'
 ```
 
-It is possible to iterate over the tables in the array.
+For example, it is possible to iterate over the tables in the array as follows.
 
 ```dart
-document['items'].forEach((Map<String, dynamic> item) { // ok
-  print(item.name);
+document['items'].forEach((Map<String, dynamic> item) {
+  print(item['name']);
 });
 ```
 
@@ -162,11 +160,12 @@ All of the following are therefore equivalent.
 ```toml
 str1 = "Hello World!"
 str2 = 'Hello World!'
-str3 = """
+str3 = """\
   Hello \
   World!\
 """
-str4 = '''Hello World!'''
+str4 = '''
+Hello World!'''
 ```
 
 **Integers** are of type `int` and **float**ing point numbers are represented as `double`s.
