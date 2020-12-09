@@ -7,3 +7,7 @@ analyzer:
     - 'example/**'
   strong-mode:
     implicit-casts: false
+
+linter:
+  rules:
+    - directives_ordering
