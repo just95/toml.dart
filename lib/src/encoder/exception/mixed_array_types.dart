@@ -4,8 +4,8 @@
 
 library toml.src.encoder.exception.mixed_array_types;
 
-import 'package:toml/ast.dart';
-import 'package:toml/exception.dart';
+import 'package:toml/src/ast.dart';
+import 'package:toml/src/exception.dart';
 
 /// An exception which is thrown when an `Iterable` cannot be encoded as an
 /// array because it does not have a unique value type.

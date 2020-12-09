@@ -5,9 +5,9 @@
 library toml.src.ast.document;
 
 import 'package:petitparser/petitparser.dart';
-import 'package:toml/decoder.dart';
-import 'package:toml/encoder.dart';
+import 'package:toml/src/decoder.dart';
 import 'package:toml/src/decoder/parser/util/whitespace.dart';
+import 'package:toml/src/encoder.dart';
 import 'package:toml/src/loader.dart';
 
 import 'expression.dart';

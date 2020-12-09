@@ -4,7 +4,7 @@
 
 library toml.src.ast.node;
 
-import 'package:toml/encoder.dart';
+import 'package:toml/src/encoder.dart';
 
 import 'visitor/node.dart';
 

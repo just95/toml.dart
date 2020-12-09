@@ -4,7 +4,7 @@
 
 library toml;
 
-export 'ast.dart';
-export 'decoder.dart';
-export 'encoder.dart';
-export 'exception.dart';
+export 'src/ast.dart';
+export 'src/decoder.dart';
+export 'src/encoder.dart';
+export 'src/exception.dart';

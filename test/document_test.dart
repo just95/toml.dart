@@ -5,7 +5,6 @@
 library toml.test.document_test;
 
 import 'package:test/test.dart';
-import 'package:toml/ast.dart';
 import 'package:toml/toml.dart';
 
 import 'tester/document.dart';

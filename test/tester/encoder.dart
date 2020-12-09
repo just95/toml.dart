@@ -5,7 +5,7 @@
 library toml.test.tester.encoder;
 
 import 'package:test/test.dart';
-import 'package:toml/ast.dart';
+import 'package:toml/toml.dart';
 
 /// Tests whether the result of encoding the [input] is the specified [output].
 void testEncoder(String description,

@@ -4,8 +4,8 @@
 
 library toml.src.decoder.exception.redefinition;
 
-import 'package:toml/ast.dart';
-import 'package:toml/exception.dart';
+import 'package:toml/src/ast.dart';
+import 'package:toml/src/exception.dart';
 
 /// An exception which is thrown when a table or key is defined more than once.
 ///

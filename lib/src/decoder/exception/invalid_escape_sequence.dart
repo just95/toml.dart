@@ -4,7 +4,7 @@
 
 library toml.src.decoder.exception.invalid_escape_sequence;
 
-import 'package:toml/exception.dart';
+import 'package:toml/src/exception.dart';
 
 /// An exception which is thrown when the parser encounters an unspecified
 /// escape sequence.

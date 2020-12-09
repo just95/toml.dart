@@ -6,14 +6,17 @@ This is a major update that does not only bring along many changes to the intern
 
 - Removed the `TomlParser` class.
   Use `TomlDocument.parse` and `TomlDocument.toMap` instead.
+- In preparation to support TOML v0.5.0 in an upcoming version of the library, the parser is now based on TOML's official ABNF.
 - Removed the `TomlEncoder` class.
   Use `TomlDocument.fromMap` and `TomlDocument.toString` instead.
-- Removed the `toml.loader` library.
+- Removed the `toml.decoder` and `toml.encoder` libraries.
+  You should always use the `toml` library instead.
+- Removed the `toml.loader` library as well as the `toml.loader.*` libraries.
   Use `TomlDocument.load` instead.
+  In order to implement a custom loading mechanism, use `TomlDocument.parse` instead.
 - Removed the `yaml` dependency.
   JSON and YAML documents cannot be loaded with this package anymore.
   Since YAML documents are needed for testing, there is still a `dep_dependency` for the `yaml` package.
-- In preparation to support TOML v0.5.0 in an upcoming version of the library, the parser is now based on TOML's official ABNF.
 
 ## 0.6.1 / 2020-11-19
 

@@ -4,8 +4,8 @@
 
 library toml.src.decoder.exception.not_a_table;
 
-import 'package:toml/ast.dart';
-import 'package:toml/exception.dart';
+import 'package:toml/src/ast.dart';
+import 'package:toml/src/exception.dart';
 
 /// An exception which is thrown when the parent element of a table is not
 /// a table or array of tables.
