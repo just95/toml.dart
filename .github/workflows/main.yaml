@@ -104,3 +104,25 @@ jobs:
         run: chmod +x build/bin/decoder
       - name: Run `toml-test` Against Decoder
         run: $GOPATH/bin/toml-test build/bin/decoder
+
+  build-docs:
+    name: Build Documentation
+    runs-on: ubuntu-latest
+    container:
+      image: google/dart:latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Print Dart SDK Version
+        run: dart --version
+      - name: Print `dartdoc` Version
+        run: dartdoc --version
+      - name: Install Dependencies
+        run: dart pub get
+      - name: Build Documentation
+        run: dartdoc --no-show-progress
+      - name: Upload Documentation
+        uses: actions/upload-artifact@v2
+        with:
+          name: api-documentation
+          path: doc/api
