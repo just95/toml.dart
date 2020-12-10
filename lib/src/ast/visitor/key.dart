@@ -18,7 +18,7 @@ abstract class TomlSimpleKeyVisitor<T> {
 
   /// Visits the given non-dotted [key].
   ///
-  /// This method is using [TomlKey.acceptSimpleKeyVisitor] to invoke the right
-  /// visitor method from above.
+  /// This method is using [TomlSimpleKey.acceptSimpleKeyVisitor] to invoke the
+  /// right visitor method from above.
   T visitSimpleKey(TomlSimpleKey key) => key.acceptSimpleKeyVisitor(this);
 }

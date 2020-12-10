@@ -10,7 +10,7 @@ import 'package:toml/src/exception.dart';
 ///     a = 1
 ///     a = 2
 ///
-/// throws a [RedefinitionException] because `a` is defined twice.
+/// throws a [TomlRedefinitionException] because `a` is defined twice.
 class TomlRedefinitionException extends TomlException {
   /// Fully qualified name of the table or key.
   final TomlKey name;

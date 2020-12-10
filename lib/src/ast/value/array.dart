@@ -7,7 +7,7 @@ import '../key.dart';
 import '../value.dart';
 import '../visitor/value.dart';
 
-/// AST node that represents a TOML array of values of type [T].
+/// AST node that represents a TOML array of values of type [V].
 ///
 ///     array = array-open [ array-values ] ws-comment-newline array-close
 ///

@@ -52,7 +52,8 @@ class TomlKey extends TomlNode {
   /// table is returned.
   TomlKey get parentKey => TomlKey(parts.take(parts.length - 1));
 
-  /// Gets the last key part (i.e., the name of this key within [parent]).
+  /// Gets the last key part (i.e., the name of this key within the table
+  /// called [parentKey]).
   TomlSimpleKey get childKey => parts.last;
 
   /// Creates a new key that identifies the given child in the table identified

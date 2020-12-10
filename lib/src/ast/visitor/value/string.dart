@@ -6,7 +6,7 @@ import '../../value/string/literal.dart';
 import '../../value/string/ml_basic.dart';
 import '../../value/string/ml_literal.dart';
 
-/// Interface for visitors of [TomlStrings]s.
+/// Interface for visitors of [TomlString]s.
 abstract class TomlStringVisitor<T> {
   /// Visits the given basic string.
   T visitBasicString(TomlBasicString string);

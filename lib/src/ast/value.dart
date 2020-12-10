@@ -80,7 +80,7 @@ abstract class TomlValue<V> extends TomlNode {
 
   /// Converts the given value to a TOML value.
   ///
-  /// Throws a [UnknownValueTypeException] when the given value cannot be
+  /// Throws a [TomlUnknownValueTypeException] when the given value cannot be
   /// encoded by TOML.
   factory TomlValue.from(V value) =>
       TomlAstBuilder().buildValue(value) as TomlValue<V>;

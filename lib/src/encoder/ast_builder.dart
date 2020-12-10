@@ -138,7 +138,8 @@ class TomlAstBuilder {
   }
 
   /// Builds a [TomlValue] for the given [value] or throws a
-  /// [UnknownValueTypeException] if the value cannot be represented by TOML.
+  /// [TomlUnknownValueTypeException] if the value cannot be represented by
+  /// TOML.
   TomlValue buildValue(dynamic value) {
     value = unwrapValue(value);
     if (value is int) return TomlInteger(value);
