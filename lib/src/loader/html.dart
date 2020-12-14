@@ -1,4 +1,4 @@
-library toml.src.loader.http;
+library toml.src.loader.html;
 
 import 'dart:async';
 import 'dart:html';
