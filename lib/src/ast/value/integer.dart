@@ -1,6 +1,7 @@
 library toml.src.ast.value.integer;
 
 import 'package:petitparser/petitparser.dart';
+import 'package:quiver/core.dart';
 
 import '../value.dart';
 import '../visitor/value.dart';
@@ -56,4 +57,11 @@ class TomlInteger extends TomlValue<int> {
   @override
   T acceptValueVisitor<T>(TomlValueVisitor<T> visitor) =>
       visitor.visitInteger(this);
+
+  @override
+  bool operator ==(dynamic other) =>
+      other is TomlInteger && value == other.value;
+
+  @override
+  int get hashCode => hash2(type, value);
 }

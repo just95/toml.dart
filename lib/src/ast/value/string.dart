@@ -10,6 +10,21 @@ import 'string/literal.dart';
 import 'string/ml_basic.dart';
 import 'string/ml_literal.dart';
 
+/// The four types of TOML strings.
+enum TomlStringType {
+  /// Type of a [TomlBasicString].
+  basic,
+
+  /// Type of a [TomlLiteralString].
+  literal,
+
+  /// Type of a [TomlMultilineBasicString].
+  multilineBasic,
+
+  /// Type of a [TomlMultilineLiteralString].
+  multilineLiteral
+}
+
 /// Base class for AST nodes that represent a TOML strings.
 ///
 ///     string = ml-basic-string
@@ -23,6 +38,9 @@ abstract class TomlString extends TomlValue<String> {
           TomlMultilineLiteralString.parser |
           TomlLiteralString.parser)
       .cast<TomlString>();
+
+  /// The type of this string.
+  TomlStringType get stringType;
 
   @override
   TomlType get type => TomlType.string;

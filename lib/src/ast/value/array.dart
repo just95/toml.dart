@@ -2,6 +2,8 @@ library toml.src.ast.value.array;
 
 import 'package:petitparser/petitparser.dart';
 import 'package:toml/src/decoder/parser/util/whitespace.dart';
+import 'package:quiver/core.dart';
+import 'package:quiver/collection.dart';
 
 import '../key.dart';
 import '../value.dart';
@@ -86,4 +88,11 @@ class TomlArray<V> extends TomlValue<Iterable<V>> {
   @override
   T acceptValueVisitor<T>(TomlValueVisitor<T> visitor) =>
       visitor.visitArray(this);
+
+  @override
+  bool operator ==(dynamic other) =>
+      other is TomlArray && listsEqual(items, other.items);
+
+  @override
+  int get hashCode => hashObjects(<dynamic>[type].followedBy(items));
 }

@@ -1,6 +1,7 @@
 library toml.src.ast.value.float;
 
 import 'package:petitparser/petitparser.dart';
+import 'package:quiver/core.dart';
 
 import '../value.dart';
 import '../visitor/value.dart';
@@ -49,4 +50,10 @@ class TomlFloat extends TomlValue<double> {
   @override
   T acceptValueVisitor<T>(TomlValueVisitor<T> visitor) =>
       visitor.visitFloat(this);
+
+  @override
+  bool operator ==(dynamic other) => other is TomlFloat && value == other.value;
+
+  @override
+  int get hashCode => hash2(type, value);
 }

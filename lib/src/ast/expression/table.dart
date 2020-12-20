@@ -2,10 +2,21 @@ library toml.src.ast.expression.table;
 
 import 'package:petitparser/petitparser.dart';
 import 'package:toml/src/decoder/parser/util/whitespace.dart';
+import 'package:quiver/core.dart';
 
 import '../expression.dart';
 import '../key.dart';
 import '../visitor/expression.dart';
+
+/// The two types of TOML tables that can be declared by a table header
+/// expression.
+enum TomlTableType {
+  /// The type of a table header that declares a standard table.
+  standardTable,
+
+  /// The type of a table header that declares an array of tables.
+  arrayTable
+}
 
 /// Base class of all TOML table header expressions.
 ///
@@ -22,6 +33,9 @@ abstract class TomlTable extends TomlExpression {
 
   /// Creates a new table.
   TomlTable(this.name);
+
+  /// The type of table declared by this table header.
+  TomlTableType get type;
 }
 
 /// A TOML expression AST node that represents the header of a standard TOML
@@ -51,8 +65,18 @@ class TomlStandardTable extends TomlTable {
   TomlStandardTable(TomlKey name) : super(name);
 
   @override
+  TomlTableType get type => TomlTableType.standardTable;
+
+  @override
   T acceptExpressionVisitor<T>(TomlExpressionVisitor<T> visitor) =>
       visitor.visitStandardTable(this);
+
+  @override
+  bool operator ==(dynamic other) =>
+      other is TomlStandardTable && name == other.name;
+
+  @override
+  int get hashCode => hash2(type, name);
 }
 
 /// A TOML expression AST node that represents the header of an entry of
@@ -83,6 +107,16 @@ class TomlArrayTable extends TomlTable {
   TomlArrayTable(TomlKey name) : super(name);
 
   @override
+  TomlTableType get type => TomlTableType.arrayTable;
+
+  @override
   T acceptExpressionVisitor<T>(TomlExpressionVisitor<T> visitor) =>
       visitor.visitArrayTable(this);
+
+  @override
+  bool operator ==(dynamic other) =>
+      other is TomlArrayTable && name == other.name;
+
+  @override
+  int get hashCode => hash2(type, name);
 }

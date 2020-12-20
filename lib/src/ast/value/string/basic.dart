@@ -4,6 +4,7 @@ import 'package:petitparser/petitparser.dart';
 import 'package:toml/src/decoder/parser/util/join.dart';
 import 'package:toml/src/decoder/parser/util/ranges.dart';
 import 'package:toml/src/decoder/parser/util/whitespace.dart';
+import 'package:quiver/core.dart';
 
 import '../../visitor/value/string.dart';
 import '../string.dart';
@@ -60,6 +61,16 @@ class TomlBasicString extends TomlSinglelineString {
   TomlBasicString(this.value);
 
   @override
+  TomlStringType get stringType => TomlStringType.basic;
+
+  @override
   T acceptStringVisitor<T>(TomlStringVisitor<T> visitor) =>
       visitor.visitBasicString(this);
+
+  @override
+  bool operator ==(dynamic other) =>
+      other is TomlBasicString && value == other.value;
+
+  @override
+  int get hashCode => hash3(type, stringType, value);
 }

@@ -1,6 +1,7 @@
 library toml.src.ast.value.datetime;
 
 import 'package:petitparser/petitparser.dart';
+import 'package:quiver/core.dart';
 
 import '../value.dart';
 import '../visitor/value.dart';
@@ -82,4 +83,11 @@ class TomlDateTime extends TomlValue<DateTime> {
   @override
   T acceptValueVisitor<T>(TomlValueVisitor<T> visitor) =>
       visitor.visitDateTime(this);
+
+  @override
+  bool operator ==(dynamic other) =>
+      other is TomlDateTime && value == other.value;
+
+  @override
+  int get hashCode => hash2(type, value);
 }

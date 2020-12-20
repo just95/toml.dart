@@ -60,4 +60,11 @@ class TomlDocument extends TomlNode {
 
   @override
   T acceptVisitor<T>(TomlVisitor<T> visitor) => visitor.visitDocument(this);
+
+  @override
+  bool operator ==(dynamic other) =>
+      other is TomlDocument && expressions == other.expressions;
+
+  @override
+  int get hashCode => expressions.hashCode;
 }

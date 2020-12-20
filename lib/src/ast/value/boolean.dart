@@ -1,6 +1,7 @@
 library toml.src.ast.value.boolean;
 
 import 'package:petitparser/petitparser.dart';
+import 'package:quiver/core.dart';
 
 import '../value.dart';
 import '../visitor/value.dart';
@@ -30,4 +31,11 @@ class TomlBoolean extends TomlValue<bool> {
   @override
   T acceptValueVisitor<T>(TomlValueVisitor<T> visitor) =>
       visitor.visitBoolean(this);
+
+  @override
+  bool operator ==(dynamic other) =>
+      other is TomlBoolean && value == other.value;
+
+  @override
+  int get hashCode => hash2(type, value);
 }

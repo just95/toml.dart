@@ -3,6 +3,8 @@ library toml.src.ast.value.table;
 import 'package:petitparser/petitparser.dart';
 import 'package:toml/src/decoder/map_builder.dart';
 import 'package:toml/src/decoder/parser/util/whitespace.dart';
+import 'package:quiver/core.dart';
+import 'package:quiver/collection.dart';
 
 import '../expression/key_value_pair.dart';
 import '../key.dart';
@@ -70,4 +72,11 @@ class TomlInlineTable extends TomlValue<Map<String, dynamic>> {
   @override
   T acceptValueVisitor<T>(TomlValueVisitor<T> visitor) =>
       visitor.visitInlineTable(this);
+
+  @override
+  bool operator ==(dynamic other) =>
+      other is TomlInlineTable && listsEqual(pairs, other.pairs);
+
+  @override
+  int get hashCode => hashObjects(<dynamic>[type].followedBy(pairs));
 }
