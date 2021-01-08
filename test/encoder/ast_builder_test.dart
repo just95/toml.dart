@@ -9,7 +9,7 @@ class TomlEncodableWrapper extends TomlEncodableKey {
   /// The wrapped value.
   final dynamic value;
 
-  /// Optionally the wrapped key if it differs from the [value].
+  /// The wrapped key or `null` if it does not differ from the [value].
   final dynamic key;
 
   /// Creates a new wrapper for the given value.
