@@ -2,7 +2,7 @@ library toml.src.encoder.exception.unknown_value_type;
 
 import 'package:toml/src/exception.dart';
 
-/// An error which is thrown when an object cannot be encoded.
+/// An error which is thrown when an object cannot be encoded as a value.
 ///
 /// Example:
 ///

@@ -49,8 +49,7 @@ class TomlDocument extends TomlNode {
       : expressions = List.from(expressions, growable: false);
 
   /// Creates a TOML document from the given map.
-  factory TomlDocument.fromMap(Map<String, dynamic> map) =>
-      TomlAstBuilder().buildDocument(map);
+  factory TomlDocument.fromMap(Map map) => TomlAstBuilder().buildDocument(map);
 
   /// Converts this document to a map from keys to values.
   Map<String, dynamic> toMap() {

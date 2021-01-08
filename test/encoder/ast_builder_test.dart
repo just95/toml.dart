@@ -3,16 +3,23 @@ library toml.test.encoder.ast_builder_test;
 import 'package:test/test.dart';
 import 'package:toml/toml.dart';
 
-/// A class that is used to test encoding of [TomlEncodable] values.
-class TomlEncodableWrapper implements TomlEncodable {
+/// A class that is used to test encoding of [TomlEncodableKey] and
+/// [TomlEncodableValue] objects.
+class TomlEncodableWrapper extends TomlEncodableKey {
   /// The wrapped value.
   final dynamic value;
 
+  /// Optionally the wrapped key if it differs from the [value].
+  final dynamic key;
+
   /// Creates a new wrapper for the given value.
-  TomlEncodableWrapper(this.value);
+  TomlEncodableWrapper(this.value, [this.key]);
 
   @override
-  dynamic toToml() => value;
+  dynamic toTomlValue() => value;
+
+  @override
+  dynamic toTomlKey() => key ?? value;
 }
 
 void main() {
@@ -76,20 +83,11 @@ void main() {
       test('builds empty inline table from empty Map', () {
         var builder = TomlAstBuilder();
         expect(
-          builder.buildValue(<String, dynamic>{}),
+          builder.buildValue({}),
           equals(TomlInlineTable([])),
         );
       });
       test('builds inline table from Map with non-dynamic value type', () {
-        var builder = TomlAstBuilder();
-        expect(
-          builder.buildValue(<String, int>{'foo': 42}),
-          equals(TomlInlineTable([
-            TomlKeyValuePair(TomlUnquotedKey('foo'), TomlInteger(42)),
-          ])),
-        );
-      });
-      test('builds inline table from Map without type annotation', () {
         var builder = TomlAstBuilder();
         expect(
           builder.buildValue({'foo': 42}),
@@ -98,22 +96,46 @@ void main() {
           ])),
         );
       });
-      test('requires the key type of empty Map to be annotated', () {
+      test('unwraps TomlEncodableKey objects', () {
         var builder = TomlAstBuilder();
-        var emptyMap = {};
         expect(
-          () => builder.buildValue(emptyMap),
-          throwsA(equals(TomlUnknownValueTypeException(emptyMap))),
+          builder.buildValue({TomlEncodableWrapper('foo'): 42}),
+          equals(TomlInlineTable([
+            TomlKeyValuePair(TomlUnquotedKey('foo'), TomlInteger(42)),
+          ])),
         );
       });
-      test('unwraps TomlEncodable values', () {
+      test('unwraps TomlEncodableKey objects recursively', () {
+        var builder = TomlAstBuilder();
+        expect(
+          builder.buildValue({
+            TomlEncodableWrapper(TomlEncodableWrapper('foo')): 42,
+          }),
+          equals(TomlInlineTable([
+            TomlKeyValuePair(TomlUnquotedKey('foo'), TomlInteger(42)),
+          ])),
+        );
+      });
+      test('uses toTomlKey to unwrap TomlEncodableKey objects', () {
+        var builder = TomlAstBuilder();
+        expect(
+          builder.buildValue({
+            TomlEncodableWrapper('foo', 'bar'):
+                TomlEncodableWrapper('foo', 'bar')
+          }),
+          equals(TomlInlineTable([
+            TomlKeyValuePair(TomlUnquotedKey('bar'), TomlLiteralString('foo')),
+          ])),
+        );
+      });
+      test('unwraps TomlEncodableValue objects', () {
         var builder = TomlAstBuilder();
         expect(
           builder.buildValue(TomlEncodableWrapper(42)),
           equals(TomlInteger(42)),
         );
       });
-      test('unwraps TomlEncodable values recursively', () {
+      test('unwraps TomlEncodableValue objects recursively', () {
         var builder = TomlAstBuilder();
         expect(
           builder.buildValue(TomlEncodableWrapper(TomlEncodableWrapper(42))),
@@ -166,7 +188,7 @@ void main() {
       test('builds a standard table header for an empty Map', () {
         var builder = TomlAstBuilder();
         expect(
-          builder.buildDocument({'table': <String, dynamic>{}}),
+          builder.buildDocument({'table': {}}),
           equals(TomlDocument([
             TomlStandardTable(TomlKey([TomlUnquotedKey('table')]))
           ])),
@@ -176,7 +198,7 @@ void main() {
         var builder = TomlAstBuilder();
         expect(
           builder.buildDocument({
-            'parent': {'table': <String, dynamic>{}}
+            'parent': {'table': {}}
           }),
           equals(TomlDocument([
             TomlStandardTable(TomlKey([
@@ -191,7 +213,7 @@ void main() {
         () {
           var builder = TomlAstBuilder();
           expect(
-            builder.buildDocument({'array': <Map<String, dynamic>>[]}),
+            builder.buildDocument({'array': <Map>[]}),
             equals(TomlDocument([
               TomlKeyValuePair(TomlUnquotedKey('array'), TomlArray([])),
             ])),
@@ -204,11 +226,7 @@ void main() {
           var builder = TomlAstBuilder();
           expect(
             builder.buildDocument({
-              'array': [
-                <String, dynamic>{},
-                <String, dynamic>{},
-                <String, dynamic>{},
-              ]
+              'array': [{}, {}, {}]
             }),
             equals(TomlDocument([
               TomlArrayTable(TomlKey([TomlUnquotedKey('array')])),

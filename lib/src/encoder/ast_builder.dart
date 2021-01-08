@@ -5,12 +5,13 @@ import 'package:toml/src/decoder/parser/util/whitespace.dart';
 
 import 'encodable.dart';
 import 'exception/mixed_array_types.dart';
+import 'exception/unknown_key_type.dart';
 import 'exception/unknown_value_type.dart';
 
 /// A builder for various TOML AST nodes.
 class TomlAstBuilder {
   /// Builds a TOML document from the given map.
-  TomlDocument buildDocument(Map<String, dynamic> map) {
+  TomlDocument buildDocument(Map map) {
     var pairs = map.entries.map(buildKeyValuePair);
     var expressions = _removeRedundantHeaders(
       _expandKeyValuePairs(pairs, prefix: TomlKey.topLevel),
@@ -103,12 +104,25 @@ class TomlAstBuilder {
   // --------------------------------------------------------------------------
 
   /// Builds a key valie pair from the given map entry.
-  TomlKeyValuePair buildKeyValuePair(MapEntry<String, dynamic> entry) =>
+  TomlKeyValuePair buildKeyValuePair(MapEntry entry) =>
       TomlKeyValuePair(buildSimpleKey(entry.key), buildValue(entry.value));
 
   // --------------------------------------------------------------------------
   // Keys
   // --------------------------------------------------------------------------
+
+  /// Converts a [TomlEncodableKey] to an object which TOML can represent as a
+  /// key.
+  ///
+  /// [TomlEncodableKey.toTomlKey] will be repeatedly applied on [value] until
+  /// the return value is representable by TOML as a key.
+  /// Returns [value] if it is not an instance of [TomlEncodableKey].
+  dynamic unwrapKey(dynamic value) {
+    while (value is TomlEncodableKey) {
+      value = value.toTomlKey();
+    }
+    return value;
+  }
 
   /// Creates a key from the given string.
   ///
@@ -116,23 +130,27 @@ class TomlAstBuilder {
   /// characters that are not allowed in unquoted keys, a quoted key is created
   /// instead. Whether a quoted key is a literal or basic string is determined
   /// by the rules of [buildSinglelineString].
-  TomlSimpleKey buildSimpleKey(String key) {
-    if (TomlUnquotedKey.canEncode(key)) return TomlUnquotedKey(key);
-    return TomlQuotedKey(buildSinglelineString(key));
+  TomlSimpleKey buildSimpleKey(dynamic key) {
+    key = unwrapKey(key);
+    if (key is String) {
+      if (TomlUnquotedKey.canEncode(key)) return TomlUnquotedKey(key);
+      return TomlQuotedKey(buildSinglelineString(key));
+    }
+    throw TomlUnknownKeyTypeException(key);
   }
 
   // --------------------------------------------------------------------------
   // Values
   // --------------------------------------------------------------------------
 
-  /// Converts a [TomlEncodable] object to an object which TOML can represent.
+  /// Converts a [TomlEncodableValue] to an object which TOML can represent.
   ///
-  /// [TomlEncodable.toToml] will be repeatedly applied on [value] until the
-  /// return value is representable by TOML.
-  /// Returns [value] if it is not an instance of [TomlEncodable].
+  /// [TomlEncodableValue.toTomlValue] will be repeatedly applied on [value]
+  /// until the return value is representable by TOML.
+  /// Returns [value] if it is not an instance of [TomlEncodableValue].
   dynamic unwrapValue(dynamic value) {
-    while (value is TomlEncodable) {
-      value = value.toToml();
+    while (value is TomlEncodableValue) {
+      value = value.toTomlValue();
     }
     return value;
   }
@@ -148,7 +166,7 @@ class TomlAstBuilder {
     if (value is DateTime) return TomlDateTime(value);
     if (value is String) return buildString(value);
     if (value is Iterable) return buildArray(value);
-    if (value is Map<String, dynamic>) return buildInlineTable(value);
+    if (value is Map) return buildInlineTable(value);
     throw TomlUnknownValueTypeException(value);
   }
 
@@ -217,6 +235,6 @@ class TomlAstBuilder {
   }
 
   /// Converts the given map to an inline table.
-  TomlInlineTable buildInlineTable(Map<String, dynamic> map) =>
+  TomlInlineTable buildInlineTable(Map map) =>
       TomlInlineTable(map.entries.map(buildKeyValuePair));
 }

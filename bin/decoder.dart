@@ -40,8 +40,8 @@ dynamic encodeArray(Iterable items) {
 ///   the string representation of [value].
 dynamic encodeValue(dynamic value) {
   // Unwrap value.
-  while (value is TomlEncodable) {
-    value = value.toToml();
+  while (value is TomlEncodableValue) {
+    value = value.toTomlValue();
   }
 
   // Special cases for tables and arrays.

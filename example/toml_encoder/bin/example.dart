@@ -2,13 +2,13 @@ import 'package:toml/toml.dart';
 
 /// Example for a class that can be encoded by the TOML encoder even though
 /// it is not a TOML value.
-class Point implements TomlEncodable {
+class Point extends TomlEncodableValue {
   final int x, y;
 
   const Point(this.x, this.y);
 
   @override
-  dynamic toToml() {
+  dynamic toTomlValue() {
     return {'x': x, 'y': y};
   }
 }

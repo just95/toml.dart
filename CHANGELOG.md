@@ -17,6 +17,11 @@ This is a major update that does not only bring along many changes to the intern
 - Removed the `yaml` dependency.
   JSON and YAML documents cannot be loaded with this package anymore.
   Since YAML documents are needed for testing, there is still a `dep_dependency` for the `yaml` package.
+- Renamed `TomlEncodable` to `TomlEncodableValue` and `toToml` to `toTomlValue`.
+- Added `TomlEncodableKey` interface.
+  Objects that implement this interface are allowed to be used as keys in hash maps instead of strings.
+  Their `toTomlKey` method must return a `TomlEncodeableKey` itself or a string that can be used as a TOML key.
+  By default `toTomlKey` is implemented via `toTomlValue`.
 
 ## 0.6.1 / 2020-11-19
 

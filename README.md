@@ -103,10 +103,10 @@ var document = TomlDocument.fromMap({
 ```
 
 The type and structure of the hash map should match the format described in the [next section](#data-structure).
-Additionally, the map may contain arbitrary values that implement the `TomlEncodable` interface.
-Classes which implement the `TomlEncodable` interface must define a `toToml` method whose return value is either an instance of `TomlEncodable` itself or is natively encodable by TOML.
+Additionally, the map may contain arbitrary keys and values that implement the `TomlEncodableKey` and `TomlEncodableValue` interfaces, respectively.
+Classes which implement those interfaces must define a `toTomlKey` or `toTomlValue` method whose return value is either implements the interface itself or is natively encodable by TOML.
 
-An example for using the encoder and the `TomlEncodable` interface to encode a `Map` can be found in [`./example/toml_encoder`][toml-dart/example/toml_encoder].
+An example for using the encoder and the `TomlEncodableValue` interface to encode a `Map` can be found in [`./example/toml_encoder`][toml-dart/example/toml_encoder].
 
 ## Data Structure
 
