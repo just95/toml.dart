@@ -164,14 +164,20 @@ class TomlPrettyPrinter extends TomlVisitor<void>
 
   @override
   void visitInlineTable(TomlInlineTable inlineTable) {
-    _writeToken(TomlInlineTable.openingDelimiter, after: true);
+    _writeToken(
+      TomlInlineTable.openingDelimiter,
+      after: inlineTable.pairs.isNotEmpty,
+    );
     _separatedBy(
       inlineTable.pairs,
       write: visitKeyValuePair,
       writeSeparator: (_) =>
           _writeToken(TomlInlineTable.separator, after: true),
     );
-    _writeToken(TomlInlineTable.closingDelimiter, before: true);
+    _writeToken(
+      TomlInlineTable.closingDelimiter,
+      before: inlineTable.pairs.isNotEmpty,
+    );
   }
 
   @override
