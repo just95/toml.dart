@@ -71,9 +71,15 @@ class TomlPrettyPrinter extends TomlVisitor<void>
       document.expressions,
       write: visitExpression,
       writeSeparator: (TomlExpression next) {
+        // All expresissions are are on a line by themselves but there is an
+        // additional blank line before every table header (except if it is
+        // the very first expression of the document).
         if (next is TomlTable) _writeNewline();
+        _writeNewline();
       },
     );
+    // There should be a newline at the end of every file.
+    _writeNewline();
   }
 
   // --------------------------------------------------------------------------
@@ -85,7 +91,6 @@ class TomlPrettyPrinter extends TomlVisitor<void>
     visitSimpleKey(pair.key);
     _writeToken(TomlKeyValuePair.separator, before: true, after: true);
     visitValue(pair.value);
-    _writeNewline();
   }
 
   @override
@@ -93,7 +98,6 @@ class TomlPrettyPrinter extends TomlVisitor<void>
     _writeToken(TomlStandardTable.openingDelimiter);
     visitKey(table.name);
     _writeToken(TomlStandardTable.closingDelimiter);
-    _writeNewline();
   }
 
   @override
@@ -101,7 +105,6 @@ class TomlPrettyPrinter extends TomlVisitor<void>
     _writeToken(TomlArrayTable.openingDelimiter);
     visitKey(table.name);
     _writeToken(TomlArrayTable.closingDelimiter);
-    _writeNewline();
   }
 
   // --------------------------------------------------------------------------
