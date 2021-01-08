@@ -5,6 +5,7 @@ import 'package:toml/src/decoder.dart';
 import 'package:toml/src/decoder/parser/util/whitespace.dart';
 import 'package:toml/src/encoder.dart';
 import 'package:toml/src/loader.dart';
+import 'package:quiver/collection.dart';
 
 import 'expression.dart';
 import 'node.dart';
@@ -63,7 +64,7 @@ class TomlDocument extends TomlNode {
 
   @override
   bool operator ==(dynamic other) =>
-      other is TomlDocument && expressions == other.expressions;
+      other is TomlDocument && listsEqual(expressions, other.expressions);
 
   @override
   int get hashCode => expressions.hashCode;
