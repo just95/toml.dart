@@ -153,7 +153,55 @@ class TomlPrettyPrinter extends TomlVisitor<void>
 
   @override
   void visitDateTime(TomlDateTime datetime) {
-    _writeToken(datetime.value.toIso8601String());
+    // Print date.
+    var yyyy = _dddd(datetime.value.year);
+    var mm = _dd(datetime.value.month);
+    var dd = _dd(datetime.value.day);
+    _writeToken('$yyyy-$mm-$dd');
+
+    // Print time.
+    var h = _dd(datetime.value.hour);
+    var min = _dd(datetime.value.minute);
+    var sec = _dd(datetime.value.second);
+    _writeToken('T$h:$min:$sec');
+
+    // Optionally add milliseconds and microseconds.
+    if (datetime.value.millisecond != 0 || datetime.value.microsecond != 0) {
+      var ms = _ddd(datetime.value.millisecond);
+      _writeToken('.$ms');
+      if (datetime.value.microsecond != 0) {
+        var us = _ddd(datetime.value.microsecond);
+        _writeToken('$us');
+      }
+    }
+
+    // Print time zone offset.
+    if (datetime.value.isUtc) {
+      _writeToken('Z');
+    } else {
+      var offset = datetime.value.timeZoneOffset;
+      var offsetSign = offset.isNegative ? '-' : '+';
+      var offsetHours =
+          _dd(offset.inHours.remainder(Duration.hoursPerDay) as int);
+      var offsetMin =
+          _dd(offset.inMinutes.remainder(Duration.minutesPerHour) as int);
+      _writeToken('$offsetSign$offsetHours:$offsetMin');
+    }
+  }
+
+  /// Converts the given number to a string of length 4 with leading zeros.
+  String _dddd(int n) {
+    return n.toString().padLeft(4, '0');
+  }
+
+  /// Converts the given number to a string of length 3 with leading zeros.
+  String _ddd(int n) {
+    return n.toString().padLeft(3, '0');
+  }
+
+  /// Converts the given number to a string of length 2 with a leading.
+  String _dd(int n) {
+    return n.toString().padLeft(2, '0');
   }
 
   @override
