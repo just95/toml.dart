@@ -145,5 +145,100 @@ void main() {
         expect(prettyPrinter.toString(), equals('-273'));
       });
     });
+    group('visitBasicString', () {
+      test('encodes simple basic strings correctly', () {
+        var prettyPrinter = TomlPrettyPrinter();
+        prettyPrinter.visitBasicString(TomlBasicString('foo'));
+        expect(prettyPrinter.toString(), equals('"foo"'));
+      });
+      test('escapes double quotes', () {
+        var prettyPrinter = TomlPrettyPrinter();
+        prettyPrinter.visitBasicString(TomlBasicString('foo "bar" baz'));
+        expect(prettyPrinter.toString(), equals(r'"foo \"bar\" baz"'));
+      });
+      test('does not escape single quotes', () {
+        var prettyPrinter = TomlPrettyPrinter();
+        prettyPrinter.visitBasicString(TomlBasicString("foo 'bar' baz"));
+        expect(prettyPrinter.toString(), equals('"foo \'bar\' baz"'));
+      });
+      test('escapes newlines', () {
+        var prettyPrinter = TomlPrettyPrinter();
+        prettyPrinter.visitBasicString(TomlBasicString('line 1\nline 2'));
+        expect(prettyPrinter.toString(), equals(r'"line 1\nline 2"'));
+      });
+    });
+    group('visitLiteralString', () {
+      test('encodes simple literal strings correctly', () {
+        var prettyPrinter = TomlPrettyPrinter();
+        prettyPrinter.visitLiteralString(TomlLiteralString('foo'));
+        expect(prettyPrinter.toString(), equals("'foo'"));
+      });
+    });
+    group('visitMultilineBasicString', () {
+      test('always inserts a newline after the opening delimiter', () {
+        var prettyPrinter = TomlPrettyPrinter();
+        prettyPrinter.visitMultilineBasicString(
+          TomlMultilineBasicString('foo'),
+        );
+        expect(prettyPrinter.toString(), equals('"""\nfoo"""'));
+      });
+      test('does not escape single double quotes', () {
+        var prettyPrinter = TomlPrettyPrinter();
+        prettyPrinter.visitMultilineBasicString(
+          TomlMultilineBasicString('foo "bar" baz'),
+        );
+        expect(prettyPrinter.toString(), equals('"""\nfoo "bar" baz"""'));
+      });
+      test('does not escape two consequtive double quotes', () {
+        var prettyPrinter = TomlPrettyPrinter();
+        prettyPrinter.visitMultilineBasicString(
+          TomlMultilineBasicString('foo ""bar"" baz'),
+        );
+        expect(prettyPrinter.toString(), equals('"""\nfoo ""bar"" baz"""'));
+      });
+      test('escapes the third consequtive double quote', () {
+        var prettyPrinter = TomlPrettyPrinter();
+        prettyPrinter.visitMultilineBasicString(
+          TomlMultilineBasicString('foo """bar""" baz'),
+        );
+        expect(
+          prettyPrinter.toString(),
+          equals('"""\nfoo ""\\"bar""\\" baz"""'),
+        );
+      });
+      test('escapes every third consequtive double quote', () {
+        var prettyPrinter = TomlPrettyPrinter();
+        prettyPrinter.visitMultilineBasicString(
+          TomlMultilineBasicString('foo """""""bar""""""" baz'),
+        );
+        expect(
+          prettyPrinter.toString(),
+          equals('"""\nfoo ""\\"""\\""bar""\\"""\\"" baz"""'),
+        );
+      });
+      test('does not escapes newlines', () {
+        var prettyPrinter = TomlPrettyPrinter();
+        prettyPrinter.visitMultilineBasicString(
+          TomlMultilineBasicString('line 1\nline 2'),
+        );
+        expect(prettyPrinter.toString(), equals('"""\nline 1\nline 2"""'));
+      });
+    });
+    group('visitMultilineLiteralString', () {
+      test('always inserts a newline after the opening delimiter', () {
+        var prettyPrinter = TomlPrettyPrinter();
+        prettyPrinter.visitMultilineLiteralString(
+          TomlMultilineLiteralString('foo'),
+        );
+        expect(prettyPrinter.toString(), equals("'''\nfoo'''"));
+      });
+      test('does not escapes newlines', () {
+        var prettyPrinter = TomlPrettyPrinter();
+        prettyPrinter.visitMultilineLiteralString(
+          TomlMultilineLiteralString('line 1\nline 2'),
+        );
+        expect(prettyPrinter.toString(), equals("'''\nline 1\nline 2'''"));
+      });
+    });
   });
 }
