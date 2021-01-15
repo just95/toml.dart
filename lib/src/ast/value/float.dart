@@ -25,6 +25,9 @@ import '../visitor/value.dart';
 ///
 /// TODO The special values `inf` and `nan` were added in TOML 0.5.0 and are
 /// not supported yet.
+///
+/// TODO Leading zeros in exponent were allowed in TOML 1.0.0-rc.1 and are not
+/// supported yet.
 class TomlFloat extends TomlValue<double> {
   /// Parser for a TOML floating point value.
   static final Parser<TomlFloat> parser = (() {
