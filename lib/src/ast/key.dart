@@ -3,6 +3,7 @@ library toml.src.ast.key;
 import 'package:petitparser/petitparser.dart';
 import 'package:quiver/collection.dart';
 import 'package:quiver/core.dart';
+import 'package:toml/src/decoder/exception/parser.dart';
 import 'package:toml/src/decoder/parser/util/whitespace.dart';
 
 import 'node.dart';
@@ -34,7 +35,8 @@ class TomlKey extends TomlNode {
   /// Parses the given TOML key.
   ///
   /// Throws a [ParserException] if there is a syntax error.
-  static TomlKey parse(String input) => parser.end().parse(input).value;
+  static TomlKey parse(String input) =>
+      parser.end().parse(input).valueOrTomlException;
 
   /// A key that identifies the top-level table.
   static TomlKey topLevel = TomlKey([]);

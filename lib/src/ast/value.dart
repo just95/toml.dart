@@ -1,6 +1,7 @@
 library toml.src.ast.value;
 
 import 'package:petitparser/petitparser.dart';
+import 'package:toml/src/decoder/exception/parser.dart';
 import 'package:toml/src/decoder/parser/util/non_strict.dart';
 import 'package:toml/src/encoder.dart';
 
@@ -72,7 +73,8 @@ abstract class TomlValue<V> extends TomlNode {
   /// Parses the given TOML value.
   ///
   /// Throws a [ParserException] if there is a syntax error.
-  static TomlValue parse(String input) => parser.end().parse(input).value;
+  static TomlValue parse(String input) =>
+      parser.end().parse(input).valueOrTomlException;
 
   /// Since there is a factory constructor, we have to provide the default
   /// constructor explicitly such that instances of subclasses can be created.

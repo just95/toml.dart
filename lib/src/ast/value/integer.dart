@@ -27,7 +27,7 @@ class TomlInteger extends TomlValue<int> {
   /// Parser for a TOML interger value.
   static final Parser<TomlInteger> parser = decParser;
 
-  /// Parser for a decimal TOML interger value..
+  /// Parser for a decimal TOML interger value.
   ///
   ///     dec-int = [ minus / plus ] unsigned-dec-int
   ///     minus = %x2D                       ; -

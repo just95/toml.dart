@@ -28,7 +28,8 @@ class TomlDocument extends TomlNode {
   /// Parses the given TOML document.
   ///
   /// Throws a [ParserException] if there is a syntax error.
-  static TomlDocument parse(String input) => parser.end().parse(input).value;
+  static TomlDocument parse(String input) =>
+      parser.end().parse(input).valueOrTomlException;
 
   /// Loads the file with the given name and [parse]s the contents as a
   /// TOML document.
