@@ -2,6 +2,10 @@ library toml.src.encoder.encodable;
 
 /// Interface for an object which can be encoded as a TOML value or table.
 abstract class TomlEncodableValue {
+  /// Constant default constructor to allow subclasses with `const`
+  /// constructors.
+  const TomlEncodableValue();
+
   /// Converts this object to an object which can natively be represented as
   /// a TOML value or table.
   ///
@@ -21,6 +25,10 @@ abstract class TomlEncodableValue {
 /// [toTomlValue] in both cases. You have to `extend` or `mixin` this interface
 /// in order to use the default implementation of [toTomlKey].
 abstract class TomlEncodableKey extends TomlEncodableValue {
+  /// Constant default constructor to allow subclasses with `const`
+  /// constructors.
+  const TomlEncodableKey();
+
   /// Like [toTomlValue] but is invoked when the object is used as a key
   /// of a `Map` instead of as a value.
   dynamic toTomlKey() => toTomlValue();
