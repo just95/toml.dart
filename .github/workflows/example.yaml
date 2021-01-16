@@ -27,18 +27,10 @@ jobs:
         uses: actions/checkout@v2
       - name: Print Dart SDK Version
         run: dart --version
-      - name: Analyze Examples
-        run: |
-          examples_dir=$(realpath example)
-          for example in $(find $examples_dir -name analysis_options.yaml); do
-            example_dir=$(dirname $example)
-            example_name=$(basename $example_dir)
-            cd $example_dir
-            echo "Installing dependencies of '$example_name' example..."
-            dart pub get || exit 1
-            echo "Analyzing code of '$example_name' example..."
-            dart analyze || exit 1
-          done
+      - name: Install Dependencies of Examples
+        run: ./tool/get-example-dependencies.sh
+      - name: Analyze Code of Examples
+        run: ./tool/analyze-examples.sh
 
 
   # Tests whether all Dart source files of the package i.e., all `.dart` files
@@ -54,21 +46,10 @@ jobs:
         uses: actions/checkout@v2
       - name: Print Dart SDK Version
         run: dart --version
-      - name: Install Dependencies
-        run: dart pub get
-      - name: Check Code Formatting
+      - name: Install Dependencies of Examples
+        run: ./tool/get-example-dependencies.sh
+      - name: Check Code Formatting of Examples
         run: |
-          examples_dir=$(realpath example)
-          for example in $(find $examples_dir -name analysis_options.yaml); do
-            example_dir=$(dirname $example)
-            example_name=$(basename $example_dir)
-            cd $example_dir
-            echo "Installing dependencies of '$example_name' example..."
-            dart pub get || exit 1
-            echo "Checking code formatting of '$example_name' example..."
-            dart format --show all            \
-                        --output none         \
-                        --set-exit-if-changed \
-                        bin lib test          \
-              || exit 1
-          done
+          ./tool/format-examples.sh --show all            \
+                                    --output none         \
+                                    --set-exit-if-changed
