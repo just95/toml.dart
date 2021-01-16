@@ -46,11 +46,19 @@ jobs:
         run: dart format --show all --output none --set-exit-if-changed .
 
   # Runs the unit tests of the package with `dart test` in the Dart VM.
+  #
+  # While most other checks run with the latest version of the Dart SDK only,
+  # the unit tests are executed with all supported versions (according to the
+  # lower sdk constraint specified in `pubspec.yaml`) in addition to the latest
+  # version.
   vm-test:
     name: Run Unit Tests in Dart VM
     runs-on: ubuntu-latest
     container:
-      image: google/dart:latest
+      image: google/dart:${{ matrix.dart-version }}
+    strategy:
+      matrix:
+        dart-version: [2.7, 2.8, 2.9, 2.10, latest]
     steps:
       - name: Checkout
         uses: actions/checkout@v2
