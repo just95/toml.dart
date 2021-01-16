@@ -1,5 +1,7 @@
 # toml.dart Examples
 
+[![Example CI](https://github.com/just95/toml.dart/workflows/Example%20CI/badge.svg?branch=main)][toml-dart/actions]
+
 This directory contains examples for the usage of the `toml.dart` package.
 
  - [`./filesystem_config_loader`][toml-dart/example/filesystem_config_loader] contains an example for how to load a configuration file in the Dart VM from the local filesystem.
@@ -13,6 +15,10 @@ This directory contains examples for the usage of the `toml.dart` package.
  - [`./toml_parser`][toml-dart/example/toml_parser] contains an example for how to use the `TomlDocument.parse` and `TomlDocument.toMap` methods to decode a TOML document from a string that has been read from `stdin`.
 
  - [`./toml_to_json`][toml-dart/example/toml_to_json] contains an example application for the conversion of TOML documents to JSON.
+
+[toml-dart/actions/example]:
+  https://github.com/just95/toml.dart/actions?query=workflow%3A%22Example+CI%22
+  "toml.dart CI Pipeline for Examples"
 
 [toml-dart/example/filesystem_config_loader]:
   https://github.com/just95/toml.dart/tree/main/example/filesystem_config_loader
