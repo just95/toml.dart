@@ -13,6 +13,12 @@ void main() {
             equals(TomlArray([])),
           );
         });
+        test('can parse empty array with whitespace', () {
+          expect(
+            TomlValue.parse('[ ]'),
+            equals(TomlArray([])),
+          );
+        });
         test('can parse array of integers', () {
           expect(
             TomlValue.parse('[1, 2, 3]'),
@@ -29,6 +35,24 @@ void main() {
           expect(
             () => TomlValue.parse('[,]'),
             throwsA(isA<TomlParserException>()),
+          );
+        });
+        test('can parse array with whitespace after the opening bracket', () {
+          expect(
+            TomlValue.parse('[ 1, 2, 3]'),
+            equals(TomlArray([TomlInteger(1), TomlInteger(2), TomlInteger(3)])),
+          );
+        });
+        test('can parse array with whitespace before the closing bracket', () {
+          expect(
+            TomlValue.parse('[1, 2, 3 ]'),
+            equals(TomlArray([TomlInteger(1), TomlInteger(2), TomlInteger(3)])),
+          );
+        });
+        test('can parse array with whitespace before commas', () {
+          expect(
+            TomlValue.parse('[1 , 2 , 3]'),
+            equals(TomlArray([TomlInteger(1), TomlInteger(2), TomlInteger(3)])),
           );
         });
         test('can parse array with newlines after the opening bracket', () {
@@ -49,16 +73,28 @@ void main() {
             equals(TomlArray([TomlInteger(1), TomlInteger(2), TomlInteger(3)])),
           );
         });
-        test('cannot parse array with newlines before commas', () {
+        test('can parse array with newlines before commas', () {
           expect(
-            () => TomlValue.parse('[1\n, 2\n, 3]'),
-            throwsA(isA<TomlParserException>()),
+            TomlValue.parse('[1\n, 2\n, 3]'),
+            equals(TomlArray([TomlInteger(1), TomlInteger(2), TomlInteger(3)])),
           );
         });
         test('rejects homogeneous arrays', () {
           expect(
             () => TomlValue.parse('[1, 2.0, 3]'),
             throwsA(isA<FormatException>()),
+          );
+        });
+        test('can parse array with comments', () {
+          expect(
+            TomlValue.parse(
+              '[    # Comment after opening bracket\n'
+              '  1, # Comment after comma\n'
+              '  2  # Comment before comma\n'
+              ', 3  # Comment before closing bracket\n'
+              ']',
+            ),
+            equals(TomlArray([TomlInteger(1), TomlInteger(2), TomlInteger(3)])),
           );
         });
       });

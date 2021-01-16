@@ -13,8 +13,9 @@ import '../visitor/value.dart';
 ///
 ///     array = array-open [ array-values ] ws-comment-newline array-close
 ///
-///     array-values =  ws-comment-newline val ws array-sep array-values
-///     array-values =/ ws-comment-newline val ws [ array-sep ]
+///     array-values =  ws-comment-newline val ws-comment-newline array-sep
+///                     array-values
+///     array-values =/ ws-comment-newline val ws-comment-newline [ array-sep ]
 ///
 class TomlArray<V> extends TomlValue<Iterable<V>> {
   /// The opening delimiter of arrays.
@@ -38,7 +39,9 @@ class TomlArray<V> extends TomlValue<Iterable<V>> {
   /// The requirement of TOML 0.4.0 that value types are not mixed,
   /// is checked by [TomlArray.fromHomogeneous].
   static final Parser<TomlArray> parser = (char(openingDelimiter) &
-          (tomlWhitespaceCommentNewline & TomlValue.parser & tomlWhitespace)
+          (tomlWhitespaceCommentNewline &
+                  TomlValue.parser &
+                  tomlWhitespaceCommentNewline)
               .pick(1)
               .separatedBy<TomlValue>(
                 char(separator),
