@@ -49,8 +49,11 @@ jobs:
   #
   # While most other checks run with the latest version of the Dart SDK only,
   # the unit tests are executed with all supported versions (according to the
-  # lower sdk constraint specified in `pubspec.yaml`) in addition to the latest
+  # lower SDK constraint specified in `pubspec.yaml`) in addition to the latest
   # version.
+  #
+  # For support of SDK versions prior to 2.10, the `dart pub get` and
+  # `dart test` commands have to fallback to `pub get` and `pub run test`.
   vm-test:
     name: Run Unit Tests in Dart VM
     runs-on: ubuntu-latest
@@ -65,9 +68,9 @@ jobs:
       - name: Print Dart SDK Version
         run: dart --version
       - name: Install Dependencies
-        run: dart pub get
+        run: dart pub get || pub get
       - name: Run Unit Tests
-        run: dart test --reporter expanded
+        run: dart test --reporter expanded || pub run test --reporter expanded
 
   # Runs the unit tests of the package with `dart test` in Node.js.
   js-test:
