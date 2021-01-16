@@ -1,15 +1,21 @@
+# This is the main workflow that performs checks on the source code of the
+# package itself.
+
 name: Dart CI
 
 # Trigger the workflow whenever commits are pushed to the `main` branch or
-# development braches with the `-ci` postfix.
+# development braches with the `-ci` postfix. Commits that only modify examples
+# do not trigger the workflow. There is a separate workflow that checks
+# the example source code.
 on:
   push:
     branches:
       - 'main'
       - '*-ci'
+    paths-ignore:
+      - 'example/**'
 
 jobs:
-
   # Analyzes the Dart code of the package (i.e., all `.dart` files in the `lib`,
   # `bin` and `test` directories) in the with `dart analyze`. The `example`s are
   # not analyzed by this job.
@@ -28,8 +34,9 @@ jobs:
       - name: Analyze Code
         run: dart analyze
 
-  # Tests whether all Dart source files of the package including the `example`s
-  # are formatted correctly with `dart format`.
+  # Tests whether all Dart source files of the package (i.e., all `.dart` files
+  # in the `lib`, `bin` and `test` directories) are formatted correctly with
+  # `dart format`. The `example`s are not analyzed by this job.
   format:
     name: Check Code Formatting
     runs-on: ubuntu-latest
@@ -43,7 +50,11 @@ jobs:
       - name: Install Dependencies
         run: dart pub get
       - name: Check Code Formatting
-        run: dart format --show all --output none --set-exit-if-changed .
+        run: |
+          dart format --show all            \
+                      --output none         \
+                      --set-exit-if-changed \
+                      bin lib test
 
   # Runs the unit tests of the package with `dart test` in the Dart VM.
   #

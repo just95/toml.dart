@@ -1,0 +1,74 @@
+# This workflow contains checks for the examples in the `example` directory
+# of the package.
+
+name: Example CI
+
+# Trigger the workflow whenever commits are pushed to the `main` branch or
+# development braches with the `-ci` postfix. The workflow also runs when
+# files outside of the `example` directory change because the examples depend
+# on the `toml` package.
+on:
+  push:
+    branches:
+      - 'main'
+      - '*-ci'
+
+jobs:
+  # Analyzes the Dart code of the examples (i.e., all `.dart` files in the `lib`,
+  # `bin` and `test` sub-directories of the example packages in the `example`
+  # directory) with `dart analyze`.
+  analyze:
+    name: Analyze Code of Examples
+    runs-on: ubuntu-latest
+    container:
+      image: google/dart:latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Print Dart SDK Version
+        run: dart --version
+      - name: Analyze Examples
+        run: |
+          examples_dir=$(realpath example)
+          for example in $(find $examples_dir -name analysis_options.yaml); do
+            example_dir=$(dirname $example)
+            example_name=$(basename $example_dir)
+            cd $example_dir
+            echo "Installing dependencies of '$example_name' example..."
+            dart pub get || exit 1
+            echo "Analyzing code of '$example_name' example..."
+            dart analyze || exit 1
+          done
+
+
+  # Tests whether all Dart source files of the package i.e., all `.dart` files
+  # in the `lib`, `bin` and `test` directories) are formatted correctly with
+  # `dart format`. The `example`s are not analyzed by this job.
+  format:
+    name: Check Code Formatting
+    runs-on: ubuntu-latest
+    container:
+      image: google/dart:latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Print Dart SDK Version
+        run: dart --version
+      - name: Install Dependencies
+        run: dart pub get
+      - name: Check Code Formatting
+        run: |
+          examples_dir=$(realpath example)
+          for example in $(find $examples_dir -name analysis_options.yaml); do
+            example_dir=$(dirname $example)
+            example_name=$(basename $example_dir)
+            cd $example_dir
+            echo "Installing dependencies of '$example_name' example..."
+            dart pub get || exit 1
+            echo "Checking code formatting of '$example_name' example..."
+            dart format --show all            \
+                        --output none         \
+                        --set-exit-if-changed \
+                        bin lib test          \
+              || exit 1
+          done
