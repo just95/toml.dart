@@ -17,12 +17,7 @@ class Point extends TomlEncodableValue {
 const Map<String, dynamic> document = {
   'shape': {
     'type': 'rectangle',
-    'points': [
-      const Point(1, 1),
-      const Point(1, -1),
-      const Point(-1, -1),
-      const Point(-1, 1)
-    ],
+    'points': [Point(1, 1), Point(1, -1), Point(-1, -1), Point(-1, 1)],
   }
 };
 
