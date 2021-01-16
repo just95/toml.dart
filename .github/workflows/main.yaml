@@ -1,10 +1,12 @@
 name: Dart CI
 
-# Trigger the workflow whenever commits are pushed to the `main` branch.
+# Trigger the workflow whenever commits are pushed to the `main` branch or
+# development braches with the `-ci` postfix.
 on:
   push:
     branches:
       - 'main'
+      - '*-ci'
 
 jobs:
 
@@ -43,9 +45,9 @@ jobs:
       - name: Check Code Formatting
         run: dart format --show all --output none --set-exit-if-changed .
 
-  # Runs the unit tests of the package with `dart test`.
-  test:
-    name: Run Unit Tests
+  # Runs the unit tests of the package with `dart test` in the Dart VM.
+  vm-test:
+    name: Run Unit Tests in Dart VM
     runs-on: ubuntu-latest
     container:
       image: google/dart:latest
@@ -58,6 +60,29 @@ jobs:
         run: dart pub get
       - name: Run Unit Tests
         run: dart test --reporter expanded
+
+  # Runs the unit tests of the package with `dart test` in Node.js.
+  js-test:
+    name: Run Unit Tests in Node.js
+    runs-on: ubuntu-latest
+    container:
+      image: google/dart:latest
+    strategy:
+      matrix:
+        node-version: [10, 12, 14, 15]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: Print Dart SDK Version
+        run: dart --version
+      - name: Install Dependencies
+        run: dart pub get
+      - name: Run Unit Tests
+        run: dart test --reporter expanded --platform node
 
   # Compiles the test decoder script for the `toml-test` test suite.
   compile-toml-test:
