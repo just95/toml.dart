@@ -1,4 +1,4 @@
-library toml.src.decoder.exception.redefinition;
+library toml.src.decoder.exception.parser;
 
 import 'package:petitparser/petitparser.dart';
 import 'package:toml/src/exception.dart';
