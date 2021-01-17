@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.7.0 / 2021-01-17
+## 0.7.0
 
 This is a major update that does not only bring along many changes to the internal architecture of the library but also to its public interface.
 
@@ -22,36 +22,36 @@ This is a major update that does not only bring along many changes to the intern
   Their `toTomlKey` method must return a `TomlEncodeableKey` itself or a string that can be used as a TOML key.
   By default `toTomlKey` is implemented via `toTomlValue`.
 
-## 0.6.1 / 2020-11-19
+## 0.6.1
 
 - Upgraded dependencies.
 
-## 0.6.0 / 2020-05-22
+## 0.6.0
 
 - Upgraded to Dart 2.
 
-## 0.5.1 / 2017-06-19
+## 0.5.1
 
 - Upgraded dependencies.
 
-## 0.5.0 / 2016-07-24
+## 0.5.0
 
 - Removed deprecated `use*ConfigLoader` functions.
 - Improved testing and added support for BurntSushi's [`toml-test`][toml-test] suite.
 
-## 0.4.0 / 2015-06-05
+## 0.4.0
 
 - Removed deprecated `toml.browser` and `toml.server` libraries.
 - Dropped support for `dart_config`. There is now a custom `ConfigLoader` interface with two default implementations.
 - The `use*ConfigLoader` functions are still available for backward compatibility, but are deprecated and will be removed in the next release.
   Each of the `ConfigLoader` implementations has a static `use` method which you should use instead.
 
-## 0.3.0 / 2015-04-08
+## 0.3.0
 
 - Introduced new `toml.loader` library.
 - The `toml.browser` and `toml.server` libraries are now deprecated and will be removed in the next release. Use the new `toml.loader` library instead.
 
-## 0.2.0 / 2015-02-12
+## 0.2.0
 
 - Updated to v0.4.0 of the TOML spec.
 - Added bare/quoted keys.
@@ -59,11 +59,11 @@ This is a major update that does not only bring along many changes to the intern
 - Allowed underscores in numbers.
 - Removed forward slash as an escapable character.
 
-## 0.1.1 / 2015-01-26
+## 0.1.1
 
 - Fixed links and markdown.
 
-## 0.1.0 / 2015-01-23
+## 0.1.0
 
 - Initial version, implements v0.3.1 of the TOML spec.
 
