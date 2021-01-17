@@ -160,7 +160,7 @@ class TomlAstBuilder {
   /// TOML.
   TomlValue buildValue(dynamic value) {
     value = unwrapValue(value);
-    if (value is int) return TomlInteger(value);
+    if (value is int) return TomlInteger.dec(value);
     if (value is double) return TomlFloat(value);
     if (value is bool) return TomlBoolean(value);
     if (value is DateTime) return TomlDateTime(value);

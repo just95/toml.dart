@@ -18,12 +18,12 @@ void main() {
         var builder = TomlMapBuilder();
         builder.visitKeyValuePair(TomlKeyValuePair(
           TomlUnquotedKey('key'),
-          TomlInteger(1),
+          TomlInteger.dec(1),
         ));
         expect(
           () => builder.visitKeyValuePair(TomlKeyValuePair(
             TomlUnquotedKey('key'),
-            TomlInteger(2),
+            TomlInteger.dec(2),
           )),
           throwsA(
             equals(
@@ -106,14 +106,14 @@ void main() {
         ));
         builder.visitKeyValuePair(TomlKeyValuePair(
           TomlUnquotedKey('key1'),
-          TomlInteger(1),
+          TomlInteger.dec(1),
         ));
         builder.visitStandardTable(TomlStandardTable(
           TomlKey([TomlUnquotedKey('parent')]),
         ));
         builder.visitKeyValuePair(TomlKeyValuePair(
           TomlUnquotedKey('key2'),
-          TomlInteger(2),
+          TomlInteger.dec(2),
         ));
         expect(
           builder.build(),
@@ -133,7 +133,7 @@ void main() {
         ));
         builder.visitKeyValuePair(TomlKeyValuePair(
           TomlUnquotedKey('key1'),
-          TomlInteger(1),
+          TomlInteger.dec(1),
         ));
         builder.visitStandardTable(TomlStandardTable(
           TomlKey([
@@ -143,7 +143,7 @@ void main() {
         ));
         builder.visitKeyValuePair(TomlKeyValuePair(
           TomlUnquotedKey('key2'),
-          TomlInteger(2),
+          TomlInteger.dec(2),
         ));
         expect(
           builder.build(),
@@ -276,14 +276,14 @@ void main() {
           ));
           builder.visitKeyValuePair(TomlKeyValuePair(
             TomlUnquotedKey('key1'),
-            TomlInteger(1),
+            TomlInteger.dec(1),
           ));
           builder.visitArrayTable(TomlArrayTable(
             TomlKey([TomlUnquotedKey('array')]),
           ));
           builder.visitKeyValuePair(TomlKeyValuePair(
             TomlUnquotedKey('key2'),
-            TomlInteger(2),
+            TomlInteger.dec(2),
           ));
           expect(
             builder.build(),

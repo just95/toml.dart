@@ -21,13 +21,15 @@ void main() {
       test('can parse array of integers', () {
         expect(
           TomlValue.parse('[1, 2, 3]'),
-          equals(TomlArray([TomlInteger(1), TomlInteger(2), TomlInteger(3)])),
+          equals(TomlArray(
+              [TomlInteger.dec(1), TomlInteger.dec(2), TomlInteger.dec(3)])),
         );
       });
       test('can parse array with trailing comma', () {
         expect(
           TomlValue.parse('[1, 2, 3,]'),
-          equals(TomlArray([TomlInteger(1), TomlInteger(2), TomlInteger(3)])),
+          equals(TomlArray(
+              [TomlInteger.dec(1), TomlInteger.dec(2), TomlInteger.dec(3)])),
         );
       });
       test('cannot parse array with comma only', () {
@@ -39,43 +41,50 @@ void main() {
       test('can parse array with whitespace after the opening bracket', () {
         expect(
           TomlValue.parse('[ 1, 2, 3]'),
-          equals(TomlArray([TomlInteger(1), TomlInteger(2), TomlInteger(3)])),
+          equals(TomlArray(
+              [TomlInteger.dec(1), TomlInteger.dec(2), TomlInteger.dec(3)])),
         );
       });
       test('can parse array with whitespace before the closing bracket', () {
         expect(
           TomlValue.parse('[1, 2, 3 ]'),
-          equals(TomlArray([TomlInteger(1), TomlInteger(2), TomlInteger(3)])),
+          equals(TomlArray(
+              [TomlInteger.dec(1), TomlInteger.dec(2), TomlInteger.dec(3)])),
         );
       });
       test('can parse array with whitespace before commas', () {
         expect(
           TomlValue.parse('[1 , 2 , 3]'),
-          equals(TomlArray([TomlInteger(1), TomlInteger(2), TomlInteger(3)])),
+          equals(TomlArray(
+              [TomlInteger.dec(1), TomlInteger.dec(2), TomlInteger.dec(3)])),
         );
       });
       test('can parse array with newlines after the opening bracket', () {
         expect(
           TomlValue.parse('[\n1, 2, 3]'),
-          equals(TomlArray([TomlInteger(1), TomlInteger(2), TomlInteger(3)])),
+          equals(TomlArray(
+              [TomlInteger.dec(1), TomlInteger.dec(2), TomlInteger.dec(3)])),
         );
       });
       test('can parse array with newlines before the closing bracket', () {
         expect(
           TomlValue.parse('[1, 2, 3\n]'),
-          equals(TomlArray([TomlInteger(1), TomlInteger(2), TomlInteger(3)])),
+          equals(TomlArray(
+              [TomlInteger.dec(1), TomlInteger.dec(2), TomlInteger.dec(3)])),
         );
       });
       test('can parse array with newlines after commas', () {
         expect(
           TomlValue.parse('[1,\n 2,\n 3]'),
-          equals(TomlArray([TomlInteger(1), TomlInteger(2), TomlInteger(3)])),
+          equals(TomlArray(
+              [TomlInteger.dec(1), TomlInteger.dec(2), TomlInteger.dec(3)])),
         );
       });
       test('can parse array with newlines before commas', () {
         expect(
           TomlValue.parse('[1\n, 2\n, 3]'),
-          equals(TomlArray([TomlInteger(1), TomlInteger(2), TomlInteger(3)])),
+          equals(TomlArray(
+              [TomlInteger.dec(1), TomlInteger.dec(2), TomlInteger.dec(3)])),
         );
       });
       test('rejects homogeneous arrays', () {
@@ -93,7 +102,8 @@ void main() {
             ', 3  # Comment before closing bracket\n'
             ']',
           ),
-          equals(TomlArray([TomlInteger(1), TomlInteger(2), TomlInteger(3)])),
+          equals(TomlArray(
+              [TomlInteger.dec(1), TomlInteger.dec(2), TomlInteger.dec(3)])),
         );
       });
     });
@@ -277,37 +287,37 @@ void main() {
       test('can parse zero without sign', () {
         expect(
           TomlValue.parse('0'),
-          equals(TomlInteger(0)),
+          equals(TomlInteger.dec(0)),
         );
       });
       test('can parse zero with plus sign', () {
         expect(
           TomlValue.parse('+0'),
-          equals(TomlInteger(0)),
+          equals(TomlInteger.dec(0)),
         );
       });
       test('can parse zero with minus sign', () {
         expect(
           TomlValue.parse('-0'),
-          equals(TomlInteger(0)),
+          equals(TomlInteger.dec(0)),
         );
       });
       test('can parse positive number with plus sign', () {
         expect(
           TomlValue.parse('+99'),
-          equals(TomlInteger(99)),
+          equals(TomlInteger.dec(99)),
         );
       });
       test('can parse positive number without plus sign', () {
         expect(
           TomlValue.parse('42'),
-          equals(TomlInteger(42)),
+          equals(TomlInteger.dec(42)),
         );
       });
       test('can parse negative number', () {
         expect(
           TomlValue.parse('-17'),
-          equals(TomlInteger(-17)),
+          equals(TomlInteger.dec(-17)),
         );
       });
       test('does not allow leading zeros', () {
@@ -319,13 +329,13 @@ void main() {
       test('allows underscores to be used as separators', () {
         expect(
           TomlValue.parse('1_000'),
-          equals(TomlInteger(1000)),
+          equals(TomlInteger.dec(1000)),
         );
       });
       test('allows underscores between every number', () {
         expect(
           TomlValue.parse('1_2_3_4_5'),
-          equals(TomlInteger(12345)),
+          equals(TomlInteger.dec(12345)),
         );
       });
       test('does not allow leading underscores', () {
@@ -372,9 +382,9 @@ void main() {
         expect(
           TomlValue.parse('{ x = 1, y = 2, z = 3 }'),
           equals(TomlInlineTable([
-            TomlKeyValuePair(TomlUnquotedKey('x'), TomlInteger(1)),
-            TomlKeyValuePair(TomlUnquotedKey('y'), TomlInteger(2)),
-            TomlKeyValuePair(TomlUnquotedKey('z'), TomlInteger(3)),
+            TomlKeyValuePair(TomlUnquotedKey('x'), TomlInteger.dec(1)),
+            TomlKeyValuePair(TomlUnquotedKey('y'), TomlInteger.dec(2)),
+            TomlKeyValuePair(TomlUnquotedKey('z'), TomlInteger.dec(3)),
           ])),
         );
       });
