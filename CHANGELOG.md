@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.7.0 / Unreleased
+## 0.7.0 / 2021-01-17
 
 This is a major update that does not only bring along many changes to the internal architecture of the library but also to its public interface.
 

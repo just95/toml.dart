@@ -27,7 +27,7 @@ To get started add `toml` as a dependency to your `pubspec.yaml` and run the
 
 ```yaml
 dependencies:
-  toml: "^0.6.1"
+  toml: "^0.7.0"
 ```
 
 ## Usage
