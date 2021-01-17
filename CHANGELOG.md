@@ -16,7 +16,6 @@ This is a major update that does not only bring along many changes to the intern
   In order to implement a custom loading mechanism, use `TomlDocument.parse` instead.
 - Removed the `yaml` dependency.
   JSON and YAML documents cannot be loaded with this package anymore.
-  Since YAML documents are needed for testing, there is still a `dep_dependency` for the `yaml` package.
 - Renamed `TomlEncodable` to `TomlEncodableValue` and `toToml` to `toTomlValue`.
 - Added `TomlEncodableKey` interface.
   Objects that implement this interface are allowed to be used as keys in hash maps instead of strings.
