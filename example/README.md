@@ -1,6 +1,6 @@
 # toml.dart Examples
 
-[![Example CI](https://github.com/just95/toml.dart/workflows/Example%20CI/badge.svg?branch=main)][toml-dart/actions]
+[![Example CI](https://github.com/just95/toml.dart/workflows/Example%20CI/badge.svg?branch=main)][toml-dart/actions/example]
 
 This directory contains examples for the usage of the `toml.dart` package.
 
