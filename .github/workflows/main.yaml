@@ -32,7 +32,7 @@ jobs:
       - name: Install Dependencies
         run: dart pub get
       - name: Analyze Code
-        run: dart analyze
+        run: dart analyze --fatal-infos
 
   # Tests whether all Dart source files of the package (i.e., all `.dart` files
   # in the `lib`, `bin` and `test` directories) are formatted correctly with

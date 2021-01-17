@@ -30,7 +30,7 @@ jobs:
       - name: Install Dependencies of Examples
         run: ./tool/get-example-dependencies.sh
       - name: Analyze Code of Examples
-        run: ./tool/analyze-examples.sh
+        run: ./tool/analyze-examples.sh --fatal-infos
 
 
   # Tests whether all Dart source files of the package i.e., all `.dart` files
