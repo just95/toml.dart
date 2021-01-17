@@ -34,7 +34,7 @@ class TomlIntegerFormat {
   /// The base of an integer of this format.
   final int base;
 
-  /// Prefix for integer of this format.
+  /// Prefix for integers of this format.
   final String prefix;
 
   /// Creates a new format for integers of the given base.
@@ -45,34 +45,27 @@ class TomlIntegerFormat {
 ///
 ///     integer = dec-int / hex-int / oct-int / bin-int
 class TomlInteger extends TomlValue<int> {
-  /// Parser for a single binary digit.
-  ///
-  ///     digit0-1 = %x30-31                 ; 0-1
-  static final Parser binDigit = char('0') | char('1');
-
-  /// Parser for a single binary digit.
-  ///
-  ///     digit0-7 = %x30-37                 ; 0-7
-  static final Parser octDigit = pattern('0-7');
-
   /// Parser for a TOML interger value.
+  ///
+  /// Decimal integers have to be parsed last such that the zero in the
+  /// prefixes of non-decimal numbers is not consumed by the [decParser].
   static final Parser<TomlInteger> parser =
-      (decParser | hexParser | octParser | binParser).cast<TomlInteger>();
+      (binParser | octParser | hexParser | decParser).cast<TomlInteger>();
 
   /// Parser for a binary TOML integer value.
   ///
   ///     bin-int = bin-prefix digit0-1 *( digit0-1 / underscore digit0-1 )
   static final Parser<TomlInteger> binParser = TomlInteger._makeParser(
     format: TomlIntegerFormat.bin,
-    digitParser: binDigit,
+    digitParser: binDigit(),
   ).map((n) => TomlInteger.bin(n));
 
   /// Parser for a binary TOML integer value.
   ///
   ///     oct-int = oct-prefix digit0-7 *( digit0-7 / underscore digit0-7 )
   static final Parser<TomlInteger> octParser = TomlInteger._makeParser(
-    format: TomlIntegerFormat.bin,
-    digitParser: octDigit,
+    format: TomlIntegerFormat.oct,
+    digitParser: octDigit(),
   ).map((n) => TomlInteger.oct(n));
 
   /// Parser for a decimal TOML interger value.
@@ -97,7 +90,7 @@ class TomlInteger extends TomlValue<int> {
   ///
   ///     hex-int = hex-prefix HEXDIG *( HEXDIG / underscore HEXDIG )
   static final Parser<TomlInteger> hexParser = TomlInteger._makeParser(
-    format: TomlIntegerFormat.bin,
+    format: TomlIntegerFormat.hex,
     digitParser: hexDigit(),
   ).map((n) => TomlInteger.hex(n));
 

@@ -2,6 +2,18 @@ library toml.src.parser.util.ranges;
 
 import 'package:petitparser/petitparser.dart';
 
+/// Parser for a binary digits.
+///
+///     digit0-1 = %x30-31                 ; 0-1
+Parser<String> binDigit([String message = 'binary digit expected']) =>
+    pattern('0-1', message);
+
+/// Parser for a octal digits.
+///
+///     digit0-7 = %x30-37                 ; 0-7
+Parser<String> octDigit([String message = 'octal digit expected']) =>
+    pattern('0-7', message);
+
 /// Parser for hexadecimal digits.
 ///
 ///     HEXDIG = DIGIT / "A" / "B" / "C" / "D" / "E" / "F"
