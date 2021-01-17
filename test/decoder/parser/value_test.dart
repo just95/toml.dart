@@ -282,6 +282,39 @@ void main() {
           throwsA(isA<TomlParserException>()),
         );
       });
+      test('can parse positive infinity without plus sign', () {
+        expect(
+          TomlValue.parse('inf'),
+          equals(TomlFloat(double.infinity)),
+        );
+      });
+      test('can parse positive infinity with plus sign', () {
+        expect(
+          TomlValue.parse('+inf'),
+          equals(TomlFloat(double.infinity)),
+        );
+      });
+      test('can parse negative infinity', () {
+        expect(
+          TomlValue.parse('-inf'),
+          equals(TomlFloat(double.negativeInfinity)),
+        );
+      });
+      test('can parse NaN without sign', () {
+        var output = TomlValue.parse('nan');
+        expect(output, isA<TomlFloat>());
+        expect(output.value, isNaN);
+      });
+      test('can parse NaN with plus sign', () {
+        var output = TomlValue.parse('+nan');
+        expect(output, isA<TomlFloat>());
+        expect(output.value, isNaN);
+      });
+      test('can parse NaN with minus sign', () {
+        var output = TomlValue.parse('-nan');
+        expect(output, isA<TomlFloat>());
+        expect(output.value, isNaN);
+      });
     });
     group('Integer', () {
       group('Binary', () {
