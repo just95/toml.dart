@@ -333,6 +333,24 @@ void main() {
             throwsA(isA<TomlParserException>()),
           );
         });
+        test('can parse largest positive 64-bit integer', () {
+          expect(
+            TomlValue.parse(
+              '0b01111111_11111111_11111111_11111111'
+              '_11111111_11111111_11111111_11111111',
+            ),
+            equals(TomlInteger.bin(9223372036854775807)),
+          );
+        });
+        test('cannot parse number too large for signed 64-bit integer', () {
+          expect(
+            () => TomlValue.parse(
+              '0b11111111_11111111_11111111_11111111'
+              '_11111111_11111111_11111111_11111111',
+            ),
+            throwsA(isA<FormatException>()),
+          );
+        });
       });
       group('Octal', () {
         test('can parse octal integers', () {
@@ -381,6 +399,18 @@ void main() {
           expect(
             () => TomlValue.parse('0o888'),
             throwsA(isA<TomlParserException>()),
+          );
+        });
+        test('can parse largest positive 64-bit integer', () {
+          expect(
+            TomlValue.parse('0o777_777_777_777_777_777_777'),
+            equals(TomlInteger.oct(9223372036854775807)),
+          );
+        });
+        test('cannot parse number too large for signed 64-bit integer', () {
+          expect(
+            () => TomlValue.parse('0o1_000_000_000_000_000_000_000'),
+            throwsA(isA<FormatException>()),
           );
         });
       });
@@ -457,6 +487,30 @@ void main() {
             throwsA(isA<TomlParserException>()),
           );
         });
+        test('can parse smallest negative 64-bit integer', () {
+          expect(
+            TomlValue.parse('-9_223_372_036_854_775_808'),
+            equals(TomlInteger.dec(-9223372036854775808)),
+          );
+        });
+        test('can parse largest positive 64-bit integer', () {
+          expect(
+            TomlValue.parse('9_223_372_036_854_775_807'),
+            equals(TomlInteger.dec(9223372036854775807)),
+          );
+        });
+        test('cannot parse number too small for 64-bit integer', () {
+          expect(
+            () => TomlValue.parse('-9_223_372_036_854_775_809'),
+            throwsA(isA<FormatException>()),
+          );
+        });
+        test('cannot parse number too large for signed 64-bit integer', () {
+          expect(
+            () => TomlValue.parse('9_223_372_036_854_775_808'),
+            throwsA(isA<FormatException>()),
+          );
+        });
       });
       group('Hexadecimal', () {
         test('can parse lower case hexadecimal integers', () {
@@ -517,6 +571,18 @@ void main() {
           expect(
             () => TomlValue.parse('0xZZZ'),
             throwsA(isA<TomlParserException>()),
+          );
+        });
+        test('can parse largest positive 64-bit integer', () {
+          expect(
+            TomlValue.parse('0x7FFF_FFFF_FFFF_FFFF'),
+            equals(TomlInteger.hex(9223372036854775807)),
+          );
+        });
+        test('cannot parse number too large for signed 64-bit integer', () {
+          expect(
+            () => TomlValue.parse('0xFFFF_FFFF_FFFF_FFFF'),
+            throwsA(isA<FormatException>()),
           );
         });
       });

@@ -129,16 +129,28 @@ class TomlInteger extends TomlValue<int> {
   final TomlIntegerFormat format;
 
   /// Creates a new binary integer value.
-  TomlInteger.bin(this.value) : format = TomlIntegerFormat.bin;
+  ///
+  /// The [value] must be non-negative.
+  TomlInteger.bin(this.value)
+      : format = TomlIntegerFormat.bin,
+        assert(value >= 0);
 
   /// Creates a new octal integer value.
-  TomlInteger.oct(this.value) : format = TomlIntegerFormat.oct;
+  ///
+  /// The [value] must be non-negative
+  TomlInteger.oct(this.value)
+      : format = TomlIntegerFormat.oct,
+        assert(value >= 0);
 
   /// Creates a new decimal integer value.
   TomlInteger.dec(this.value) : format = TomlIntegerFormat.dec;
 
   /// Creates a new hexadecimal integer value.
-  TomlInteger.hex(this.value) : format = TomlIntegerFormat.hex;
+  ///
+  /// The [value] must be non-negative
+  TomlInteger.hex(this.value)
+      : format = TomlIntegerFormat.hex,
+        assert(value >= 0);
 
   @override
   TomlType get type => TomlType.integer;
