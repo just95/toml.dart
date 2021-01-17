@@ -17,7 +17,7 @@ jobs:
   # Analyzes the Dart code of the examples (i.e., all `.dart` files in the `lib`,
   # `bin` and `test` sub-directories of the example packages in the `example`
   # directory) with `dart analyze`.
-  analyze:
+  analyze-examples:
     name: Analyze Code of Examples
     runs-on: ubuntu-latest
     container:
@@ -32,11 +32,10 @@ jobs:
       - name: Analyze Code of Examples
         run: ./tool/analyze-examples.sh --fatal-infos
 
-
   # Tests whether all Dart source files of the package i.e., all `.dart` files
   # in the `lib`, `bin` and `test` directories) are formatted correctly with
   # `dart format`. The `example`s are not analyzed by this job.
-  format:
+  format-examples:
     name: Check Code Formatting of Examples
     runs-on: ubuntu-latest
     container:
@@ -53,3 +52,19 @@ jobs:
           ./tool/format-examples.sh --show all            \
                                     --output none         \
                                     --set-exit-if-changed
+
+  # Runs the `tool/test.sh` scripts of the `example`s.
+  test-examples:
+    name: Test Examples
+    runs-on: ubuntu-latest
+    container:
+      image: google/dart:latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Print Dart SDK Version
+        run: dart --version
+      - name: Install Dependencies of Examples
+        run: ./tool/get-example-dependencies.sh
+      - name: Check Code Formatting of Examples
+        run: ./tool/test-examples.sh
