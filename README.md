@@ -195,6 +195,9 @@ However, in JavaScript, the encoder yields the following TOML document.
 array = [1.0, 2.0, 3.141]
 ```
 
+The special floating point values `inf`, `-inf` and `nan` are mapped to `double.infinity`, `double.negativeInfinity` and `double.nan`, respectively.
+The value `-nan` is also mapped to `double.nan`.
+
 **Boolean** values are obviously of type `bool`.
 
 **Datetime** values are UTC `DateTime` objects.
