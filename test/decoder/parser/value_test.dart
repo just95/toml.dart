@@ -284,77 +284,241 @@ void main() {
       });
     });
     group('Integer', () {
-      test('can parse zero without sign', () {
-        expect(
-          TomlValue.parse('0'),
-          equals(TomlInteger.dec(0)),
-        );
+      group('Binary', () {
+        test('can parse binary integers', () {
+          expect(
+            TomlValue.parse('0b101010'),
+            equals(TomlInteger.bin(42)),
+          );
+        });
+        test('can parse binary integers with leading zeros', () {
+          expect(
+            TomlValue.parse('0b00101010'),
+            equals(TomlInteger.bin(42)),
+          );
+        });
+        test('can parse binary integers with underscores', () {
+          expect(
+            TomlValue.parse('0b10_10_10'),
+            equals(TomlInteger.bin(42)),
+          );
+        });
+        test('cannot parse binary integer with leading underscores', () {
+          expect(
+            () => TomlValue.parse('0b_101010'),
+            throwsA(isA<TomlParserException>()),
+          );
+        });
+        test('cannot parse binary integer with trailing underscores', () {
+          expect(
+            () => TomlValue.parse('0b101010_'),
+            throwsA(isA<TomlParserException>()),
+          );
+        });
+        test('cannot parse binary integer with consecutive underscores', () {
+          expect(
+            () => TomlValue.parse('0b10__1010'),
+            throwsA(isA<TomlParserException>()),
+          );
+        });
+        test('cannot parse binary integer without digits', () {
+          expect(
+            () => TomlValue.parse('0b'),
+            throwsA(isA<TomlParserException>()),
+          );
+        });
+        test('cannot parse binary integer with non-binary digits', () {
+          expect(
+            () => TomlValue.parse('0b123'),
+            throwsA(isA<TomlParserException>()),
+          );
+        });
       });
-      test('can parse zero with plus sign', () {
-        expect(
-          TomlValue.parse('+0'),
-          equals(TomlInteger.dec(0)),
-        );
+      group('Octal', () {
+        test('can parse octal integers', () {
+          expect(
+            TomlValue.parse('0o755'),
+            equals(TomlInteger.oct(493)),
+          );
+        });
+        test('can parse octal integers with leading zeros', () {
+          expect(
+            TomlValue.parse('0o0755'),
+            equals(TomlInteger.oct(493)),
+          );
+        });
+        test('can parse octal integers with underscores', () {
+          expect(
+            TomlValue.parse('0o7_5_5'),
+            equals(TomlInteger.oct(493)),
+          );
+        });
+        test('cannot parse octal integer with leading underscores', () {
+          expect(
+            () => TomlValue.parse('0o_755'),
+            throwsA(isA<TomlParserException>()),
+          );
+        });
+        test('cannot parse octal integer with trailing underscores', () {
+          expect(
+            () => TomlValue.parse('0o755_'),
+            throwsA(isA<TomlParserException>()),
+          );
+        });
+        test('cannot parse octal integer with consecutive underscores', () {
+          expect(
+            () => TomlValue.parse('0o7__55'),
+            throwsA(isA<TomlParserException>()),
+          );
+        });
+        test('cannot parse octal integer without digits', () {
+          expect(
+            () => TomlValue.parse('0o'),
+            throwsA(isA<TomlParserException>()),
+          );
+        });
+        test('cannot parse octal integer with non-octal digits', () {
+          expect(
+            () => TomlValue.parse('0o888'),
+            throwsA(isA<TomlParserException>()),
+          );
+        });
       });
-      test('can parse zero with minus sign', () {
-        expect(
-          TomlValue.parse('-0'),
-          equals(TomlInteger.dec(0)),
-        );
+      group('Decimal', () {
+        test('can parse zero without sign', () {
+          expect(
+            TomlValue.parse('0'),
+            equals(TomlInteger.dec(0)),
+          );
+        });
+        test('can parse zero with plus sign', () {
+          expect(
+            TomlValue.parse('+0'),
+            equals(TomlInteger.dec(0)),
+          );
+        });
+        test('can parse zero with minus sign', () {
+          expect(
+            TomlValue.parse('-0'),
+            equals(TomlInteger.dec(0)),
+          );
+        });
+        test('can parse positive number with plus sign', () {
+          expect(
+            TomlValue.parse('+99'),
+            equals(TomlInteger.dec(99)),
+          );
+        });
+        test('can parse positive number without plus sign', () {
+          expect(
+            TomlValue.parse('42'),
+            equals(TomlInteger.dec(42)),
+          );
+        });
+        test('can parse negative number', () {
+          expect(
+            TomlValue.parse('-17'),
+            equals(TomlInteger.dec(-17)),
+          );
+        });
+        test('does not allow leading zeros', () {
+          expect(
+            () => TomlValue.parse('0777'),
+            throwsA(isA<TomlParserException>()),
+          );
+        });
+        test('allows underscores to be used as separators', () {
+          expect(
+            TomlValue.parse('1_000'),
+            equals(TomlInteger.dec(1000)),
+          );
+        });
+        test('allows underscores between every number', () {
+          expect(
+            TomlValue.parse('1_2_3_4_5'),
+            equals(TomlInteger.dec(12345)),
+          );
+        });
+        test('does not allow leading underscores', () {
+          expect(
+            () => TomlValue.parse('_1000'),
+            throwsA(isA<TomlParserException>()),
+          );
+        });
+        test('does not allow trailing underscores', () {
+          expect(
+            () => TomlValue.parse('1000_'),
+            throwsA(isA<TomlParserException>()),
+          );
+        });
+        test('does not allow consecutive underscores', () {
+          expect(
+            () => TomlValue.parse('1__000'),
+            throwsA(isA<TomlParserException>()),
+          );
+        });
       });
-      test('can parse positive number with plus sign', () {
-        expect(
-          TomlValue.parse('+99'),
-          equals(TomlInteger.dec(99)),
-        );
-      });
-      test('can parse positive number without plus sign', () {
-        expect(
-          TomlValue.parse('42'),
-          equals(TomlInteger.dec(42)),
-        );
-      });
-      test('can parse negative number', () {
-        expect(
-          TomlValue.parse('-17'),
-          equals(TomlInteger.dec(-17)),
-        );
-      });
-      test('does not allow leading zeros', () {
-        expect(
-          () => TomlValue.parse('0777'),
-          throwsA(isA<TomlParserException>()),
-        );
-      });
-      test('allows underscores to be used as separators', () {
-        expect(
-          TomlValue.parse('1_000'),
-          equals(TomlInteger.dec(1000)),
-        );
-      });
-      test('allows underscores between every number', () {
-        expect(
-          TomlValue.parse('1_2_3_4_5'),
-          equals(TomlInteger.dec(12345)),
-        );
-      });
-      test('does not allow leading underscores', () {
-        expect(
-          () => TomlValue.parse('_1000'),
-          throwsA(isA<TomlParserException>()),
-        );
-      });
-      test('does not allow trailing underscores', () {
-        expect(
-          () => TomlValue.parse('1000_'),
-          throwsA(isA<TomlParserException>()),
-        );
-      });
-      test('does not allow consecutive underscores', () {
-        expect(
-          () => TomlValue.parse('1__000'),
-          throwsA(isA<TomlParserException>()),
-        );
+      group('Hexadecimal', () {
+        test('can parse lower case hexadecimal integers', () {
+          expect(
+            TomlValue.parse('0xbadc0ded'),
+            equals(TomlInteger.hex(0xbadc0ded)),
+          );
+        });
+        test('can parse upper case hexadecimal integers', () {
+          expect(
+            TomlValue.parse('0xBADC0DED'),
+            equals(TomlInteger.hex(0xbadc0ded)),
+          );
+        });
+        test('can parse mixed case hexadecimal integers', () {
+          expect(
+            TomlValue.parse('0xBadC0ded'),
+            equals(TomlInteger.hex(0xbadc0ded)),
+          );
+        });
+        test('can parse hexadecimal integers with leading zeros', () {
+          expect(
+            TomlValue.parse('0x0000c0de'),
+            equals(TomlInteger.hex(0xc0de)),
+          );
+        });
+        test('can parse octal integers with underscores', () {
+          expect(
+            TomlValue.parse('0xbad_c0ded'),
+            equals(TomlInteger.hex(0xbadc0ded)),
+          );
+        });
+        test('cannot parse octal integer with leading underscores', () {
+          expect(
+            () => TomlValue.parse('0x_badc0ded'),
+            throwsA(isA<TomlParserException>()),
+          );
+        });
+        test('cannot parse octal integer with trailing underscores', () {
+          expect(
+            () => TomlValue.parse('0xbadc0ded_'),
+            throwsA(isA<TomlParserException>()),
+          );
+        });
+        test('cannot parse octal integer with consecutive underscores', () {
+          expect(
+            () => TomlValue.parse('0xbad__c0ded'),
+            throwsA(isA<TomlParserException>()),
+          );
+        });
+        test('cannot parse octal integer without digits', () {
+          expect(
+            () => TomlValue.parse('0x'),
+            throwsA(isA<TomlParserException>()),
+          );
+        });
+        test('cannot parse octal integer with non-octal digits', () {
+          expect(
+            () => TomlValue.parse('0xZZZ'),
+            throwsA(isA<TomlParserException>()),
+          );
+        });
       });
     });
     group('Inline Table', () {
