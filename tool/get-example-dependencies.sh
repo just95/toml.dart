@@ -4,6 +4,9 @@
 # directory using `dart pub get`. The script is used by the CI pipeline
 # when the source code of the examples is checked but can also be used
 # for local testing.
+#
+# The dependencies of the Flutter example are not installed since the Flutter
+# SDK is not available in the CI pipeline.
 
 # Change into the root directory of the package.
 script=$(realpath "$0")
@@ -28,5 +31,12 @@ for example in $(find "$examples_dir" -name pubspec.yaml); do
 
   # Install dependencies of the example with `pub get`.
   echo "Installing dependencies of '$example_name' example..."
-  dart pub get || exit 1
+  if ! dart pub get | awk '{print " | " $0}'; then
+    echo "------------------------------------------------------------------"
+    echo "Error when installing dependencies for '$example_name' example!" >&2
+    exit 1
+  fi
 done
+
+echo "========================================================================"
+echo "Installed dependencies of all examples successfully!"

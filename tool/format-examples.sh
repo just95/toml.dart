@@ -6,9 +6,8 @@
 # be used for local testing.
 #
 # The script forwards all command line arguments to `dart format`.
-# If there
-# fails analyzes the examples one after another and fails as soon as there are
-# errors for one example.
+# If the `--set-exit-if-changed` flag is specified and there is a file that
+# has been formatted, the script exists with error code `1`.
 
 # Change into the root directory of the package.
 script=$(realpath "$0")
@@ -17,21 +16,12 @@ root_dir=$(dirname "$script_dir")
 cd "$root_dir"
 
 # Find all examples with a `pubspec.yaml` file.
-examples_dir="$root_dir/example"
-for example in $(find "$examples_dir" -name pubspec.yaml); do
-  example_dir=$(dirname "$example")
-  example_name=$(basename "$example_dir")
+echo "Checking formatting of all examples..."
+if ! dart format "$@" bin lib test | awk '{print " | " $0}'; then
+  echo "------------------------------------------------------------------"
+  echo "Error when checking formatting!" >&2
+  exit 1
+fi
 
-  # Skip Flutter example.
-  if [[ "$example_name" = "flutter_example" ]]; then
-    echo "Skipping Flutter example!"
-    continue
-  fi
-
-  # Change into the example's root directory.
-  cd "$example_dir"
-
-  # Format the example's source code with `dart format`.
-  echo "Analyzing code of '$example_name' example..."
-  dart format "$@" bin lib test || exit 1
-done
+echo "========================================================================"
+echo "Formatted code of all examples successfully!"

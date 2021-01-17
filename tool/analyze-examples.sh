@@ -4,8 +4,12 @@
 # directory with `dart analyze`. The script is used by the CI pipeline to
 # analyze the examples but can also be used for local testing.
 #
-# The script fails analyzes the examples one after another and fails as soon
+# The script forwards all command line arguments to `dart format`.
+# The examples are analyzed one after another and the script fails as soon
 # as there are errors for one example.
+#
+# The source code of the Flutter example is not analyzed because the Flutter
+# SDK is not available in the CI pipeline.
 
 # Change into the root directory of the package.
 script=$(realpath "$0")
@@ -30,5 +34,12 @@ for example in $(find "$examples_dir" -name analysis_options.yaml); do
 
   # Analyze the example's source code `dart analyze`.
   echo "Analyzing code of '$example_name' example..."
-  dart analyze || exit 1
+  if ! dart analyze "$@" | awk '{print " | " $0}'; then
+    echo "------------------------------------------------------------------"
+    echo "Error when analyzing code of '$example_name' example!" >&2
+    exit 1
+  fi
 done
+
+echo "========================================================================"
+echo "Analyzed code of all examples successfully!"
