@@ -230,7 +230,8 @@ class TomlPrettyPrinter extends TomlVisitor<void>
 
   @override
   void visitInteger(TomlInteger integer) {
-    _writeToken(integer.value.toString());
+    _writeToken(integer.format.prefix);
+    _writeToken(integer.value.toRadixString(integer.format.base));
   }
 
   // --------------------------------------------------------------------------
