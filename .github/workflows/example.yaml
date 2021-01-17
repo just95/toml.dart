@@ -37,7 +37,7 @@ jobs:
   # in the `lib`, `bin` and `test` directories) are formatted correctly with
   # `dart format`. The `example`s are not analyzed by this job.
   format:
-    name: Check Code Formatting
+    name: Check Code Formatting of Examples
     runs-on: ubuntu-latest
     container:
       image: google/dart:latest
