@@ -46,12 +46,14 @@ class TomlFloat extends TomlValue<double> {
   static final Parser<TomlFloat> specialFloatParser = (() {
     var plus = char('+').map((_) => 1.0);
     var minus = char('-').map((_) => -1.0);
-    var sign = plus | minus;
+    var sign = (plus | minus).optional();
     var inf = string('inf').map((_) => double.infinity);
     var nan = string('nan').map((_) => double.nan);
-    return (sign & (inf | nan))
-        .castList<double>()
-        .map((pair) => TomlFloat(pair.reduce((sign, value) => sign * value)));
+    return (sign & (inf | nan)).castList<double>().map(
+          (pair) => TomlFloat(pair
+              .where((value) => value != null)
+              .reduce((sign, value) => sign * value)),
+        );
   })();
 
   @override
