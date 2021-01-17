@@ -92,7 +92,7 @@ void main() {
 }
 ```
 
-If the TOML document is semantically invalid, `TomlException` is thrown.
+If the TOML document is semantically invalid, a `TomlException` is thrown.
 
 In the [next section](#data-structure) the type and structure of the generated hash map will be elaborated in more detail.
 
@@ -110,7 +110,7 @@ var document = TomlDocument.fromMap({
 
 The type and structure of the hash map should match the format described in the [next section](#data-structure).
 Additionally, the map may contain arbitrary keys and values that implement the `TomlEncodableKey` and `TomlEncodableValue` interfaces, respectively.
-Classes which implement those interfaces must define a `toTomlKey` or `toTomlValue` method, respectively, whose return value is either implements the interface itself or is natively encodable by TOML.
+Classes which implement those interfaces must define a `toTomlKey` or `toTomlValue` method, whose return value is either implements the interface itself or is natively encodable by TOML.
 If an object cannot be encoded as a TOML key or value, a `TomlUnknownKeyTypeException` or `TomlUnknownValueTypeException` is thrown by `TomlDocument.fromMap`.
 
 An example for using the encoder and the `TomlEncodableValue` interface to encode a `Map` can be found in [`./example/toml_encoder`][toml-dart/example/toml_encoder].
@@ -140,7 +140,7 @@ var table = document['a.b.c']; // error
 All kinds of **arrays** including **arrays of tables** are stored as `List` objects.
 The encoder accepts any `Iterable`, though.
 The items of the list represent either a value or a table.
-Consider the document that contains an array of tables.
+Consider the following document that contains an array of tables.
 
 ```toml
 [[items]]
