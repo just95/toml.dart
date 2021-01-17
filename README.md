@@ -58,6 +58,8 @@ When the code is running in the browser, HTTP is used to fetch the configuration
 When the code is running on the Dart VM or natively, the file is loaded from
 the local file system.
 
+If the loaded TOML file contains a syntax error, a `TomlParserException` is thrown.
+
 Full examples for loading a configuration file via HTTP and from a file can be found in [`./example/http_config_loader`][toml-dart/example/http_config_loader] and [`./example/filesystem_config_loader`][toml-dart/example/filesystem_config_loader], respectively.
 
 ### Parsing TOML
@@ -66,12 +68,14 @@ Sometimes the two default mechanisms for loading TOML documents with `TomlDocume
 In those cases, you can simply load the contents of the configuration file yourself and parse them as a TOML document manually using the static `TomlDocument.parse` function.
 
 ```dart
-void main() async {
+void main() {
   var contents = '...';
   var document = TomlDocument.parse(contents);
   // ...
 }
 ```
+
+If the loaded TOML file contains a syntax error, a `TomlParserException` is thrown.
 
 An example for writing a custom configuration file loader and parsing the loaded file manually can be found in [`./example/toml_parser`][toml-dart/example/toml_parser].
 
@@ -82,11 +86,13 @@ Such a `TomlDocument` is an abstract representation of the syntax of a TOML docu
 In order to access the configuration options that are stored in the TOML document, we first have to convert it to a hash map with the `TomlDocument.toMap` method.
 
 ```dart
-void main() async {
+void main() {
   var config = TomlDocument.parse('...').toMap();
   // ...
 }
 ```
+
+If the TOML document is semantically invalid, `TomlException` is thrown.
 
 In the [next section](#data-structure) the type and structure of the generated hash map will be elaborated in more detail.
 
@@ -104,7 +110,8 @@ var document = TomlDocument.fromMap({
 
 The type and structure of the hash map should match the format described in the [next section](#data-structure).
 Additionally, the map may contain arbitrary keys and values that implement the `TomlEncodableKey` and `TomlEncodableValue` interfaces, respectively.
-Classes which implement those interfaces must define a `toTomlKey` or `toTomlValue` method whose return value is either implements the interface itself or is natively encodable by TOML.
+Classes which implement those interfaces must define a `toTomlKey` or `toTomlValue` method, respectively, whose return value is either implements the interface itself or is natively encodable by TOML.
+If an object cannot be encoded as a TOML key or value, a `TomlUnknownKeyTypeException` or `TomlUnknownValueTypeException` is thrown by `TomlDocument.fromMap`.
 
 An example for using the encoder and the `TomlEncodableValue` interface to encode a `Map` can be found in [`./example/toml_encoder`][toml-dart/example/toml_encoder].
 
