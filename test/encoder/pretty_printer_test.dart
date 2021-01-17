@@ -128,6 +128,36 @@ void main() {
           prettyPrinter.visitInteger(TomlInteger.dec(-273));
           expect(prettyPrinter.toString(), equals('-273'));
         });
+        test('pretty prints binary zero correctly', () {
+          var prettyPrinter = TomlPrettyPrinter();
+          prettyPrinter.visitInteger(TomlInteger.bin(0));
+          expect(prettyPrinter.toString(), equals('0b0'));
+        });
+        test('pretty prints octal zero correctly', () {
+          var prettyPrinter = TomlPrettyPrinter();
+          prettyPrinter.visitInteger(TomlInteger.oct(0));
+          expect(prettyPrinter.toString(), equals('0o0'));
+        });
+        test('pretty prints hexadecimal zero correctly', () {
+          var prettyPrinter = TomlPrettyPrinter();
+          prettyPrinter.visitInteger(TomlInteger.hex(0));
+          expect(prettyPrinter.toString(), equals('0x0'));
+        });
+        test('pretty prints binary integer correctly', () {
+          var prettyPrinter = TomlPrettyPrinter();
+          prettyPrinter.visitInteger(TomlInteger.bin(42));
+          expect(prettyPrinter.toString(), equals('0b101010'));
+        });
+        test('pretty prints octal integer correctly', () {
+          var prettyPrinter = TomlPrettyPrinter();
+          prettyPrinter.visitInteger(TomlInteger.oct(493));
+          expect(prettyPrinter.toString(), equals('0o755'));
+        });
+        test('pretty prints hexadecimal integer correctly', () {
+          var prettyPrinter = TomlPrettyPrinter();
+          prettyPrinter.visitInteger(TomlInteger.hex(0xbadc0ded));
+          expect(prettyPrinter.toString(), equals('0xbadc0ded'));
+        });
       });
 
       group('visitString', () {
