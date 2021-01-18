@@ -200,6 +200,18 @@ void main() {
             prettyPrinter.visitBasicString(TomlBasicString('foo "bar" baz'));
             expect(prettyPrinter.toString(), equals(r'"foo \"bar\" baz"'));
           });
+          test('escapes backslashes', () {
+            var prettyPrinter = TomlPrettyPrinter();
+            prettyPrinter.visitBasicString(TomlBasicString(r'C:\Users'));
+            expect(prettyPrinter.toString(), equals(r'"C:\\Users"'));
+          });
+          test('escapes control characters', () {
+            var prettyPrinter = TomlPrettyPrinter();
+            prettyPrinter.visitBasicString(
+              TomlBasicString('\u0000\u001f\u007f'),
+            );
+            expect(prettyPrinter.toString(), equals(r'"\u0000\u001f\u007f"'));
+          });
           test('does not escape single quotes', () {
             var prettyPrinter = TomlPrettyPrinter();
             prettyPrinter.visitBasicString(TomlBasicString("foo 'bar' baz"));
