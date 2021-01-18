@@ -14,6 +14,50 @@ void main() {
         ));
         expect(builder.build(), equals({'key': 'value'}));
       });
+      test('dotted key/value pairs are inserted into child tables', () {
+        var builder = TomlMapBuilder();
+        builder.visitKeyValuePair(TomlKeyValuePair(
+          TomlKey([
+            TomlUnquotedKey('a'),
+            TomlUnquotedKey('b'),
+            TomlUnquotedKey('c'),
+          ]),
+          TomlLiteralString('value'),
+        ));
+        expect(
+            builder.build(),
+            equals({
+              'a': {
+                'b': {'c': 'value'}
+              }
+            }));
+      });
+      test('allows multiple dotted keys with same parent', () {
+        var builder = TomlMapBuilder();
+        builder.visitKeyValuePair(TomlKeyValuePair(
+          TomlKey([
+            TomlUnquotedKey('a'),
+            TomlUnquotedKey('b'),
+            TomlUnquotedKey('c'),
+          ]),
+          TomlInteger.dec(BigInt.from(1)),
+        ));
+        builder.visitKeyValuePair(TomlKeyValuePair(
+          TomlKey([
+            TomlUnquotedKey('a'),
+            TomlUnquotedKey('d'),
+          ]),
+          TomlInteger.dec(BigInt.from(2)),
+        ));
+        expect(
+            builder.build(),
+            equals({
+              'a': {
+                'b': {'c': 1},
+                'd': 2
+              }
+            }));
+      });
       test('throws an exception if the key/value pair is defined already', () {
         var builder = TomlMapBuilder();
         builder.visitKeyValuePair(TomlKeyValuePair(
@@ -25,13 +69,96 @@ void main() {
             TomlKey([TomlUnquotedKey('key')]),
             TomlInteger.dec(BigInt.from(2)),
           )),
-          throwsA(
-            equals(
-              TomlRedefinitionException(TomlKey([TomlUnquotedKey('key')])),
-            ),
-          ),
+          throwsA(equals(
+            TomlRedefinitionException(TomlKey([TomlUnquotedKey('key')])),
+          )),
         );
       });
+      test(
+        'throws an exception if the immediate parent of dotted key exists and '
+        'is not a table',
+        () {
+          var builder = TomlMapBuilder();
+          builder.visitKeyValuePair(TomlKeyValuePair(
+            TomlKey([
+              TomlUnquotedKey('a'),
+              TomlUnquotedKey('b'),
+            ]),
+            TomlLiteralString('value'),
+          ));
+          expect(
+            () => builder.visitKeyValuePair(TomlKeyValuePair(
+              TomlKey([
+                TomlUnquotedKey('a'),
+                TomlUnquotedKey('b'),
+                TomlUnquotedKey('c'),
+              ]),
+              TomlLiteralString('value'),
+            )),
+            throwsA(equals(
+              TomlNotATableException(TomlKey([
+                TomlUnquotedKey('a'),
+                TomlUnquotedKey('b'),
+                TomlUnquotedKey('c'),
+              ])),
+            )),
+          );
+        },
+      );
+      test(
+        'throws an exception if a parent of dotted key exists and is not a '
+        'table',
+        () {
+          var builder = TomlMapBuilder();
+          builder.visitKeyValuePair(TomlKeyValuePair(
+            TomlKey([
+              TomlUnquotedKey('a'),
+            ]),
+            TomlLiteralString('value'),
+          ));
+          expect(
+            () => builder.visitKeyValuePair(TomlKeyValuePair(
+              TomlKey([
+                TomlUnquotedKey('a'),
+                TomlUnquotedKey('b'),
+                TomlUnquotedKey('c'),
+              ]),
+              TomlLiteralString('value'),
+            )),
+            throwsA(equals(
+              TomlNotATableException(TomlKey([
+                TomlUnquotedKey('a'),
+                TomlUnquotedKey('b'),
+              ])),
+            )),
+          );
+        },
+      );
+      test(
+        'cannot insert key/value pair into inline table',
+        () {
+          var builder = TomlMapBuilder();
+          builder.visitKeyValuePair(TomlKeyValuePair(
+            TomlKey([TomlUnquotedKey('table')]),
+            TomlInlineTable([]),
+          ));
+          expect(
+            () => builder.visitKeyValuePair(TomlKeyValuePair(
+              TomlKey([
+                TomlUnquotedKey('table'),
+                TomlUnquotedKey('key'),
+              ]),
+              TomlLiteralString('value'),
+            )),
+            throwsA(equals(
+              TomlNotATableException(TomlKey([
+                TomlUnquotedKey('table'),
+                TomlUnquotedKey('key'),
+              ])),
+            )),
+          );
+        },
+      );
     });
 
     group('visitStandardTable', () {
@@ -229,6 +356,26 @@ void main() {
               ])),
             ),
           ),
+        );
+      });
+      test('can create sub-tables within tables defined via dotted keys', () {
+        var builder = TomlMapBuilder();
+        builder.visitKeyValuePair(TomlKeyValuePair(
+          TomlKey([TomlUnquotedKey('parent'), TomlUnquotedKey('key1')]),
+          TomlInteger.dec(BigInt.from(1)),
+        ));
+        builder.visitStandardTable(TomlStandardTable(
+          TomlKey([TomlUnquotedKey('parent')]),
+        ));
+        builder.visitKeyValuePair(TomlKeyValuePair(
+          TomlKey([TomlUnquotedKey('key2')]),
+          TomlInteger.dec(BigInt.from(2)),
+        ));
+        expect(
+          builder.build(),
+          equals({
+            'parent': {'key1': 1, 'key2': 2}
+          }),
         );
       });
     });
