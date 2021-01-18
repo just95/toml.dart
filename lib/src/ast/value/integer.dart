@@ -44,7 +44,7 @@ class TomlIntegerFormat {
 /// AST node that represents a TOML integer.
 ///
 ///     integer = dec-int / hex-int / oct-int / bin-int
-class TomlInteger extends TomlValue<int> {
+class TomlInteger extends TomlValue<BigInt> {
   /// Parser for a TOML interger value.
   ///
   /// Decimal integers have to be parsed last such that the zero in the
@@ -81,9 +81,12 @@ class TomlInteger extends TomlValue<int> {
   static final Parser<TomlInteger> decParser = (() {
     var digits = digit().plus().separatedBy(char('_'));
     var decimal = anyOf('+-').optional() & (char('0') | digits);
-    return decimal
-        .flatten()
-        .map((str) => TomlInteger.dec(int.parse(str.replaceAll('_', ''))));
+    return decimal.flatten().map(
+          (str) => TomlInteger.dec(BigInt.parse(
+            str.replaceAll('_', ''),
+            radix: TomlIntegerFormat.dec.base,
+          )),
+        );
   })();
 
   /// Parser for a binary TOML integer value.
@@ -108,22 +111,22 @@ class TomlInteger extends TomlValue<int> {
   ///  `x-prefix` is controlled by [prefix] and the provided [digitParser] is
   ///  used in place of `x-digit`. The parsed number is converted to a [int]
   ///  using [int.parse] with `radix` set to the [base] of the integer.
-  static Parser<int> _makeParser({
+  static Parser<BigInt> _makeParser({
     TomlIntegerFormat format,
     Parser digitParser,
   }) {
     var digitsParser = digitParser.plus().separatedBy(char('_'));
     var integerParser = digitsParser.flatten().map(
-          (str) => int.parse(
+          (str) => BigInt.parse(
             str.replaceAll('_', ''),
             radix: format.base,
           ),
         );
-    return (string(format.prefix) & integerParser).pick<int>(1);
+    return (string(format.prefix) & integerParser).pick<BigInt>(1);
   }
 
-  @override
-  final int value;
+  /// The number represented by this node.
+  final BigInt value;
 
   /// The format of this integer.
   final TomlIntegerFormat format;
@@ -131,16 +134,24 @@ class TomlInteger extends TomlValue<int> {
   /// Creates a new binary integer value.
   ///
   /// The [value] must be non-negative.
-  TomlInteger.bin(this.value)
-      : format = TomlIntegerFormat.bin,
-        assert(value >= 0);
+  TomlInteger.bin(this.value) : format = TomlIntegerFormat.bin {
+    if (value.isNegative) {
+      throw ArgumentError(
+        'Binary TOML integer must be non-negative, got $value.',
+      );
+    }
+  }
 
   /// Creates a new octal integer value.
   ///
   /// The [value] must be non-negative
-  TomlInteger.oct(this.value)
-      : format = TomlIntegerFormat.oct,
-        assert(value >= 0);
+  TomlInteger.oct(this.value) : format = TomlIntegerFormat.oct {
+    if (value.isNegative) {
+      throw ArgumentError(
+        'Octal TOML integer must be non-negative, got $value.',
+      );
+    }
+  }
 
   /// Creates a new decimal integer value.
   TomlInteger.dec(this.value) : format = TomlIntegerFormat.dec;
@@ -148,9 +159,13 @@ class TomlInteger extends TomlValue<int> {
   /// Creates a new hexadecimal integer value.
   ///
   /// The [value] must be non-negative
-  TomlInteger.hex(this.value)
-      : format = TomlIntegerFormat.hex,
-        assert(value >= 0);
+  TomlInteger.hex(this.value) : format = TomlIntegerFormat.hex {
+    if (value.isNegative) {
+      throw ArgumentError(
+        'Hexadecimal TOML integer must be non-negative, got $value.',
+      );
+    }
+  }
 
   @override
   TomlType get type => TomlType.integer;

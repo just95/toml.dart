@@ -27,7 +27,17 @@ void main() {
     group('buildValue', () {
       test('builds integer from int', () {
         var builder = TomlAstBuilder();
-        expect(builder.buildValue(42), equals(TomlInteger.dec(42)));
+        expect(
+          builder.buildValue(42),
+          equals(TomlInteger.dec(BigInt.from(42))),
+        );
+      });
+      test('builds integer from BigInt', () {
+        var builder = TomlAstBuilder();
+        expect(
+          builder.buildValue(BigInt.from(42)),
+          equals(TomlInteger.dec(BigInt.from(42))),
+        );
       });
       test('builds float from double', () {
         var builder = TomlAstBuilder();
@@ -77,7 +87,10 @@ void main() {
         var builder = TomlAstBuilder();
         expect(
           builder.buildValue([0, 1, 2, 3].where((n) => n.isEven)),
-          equals(TomlArray([TomlInteger.dec(0), TomlInteger.dec(2)])),
+          equals(TomlArray([
+            TomlInteger.dec(BigInt.from(0)),
+            TomlInteger.dec(BigInt.from(2))
+          ])),
         );
       });
       test('builds empty inline table from empty Map', () {
@@ -92,7 +105,10 @@ void main() {
         expect(
           builder.buildValue({'foo': 42}),
           equals(TomlInlineTable([
-            TomlKeyValuePair(TomlUnquotedKey('foo'), TomlInteger.dec(42)),
+            TomlKeyValuePair(
+              TomlUnquotedKey('foo'),
+              TomlInteger.dec(BigInt.from(42)),
+            ),
           ])),
         );
       });
@@ -101,7 +117,10 @@ void main() {
         expect(
           builder.buildValue({TomlEncodableWrapper('foo'): 42}),
           equals(TomlInlineTable([
-            TomlKeyValuePair(TomlUnquotedKey('foo'), TomlInteger.dec(42)),
+            TomlKeyValuePair(
+              TomlUnquotedKey('foo'),
+              TomlInteger.dec(BigInt.from(42)),
+            ),
           ])),
         );
       });
@@ -112,7 +131,10 @@ void main() {
             TomlEncodableWrapper(TomlEncodableWrapper('foo')): 42,
           }),
           equals(TomlInlineTable([
-            TomlKeyValuePair(TomlUnquotedKey('foo'), TomlInteger.dec(42)),
+            TomlKeyValuePair(
+              TomlUnquotedKey('foo'),
+              TomlInteger.dec(BigInt.from(42)),
+            ),
           ])),
         );
       });
@@ -132,14 +154,14 @@ void main() {
         var builder = TomlAstBuilder();
         expect(
           builder.buildValue(TomlEncodableWrapper(42)),
-          equals(TomlInteger.dec(42)),
+          equals(TomlInteger.dec(BigInt.from(42))),
         );
       });
       test('unwraps TomlEncodableValue objects recursively', () {
         var builder = TomlAstBuilder();
         expect(
           builder.buildValue(TomlEncodableWrapper(TomlEncodableWrapper(42))),
-          equals(TomlInteger.dec(42)),
+          equals(TomlInteger.dec(BigInt.from(42))),
         );
       });
     });

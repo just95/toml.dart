@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+ - Added support for `BigInt`s.
+
 ## 0.7.0
 
 This is a major update that does not only bring along many changes to the internal architecture of the library but also to its public interface.

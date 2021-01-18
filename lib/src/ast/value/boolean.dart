@@ -19,7 +19,7 @@ class TomlBoolean extends TomlValue<bool> {
               string('false').map((_) => TomlBoolean(false)))
           .cast<TomlBoolean>();
 
-  @override
+  /// The boolean value represented by this node.
   final bool value;
 
   /// Creates a new boolean value.

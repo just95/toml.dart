@@ -56,7 +56,7 @@ class TomlFloat extends TomlValue<double> {
         );
   })();
 
-  @override
+  /// The number represented by this node.
   final double value;
 
   /// Creates a new floating point value.

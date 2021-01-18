@@ -71,7 +71,7 @@ class TomlDateTime extends TomlValue<DateTime> {
   static final Parser _fullDate = _dddd & char('-') & _dd & char('-') & _dd;
   static final Parser _datetime = _fullDate & char('T') & _fullTime;
 
-  @override
+  /// The date and time represented by this node.
   final DateTime value;
 
   /// Creates a new date-time value.

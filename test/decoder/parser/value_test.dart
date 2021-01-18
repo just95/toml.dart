@@ -21,15 +21,21 @@ void main() {
       test('can parse array of integers', () {
         expect(
           TomlValue.parse('[1, 2, 3]'),
-          equals(TomlArray(
-              [TomlInteger.dec(1), TomlInteger.dec(2), TomlInteger.dec(3)])),
+          equals(TomlArray([
+            TomlInteger.dec(BigInt.from(1)),
+            TomlInteger.dec(BigInt.from(2)),
+            TomlInteger.dec(BigInt.from(3))
+          ])),
         );
       });
       test('can parse array with trailing comma', () {
         expect(
           TomlValue.parse('[1, 2, 3,]'),
-          equals(TomlArray(
-              [TomlInteger.dec(1), TomlInteger.dec(2), TomlInteger.dec(3)])),
+          equals(TomlArray([
+            TomlInteger.dec(BigInt.from(1)),
+            TomlInteger.dec(BigInt.from(2)),
+            TomlInteger.dec(BigInt.from(3))
+          ])),
         );
       });
       test('cannot parse array with comma only', () {
@@ -41,50 +47,71 @@ void main() {
       test('can parse array with whitespace after the opening bracket', () {
         expect(
           TomlValue.parse('[ 1, 2, 3]'),
-          equals(TomlArray(
-              [TomlInteger.dec(1), TomlInteger.dec(2), TomlInteger.dec(3)])),
+          equals(TomlArray([
+            TomlInteger.dec(BigInt.from(1)),
+            TomlInteger.dec(BigInt.from(2)),
+            TomlInteger.dec(BigInt.from(3))
+          ])),
         );
       });
       test('can parse array with whitespace before the closing bracket', () {
         expect(
           TomlValue.parse('[1, 2, 3 ]'),
-          equals(TomlArray(
-              [TomlInteger.dec(1), TomlInteger.dec(2), TomlInteger.dec(3)])),
+          equals(TomlArray([
+            TomlInteger.dec(BigInt.from(1)),
+            TomlInteger.dec(BigInt.from(2)),
+            TomlInteger.dec(BigInt.from(3))
+          ])),
         );
       });
       test('can parse array with whitespace before commas', () {
         expect(
           TomlValue.parse('[1 , 2 , 3]'),
-          equals(TomlArray(
-              [TomlInteger.dec(1), TomlInteger.dec(2), TomlInteger.dec(3)])),
+          equals(TomlArray([
+            TomlInteger.dec(BigInt.from(1)),
+            TomlInteger.dec(BigInt.from(2)),
+            TomlInteger.dec(BigInt.from(3))
+          ])),
         );
       });
       test('can parse array with newlines after the opening bracket', () {
         expect(
           TomlValue.parse('[\n1, 2, 3]'),
-          equals(TomlArray(
-              [TomlInteger.dec(1), TomlInteger.dec(2), TomlInteger.dec(3)])),
+          equals(TomlArray([
+            TomlInteger.dec(BigInt.from(1)),
+            TomlInteger.dec(BigInt.from(2)),
+            TomlInteger.dec(BigInt.from(3))
+          ])),
         );
       });
       test('can parse array with newlines before the closing bracket', () {
         expect(
           TomlValue.parse('[1, 2, 3\n]'),
-          equals(TomlArray(
-              [TomlInteger.dec(1), TomlInteger.dec(2), TomlInteger.dec(3)])),
+          equals(TomlArray([
+            TomlInteger.dec(BigInt.from(1)),
+            TomlInteger.dec(BigInt.from(2)),
+            TomlInteger.dec(BigInt.from(3))
+          ])),
         );
       });
       test('can parse array with newlines after commas', () {
         expect(
           TomlValue.parse('[1,\n 2,\n 3]'),
-          equals(TomlArray(
-              [TomlInteger.dec(1), TomlInteger.dec(2), TomlInteger.dec(3)])),
+          equals(TomlArray([
+            TomlInteger.dec(BigInt.from(1)),
+            TomlInteger.dec(BigInt.from(2)),
+            TomlInteger.dec(BigInt.from(3))
+          ])),
         );
       });
       test('can parse array with newlines before commas', () {
         expect(
           TomlValue.parse('[1\n, 2\n, 3]'),
-          equals(TomlArray(
-              [TomlInteger.dec(1), TomlInteger.dec(2), TomlInteger.dec(3)])),
+          equals(TomlArray([
+            TomlInteger.dec(BigInt.from(1)),
+            TomlInteger.dec(BigInt.from(2)),
+            TomlInteger.dec(BigInt.from(3))
+          ])),
         );
       });
       test('rejects homogeneous arrays', () {
@@ -102,8 +129,11 @@ void main() {
             ', 3  # Comment before closing bracket\n'
             ']',
           ),
-          equals(TomlArray(
-              [TomlInteger.dec(1), TomlInteger.dec(2), TomlInteger.dec(3)])),
+          equals(TomlArray([
+            TomlInteger.dec(BigInt.from(1)),
+            TomlInteger.dec(BigInt.from(2)),
+            TomlInteger.dec(BigInt.from(3))
+          ])),
         );
       });
     });
@@ -303,17 +333,17 @@ void main() {
       test('can parse NaN without sign', () {
         var output = TomlValue.parse('nan');
         expect(output, isA<TomlFloat>());
-        expect(output.value, isNaN);
+        if (output is TomlFloat) expect(output.value, isNaN);
       });
       test('can parse NaN with plus sign', () {
         var output = TomlValue.parse('+nan');
         expect(output, isA<TomlFloat>());
-        expect(output.value, isNaN);
+        if (output is TomlFloat) expect(output.value, isNaN);
       });
       test('can parse NaN with minus sign', () {
         var output = TomlValue.parse('-nan');
         expect(output, isA<TomlFloat>());
-        expect(output.value, isNaN);
+        if (output is TomlFloat) expect(output.value, isNaN);
       });
     });
     group('Integer', () {
@@ -321,19 +351,19 @@ void main() {
         test('can parse binary integers', () {
           expect(
             TomlValue.parse('0b101010'),
-            equals(TomlInteger.bin(42)),
+            equals(TomlInteger.bin(BigInt.from(42))),
           );
         });
         test('can parse binary integers with leading zeros', () {
           expect(
             TomlValue.parse('0b00101010'),
-            equals(TomlInteger.bin(42)),
+            equals(TomlInteger.bin(BigInt.from(42))),
           );
         });
         test('can parse binary integers with underscores', () {
           expect(
             TomlValue.parse('0b10_10_10'),
-            equals(TomlInteger.bin(42)),
+            equals(TomlInteger.bin(BigInt.from(42))),
           );
         });
         test('cannot parse binary integer with leading underscores', () {
@@ -366,42 +396,24 @@ void main() {
             throwsA(isA<TomlParserException>()),
           );
         });
-        test('can parse largest positive 64-bit integer', () {
-          expect(
-            TomlValue.parse(
-              '0b01111111_11111111_11111111_11111111'
-              '_11111111_11111111_11111111_11111111',
-            ),
-            equals(TomlInteger.bin(9223372036854775807)),
-          );
-        });
-        test('cannot parse number too large for signed 64-bit integer', () {
-          expect(
-            () => TomlValue.parse(
-              '0b11111111_11111111_11111111_11111111'
-              '_11111111_11111111_11111111_11111111',
-            ),
-            throwsA(isA<FormatException>()),
-          );
-        });
       });
       group('Octal', () {
         test('can parse octal integers', () {
           expect(
             TomlValue.parse('0o755'),
-            equals(TomlInteger.oct(493)),
+            equals(TomlInteger.oct(BigInt.from(493))),
           );
         });
         test('can parse octal integers with leading zeros', () {
           expect(
             TomlValue.parse('0o0755'),
-            equals(TomlInteger.oct(493)),
+            equals(TomlInteger.oct(BigInt.from(493))),
           );
         });
         test('can parse octal integers with underscores', () {
           expect(
             TomlValue.parse('0o7_5_5'),
-            equals(TomlInteger.oct(493)),
+            equals(TomlInteger.oct(BigInt.from(493))),
           );
         });
         test('cannot parse octal integer with leading underscores', () {
@@ -434,54 +446,42 @@ void main() {
             throwsA(isA<TomlParserException>()),
           );
         });
-        test('can parse largest positive 64-bit integer', () {
-          expect(
-            TomlValue.parse('0o777_777_777_777_777_777_777'),
-            equals(TomlInteger.oct(9223372036854775807)),
-          );
-        });
-        test('cannot parse number too large for signed 64-bit integer', () {
-          expect(
-            () => TomlValue.parse('0o1_000_000_000_000_000_000_000'),
-            throwsA(isA<FormatException>()),
-          );
-        });
       });
       group('Decimal', () {
         test('can parse zero without sign', () {
           expect(
             TomlValue.parse('0'),
-            equals(TomlInteger.dec(0)),
+            equals(TomlInteger.dec(BigInt.from(0))),
           );
         });
         test('can parse zero with plus sign', () {
           expect(
             TomlValue.parse('+0'),
-            equals(TomlInteger.dec(0)),
+            equals(TomlInteger.dec(BigInt.from(0))),
           );
         });
         test('can parse zero with minus sign', () {
           expect(
             TomlValue.parse('-0'),
-            equals(TomlInteger.dec(0)),
+            equals(TomlInteger.dec(BigInt.from(0))),
           );
         });
         test('can parse positive number with plus sign', () {
           expect(
             TomlValue.parse('+99'),
-            equals(TomlInteger.dec(99)),
+            equals(TomlInteger.dec(BigInt.from(99))),
           );
         });
         test('can parse positive number without plus sign', () {
           expect(
             TomlValue.parse('42'),
-            equals(TomlInteger.dec(42)),
+            equals(TomlInteger.dec(BigInt.from(42))),
           );
         });
         test('can parse negative number', () {
           expect(
             TomlValue.parse('-17'),
-            equals(TomlInteger.dec(-17)),
+            equals(TomlInteger.dec(BigInt.from(-17))),
           );
         });
         test('does not allow leading zeros', () {
@@ -493,13 +493,13 @@ void main() {
         test('allows underscores to be used as separators', () {
           expect(
             TomlValue.parse('1_000'),
-            equals(TomlInteger.dec(1000)),
+            equals(TomlInteger.dec(BigInt.from(1000))),
           );
         });
         test('allows underscores between every number', () {
           expect(
             TomlValue.parse('1_2_3_4_5'),
-            equals(TomlInteger.dec(12345)),
+            equals(TomlInteger.dec(BigInt.from(12345))),
           );
         });
         test('does not allow leading underscores', () {
@@ -520,60 +520,36 @@ void main() {
             throwsA(isA<TomlParserException>()),
           );
         });
-        test('can parse smallest negative 64-bit integer', () {
-          expect(
-            TomlValue.parse('-9_223_372_036_854_775_808'),
-            equals(TomlInteger.dec(-9223372036854775808)),
-          );
-        });
-        test('can parse largest positive 64-bit integer', () {
-          expect(
-            TomlValue.parse('9_223_372_036_854_775_807'),
-            equals(TomlInteger.dec(9223372036854775807)),
-          );
-        });
-        test('cannot parse number too small for 64-bit integer', () {
-          expect(
-            () => TomlValue.parse('-9_223_372_036_854_775_809'),
-            throwsA(isA<FormatException>()),
-          );
-        });
-        test('cannot parse number too large for signed 64-bit integer', () {
-          expect(
-            () => TomlValue.parse('9_223_372_036_854_775_808'),
-            throwsA(isA<FormatException>()),
-          );
-        });
       });
       group('Hexadecimal', () {
         test('can parse lower case hexadecimal integers', () {
           expect(
             TomlValue.parse('0xbadc0ded'),
-            equals(TomlInteger.hex(0xbadc0ded)),
+            equals(TomlInteger.hex(BigInt.from(0xbadc0ded))),
           );
         });
         test('can parse upper case hexadecimal integers', () {
           expect(
             TomlValue.parse('0xBADC0DED'),
-            equals(TomlInteger.hex(0xbadc0ded)),
+            equals(TomlInteger.hex(BigInt.from(0xbadc0ded))),
           );
         });
         test('can parse mixed case hexadecimal integers', () {
           expect(
             TomlValue.parse('0xBadC0ded'),
-            equals(TomlInteger.hex(0xbadc0ded)),
+            equals(TomlInteger.hex(BigInt.from(0xbadc0ded))),
           );
         });
         test('can parse hexadecimal integers with leading zeros', () {
           expect(
             TomlValue.parse('0x0000c0de'),
-            equals(TomlInteger.hex(0xc0de)),
+            equals(TomlInteger.hex(BigInt.from(0xc0de))),
           );
         });
         test('can parse octal integers with underscores', () {
           expect(
             TomlValue.parse('0xbad_c0ded'),
-            equals(TomlInteger.hex(0xbadc0ded)),
+            equals(TomlInteger.hex(BigInt.from(0xbadc0ded))),
           );
         });
         test('cannot parse octal integer with leading underscores', () {
@@ -606,18 +582,6 @@ void main() {
             throwsA(isA<TomlParserException>()),
           );
         });
-        test('can parse largest positive 64-bit integer', () {
-          expect(
-            TomlValue.parse('0x7FFF_FFFF_FFFF_FFFF'),
-            equals(TomlInteger.hex(9223372036854775807)),
-          );
-        });
-        test('cannot parse number too large for signed 64-bit integer', () {
-          expect(
-            () => TomlValue.parse('0xFFFF_FFFF_FFFF_FFFF'),
-            throwsA(isA<FormatException>()),
-          );
-        });
       });
     });
     group('Inline Table', () {
@@ -645,9 +609,18 @@ void main() {
         expect(
           TomlValue.parse('{ x = 1, y = 2, z = 3 }'),
           equals(TomlInlineTable([
-            TomlKeyValuePair(TomlUnquotedKey('x'), TomlInteger.dec(1)),
-            TomlKeyValuePair(TomlUnquotedKey('y'), TomlInteger.dec(2)),
-            TomlKeyValuePair(TomlUnquotedKey('z'), TomlInteger.dec(3)),
+            TomlKeyValuePair(
+              TomlUnquotedKey('x'),
+              TomlInteger.dec(BigInt.from(1)),
+            ),
+            TomlKeyValuePair(
+              TomlUnquotedKey('y'),
+              TomlInteger.dec(BigInt.from(2)),
+            ),
+            TomlKeyValuePair(
+              TomlUnquotedKey('z'),
+              TomlInteger.dec(BigInt.from(3)),
+            ),
           ])),
         );
       });

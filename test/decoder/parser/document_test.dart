@@ -83,8 +83,14 @@ void main() {
             'key2 = 2',
           ),
           equals(TomlDocument([
-            TomlKeyValuePair(TomlUnquotedKey('key1'), TomlInteger.dec(1)),
-            TomlKeyValuePair(TomlUnquotedKey('key2'), TomlInteger.dec(2)),
+            TomlKeyValuePair(
+              TomlUnquotedKey('key1'),
+              TomlInteger.dec(BigInt.from(1)),
+            ),
+            TomlKeyValuePair(
+              TomlUnquotedKey('key2'),
+              TomlInteger.dec(BigInt.from(2)),
+            ),
           ])),
         );
       });

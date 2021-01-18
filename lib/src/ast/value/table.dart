@@ -1,13 +1,11 @@
 library toml.src.ast.value.table;
 
 import 'package:petitparser/petitparser.dart';
-import 'package:toml/src/decoder/map_builder.dart';
 import 'package:toml/src/decoder/parser/util/whitespace.dart';
 import 'package:quiver/core.dart';
 import 'package:quiver/collection.dart';
 
 import '../expression/key_value_pair.dart';
-import '../key.dart';
 import '../value.dart';
 import '../visitor/value.dart';
 
@@ -55,16 +53,6 @@ class TomlInlineTable extends TomlValue<Map<String, dynamic>> {
   /// Creates a new inline table.
   TomlInlineTable(Iterable<TomlKeyValuePair> pairs)
       : pairs = List.from(pairs, growable: false);
-
-  @override
-  Map<String, dynamic> get value => buildValue(TomlKey.topLevel);
-
-  @override
-  Map<String, dynamic> buildValue(TomlKey key) {
-    var builder = TomlMapBuilder.withPrefix(key);
-    pairs.forEach(builder.visitExpression);
-    return builder.build();
-  }
 
   @override
   TomlType get type => TomlType.table;

@@ -5,7 +5,6 @@ import 'package:toml/src/decoder/parser/util/whitespace.dart';
 import 'package:quiver/core.dart';
 import 'package:quiver/collection.dart';
 
-import '../key.dart';
 import '../value.dart';
 import '../visitor/value.dart';
 
@@ -17,7 +16,7 @@ import '../visitor/value.dart';
 ///                     array-values
 ///     array-values =/ ws-comment-newline val ws-comment-newline [ array-sep ]
 ///
-class TomlArray<V> extends TomlValue<Iterable<V>> {
+class TomlArray<V> extends TomlValue<Iterable> {
   /// The opening delimiter of arrays.
   ///
   ///     array-open =  %x5B ; [
@@ -77,13 +76,6 @@ class TomlArray<V> extends TomlValue<Iterable<V>> {
 
   /// Gets the TOML types of the [items].
   Iterable<TomlType> get itemTypes => items.map((item) => item.type);
-
-  @override
-  Iterable<V> get value => buildValue(TomlKey.topLevel);
-
-  @override
-  Iterable<V> buildValue(TomlKey key) =>
-      items.map((item) => item.buildValue(key));
 
   @override
   TomlType get type => TomlType.array;

@@ -39,6 +39,9 @@ abstract class TomlString extends TomlValue<String> {
           TomlLiteralString.parser)
       .cast<TomlString>();
 
+  /// The contents of the string.
+  String get value;
+
   /// The type of this string.
   TomlStringType get stringType;
 

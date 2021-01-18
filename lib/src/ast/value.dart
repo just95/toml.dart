@@ -5,7 +5,6 @@ import 'package:toml/src/decoder/exception/parser.dart';
 import 'package:toml/src/decoder/parser/util/non_strict.dart';
 import 'package:toml/src/encoder.dart';
 
-import 'key.dart';
 import 'node.dart';
 import 'value/array.dart';
 import 'value/boolean.dart';
@@ -87,18 +86,8 @@ abstract class TomlValue<V> extends TomlNode {
   factory TomlValue.from(V value) =>
       TomlAstBuilder().buildValue(value) as TomlValue<V>;
 
-  /// The Dart value of the TOML value represented by this AST node.
-  V get value;
-
   /// The type of the TOML value represented by this AST node.
   TomlType get type;
-
-  /// Builds the Dart [value] of the TOML value represented by this AST node.
-  ///
-  /// This should always return the same value as the [value] getter but the
-  /// given fully qualified name of the key/value pair can be used to improve
-  /// error messages.
-  V buildValue(TomlKey key) => value;
 
   /// Invokes the correct `visit*` method for this value of the given
   /// visitor.

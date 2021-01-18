@@ -175,7 +175,13 @@ str4 = '''
 Hello World!'''
 ```
 
-**Integers** are of type `int` and **float**ing point numbers are represented as `double`s.
+**Integers** are of type `int` or `BigInt`.
+The decoder produces an `int` only if the number can be represented losslessly by an `int`.
+Whether a number can be represented by an `int` is platform specific.
+When the code is running in the VM, numbers between `-2^63` and `2^63 - 1` can be represented as an `int`.
+In JavaScript, only numbers in the range from `-(2^53 - 1)` to `2^53 - 1` are guaranteed to be converted to `int` but smaller or larger numbers may still produce an `int` if they can be represented without loss of precision.
+
+**Float**ing point numbers are represented as `double`s.
 When compiled to JavaScript these two types are not distinct.
 Thus a float without decimal places might accidentally be encoded as an integer.
 This behavior would lead to the generation of invalid numeric arrays.

@@ -10,7 +10,10 @@ void main() {
       group('buildValue', () {
         test('builds integer from double without decimal places', () {
           var builder = TomlAstBuilder();
-          expect(builder.buildValue(42.0), equals(TomlInteger.dec(42)));
+          expect(
+            builder.buildValue(42.0),
+            equals(TomlInteger.dec(BigInt.from(42))),
+          );
         });
       });
     });

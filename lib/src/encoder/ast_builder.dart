@@ -160,7 +160,8 @@ class TomlAstBuilder {
   /// TOML.
   TomlValue buildValue(dynamic value) {
     value = unwrapValue(value);
-    if (value is int) return TomlInteger.dec(value);
+    if (value is int) return TomlInteger.dec(BigInt.from(value));
+    if (value is BigInt) return TomlInteger.dec(value);
     if (value is double) return TomlFloat(value);
     if (value is bool) return TomlBoolean(value);
     if (value is DateTime) return TomlDateTime(value);
@@ -221,9 +222,11 @@ class TomlAstBuilder {
           types.length == 2 &&
           types.contains(TomlType.integer) &&
           types.contains(TomlType.float)) {
-        return TomlArray(
-          array.items.map((item) => TomlFloat(item.value as double)),
-        );
+        return TomlArray(array.items.map((item) {
+          if (item is TomlFloat) return item;
+          if (item is TomlInteger) return TomlFloat(item.value as double);
+          throw ArgumentError('Expected number, but got ${item.type}.');
+        }));
       }
 
       // Otherwise arrays must be homogenous.

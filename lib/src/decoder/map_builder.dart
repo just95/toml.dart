@@ -4,8 +4,9 @@ import 'package:toml/src/ast.dart';
 
 import 'exception/not_a_table.dart';
 import 'exception/redefinition.dart';
+import 'value_builder.dart';
 
-/// A visitor for [TomlExpression]s that builds a [Map] for
+/// A visitor for [TomlExpression]s that builds a [Map] from a TOML document.
 class TomlMapBuilder extends TomlExpressionVisitor<void> {
   /// Internal representation of the top-level table.
   final _TomlTreeMap _topLevel;
@@ -34,7 +35,8 @@ class TomlMapBuilder extends TomlExpressionVisitor<void> {
   @override
   void visitKeyValuePair(TomlKeyValuePair pair) {
     var key = _current.nodeName.child(pair.key),
-        value = pair.value.buildValue(key);
+        valueBuilder = TomlValueBuilder(key),
+        value = valueBuilder.visitValue(pair.value);
     _current.addChild(pair.key, _TomlTreeLeaf(key, value));
   }
 

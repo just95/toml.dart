@@ -14,15 +14,16 @@ void main() {
         });
         test('pretty prints one elementry array correctly', () {
           var prettyPrinter = TomlPrettyPrinter();
-          prettyPrinter.visitArray(TomlArray([TomlInteger.dec(1)]));
+          prettyPrinter
+              .visitArray(TomlArray([TomlInteger.dec(BigInt.from(1))]));
           expect(prettyPrinter.toString(), equals('[1]'));
         });
         test('pretty prints array with multiple items correctly', () {
           var prettyPrinter = TomlPrettyPrinter();
           prettyPrinter.visitArray(TomlArray([
-            TomlInteger.dec(1),
-            TomlInteger.dec(2),
-            TomlInteger.dec(3),
+            TomlInteger.dec(BigInt.from(1)),
+            TomlInteger.dec(BigInt.from(2)),
+            TomlInteger.dec(BigInt.from(3)),
           ]));
           expect(prettyPrinter.toString(), equals('[1, 2, 3]'));
         });
@@ -92,7 +93,10 @@ void main() {
             () {
           var prettyPrinter = TomlPrettyPrinter();
           prettyPrinter.visitInlineTable(TomlInlineTable([
-            TomlKeyValuePair(TomlUnquotedKey('foo'), TomlInteger.dec(0)),
+            TomlKeyValuePair(
+              TomlUnquotedKey('foo'),
+              TomlInteger.dec(BigInt.from(0)),
+            ),
           ]));
           expect(prettyPrinter.toString(), equals('{ foo = 0 }'));
         });
@@ -101,9 +105,18 @@ void main() {
           () {
             var prettyPrinter = TomlPrettyPrinter();
             prettyPrinter.visitInlineTable(TomlInlineTable([
-              TomlKeyValuePair(TomlUnquotedKey('foo'), TomlInteger.dec(0)),
-              TomlKeyValuePair(TomlUnquotedKey('bar'), TomlInteger.dec(1)),
-              TomlKeyValuePair(TomlUnquotedKey('baz'), TomlInteger.dec(2)),
+              TomlKeyValuePair(
+                TomlUnquotedKey('foo'),
+                TomlInteger.dec(BigInt.from(0)),
+              ),
+              TomlKeyValuePair(
+                TomlUnquotedKey('bar'),
+                TomlInteger.dec(BigInt.from(1)),
+              ),
+              TomlKeyValuePair(
+                TomlUnquotedKey('baz'),
+                TomlInteger.dec(BigInt.from(2)),
+              ),
             ]));
             expect(
               prettyPrinter.toString(),
@@ -115,47 +128,47 @@ void main() {
       group('visitInteger', () {
         test('pretty prints zero correctly', () {
           var prettyPrinter = TomlPrettyPrinter();
-          prettyPrinter.visitInteger(TomlInteger.dec(0));
+          prettyPrinter.visitInteger(TomlInteger.dec(BigInt.from(0)));
           expect(prettyPrinter.toString(), equals('0'));
         });
         test('pretty prints positive integer correctly', () {
           var prettyPrinter = TomlPrettyPrinter();
-          prettyPrinter.visitInteger(TomlInteger.dec(42));
+          prettyPrinter.visitInteger(TomlInteger.dec(BigInt.from(42)));
           expect(prettyPrinter.toString(), equals('42'));
         });
         test('pretty prints negative integer correctly', () {
           var prettyPrinter = TomlPrettyPrinter();
-          prettyPrinter.visitInteger(TomlInteger.dec(-273));
+          prettyPrinter.visitInteger(TomlInteger.dec(BigInt.from(-273)));
           expect(prettyPrinter.toString(), equals('-273'));
         });
         test('pretty prints binary zero correctly', () {
           var prettyPrinter = TomlPrettyPrinter();
-          prettyPrinter.visitInteger(TomlInteger.bin(0));
+          prettyPrinter.visitInteger(TomlInteger.bin(BigInt.from(0)));
           expect(prettyPrinter.toString(), equals('0b0'));
         });
         test('pretty prints octal zero correctly', () {
           var prettyPrinter = TomlPrettyPrinter();
-          prettyPrinter.visitInteger(TomlInteger.oct(0));
+          prettyPrinter.visitInteger(TomlInteger.oct(BigInt.from(0)));
           expect(prettyPrinter.toString(), equals('0o0'));
         });
         test('pretty prints hexadecimal zero correctly', () {
           var prettyPrinter = TomlPrettyPrinter();
-          prettyPrinter.visitInteger(TomlInteger.hex(0));
+          prettyPrinter.visitInteger(TomlInteger.hex(BigInt.from(0)));
           expect(prettyPrinter.toString(), equals('0x0'));
         });
         test('pretty prints binary integer correctly', () {
           var prettyPrinter = TomlPrettyPrinter();
-          prettyPrinter.visitInteger(TomlInteger.bin(42));
+          prettyPrinter.visitInteger(TomlInteger.bin(BigInt.from(42)));
           expect(prettyPrinter.toString(), equals('0b101010'));
         });
         test('pretty prints octal integer correctly', () {
           var prettyPrinter = TomlPrettyPrinter();
-          prettyPrinter.visitInteger(TomlInteger.oct(493));
+          prettyPrinter.visitInteger(TomlInteger.oct(BigInt.from(493)));
           expect(prettyPrinter.toString(), equals('0o755'));
         });
         test('pretty prints hexadecimal integer correctly', () {
           var prettyPrinter = TomlPrettyPrinter();
-          prettyPrinter.visitInteger(TomlInteger.hex(0xbadc0ded));
+          prettyPrinter.visitInteger(TomlInteger.hex(BigInt.from(0xbadc0ded)));
           expect(prettyPrinter.toString(), equals('0xbadc0ded'));
         });
       });
@@ -302,7 +315,8 @@ void main() {
         test('uses equals sign and one space padding as separator', () {
           var prettyPrinter = TomlPrettyPrinter();
           prettyPrinter.visitKeyValuePair(
-            TomlKeyValuePair(TomlUnquotedKey('key1'), TomlInteger.dec(1)),
+            TomlKeyValuePair(
+                TomlUnquotedKey('key1'), TomlInteger.dec(BigInt.from(1))),
           );
           expect(prettyPrinter.toString(), equals('key1 = 1'));
         });
@@ -335,8 +349,14 @@ void main() {
       test('separates key/value pairs by newlines', () {
         var prettyPrinter = TomlPrettyPrinter();
         prettyPrinter.visitDocument(TomlDocument([
-          TomlKeyValuePair(TomlUnquotedKey('key1'), TomlInteger.dec(1)),
-          TomlKeyValuePair(TomlUnquotedKey('key2'), TomlInteger.dec(2)),
+          TomlKeyValuePair(
+            TomlUnquotedKey('key1'),
+            TomlInteger.dec(BigInt.from(1)),
+          ),
+          TomlKeyValuePair(
+            TomlUnquotedKey('key2'),
+            TomlInteger.dec(BigInt.from(2)),
+          ),
         ]));
         expect(prettyPrinter.toString(), equals('key1 = 1\nkey2 = 2\n'));
       });
@@ -344,9 +364,15 @@ void main() {
         var prettyPrinter = TomlPrettyPrinter();
         prettyPrinter.visitDocument(TomlDocument([
           TomlStandardTable(TomlKey([TomlUnquotedKey('table1')])),
-          TomlKeyValuePair(TomlUnquotedKey('key1'), TomlInteger.dec(1)),
+          TomlKeyValuePair(
+            TomlUnquotedKey('key1'),
+            TomlInteger.dec(BigInt.from(1)),
+          ),
           TomlStandardTable(TomlKey([TomlUnquotedKey('table2')])),
-          TomlKeyValuePair(TomlUnquotedKey('key2'), TomlInteger.dec(2)),
+          TomlKeyValuePair(
+            TomlUnquotedKey('key2'),
+            TomlInteger.dec(BigInt.from(2)),
+          ),
         ]));
         expect(
           prettyPrinter.toString(),
@@ -357,9 +383,15 @@ void main() {
         var prettyPrinter = TomlPrettyPrinter();
         prettyPrinter.visitDocument(TomlDocument([
           TomlArrayTable(TomlKey([TomlUnquotedKey('array1')])),
-          TomlKeyValuePair(TomlUnquotedKey('key1'), TomlInteger.dec(1)),
+          TomlKeyValuePair(
+            TomlUnquotedKey('key1'),
+            TomlInteger.dec(BigInt.from(1)),
+          ),
           TomlArrayTable(TomlKey([TomlUnquotedKey('array2')])),
-          TomlKeyValuePair(TomlUnquotedKey('key2'), TomlInteger.dec(2)),
+          TomlKeyValuePair(
+            TomlUnquotedKey('key2'),
+            TomlInteger.dec(BigInt.from(2)),
+          ),
         ]));
         expect(
           prettyPrinter.toString(),
