@@ -714,6 +714,21 @@ void main() {
             throwsA(isA<TomlInvalidEscapeSequenceException>()),
           );
         });
+        test('does not allow newlines', () {
+          expect(
+            () => TomlValue.parse(
+              '"Line 1\n'
+              'Line 2"',
+            ),
+            throwsA(isA<TomlParserException>()),
+          );
+        });
+        test('does not allow control characters', () {
+          expect(
+            () => TomlValue.parse('"\u0000"'),
+            throwsA(isA<TomlParserException>()),
+          );
+        });
       });
       group('Multi-Line Basic', () {
         test('can parse empty multi-line basic strings', () {
@@ -804,6 +819,12 @@ void main() {
             equals(TomlMultilineBasicString(
               'Foo """Bar""" Baz',
             )),
+          );
+        });
+        test('does not allow control characters', () {
+          expect(
+            () => TomlValue.parse('"""\u0000"""'),
+            throwsA(isA<TomlParserException>()),
           );
         });
       });
