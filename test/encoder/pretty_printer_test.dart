@@ -279,6 +279,32 @@ void main() {
             );
             expect(prettyPrinter.toString(), equals('"""\nline 1\nline 2"""'));
           });
+          test('escapes backslashes', () {
+            var prettyPrinter = TomlPrettyPrinter();
+            prettyPrinter.visitMultilineBasicString(
+              TomlMultilineBasicString(r'C:\Users'),
+            );
+            expect(
+              prettyPrinter.toString(),
+              equals(
+                '"""\n'
+                r'C:\\Users"""',
+              ),
+            );
+          });
+          test('escapes control characters', () {
+            var prettyPrinter = TomlPrettyPrinter();
+            prettyPrinter.visitMultilineBasicString(
+              TomlMultilineBasicString('\u0000\u001f\u007f'),
+            );
+            expect(
+              prettyPrinter.toString(),
+              equals(
+                '"""\n'
+                r'\u0000\u001f\u007f"""',
+              ),
+            );
+          });
         });
         group('visitMultilineLiteralString', () {
           test('always inserts a newline after the opening delimiter', () {
