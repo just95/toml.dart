@@ -5,6 +5,34 @@ import 'package:toml/toml.dart';
 
 void main() {
   group('TomlDocument.parse', () {
+    group('Comments', () {
+      test('can parse comments', () {
+        expect(
+          TomlDocument.parse('# Comment'),
+          equals(TomlDocument([])),
+        );
+      });
+      test('comments end with newline', () {
+        expect(
+          TomlDocument.parse(
+            '# Comment\n'
+            'key = "value"',
+          ),
+          equals(TomlDocument([
+            TomlKeyValuePair(
+              TomlKey([TomlUnquotedKey('key')]),
+              TomlBasicString('value'),
+            )
+          ])),
+        );
+      });
+      test('comments cannot contain control characters', () {
+        expect(
+          () => TomlDocument.parse('# Comment \u0000'),
+          throwsA(isA<TomlParserException>()),
+        );
+      });
+    });
     group('Key/Value Pair', () {
       test('can parse key/value pair with unquoted key', () {
         expect(
