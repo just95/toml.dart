@@ -106,7 +106,7 @@ void main() {
           builder.buildValue({'foo': 42}),
           equals(TomlInlineTable([
             TomlKeyValuePair(
-              TomlUnquotedKey('foo'),
+              TomlKey([TomlUnquotedKey('foo')]),
               TomlInteger.dec(BigInt.from(42)),
             ),
           ])),
@@ -118,7 +118,7 @@ void main() {
           builder.buildValue({TomlEncodableWrapper('foo'): 42}),
           equals(TomlInlineTable([
             TomlKeyValuePair(
-              TomlUnquotedKey('foo'),
+              TomlKey([TomlUnquotedKey('foo')]),
               TomlInteger.dec(BigInt.from(42)),
             ),
           ])),
@@ -132,7 +132,7 @@ void main() {
           }),
           equals(TomlInlineTable([
             TomlKeyValuePair(
-              TomlUnquotedKey('foo'),
+              TomlKey([TomlUnquotedKey('foo')]),
               TomlInteger.dec(BigInt.from(42)),
             ),
           ])),
@@ -146,7 +146,10 @@ void main() {
                 TomlEncodableWrapper('foo', 'bar')
           }),
           equals(TomlInlineTable([
-            TomlKeyValuePair(TomlUnquotedKey('bar'), TomlLiteralString('foo')),
+            TomlKeyValuePair(
+              TomlKey([TomlUnquotedKey('bar')]),
+              TomlLiteralString('foo'),
+            ),
           ])),
         );
       });
@@ -237,7 +240,10 @@ void main() {
           expect(
             builder.buildDocument({'array': <Map>[]}),
             equals(TomlDocument([
-              TomlKeyValuePair(TomlUnquotedKey('array'), TomlArray([])),
+              TomlKeyValuePair(
+                TomlKey([TomlUnquotedKey('array')]),
+                TomlArray([]),
+              ),
             ])),
           );
         },

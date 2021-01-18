@@ -10,7 +10,10 @@ void main() {
         expect(
           TomlDocument.parse('key = "value"'),
           equals(TomlDocument([
-            TomlKeyValuePair(TomlUnquotedKey('key'), TomlBasicString('value'))
+            TomlKeyValuePair(
+              TomlKey([TomlUnquotedKey('key')]),
+              TomlBasicString('value'),
+            )
           ])),
         );
       });
@@ -19,7 +22,7 @@ void main() {
           TomlDocument.parse("'ʎǝʞ' = 'value'"),
           equals(TomlDocument([
             TomlKeyValuePair(
-              TomlQuotedKey(TomlLiteralString('ʎǝʞ')),
+              TomlKey([TomlQuotedKey(TomlLiteralString('ʎǝʞ'))]),
               TomlLiteralString('value'),
             )
           ])),
@@ -30,7 +33,9 @@ void main() {
           TomlDocument.parse('"ʎǝʞ" = "value"'),
           equals(TomlDocument([
             TomlKeyValuePair(
-                TomlQuotedKey(TomlBasicString('ʎǝʞ')), TomlBasicString('value'))
+              TomlKey([TomlQuotedKey(TomlBasicString('ʎǝʞ'))]),
+              TomlBasicString('value'),
+            )
           ])),
         );
       });
@@ -38,7 +43,10 @@ void main() {
         expect(
           TomlDocument.parse('key="value"'),
           equals(TomlDocument([
-            TomlKeyValuePair(TomlUnquotedKey('key'), TomlBasicString('value'))
+            TomlKeyValuePair(
+              TomlKey([TomlUnquotedKey('key')]),
+              TomlBasicString('value'),
+            )
           ])),
         );
       });
@@ -46,7 +54,10 @@ void main() {
         expect(
           TomlDocument.parse('  key = "value"'),
           equals(TomlDocument([
-            TomlKeyValuePair(TomlUnquotedKey('key'), TomlBasicString('value'))
+            TomlKeyValuePair(
+              TomlKey([TomlUnquotedKey('key')]),
+              TomlBasicString('value'),
+            )
           ])),
         );
       });
@@ -54,7 +65,10 @@ void main() {
         expect(
           TomlDocument.parse('key = "value" # Comment'),
           equals(TomlDocument([
-            TomlKeyValuePair(TomlUnquotedKey('key'), TomlBasicString('value'))
+            TomlKeyValuePair(
+              TomlKey([TomlUnquotedKey('key')]),
+              TomlBasicString('value'),
+            )
           ])),
         );
       });
@@ -84,11 +98,11 @@ void main() {
           ),
           equals(TomlDocument([
             TomlKeyValuePair(
-              TomlUnquotedKey('key1'),
+              TomlKey([TomlUnquotedKey('key1')]),
               TomlInteger.dec(BigInt.from(1)),
             ),
             TomlKeyValuePair(
-              TomlUnquotedKey('key2'),
+              TomlKey([TomlUnquotedKey('key2')]),
               TomlInteger.dec(BigInt.from(2)),
             ),
           ])),

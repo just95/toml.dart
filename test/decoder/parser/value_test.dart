@@ -601,7 +601,10 @@ void main() {
         expect(
           TomlValue.parse('{ key = "value" }'),
           equals(TomlInlineTable([
-            TomlKeyValuePair(TomlUnquotedKey('key'), TomlBasicString('value'))
+            TomlKeyValuePair(
+              TomlKey([TomlUnquotedKey('key')]),
+              TomlBasicString('value'),
+            )
           ])),
         );
       });
@@ -610,15 +613,15 @@ void main() {
           TomlValue.parse('{ x = 1, y = 2, z = 3 }'),
           equals(TomlInlineTable([
             TomlKeyValuePair(
-              TomlUnquotedKey('x'),
+              TomlKey([TomlUnquotedKey('x')]),
               TomlInteger.dec(BigInt.from(1)),
             ),
             TomlKeyValuePair(
-              TomlUnquotedKey('y'),
+              TomlKey([TomlUnquotedKey('y')]),
               TomlInteger.dec(BigInt.from(2)),
             ),
             TomlKeyValuePair(
-              TomlUnquotedKey('z'),
+              TomlKey([TomlUnquotedKey('z')]),
               TomlInteger.dec(BigInt.from(3)),
             ),
           ])),
@@ -638,7 +641,7 @@ void main() {
           ),
           equals(TomlInlineTable([
             TomlKeyValuePair(
-              TomlUnquotedKey('key'),
+              TomlKey([TomlUnquotedKey('key')]),
               TomlMultilineBasicString(''),
             ),
           ])),

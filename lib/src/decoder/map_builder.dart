@@ -34,10 +34,15 @@ class TomlMapBuilder extends TomlExpressionVisitor<void> {
 
   @override
   void visitKeyValuePair(TomlKeyValuePair pair) {
-    var key = _current.nodeName.child(pair.key),
+    var key = _current.nodeName.deepChild(pair.key),
         valueBuilder = TomlValueBuilder(key),
-        value = valueBuilder.visitValue(pair.value);
-    _current.addChild(pair.key, _TomlTreeLeaf(key, value));
+        value = valueBuilder.visitValue(pair.value),
+        parent = _current.findOrAddChild(pair.key.parentKey);
+    if (parent is _TomlTreeMap) {
+      parent.addChild(pair.key.childKey, _TomlTreeLeaf(key, value));
+    } else {
+      throw TomlNotATableException(key);
+    }
   }
 
   @override

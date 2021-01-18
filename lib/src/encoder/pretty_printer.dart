@@ -88,7 +88,7 @@ class TomlPrettyPrinter extends TomlVisitor<void>
 
   @override
   void visitKeyValuePair(TomlKeyValuePair pair) {
-    visitSimpleKey(pair.key);
+    visitKey(pair.key);
     _writeToken(TomlKeyValuePair.separator, before: true, after: true);
     visitValue(pair.value);
   }

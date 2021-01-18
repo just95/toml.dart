@@ -32,7 +32,7 @@ class TomlAstBuilder {
       var key = pair.key, value = pair.value;
       if (value is TomlInlineTable) {
         tables.add(() sync* {
-          var name = prefix.child(key);
+          var name = prefix.deepChild(key);
           yield TomlStandardTable(name);
           yield* _expandKeyValuePairs(value.pairs, prefix: name);
         });
@@ -44,7 +44,7 @@ class TomlAstBuilder {
           value.items.isNotEmpty &&
           value.items.every((item) => item is TomlInlineTable)) {
         tables.add(() sync* {
-          var name = prefix.child(key);
+          var name = prefix.deepChild(key);
           for (var item in value.items.cast<TomlInlineTable>()) {
             yield TomlArrayTable(name);
             yield* _expandKeyValuePairs(item.pairs, prefix: name);
@@ -104,8 +104,10 @@ class TomlAstBuilder {
   // --------------------------------------------------------------------------
 
   /// Builds a key valie pair from the given map entry.
-  TomlKeyValuePair buildKeyValuePair(MapEntry entry) =>
-      TomlKeyValuePair(buildSimpleKey(entry.key), buildValue(entry.value));
+  TomlKeyValuePair buildKeyValuePair(MapEntry entry) => TomlKeyValuePair(
+        TomlKey([buildSimpleKey(entry.key)]),
+        buildValue(entry.value),
+      );
 
   // --------------------------------------------------------------------------
   // Keys

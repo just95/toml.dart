@@ -109,7 +109,7 @@ void main() {
           var prettyPrinter = TomlPrettyPrinter();
           prettyPrinter.visitInlineTable(TomlInlineTable([
             TomlKeyValuePair(
-              TomlUnquotedKey('foo'),
+              TomlKey([TomlUnquotedKey('foo')]),
               TomlInteger.dec(BigInt.from(0)),
             ),
           ]));
@@ -121,15 +121,15 @@ void main() {
             var prettyPrinter = TomlPrettyPrinter();
             prettyPrinter.visitInlineTable(TomlInlineTable([
               TomlKeyValuePair(
-                TomlUnquotedKey('foo'),
+                TomlKey([TomlUnquotedKey('foo')]),
                 TomlInteger.dec(BigInt.from(0)),
               ),
               TomlKeyValuePair(
-                TomlUnquotedKey('bar'),
+                TomlKey([TomlUnquotedKey('bar')]),
                 TomlInteger.dec(BigInt.from(1)),
               ),
               TomlKeyValuePair(
-                TomlUnquotedKey('baz'),
+                TomlKey([TomlUnquotedKey('baz')]),
                 TomlInteger.dec(BigInt.from(2)),
               ),
             ]));
@@ -331,7 +331,9 @@ void main() {
           var prettyPrinter = TomlPrettyPrinter();
           prettyPrinter.visitKeyValuePair(
             TomlKeyValuePair(
-                TomlUnquotedKey('key1'), TomlInteger.dec(BigInt.from(1))),
+              TomlKey([TomlUnquotedKey('key1')]),
+              TomlInteger.dec(BigInt.from(1)),
+            ),
           );
           expect(prettyPrinter.toString(), equals('key1 = 1'));
         });
@@ -365,11 +367,11 @@ void main() {
         var prettyPrinter = TomlPrettyPrinter();
         prettyPrinter.visitDocument(TomlDocument([
           TomlKeyValuePair(
-            TomlUnquotedKey('key1'),
+            TomlKey([TomlUnquotedKey('key1')]),
             TomlInteger.dec(BigInt.from(1)),
           ),
           TomlKeyValuePair(
-            TomlUnquotedKey('key2'),
+            TomlKey([TomlUnquotedKey('key2')]),
             TomlInteger.dec(BigInt.from(2)),
           ),
         ]));
@@ -380,12 +382,12 @@ void main() {
         prettyPrinter.visitDocument(TomlDocument([
           TomlStandardTable(TomlKey([TomlUnquotedKey('table1')])),
           TomlKeyValuePair(
-            TomlUnquotedKey('key1'),
+            TomlKey([TomlUnquotedKey('key1')]),
             TomlInteger.dec(BigInt.from(1)),
           ),
           TomlStandardTable(TomlKey([TomlUnquotedKey('table2')])),
           TomlKeyValuePair(
-            TomlUnquotedKey('key2'),
+            TomlKey([TomlUnquotedKey('key2')]),
             TomlInteger.dec(BigInt.from(2)),
           ),
         ]));
@@ -399,12 +401,12 @@ void main() {
         prettyPrinter.visitDocument(TomlDocument([
           TomlArrayTable(TomlKey([TomlUnquotedKey('array1')])),
           TomlKeyValuePair(
-            TomlUnquotedKey('key1'),
+            TomlKey([TomlUnquotedKey('key1')]),
             TomlInteger.dec(BigInt.from(1)),
           ),
           TomlArrayTable(TomlKey([TomlUnquotedKey('array2')])),
           TomlKeyValuePair(
-            TomlUnquotedKey('key2'),
+            TomlKey([TomlUnquotedKey('key2')]),
             TomlInteger.dec(BigInt.from(2)),
           ),
         ]));

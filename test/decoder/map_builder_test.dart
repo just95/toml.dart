@@ -9,7 +9,7 @@ void main() {
       test('key/value pairs are inserted at top-level by default', () {
         var builder = TomlMapBuilder();
         builder.visitKeyValuePair(TomlKeyValuePair(
-          TomlUnquotedKey('key'),
+          TomlKey([TomlUnquotedKey('key')]),
           TomlLiteralString('value'),
         ));
         expect(builder.build(), equals({'key': 'value'}));
@@ -17,12 +17,12 @@ void main() {
       test('throws an exception if the key/value pair is defined already', () {
         var builder = TomlMapBuilder();
         builder.visitKeyValuePair(TomlKeyValuePair(
-          TomlUnquotedKey('key'),
+          TomlKey([TomlUnquotedKey('key')]),
           TomlInteger.dec(BigInt.from(1)),
         ));
         expect(
           () => builder.visitKeyValuePair(TomlKeyValuePair(
-            TomlUnquotedKey('key'),
+            TomlKey([TomlUnquotedKey('key')]),
             TomlInteger.dec(BigInt.from(2)),
           )),
           throwsA(
@@ -51,7 +51,7 @@ void main() {
           TomlKey([TomlUnquotedKey('table')]),
         ));
         builder.visitKeyValuePair(TomlKeyValuePair(
-          TomlUnquotedKey('key'),
+          TomlKey([TomlUnquotedKey('key')]),
           TomlLiteralString('value'),
         ));
         expect(
@@ -83,7 +83,7 @@ void main() {
           ]),
         ));
         builder.visitKeyValuePair(TomlKeyValuePair(
-          TomlUnquotedKey('key'),
+          TomlKey([TomlUnquotedKey('key')]),
           TomlLiteralString('value'),
         ));
         expect(
@@ -105,14 +105,14 @@ void main() {
           ]),
         ));
         builder.visitKeyValuePair(TomlKeyValuePair(
-          TomlUnquotedKey('key1'),
+          TomlKey([TomlUnquotedKey('key1')]),
           TomlInteger.dec(BigInt.from(1)),
         ));
         builder.visitStandardTable(TomlStandardTable(
           TomlKey([TomlUnquotedKey('parent')]),
         ));
         builder.visitKeyValuePair(TomlKeyValuePair(
-          TomlUnquotedKey('key2'),
+          TomlKey([TomlUnquotedKey('key2')]),
           TomlInteger.dec(BigInt.from(2)),
         ));
         expect(
@@ -132,7 +132,7 @@ void main() {
           TomlKey([TomlUnquotedKey('parent')]),
         ));
         builder.visitKeyValuePair(TomlKeyValuePair(
-          TomlUnquotedKey('key1'),
+          TomlKey([TomlUnquotedKey('key1')]),
           TomlInteger.dec(BigInt.from(1)),
         ));
         builder.visitStandardTable(TomlStandardTable(
@@ -142,7 +142,7 @@ void main() {
           ]),
         ));
         builder.visitKeyValuePair(TomlKeyValuePair(
-          TomlUnquotedKey('key2'),
+          TomlKey([TomlUnquotedKey('key2')]),
           TomlInteger.dec(BigInt.from(2)),
         ));
         expect(
@@ -174,7 +174,7 @@ void main() {
       test('throws an exception if a value with the same name exists', () {
         var builder = TomlMapBuilder();
         builder.visitKeyValuePair(TomlKeyValuePair(
-          TomlUnquotedKey('key'),
+          TomlKey([TomlUnquotedKey('key')]),
           TomlLiteralString('value'),
         ));
         expect(
@@ -191,7 +191,7 @@ void main() {
       test('throws an exception if a parent is not a table', () {
         var builder = TomlMapBuilder();
         builder.visitKeyValuePair(TomlKeyValuePair(
-          TomlUnquotedKey('key'),
+          TomlKey([TomlUnquotedKey('key')]),
           TomlLiteralString('value'),
         ));
         expect(
@@ -213,7 +213,7 @@ void main() {
       test('throws an exception if a parent is an inline table', () {
         var builder = TomlMapBuilder();
         builder.visitKeyValuePair(TomlKeyValuePair(
-          TomlUnquotedKey('key'),
+          TomlKey([TomlUnquotedKey('key')]),
           TomlInlineTable([]),
         ));
         expect(
@@ -275,14 +275,14 @@ void main() {
             TomlKey([TomlUnquotedKey('array')]),
           ));
           builder.visitKeyValuePair(TomlKeyValuePair(
-            TomlUnquotedKey('key1'),
+            TomlKey([TomlUnquotedKey('key1')]),
             TomlInteger.dec(BigInt.from(1)),
           ));
           builder.visitArrayTable(TomlArrayTable(
             TomlKey([TomlUnquotedKey('array')]),
           ));
           builder.visitKeyValuePair(TomlKeyValuePair(
-            TomlUnquotedKey('key2'),
+            TomlKey([TomlUnquotedKey('key2')]),
             TomlInteger.dec(BigInt.from(2)),
           ));
           expect(
@@ -316,7 +316,7 @@ void main() {
       test('throws an exception if a parent is not a table', () {
         var builder = TomlMapBuilder();
         builder.visitKeyValuePair(TomlKeyValuePair(
-          TomlUnquotedKey('key'),
+          TomlKey([TomlUnquotedKey('key')]),
           TomlLiteralString('value'),
         ));
         expect(
