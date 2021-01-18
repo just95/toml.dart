@@ -82,6 +82,21 @@ void main() {
           prettyPrinter.visitFloat(TomlFloat(-273.15));
           expect(prettyPrinter.toString(), equals('-273.15'));
         });
+        test('pretty prints positive infinity correctly', () {
+          var prettyPrinter = TomlPrettyPrinter();
+          prettyPrinter.visitFloat(TomlFloat(double.infinity));
+          expect(prettyPrinter.toString(), equals('inf'));
+        });
+        test('pretty prints negative infinity correctly', () {
+          var prettyPrinter = TomlPrettyPrinter();
+          prettyPrinter.visitFloat(TomlFloat(double.negativeInfinity));
+          expect(prettyPrinter.toString(), equals('-inf'));
+        });
+        test('pretty prints NaN correctly', () {
+          var prettyPrinter = TomlPrettyPrinter();
+          prettyPrinter.visitFloat(TomlFloat(double.nan));
+          expect(prettyPrinter.toString(), equals('nan'));
+        });
       });
       group('visitInlineTable', () {
         test('pretty prints empty inline table correctly', () {
