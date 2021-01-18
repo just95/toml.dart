@@ -47,7 +47,7 @@ abstract class TomlEscapedChar {
   static final Parser<String> escapedCharParser =
       (tomlNewline | tomlWhitespaceChar).neg().map((shortcut) {
     if (!escapableChars.containsKey(shortcut)) {
-      throw TomlInvalidEscapeSequenceException('\\${shortcut}');
+      throw TomlInvalidEscapeSequenceException('\\$shortcut');
     }
     return String.fromCharCode(escapableChars[shortcut]);
   });

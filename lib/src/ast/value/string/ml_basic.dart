@@ -77,7 +77,7 @@ class TomlMultilineBasicString extends TomlMultilineString {
   ///
   ///     mlb-escaped-nl = escape ws newline *( wschar / newline )
   static final Parser<String> escapedNewlineParser =
-      (TomlEscapedChar.escapedCharParser &
+      (char(TomlEscapedChar.escapeChar) &
               tomlWhitespace &
               tomlNewline &
               (tomlWhitespaceChar | tomlNewline).star())
