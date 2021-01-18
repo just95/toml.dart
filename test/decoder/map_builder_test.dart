@@ -492,6 +492,19 @@ void main() {
           }),
         );
       });
+      test('cannot insert into static array', () {
+        var builder = TomlMapBuilder();
+        builder.visitKeyValuePair(TomlKeyValuePair(
+          TomlKey([TomlUnquotedKey('array')]),
+          TomlArray([]),
+        ));
+        expect(
+          () => builder.visitArrayTable(TomlArrayTable(
+            TomlKey([TomlUnquotedKey('array')]),
+          )),
+          throwsA(isA<TomlRedefinitionException>()),
+        );
+      });
     });
   });
 }
