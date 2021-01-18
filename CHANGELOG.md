@@ -2,7 +2,7 @@
 
 ## Unreleased
 
- - Updated to TOML 0.5.0.
+ - Updated to [v0.5.0][toml-spec/v0.5.0] of the TOML specification.
    + Added binary, octal and hexadecimal integer notation.
    + Added special floating point values `inf` and `nan`.
  - Added support for `BigInt`s.
@@ -13,7 +13,7 @@ This is a major update that does not only bring along many changes to the intern
 
 - Removed the `TomlParser` class.
   Use `TomlDocument.parse` and `TomlDocument.toMap` instead.
-- In preparation to support TOML v0.5.0 in an upcoming version of the library, the parser is now based on TOML's official ABNF.
+- In preparation to support TOML [v0.5.0][toml-spec/v0.5.0] in an upcoming version of the library, the parser is now based on TOML's official ABNF.
 - Removed the `TomlEncoder` class.
   Use `TomlDocument.fromMap` and `TomlDocument.toString` instead.
 - Removed the `toml.decoder` and `toml.encoder` libraries.
@@ -60,7 +60,7 @@ This is a major update that does not only bring along many changes to the intern
 
 ## 0.2.0
 
-- Updated to v0.4.0 of the TOML spec.
+- Updated to [v0.4.0][toml-spec/v0.4.0] of the TOML specification.
 - Added bare/quoted keys.
 - Added inline table syntax.
 - Allowed underscores in numbers.
@@ -72,7 +72,17 @@ This is a major update that does not only bring along many changes to the intern
 
 ## 0.1.0
 
-- Initial version, implements v0.3.1 of the TOML spec.
+- Initial version, implements [v0.3.1][toml-spec/v0.3.1] of the TOML specification.
+
+[toml-spec/v0.3.1]:
+  https://toml.io/en/v0.3.1
+  "TOML: English v0.3.1"
+[toml-spec/v0.4.0]:
+  https://toml.io/en/v0.4.0
+  "TOML: English v0.4.0"
+[toml-spec/v0.5.0]:
+  https://toml.io/en/v0.5.0
+  "TOML: English v0.5.0"
 
 [toml-test]:
   https://github.com/BurntSushi/toml-test
