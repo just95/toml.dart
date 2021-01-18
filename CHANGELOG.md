@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+ - Updated to TOML 0.5.0.
+   + Added binary, octal and hexadecimal integer notation.
+   + Added special floating point values `inf` and `nan`.
  - Added support for `BigInt`s.
 
 ## 0.7.0
