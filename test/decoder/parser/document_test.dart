@@ -39,6 +39,56 @@ void main() {
           ])),
         );
       });
+      test('can parse key/value pair with dotted key', () {
+        expect(
+          TomlDocument.parse('a.b.c = "value"'),
+          equals(TomlDocument([
+            TomlKeyValuePair(
+              TomlKey([
+                TomlUnquotedKey('a'),
+                TomlUnquotedKey('b'),
+                TomlUnquotedKey('c'),
+              ]),
+              TomlBasicString('value'),
+            )
+          ])),
+        );
+      });
+      test('allows whitespace between dots', () {
+        expect(
+          TomlDocument.parse('a . b . c = "value"'),
+          equals(TomlDocument([
+            TomlKeyValuePair(
+              TomlKey([
+                TomlUnquotedKey('a'),
+                TomlUnquotedKey('b'),
+                TomlUnquotedKey('c'),
+              ]),
+              TomlBasicString('value'),
+            )
+          ])),
+        );
+      });
+      test('does not allow newlines after dots', () {
+        expect(
+          () => TomlDocument.parse(
+            'a.\n'
+            'b.\n'
+            'c = "value"',
+          ),
+          throwsA(isA<TomlParserException>()),
+        );
+      });
+      test('does not allow newlines before dots', () {
+        expect(
+          () => TomlDocument.parse(
+            'a\n'
+            '.b\n'
+            '.c = "value"',
+          ),
+          throwsA(isA<TomlParserException>()),
+        );
+      });
       test('allows whitespace around equals sign to be omitted', () {
         expect(
           TomlDocument.parse('key="value"'),

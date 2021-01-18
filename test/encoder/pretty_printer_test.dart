@@ -337,6 +337,20 @@ void main() {
           );
           expect(prettyPrinter.toString(), equals('key1 = 1'));
         });
+        test('uses dots to separate parts of dotted keys', () {
+          var prettyPrinter = TomlPrettyPrinter();
+          prettyPrinter.visitKeyValuePair(
+            TomlKeyValuePair(
+              TomlKey([
+                TomlUnquotedKey('a'),
+                TomlUnquotedKey('b'),
+                TomlUnquotedKey('c'),
+              ]),
+              TomlInteger.dec(BigInt.from(1)),
+            ),
+          );
+          expect(prettyPrinter.toString(), equals('a.b.c = 1'));
+        });
       });
       group('visitStandardTable', () {
         test('uses square brackets without padding as delimiter', () {
