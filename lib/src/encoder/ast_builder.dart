@@ -170,6 +170,7 @@ class TomlAstBuilder {
     if (value is String) return buildString(value);
     if (value is Iterable) return buildArray(value);
     if (value is Map) return buildInlineTable(value);
+    if (value is TomlValue) return value;
     throw TomlUnknownValueTypeException(value);
   }
 

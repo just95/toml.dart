@@ -39,6 +39,38 @@ void main() {
           equals(TomlInteger.dec(BigInt.from(42))),
         );
       });
+      test('preserves binary TOML integer values', () {
+        var builder = TomlAstBuilder();
+        var integer = TomlInteger.bin(BigInt.from(42));
+        expect(
+          builder.buildValue(integer),
+          equals(integer),
+        );
+      });
+      test('preserves octal TOML integer values', () {
+        var builder = TomlAstBuilder();
+        var integer = TomlInteger.oct(BigInt.from(42));
+        expect(
+          builder.buildValue(integer),
+          equals(integer),
+        );
+      });
+      test('preserves decimal TOML integer values', () {
+        var builder = TomlAstBuilder();
+        var integer = TomlInteger.dec(BigInt.from(42));
+        expect(
+          builder.buildValue(integer),
+          equals(integer),
+        );
+      });
+      test('preserves hexadecimal TOML integer values', () {
+        var builder = TomlAstBuilder();
+        var integer = TomlInteger.hex(BigInt.from(42));
+        expect(
+          builder.buildValue(integer),
+          equals(integer),
+        );
+      });
       test('builds float from double', () {
         var builder = TomlAstBuilder();
         expect(builder.buildValue(13.37), equals(TomlFloat(13.37)));
@@ -50,9 +82,9 @@ void main() {
       });
       test('builds offset date-time from UTC DateTime', () {
         var builder = TomlAstBuilder();
-        var now = DateTime.utc(1969, 7, 20, 20, 17);
+        var date = DateTime.utc(1969, 7, 20, 20, 17);
         expect(
-            builder.buildValue(now),
+            builder.buildValue(date),
             equals(TomlOffsetDateTime(
               TomlFullDate(1969, 7, 20),
               TomlPartialTime(20, 17, 0),
@@ -61,14 +93,45 @@ void main() {
       });
       test('builds offset date-time from local DateTime', () {
         var builder = TomlAstBuilder();
-        var now = DateTime(1969, 7, 20, 20, 17);
+        var date = DateTime(1969, 7, 20, 20, 17);
         expect(
-            builder.buildValue(now),
+            builder.buildValue(date),
             equals(TomlOffsetDateTime(
               TomlFullDate(1969, 7, 20),
               TomlPartialTime(20, 17, 0),
               TomlTimeZoneOffset.local(),
             )));
+      });
+      test('preserves TOML offset date-time values', () {
+        var builder = TomlAstBuilder();
+        var date = TomlOffsetDateTime(
+          TomlFullDate(1969, 7, 20),
+          TomlPartialTime(20, 17, 0),
+          TomlTimeZoneOffset.utc(),
+        );
+        expect(builder.buildValue(date), equals(date));
+      });
+      test('preserves TOML local date-time values', () {
+        var builder = TomlAstBuilder();
+        var date = TomlLocalDateTime(
+          TomlFullDate(1969, 7, 20),
+          TomlPartialTime(20, 17, 0),
+        );
+        expect(builder.buildValue(date), equals(date));
+      });
+      test('preserves TOML local date values', () {
+        var builder = TomlAstBuilder();
+        var date = TomlLocalDate(
+          TomlFullDate(1969, 7, 20),
+        );
+        expect(builder.buildValue(date), equals(date));
+      });
+      test('preserves TOML local time values', () {
+        var builder = TomlAstBuilder();
+        var time = TomlLocalTime(
+          TomlPartialTime(20, 17, 0),
+        );
+        expect(builder.buildValue(time), equals(time));
       });
       test('builds literal string from String by default', () {
         var builder = TomlAstBuilder();
@@ -96,6 +159,26 @@ void main() {
           );
         },
       );
+      test('preserves TOML basic string values', () {
+        var builder = TomlAstBuilder();
+        var str = TomlBasicString('test');
+        expect(builder.buildValue(str), equals(str));
+      });
+      test('preserves TOML multiline basic string values', () {
+        var builder = TomlAstBuilder();
+        var str = TomlMultilineBasicString('test');
+        expect(builder.buildValue(str), equals(str));
+      });
+      test('preserves TOML literal string values', () {
+        var builder = TomlAstBuilder();
+        var str = TomlLiteralString('test');
+        expect(builder.buildValue(str), equals(str));
+      });
+      test('preserves TOML multiline literal string values', () {
+        var builder = TomlAstBuilder();
+        var str = TomlMultilineLiteralString('test');
+        expect(builder.buildValue(str), equals(str));
+      });
       test('builds empty array from empty List', () {
         var builder = TomlAstBuilder();
         expect(builder.buildValue([]), equals(TomlArray([])));
