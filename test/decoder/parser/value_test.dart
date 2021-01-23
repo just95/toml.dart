@@ -252,16 +252,20 @@ void main() {
         );
       });
       test('can parse zero with plus sign', () {
-        expect(
-          TomlValue.parse('+0.0'),
-          equals(TomlFloat(0.0)),
-        );
+        var node = TomlValue.parse('+0.0');
+        expect(node, isA<TomlFloat>());
+        if (node is TomlFloat) {
+          expect(node.value, isZero);
+          expect(node.value.isNegative, equals(false));
+        }
       });
       test('can parse zero with minus sign', () {
-        expect(
-          TomlValue.parse('-0.0'),
-          equals(TomlFloat(0.0)),
-        );
+        var node = TomlValue.parse('-0.0');
+        expect(node, isA<TomlFloat>());
+        if (node is TomlFloat) {
+          expect(node.value, isZero);
+          expect(node.value.isNegative, equals(true));
+        }
       });
       test('can parse positive float with plus sign', () {
         expect(
