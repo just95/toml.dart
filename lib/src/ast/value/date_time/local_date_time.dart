@@ -19,7 +19,7 @@ class TomlLocalDateTime extends TomlDateTime {
       (TomlFullDate.parser & anyOf('Tt ') & TomlPartialTime.parser)
           .permute([0, 2]).map((xs) => TomlLocalDateTime(
                 xs[0] as TomlFullDate,
-                xs[2] as TomlPartialTime,
+                xs[1] as TomlPartialTime,
               ));
 
   /// The date.

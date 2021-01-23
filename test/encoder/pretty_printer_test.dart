@@ -70,8 +70,10 @@ void main() {
                 TomlPartialTime(20, 17, 0, [123, 456]),
                 TomlTimeZoneOffset.utc(),
               ));
-              expect(prettyPrinter.toString(),
-                  equals('1969-07-20 20:17:00.123456Z'));
+              expect(
+                prettyPrinter.toString(),
+                equals('1969-07-20 20:17:00.123456Z'),
+              );
             },
           );
           test('pretty prints UTC date-time with microseconds correctly', () {
@@ -81,8 +83,97 @@ void main() {
               TomlPartialTime(20, 17, 0, [0, 456]),
               TomlTimeZoneOffset.utc(),
             ));
-            expect(prettyPrinter.toString(),
-                equals('1969-07-20 20:17:00.000456Z'));
+            expect(
+              prettyPrinter.toString(),
+              equals('1969-07-20 20:17:00.000456Z'),
+            );
+          });
+        });
+        group('visitLocalDateTime', () {
+          test('pretty prints local date-time correctly', () {
+            var prettyPrinter = TomlPrettyPrinter();
+            prettyPrinter.visitLocalDateTime(TomlLocalDateTime(
+              TomlFullDate(1969, 7, 20),
+              TomlPartialTime(20, 17, 0),
+            ));
+            expect(prettyPrinter.toString(), equals('1969-07-20 20:17:00'));
+          });
+          test('pretty prints local date-time with milliseconds correctly', () {
+            var prettyPrinter = TomlPrettyPrinter();
+            prettyPrinter.visitLocalDateTime(TomlLocalDateTime(
+              TomlFullDate(1969, 7, 20),
+              TomlPartialTime(20, 17, 0, [123]),
+            ));
+            expect(prettyPrinter.toString(), equals('1969-07-20 20:17:00.123'));
+          });
+          test(
+            'pretty prints local date-time with milli- and microseconds '
+            'correctly',
+            () {
+              var prettyPrinter = TomlPrettyPrinter();
+              prettyPrinter.visitLocalDateTime(TomlLocalDateTime(
+                TomlFullDate(1969, 7, 20),
+                TomlPartialTime(20, 17, 0, [123, 456]),
+              ));
+              expect(prettyPrinter.toString(),
+                  equals('1969-07-20 20:17:00.123456'));
+            },
+          );
+          test('pretty prints local date-time with microseconds correctly', () {
+            var prettyPrinter = TomlPrettyPrinter();
+            prettyPrinter.visitLocalDateTime(TomlLocalDateTime(
+              TomlFullDate(1969, 7, 20),
+              TomlPartialTime(20, 17, 0, [0, 456]),
+            ));
+            expect(
+              prettyPrinter.toString(),
+              equals('1969-07-20 20:17:00.000456'),
+            );
+          });
+        });
+        group('visitLocalDate', () {
+          test('pretty prints date correctly', () {
+            var prettyPrinter = TomlPrettyPrinter();
+            prettyPrinter.visitLocalDate(TomlLocalDate(
+              TomlFullDate(1969, 7, 20),
+            ));
+            expect(prettyPrinter.toString(), equals('1969-07-20'));
+          });
+        });
+        group('visitLocalTime', () {
+          test('pretty prints time correctly', () {
+            var prettyPrinter = TomlPrettyPrinter();
+            prettyPrinter.visitLocalTime(TomlLocalTime(
+              TomlPartialTime(20, 17, 0),
+            ));
+            expect(prettyPrinter.toString(), equals('20:17:00'));
+          });
+          test('pretty prints time with milliseconds correctly', () {
+            var prettyPrinter = TomlPrettyPrinter();
+            prettyPrinter.visitLocalTime(TomlLocalTime(
+              TomlPartialTime(20, 17, 0, [123]),
+            ));
+            expect(prettyPrinter.toString(), equals('20:17:00.123'));
+          });
+          test(
+            'pretty prints time with milli- and microseconds correctly',
+            () {
+              var prettyPrinter = TomlPrettyPrinter();
+              prettyPrinter.visitLocalTime(TomlLocalTime(
+                TomlPartialTime(20, 17, 0, [123, 456]),
+              ));
+              expect(prettyPrinter.toString(), equals('20:17:00.123456'));
+            },
+          );
+          test('pretty prints time with microseconds correctly', () {
+            var prettyPrinter = TomlPrettyPrinter();
+            prettyPrinter.visitLocalTime(TomlLocalTime(
+              TomlPartialTime(20, 17, 0, [0, 456]),
+            ));
+            expect(
+              prettyPrinter.toString(),
+              equals('20:17:00.000456'),
+            );
           });
         });
       });

@@ -193,6 +193,57 @@ void main() {
         );
       });
     });
+    group('Local Date-Time', () {
+      test('can parse date-times without time-zone offset', () {
+        expect(
+          TomlValue.parse('1989-11-09 17:53:00'),
+          equals(TomlLocalDateTime(
+            TomlFullDate(1989, 11, 9),
+            TomlPartialTime(17, 53, 0),
+          )),
+        );
+      });
+      test('allows \'T\' as a separator between date and time', () {
+        expect(
+          TomlValue.parse('1989-11-09T17:53:00'),
+          equals(TomlLocalDateTime(
+            TomlFullDate(1989, 11, 9),
+            TomlPartialTime(17, 53, 0),
+          )),
+        );
+      });
+      test('can parse date-times with fractions of a second', () {
+        expect(
+          TomlValue.parse('1989-11-09 18:53:00.0099999'),
+          equals(TomlLocalDateTime(
+            TomlFullDate(1989, 11, 9),
+            TomlPartialTime(18, 53, 0, [009, 999, 900]),
+          )),
+        );
+      });
+    });
+    group('Local Date', () {
+      test('can parse dates without time', () {
+        expect(
+          TomlValue.parse('1989-11-09'),
+          equals(TomlLocalDate(TomlFullDate(1989, 11, 9))),
+        );
+      });
+    });
+    group('Local Time', () {
+      test('can parse time without date', () {
+        expect(
+          TomlValue.parse('17:53:00'),
+          equals(TomlLocalTime(TomlPartialTime(17, 53, 0))),
+        );
+      });
+      test('can parse time with fractions of a second', () {
+        expect(
+          TomlValue.parse('18:53:00.0099999'),
+          equals(TomlLocalTime(TomlPartialTime(18, 53, 0, [009, 999, 900]))),
+        );
+      });
+    });
     group('Float', () {
       test('can parse zero without sign', () {
         expect(
