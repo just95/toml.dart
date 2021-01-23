@@ -6,6 +6,7 @@ import 'package:quiver/core.dart';
 import '../../value.dart';
 import '../../visitor/value/date_time.dart';
 import '../date_time.dart';
+import 'local_date_time.dart';
 
 /// AST node that represents a TOML local date value.
 ///
@@ -20,6 +21,10 @@ class TomlLocalDate extends TomlDateTime {
 
   /// Creates a new local date value.
   TomlLocalDate(this.date);
+
+  /// Gets a [TomlLocalDateTime] that represents the given time at this date.
+  TomlLocalDateTime atTime(TomlPartialTime time) =>
+      TomlLocalDateTime(date, time);
 
   @override
   TomlType get type => TomlType.localDate;

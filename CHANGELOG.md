@@ -5,6 +5,11 @@
  - Updated to [v0.5.0][toml-spec/v0.5.0] of the TOML specification.
    + Added binary, octal and hexadecimal integer notation.
    + Added special floating point values `inf` and `nan`.
+   + Added offset date-times, local date-times, local dates and local times.
+     - The decoder produces `TomlOffsetDateTime`, `TomlLocalDateTime`, `TomlLocalDate` or `TomlLocalTime` values.
+       There are methods to map `TomlOffsetDateTime` to a `DateTime`.
+       To convert the other values to `DateTime`s, missing information such as date, time or offset has to be provided by the application.
+     - UTC and local `DateTime`s are now encoded as offset date-times.
  - Added support for `BigInt`s.
 
 ## 0.7.0
