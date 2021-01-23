@@ -12,7 +12,7 @@ import '../visitor/value.dart';
 ///
 ///     true    = %x74.72.75.65     ; true
 ///     false   = %x66.61.6C.73.65  ; false
-class TomlBoolean extends TomlValue<bool> {
+class TomlBoolean extends TomlValue {
   /// Parser for a boolean TOML value.
   static final Parser<TomlBoolean> parser =
       (string('true').map((_) => TomlBoolean(true)) |

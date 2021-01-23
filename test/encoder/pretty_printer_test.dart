@@ -41,29 +41,49 @@ void main() {
         });
       });
       group('visitDateTime', () {
-        test('pretty prints UTC date-time correctly', () {
-          var prettyPrinter = TomlPrettyPrinter();
-          prettyPrinter.visitDateTime(TomlDateTime(
-            DateTime.utc(1969, 7, 20, 20, 17),
-          ));
-          expect(prettyPrinter.toString(), equals('1969-07-20T20:17:00Z'));
-        });
-        test('pretty prints UTC date-time with milliseconds correctly', () {
-          var prettyPrinter = TomlPrettyPrinter();
-          prettyPrinter.visitDateTime(TomlDateTime(
-            DateTime.utc(1969, 7, 20, 20, 17, 0, 123),
-          ));
-          expect(prettyPrinter.toString(), equals('1969-07-20T20:17:00.123Z'));
-        });
-        test('pretty prints local date-time with offset', () {
-          var prettyPrinter = TomlPrettyPrinter();
-          prettyPrinter.visitDateTime(TomlDateTime(
-            DateTime(1969, 7, 20, 20, 17),
-          ));
-          expect(
-            prettyPrinter.toString(),
-            matches(r'1969-07-20T20:17:00[+-]\d\d:\d\d'),
+        group('visitOffsetDateTime', () {
+          test('pretty prints UTC date-time correctly', () {
+            var prettyPrinter = TomlPrettyPrinter();
+            prettyPrinter.visitOffsetDateTime(TomlOffsetDateTime(
+              TomlFullDate(1969, 7, 20),
+              TomlPartialTime(20, 17, 0),
+              TomlTimeZoneOffset.utc(),
+            ));
+            expect(prettyPrinter.toString(), equals('1969-07-20 20:17:00Z'));
+          });
+          test('pretty prints UTC date-time with milliseconds correctly', () {
+            var prettyPrinter = TomlPrettyPrinter();
+            prettyPrinter.visitOffsetDateTime(TomlOffsetDateTime(
+              TomlFullDate(1969, 7, 20),
+              TomlPartialTime(20, 17, 0, [123]),
+              TomlTimeZoneOffset.utc(),
+            ));
+            expect(
+                prettyPrinter.toString(), equals('1969-07-20 20:17:00.123Z'));
+          });
+          test(
+            'pretty prints UTC date-time with milli- and microseconds correctly',
+            () {
+              var prettyPrinter = TomlPrettyPrinter();
+              prettyPrinter.visitOffsetDateTime(TomlOffsetDateTime(
+                TomlFullDate(1969, 7, 20),
+                TomlPartialTime(20, 17, 0, [123, 456]),
+                TomlTimeZoneOffset.utc(),
+              ));
+              expect(prettyPrinter.toString(),
+                  equals('1969-07-20 20:17:00.123456Z'));
+            },
           );
+          test('pretty prints UTC date-time with microseconds correctly', () {
+            var prettyPrinter = TomlPrettyPrinter();
+            prettyPrinter.visitOffsetDateTime(TomlOffsetDateTime(
+              TomlFullDate(1969, 7, 20),
+              TomlPartialTime(20, 17, 0, [0, 456]),
+              TomlTimeZoneOffset.utc(),
+            ));
+            expect(prettyPrinter.toString(),
+                equals('1969-07-20 20:17:00.000456Z'));
+          });
         });
       });
       group('visitFloat', () {
@@ -245,14 +265,14 @@ void main() {
             );
             expect(prettyPrinter.toString(), equals('"""\nfoo "bar" baz"""'));
           });
-          test('does not escape two consequtive double quotes', () {
+          test('does not escape two consecutive double quotes', () {
             var prettyPrinter = TomlPrettyPrinter();
             prettyPrinter.visitMultilineBasicString(
               TomlMultilineBasicString('foo ""bar"" baz'),
             );
             expect(prettyPrinter.toString(), equals('"""\nfoo ""bar"" baz"""'));
           });
-          test('escapes the third consequtive double quote', () {
+          test('escapes the third consecutive double quote', () {
             var prettyPrinter = TomlPrettyPrinter();
             prettyPrinter.visitMultilineBasicString(
               TomlMultilineBasicString('foo """bar""" baz'),
@@ -262,7 +282,7 @@ void main() {
               equals('"""\nfoo ""\\"bar""\\" baz"""'),
             );
           });
-          test('escapes every third consequtive double quote', () {
+          test('escapes every third consecutive double quote', () {
             var prettyPrinter = TomlPrettyPrinter();
             prettyPrinter.visitMultilineBasicString(
               TomlMultilineBasicString('foo """""""bar""""""" baz'),

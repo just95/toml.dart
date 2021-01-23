@@ -151,25 +151,45 @@ void main() {
         );
       });
     });
-    group('Date-Time', () {
+    group('Offset Date-Time', () {
       test('can parse UTC date-times', () {
         expect(
-          TomlValue.parse('1989-11-09T17:53:00Z'),
-          equals(TomlDateTime(DateTime.utc(1989, 11, 9, 17, 53))),
+          TomlValue.parse('1989-11-09 17:53:00Z'),
+          equals(TomlOffsetDateTime(
+            TomlFullDate(1989, 11, 9),
+            TomlPartialTime(17, 53, 0),
+            TomlTimeZoneOffset.utc(),
+          )),
         );
       });
-      test('can parse date-times with time zone offset', () {
+      test('allows \'T\' as a separator between date and time', () {
         expect(
-          TomlValue.parse('1989-11-09T18:53:00+01:00'),
-          equals(TomlDateTime(DateTime.utc(1989, 11, 9, 17, 53))),
+          TomlValue.parse('1989-11-09T17:53:00Z'),
+          equals(TomlOffsetDateTime(
+            TomlFullDate(1989, 11, 9),
+            TomlPartialTime(17, 53, 0),
+            TomlTimeZoneOffset.utc(),
+          )),
+        );
+      });
+      test('can parse date-times with numeric time zone offset', () {
+        expect(
+          TomlValue.parse('1989-11-09 18:53:00+01:00'),
+          equals(TomlOffsetDateTime(
+            TomlFullDate(1989, 11, 9),
+            TomlPartialTime(18, 53, 0),
+            TomlTimeZoneOffset.positive(1, 0),
+          )),
         );
       });
       test('can parse date-times with fractions of a second', () {
         expect(
-          TomlValue.parse('1989-11-09T18:53:00.999999+01:00'),
-          equals(
-            TomlDateTime(DateTime.utc(1989, 11, 9, 17, 53, 0, 999, 999)),
-          ),
+          TomlValue.parse('1989-11-09 18:53:00.0099999+01:00'),
+          equals(TomlOffsetDateTime(
+            TomlFullDate(1989, 11, 9),
+            TomlPartialTime(18, 53, 0, [009, 999, 900]),
+            TomlTimeZoneOffset.positive(1, 0),
+          )),
         );
       });
     });

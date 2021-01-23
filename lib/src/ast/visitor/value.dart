@@ -3,7 +3,7 @@ library toml.src.ast.visitor.value;
 import '../value.dart';
 import '../value/array.dart';
 import '../value/boolean.dart';
-import '../value/datetime.dart';
+import '../value/date_time.dart';
 import '../value/float.dart';
 import '../value/integer.dart';
 import '../value/string.dart';
@@ -17,8 +17,8 @@ abstract class TomlValueVisitor<T> {
   /// Visits the given boolean value.
   T visitBoolean(TomlBoolean boolean);
 
-  /// Visits the given date-time value.
-  T visitDateTime(TomlDateTime datetime);
+  /// Visits the given date or time value.
+  T visitDateTime(TomlDateTime dateTime);
 
   /// Visits the given floating point number.
   T visitFloat(TomlFloat float);

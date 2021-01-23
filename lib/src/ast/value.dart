@@ -8,7 +8,7 @@ import 'package:toml/src/encoder.dart';
 import 'node.dart';
 import 'value/array.dart';
 import 'value/boolean.dart';
-import 'value/datetime.dart';
+import 'value/date_time.dart';
 import 'value/float.dart';
 import 'value/integer.dart';
 import 'value/string.dart';
@@ -24,9 +24,6 @@ enum TomlType {
   /// The type of a boolean value.
   boolean,
 
-  /// The type of a datetime.
-  datetime,
-
   /// The type of a floating point number.
   float,
 
@@ -37,7 +34,19 @@ enum TomlType {
   string,
 
   /// The type of an inline table.
-  table
+  table,
+
+  /// The type of an offset date-time.
+  offsetDateTime,
+
+  /// The type of a local date-time.
+  localDateTime,
+
+  /// The type of a local date.
+  localDate,
+
+  /// The type of a local time.
+  localTime,
 }
 
 /// Base class for AST nodes that represent TOML values.
@@ -49,7 +58,7 @@ enum TomlType {
 ///         / date-time
 ///         / float
 ///         / integer
-abstract class TomlValue<V> extends TomlNode {
+abstract class TomlValue extends TomlNode {
   /// Parser for a TOML value.
   ///
   /// We have to use a [NonStrictParser] since values (arrays for example)
@@ -83,8 +92,7 @@ abstract class TomlValue<V> extends TomlNode {
   ///
   /// Throws a [TomlUnknownValueTypeException] when the given value cannot be
   /// encoded by TOML.
-  factory TomlValue.from(V value) =>
-      TomlAstBuilder().buildValue(value) as TomlValue<V>;
+  factory TomlValue.from(dynamic value) => TomlAstBuilder().buildValue(value);
 
   /// The type of the TOML value represented by this AST node.
   TomlType get type;

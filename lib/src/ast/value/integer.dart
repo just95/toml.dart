@@ -44,7 +44,7 @@ class TomlIntegerFormat {
 /// AST node that represents a TOML integer.
 ///
 ///     integer = dec-int / hex-int / oct-int / bin-int
-class TomlInteger extends TomlValue<BigInt> {
+class TomlInteger extends TomlValue {
   /// Parser for a TOML interger value.
   ///
   /// Decimal integers have to be parsed last such that the zero in the

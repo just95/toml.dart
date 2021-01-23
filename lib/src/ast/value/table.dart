@@ -15,7 +15,7 @@ import '../visitor/value.dart';
 ///         inline-table-open [ inline-table-keyvals ] inline-table-close
 ///
 ///     inline-table-keyvals = keyval [ inline-table-sep inline-table-keyvals ]
-class TomlInlineTable extends TomlValue<Map<String, dynamic>> {
+class TomlInlineTable extends TomlValue {
   /// The opening delimiter of inline tables.
   ///
   ///     inline-table-open  = %x7B ws     ; {

@@ -16,7 +16,7 @@ import '../visitor/value.dart';
 ///                     array-values
 ///     array-values =/ ws-comment-newline val ws-comment-newline [ array-sep ]
 ///
-class TomlArray<V> extends TomlValue<Iterable> {
+class TomlArray<V> extends TomlValue {
   /// The opening delimiter of arrays.
   ///
   ///     array-open =  %x5B ; [
@@ -55,7 +55,7 @@ class TomlArray<V> extends TomlValue<Iterable> {
 
   /// Creates a new array value from the given [items] but throws an
   /// [FormatException] if multiple element types are mixed.
-  static TomlArray<V> fromHomogeneous<V>(Iterable<TomlValue<V>> items) {
+  static TomlArray fromHomogeneous<V>(Iterable<TomlValue> items) {
     var array = TomlArray(items);
     var types = array.itemTypes.toSet();
     if (types.length > 1) {
@@ -68,10 +68,10 @@ class TomlArray<V> extends TomlValue<Iterable> {
   }
 
   /// The array items.
-  final List<TomlValue<V>> items;
+  final List<TomlValue> items;
 
   /// Creates a new array value.
-  TomlArray(Iterable<TomlValue<V>> items)
+  TomlArray(Iterable<TomlValue> items)
       : items = List.from(items, growable: false);
 
   /// Gets the TOML types of the [items].

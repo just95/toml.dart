@@ -10,7 +10,7 @@ import '../visitor/value.dart';
 ///
 ///     float = float-int-part ( exp / frac [ exp ] )
 ///     float =/ special-float
-class TomlFloat extends TomlValue<double> {
+class TomlFloat extends TomlValue {
   /// Parser for a TOML floating point value.
   static final Parser<TomlFloat> parser =
       (finalFloatParser | specialFloatParser).cast<TomlFloat>();

@@ -31,7 +31,7 @@ enum TomlStringType {
 ///            / basic-string
 ///            / ml-literal-string
 ///            / literal-string
-abstract class TomlString extends TomlValue<String> {
+abstract class TomlString extends TomlValue {
   /// Parser for a TOML string value.
   static final Parser<TomlString> parser = (TomlMultilineBasicString.parser |
           TomlBasicString.parser |

@@ -166,7 +166,7 @@ class TomlAstBuilder {
     if (value is BigInt) return TomlInteger.dec(value);
     if (value is double) return TomlFloat(value);
     if (value is bool) return TomlBoolean(value);
-    if (value is DateTime) return TomlDateTime(value);
+    if (value is DateTime) return TomlOffsetDateTime.fromDateTime(value);
     if (value is String) return buildString(value);
     if (value is Iterable) return buildArray(value);
     if (value is Map) return buildInlineTable(value);

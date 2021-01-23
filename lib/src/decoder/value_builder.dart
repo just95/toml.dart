@@ -23,7 +23,7 @@ class TomlValueBuilder extends TomlValueVisitor<dynamic>
   bool visitBoolean(TomlBoolean boolean) => boolean.value;
 
   @override
-  DateTime visitDateTime(TomlDateTime datetime) => datetime.value;
+  TomlDateTime visitDateTime(TomlDateTime dateTime) => dateTime;
 
   @override
   double visitFloat(TomlFloat float) => float.value;

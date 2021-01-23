@@ -13,6 +13,7 @@ class TomlPrettyPrinter extends TomlVisitor<void>
         TomlKeyVisitor<void>,
         TomlSimpleKeyVisitor<void>,
         TomlValueVisitor<void>,
+        TomlDateTimeVisitor<void>,
         TomlStringVisitor<void> {
   /// Buffer for constructing the TOML formatted string.
   final StringBuffer _buffer;
@@ -152,59 +153,6 @@ class TomlPrettyPrinter extends TomlVisitor<void>
   }
 
   @override
-  void visitDateTime(TomlDateTime datetime) {
-    // Print date.
-    var yyyy = _dddd(datetime.value.year);
-    var mm = _dd(datetime.value.month);
-    var dd = _dd(datetime.value.day);
-    _writeToken('$yyyy-$mm-$dd');
-
-    // Print time.
-    var h = _dd(datetime.value.hour);
-    var min = _dd(datetime.value.minute);
-    var sec = _dd(datetime.value.second);
-    _writeToken('T$h:$min:$sec');
-
-    // Optionally add milliseconds and microseconds.
-    if (datetime.value.millisecond != 0 || datetime.value.microsecond != 0) {
-      var ms = _ddd(datetime.value.millisecond);
-      _writeToken('.$ms');
-      if (datetime.value.microsecond != 0) {
-        var us = _ddd(datetime.value.microsecond);
-        _writeToken('$us');
-      }
-    }
-
-    // Print time zone offset.
-    if (datetime.value.isUtc) {
-      _writeToken('Z');
-    } else {
-      var offset = datetime.value.timeZoneOffset;
-      var offsetSign = offset.isNegative ? '-' : '+';
-      var offsetHours =
-          _dd(offset.inHours.remainder(Duration.hoursPerDay) as int);
-      var offsetMin =
-          _dd(offset.inMinutes.remainder(Duration.minutesPerHour) as int);
-      _writeToken('$offsetSign$offsetHours:$offsetMin');
-    }
-  }
-
-  /// Converts the given number to a string of length 4 with leading zeros.
-  String _dddd(int n) {
-    return n.toString().padLeft(4, '0');
-  }
-
-  /// Converts the given number to a string of length 3 with leading zeros.
-  String _ddd(int n) {
-    return n.toString().padLeft(3, '0');
-  }
-
-  /// Converts the given number to a string of length 2 with a leading.
-  String _dd(int n) {
-    return n.toString().padLeft(2, '0');
-  }
-
-  @override
   void visitFloat(TomlFloat float) {
     if (float.value.isFinite) {
       _writeToken(float.value.toString());
@@ -241,6 +189,82 @@ class TomlPrettyPrinter extends TomlVisitor<void>
   void visitInteger(TomlInteger integer) {
     _writeToken(integer.format.prefix);
     _writeToken(integer.value.toRadixString(integer.format.base));
+  }
+
+  // --------------------------------------------------------------------------
+  // Date-Times
+  // --------------------------------------------------------------------------
+
+  /// Converts the given number to a string of length 4 with leading zeros.
+  String _dddd(int n) {
+    return n.toString().padLeft(4, '0');
+  }
+
+  /// Converts the given number to a string of length 3 with leading zeros.
+  String _ddd(int n) {
+    return n.toString().padLeft(3, '0');
+  }
+
+  /// Converts the given number to a string of length 2 with a leading.
+  String _dd(int n) {
+    return n.toString().padLeft(2, '0');
+  }
+
+  /// Prints a full date.
+  void printFullDate(TomlFullDate date) {
+    var yyyy = _dddd(date.year);
+    var mm = _dd(date.month);
+    var dd = _dd(date.day);
+    _writeToken('$yyyy-$mm-$dd');
+  }
+
+  /// Prints a time without time-zone offset.
+  void printPartialTime(TomlPartialTime time) {
+    var h = _dd(time.hour);
+    var min = _dd(time.minute);
+    var sec = _dd(time.second);
+    _writeToken('$h:$min:$sec');
+
+    // Optionally add fractions of a second.
+    if (time.secondFractions.isNotEmpty) _writeToken('.');
+    time.secondFractions.map(_ddd).forEach(_writeToken);
+  }
+
+  /// Prints a time-zone offset.
+  void printTimeZoneOffset(TomlTimeZoneOffset offset) {
+    if (offset.isUtc) {
+      _writeToken('Z');
+    } else {
+      var sign = offset.isNegative ? '-' : '+';
+      var hours = _dd(offset.hours);
+      var min = _dd(offset.minutes);
+      _writeToken('$sign$hours:$min');
+    }
+  }
+
+  @override
+  void visitLocalDate(TomlLocalDate localDate) {
+    printFullDate(localDate.date);
+  }
+
+  @override
+  void visitLocalDateTime(TomlLocalDateTime localDateTime) {
+    printFullDate(localDateTime.date);
+    _writeToken(' ');
+    printPartialTime(localDateTime.time);
+  }
+
+  @override
+  void visitLocalTime(TomlLocalTime localTime) {
+    printPartialTime(localTime.time);
+  }
+
+  @override
+  void visitOffsetDateTime(TomlOffsetDateTime offsetDateTime) {
+    printFullDate(offsetDateTime.date);
+    _writeToken(' ');
+    printPartialTime(offsetDateTime.time);
+    printTimeZoneOffset(offsetDateTime.offset);
   }
 
   // --------------------------------------------------------------------------

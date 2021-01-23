@@ -48,10 +48,27 @@ void main() {
         expect(builder.buildValue(true), equals(TomlBoolean(true)));
         expect(builder.buildValue(false), equals(TomlBoolean(false)));
       });
-      test('builds date-time from DateTime', () {
+      test('builds offset date-time from UTC DateTime', () {
         var builder = TomlAstBuilder();
-        var now = DateTime.now();
-        expect(builder.buildValue(now), equals(TomlDateTime(now)));
+        var now = DateTime.utc(1969, 7, 20, 20, 17);
+        expect(
+            builder.buildValue(now),
+            equals(TomlOffsetDateTime(
+              TomlFullDate(1969, 7, 20),
+              TomlPartialTime(20, 17, 0),
+              TomlTimeZoneOffset.utc(),
+            )));
+      });
+      test('builds offset date-time from local DateTime', () {
+        var builder = TomlAstBuilder();
+        var now = DateTime(1969, 7, 20, 20, 17);
+        expect(
+            builder.buildValue(now),
+            equals(TomlOffsetDateTime(
+              TomlFullDate(1969, 7, 20),
+              TomlPartialTime(20, 17, 0),
+              TomlTimeZoneOffset.local(),
+            )));
       });
       test('builds literal string from String by default', () {
         var builder = TomlAstBuilder();
