@@ -212,7 +212,7 @@ class TomlTimeZoneOffset {
       (char('-') & _dd & char(':') & _dd)
           .permute([1, 3])
           .castList<int>()
-          .map((xs) => TomlTimeZoneOffset.positive(xs[0], xs[1]));
+          .map((xs) => TomlTimeZoneOffset.negative(xs[0], xs[1]));
 
   /// Whether this offset identifies the UTC time-zone.
   ///
