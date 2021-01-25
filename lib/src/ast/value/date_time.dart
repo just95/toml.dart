@@ -152,6 +152,12 @@ class TomlPartialTime {
     if (second < 0 || second > 60) {
       throw ArgumentError('Invalid second: $second');
     }
+
+    for (var secondFraction in secondFractions) {
+      if (secondFraction < 0 || secondFraction > 999) {
+        throw ArgumentError('Invalid fraction of a second: $secondFraction');
+      }
+    }
   }
 
   int getSecondFractions(int i) =>
