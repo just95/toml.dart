@@ -13,10 +13,20 @@ It currently supports version [0.4.0][toml-spec/v0.4.0] of the TOML specificatio
  1. [Installation](#installation)
  2. [Usage](#usage)
     1. [Loading TOML](#loading-toml)
-    1. [Parsing TOML](#parsing-toml)
-    3. [Decoding TOML](#decoding-toml)
-    4. [Encoding TOML](#encoding-toml)
+    3. [Parsing TOML](#parsing-toml)
+    4. [Decoding TOML](#decoding-toml)
+    5. [Encoding TOML](#encoding-toml)
  3. [Data Structure](#data-structure)
+    1. [Table and Inline Table](#table-and-inline-table)
+    2. [Array and Array of Tables](#array-and-array-of-tables)
+    3. [String](#string)
+    4. [Integer](#integer)
+    5. [Float](#float)
+    6. [Boolean](#boolean)
+    7. [Offset Date-Time](#offset-date-time)
+    8. [Local Date-Time](#local-date-time)
+    9. [Local Date](#local-date)
+    10. [Local Time](#local-time)
  4. [Testing](#testing)
  5. [License](#license)
 
@@ -117,30 +127,37 @@ An example for using the encoder and the `TomlEncodableValue` interface to encod
 
 ## Data Structure
 
-TOML **documents** and **tables** as well as **inline tables** are represented through nested `Map` objects whose keys are `String`s and values `dynamic` representations of the corresponding TOML value or sub-table.
-The contents of a table declared by
+This section describes how the decoder (i.e., `TomlDocument.toMap`) maps TOML values to Dart values and which Dart values are accepted by the encoder (i.e., `TomlDocument.fromMap`).
+
+### Table and Inline Table
+
+TOML documents and tables including inline tables are represented through nested `Map` objects whose keys are `String`s and values `dynamic` representations of the corresponding TOML value or sub-table.
+
+For example, given the following TOML document
 
 ```toml
-[a.b.c]
+[parent.table]
 key = 'value'
 ```
 
-may be accessed using `[]` as shown in the listing below.
+the decoder produces the following `Map`.
 
 ```dart
-var table = document['a']['b']['c']; // ok
+<String, dynamic>{
+  'parent': <String, dynamic>{
+    'table': <String, dynamic>{'key': 'value'}
+  }
+}
 ```
 
-The following, on the other hand, is invalid.
+The encoder does not require all keys to have the static type `String`.
+A map of type `Map<MyKey, dynamic>` can be encoded, provided that the class `MyKey` implements the `TomlEncodableKey` interface.
+The encoder never produces inline-tables or dotted keys at the moment.
 
-```dart
-var table = document['a.b.c']; // error
-```
+### Array and Array of Tables
 
-All kinds of **arrays** including **arrays of tables** are stored as `List` objects.
-The encoder accepts any `Iterable`, though.
-The items of the list represent either a value or a table.
-Consider the following document that contains an array of tables.
+The decoder produces `List` objects for all kinds of arrays including arrays of tables.
+For example, given the following TOML document
 
 ```toml
 [[items]]
@@ -153,60 +170,170 @@ name = 'B'
 name = 'C'
 ```
 
-For example, it is possible to iterate over the tables in the array as follows.
+the decoder produces the following `List`.
 
 ```dart
-document['items'].forEach((Map<String, dynamic> item) {
-  print(item['name']);
-});
+<String, dynamic>{
+  'items': [
+    <String, dynamic>{'name': 'A'},
+    <String, dynamic>{'name': 'B'},
+    <String, dynamic>{'name': 'C'},
+  ]
+}
 ```
 
-All **string** variants produce regular dart `String`s.
-All of the following are therefore equivalent.
+The encoder accepts any `Iterable`.
+All elements of the `Iterable` must be mapped to TOML values of the same type by the encoder.
+Otherwise a `TomlMixedArrayTypesException` is thrown.
+In JavaScript, `int` and `double` cannot be distinguished.
+Thus, if integers and floats are mixed, an array of floats is produced.
+If an integer cannot be expressed losslessly as a `double`, it's value is approximated.
+The approximation for very large integers may be `double.infinity`.
 
-```toml
-str1 = "Hello World!"
-str2 = 'Hello World!'
-str3 = """\
-  Hello \
-  World!\
-"""
-str4 = '''
-Hello World!'''
-```
-
-**Integers** are of type `int` or `BigInt`.
-The decoder produces an `int` only if the number can be represented losslessly by an `int`.
-Whether a number can be represented by an `int` is platform specific.
-When the code is running in the VM, numbers between `-2^63` and `2^63 - 1` can be represented as an `int`.
-In JavaScript, only numbers in the range from `-(2^53 - 1)` to `2^53 - 1` are guaranteed to be converted to `int` but smaller or larger numbers may still produce an `int` if they can be represented without loss of precision.
-
-**Float**ing point numbers are represented as `double`s.
-When compiled to JavaScript these two types are not distinct.
-Thus a float without decimal places might accidentally be encoded as an integer.
-This behavior would lead to the generation of invalid numeric arrays.
-The TOML encoder addresses this issue by analyzing the contents of numeric arrays first.
-If any of its items cannot be represented as an integer, all items will be encoded as floats instead.
-Encoding the following map, for example, would throw an `TomlMixedArrayTypesException` in the VM.
+For example, encoding the array
 
 ```dart
-var document = {
-  'array': [1, 2.0, 3.141]
-};
+var array = [1, 2.0, 3.141];
 ```
 
-However, in JavaScript, the encoder yields the following TOML document.
+produces the following TOML value in JavaScript
 
 ```toml
 array = [1.0, 2.0, 3.141]
 ```
 
+but throws a `TomlMixedArrayTypesException` in the VM.
+
+
+### String
+
+All string variants produce regular dart `String`s.
+For example, all strings in the listing below map to the Dart value `'Hello, World!'`.
+
+```toml
+str1 = "Hello, World!"
+str2 = 'Hello, World!'
+str3 = """\
+  Hello, \
+  World!\
+"""
+str4 = '''
+Hello, World!'''
+```
+
+The encoder preferably generates literal strings.
+If a string contains apostrophes or other characters that are not allowed in literal strings, a basic string is produced instead.
+Strings that contain newlines produce multiline strings.
+Whether a multiline literal or multiline basic string is generated depends on the remaining characters in the string.
+All produced multiline strings start with a trimmed newline and multiline basic strings never contain escaped whitespace.
+
+If you need more control over the type of string that is produced by the encoder, you can wrap the value with a `TomlLiteralString`, `TomlBasicString`, `TomlMultilineLiteralString` or `TomlMultilineBasicString`.
+
+### Integer
+
+Integers are represented by `int`s or `BigInt`s.
+
+The decoder produces an `int` only if the number can be represented losslessly by an `int`.
+Whether a number can be represented by an `int` is platform specific.
+When the code is running in the VM, numbers between `-2^63` and `2^63 - 1` can be represented as an `int`.
+In JavaScript, only numbers in the range from `-(2^53 - 1)` to `2^53 - 1` are guaranteed to be converted to `int` but smaller or larger numbers may still produce an `int` if they can be represented without loss of precision.
+
+The encoder accepts either representation and uses the decimal integer format by default.
+If you need more control over the format used by the encoder, the value has to be wrapped in a `TomlInteger`.
+
+For example, the following map
+
+```dart
+<String, dynamic>{
+  'decimal': 255,
+  'hexadecimal': TomlInteger.hex(255)
+}
+```
+
+is encoded as shown below.
+
+```toml
+decimal = 255
+hexadecimal = 0xff
+```
+
+### Float
+
+Floating point numbers are represented as `double`s.
 The special floating point values `inf`, `-inf` and `nan` are mapped to `double.infinity`, `double.negativeInfinity` and `double.nan`, respectively.
 The value `-nan` is also mapped to `double.nan`.
 
-**Boolean** values are obviously of type `bool`.
+When compiled to JavaScript, a `double` without decimal places cannot be distinguished from an `int`.
+Thus, the encoder produces an integer for `double` values without decimal place.
+If you want to force a JavaScript number to be encoded as a float, it has to be wrapped in a `TomlFloat`.
 
-**Datetime** values are UTC `DateTime` objects.
+### Boolean
+
+Boolean values are represented as values of type `bool`.
+The encoder produces the TOML values `true` and `false`.
+
+### Offset Date-Time
+
+Offset Date-Time values are represented by the `TomlOffsetDateTime` class.
+They can be converted to a UTC `DateTime` object with the `toUtcDateTime` method.
+
+The encoder accepts `TomlOffsetDateTime` as well as `DateTime` objects.
+A UTC `DateTime` is encoded as a offset date-time in the UTC time-zone.
+A local `DateTime` is encoded as a offset date0time in the local time-zone.
+For example, the following dates
+
+```dart
+<String, dynamic>{
+  'utc': DateTime.utc(1969, 7, 20, 20, 17),
+  'local': DateTime(1969, 7, 20, 20, 17),
+}
+```
+
+are encoded as shown below when the code runs in the UTC+01:00 time-zone.
+
+```toml
+utc = 1969-07-20 20:17:00Z
+local = 1969-07-20 20:17:00+01:00
+```
+
+### Local Date-Time
+
+Local Date-Time values are represented by the `TomlLocalDateTime` class.
+Before they can be converted to a `DateTime`, you must provide a time-zone information in which to interpret the date-time.
+For example, to interpret a local date-time in the time-zone the code is running in, type the following.
+
+```dart
+localDateTime.withOffset(TomlTimeZoneOffset.local()) // interpret in local time-zone
+```
+
+To interpret the local date-time value in a specific time-zone, write the following for example.
+
+```dart
+localDateTime.withOffset(TomlTimeZoneOffset.positive(1, 0)) // interpret in UTC+01:00
+```
+
+In both cases the result is a `TomlOffsetDateTime` that can be converted to a `DateTime` as described above.
+The encoder accepts `TomlLocalDateTime` objects only, i.e., a `DateTime` will never be encoded as a local date-time automatically.
+
+### Local Date
+
+Local Date values are represented by the `TomlLocalDate` class.
+Before they can be converted to a `DateTime`, both a time and time-zone offset have to be provided.
+First add a time with the `atTime` method and use `withOffset` from the resulting `TomlLocalDateTime` to obtain a offset date-time that can then be converted to a `DateTime`.
+
+```dart
+localDate.atTime(time).withOffset(timeZoneOffset)
+```
+
+### Local Time
+
+Local Time values are represented by the `TomlLocalTime` class.
+Before they can be converted to a `DateTime`, both a date and time-zone offset have to be provided.
+First add a date with the `atDate` method and use `withOffset` from the resulting `TomlLocalDateTime` to obtain a offset date-time that can then be converted to a `DateTime`.
+
+```dart
+localTime.atDate(date).withOffset(timeZoneOffset)
+```
 
 ## Testing
 
