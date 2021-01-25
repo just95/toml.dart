@@ -51,6 +51,18 @@ void main() {
             ));
             expect(prettyPrinter.toString(), equals('1969-07-20 20:17:00Z'));
           });
+          test('pretty prints non-UTC date-time correctly', () {
+            var prettyPrinter = TomlPrettyPrinter();
+            prettyPrinter.visitOffsetDateTime(TomlOffsetDateTime(
+              TomlFullDate(1969, 7, 20),
+              TomlPartialTime(20, 17, 0),
+              TomlTimeZoneOffset.positive(1, 0),
+            ));
+            expect(
+              prettyPrinter.toString(),
+              equals('1969-07-20 20:17:00+01:00'),
+            );
+          });
           test('pretty prints UTC date-time with milliseconds correctly', () {
             var prettyPrinter = TomlPrettyPrinter();
             prettyPrinter.visitOffsetDateTime(TomlOffsetDateTime(
