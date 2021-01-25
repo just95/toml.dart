@@ -49,10 +49,13 @@ dynamic encodeValue(dynamic value) {
   if (value is Iterable) return encodeArray(value);
 
   var str = value.toString();
-  if (value is DateTime) {
-    // In TOML date and time are separated by `T` rather than a space.
-    str = str.replaceFirst(' ', 'T').replaceFirst('.000', '');
+
+  // Since toml-test supports TOML 0.4.0 only, it expects a `T` instead of a
+  // space as a separator between the date and time.
+  if (value is TomlOffsetDateTime) {
+    str = str.replaceFirst(' ', 'T');
   }
+
   return {'type': getValueType(value), 'value': str};
 }
 
@@ -63,7 +66,7 @@ String getValueType(dynamic value) {
   if (value is String) return 'string';
   if (value is int) return 'integer';
   if (value is double) return 'float';
-  if (value is DateTime) return 'datetime';
+  if (value is TomlDateTime) return 'datetime';
   if (value is bool) return 'bool';
   throw UnsupportedError('Unsupported value type: $value');
 }
