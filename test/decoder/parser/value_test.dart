@@ -229,6 +229,30 @@ void main() {
           equals(TomlLocalDate(TomlFullDate(1989, 11, 9))),
         );
       });
+      test('rejects dates with invalid months', () {
+        expect(
+          () => TomlValue.parse('1989-13-09'),
+          throwsA(isA<ArgumentError>()),
+        );
+      });
+      test('rejects dates with invalid day', () {
+        expect(
+          () => TomlValue.parse('1989-11-31'),
+          throwsA(isA<ArgumentError>()),
+        );
+      });
+      test('accepts leap day of leap-year', () {
+        expect(
+          TomlValue.parse('2020-02-29'),
+          equals(TomlLocalDate(TomlFullDate(2020, 2, 29))),
+        );
+      });
+      test('rejects leap day of non-leap-year', () {
+        expect(
+          () => TomlValue.parse('2021-02-29'),
+          throwsA(isA<ArgumentError>()),
+        );
+      });
     });
     group('Local Time', () {
       test('can parse time without date', () {

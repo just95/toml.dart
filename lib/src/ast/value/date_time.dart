@@ -4,6 +4,7 @@ import 'package:petitparser/petitparser.dart';
 import 'package:quiver/collection.dart';
 import 'package:quiver/core.dart';
 import 'package:toml/src/encoder.dart';
+import 'package:toml/src/util/date.dart';
 
 import '../value.dart';
 import '../visitor/value.dart';
@@ -49,11 +50,23 @@ class TomlFullDate {
   final int month;
 
   /// The day of [month] as a number from `1` to `28`, `29`, `30` or `31`
-  /// depending on the
+  /// depending on the [year] and [month].
   final int day;
 
   /// Creates a full date.
-  TomlFullDate(this.year, this.month, this.day);
+  ///
+  /// Throws an [ArgumentError] when the given date is invalid.
+  TomlFullDate(this.year, this.month, this.day) {
+    if (month < 1 || month > 12) {
+      var mm = month.toString().padLeft(2, '0');
+      throw ArgumentError('Invalid month: $mm');
+    }
+    if (day < 1 || day > year.daysOfMonth(month)) {
+      var yyyy = year.toString().padLeft(4, '0');
+      var mm = month.toString().padLeft(2, '0');
+      throw ArgumentError('Invalid day of month $yyyy-$mm: $day');
+    }
+  }
 
   @override
   bool operator ==(dynamic other) =>
@@ -101,7 +114,7 @@ class TomlPartialTime {
   final int minute;
 
   /// The second of the minute as a number from `0` to `58`, `59` or `60`
-  /// based on lead seconds.
+  /// based on leap seconds.
   final int second;
 
   /// The fractions of the second as numbers from `0` to `999`.
@@ -119,12 +132,27 @@ class TomlPartialTime {
   final List<int> secondFractions;
 
   /// Creates a partial time.
+  ///
+  /// Throws an [ArgumentError] when any of the given values is invalid.
+  /// When no exception is thrown, the time is not necessarily valid on
+  /// every date and in every time-zone.
   TomlPartialTime(
     this.hour,
     this.minute,
     this.second, [
     List<int> secondFractions = const [],
-  ]) : secondFractions = List.from(secondFractions, growable: false);
+  ]) : secondFractions = List.from(secondFractions, growable: false) {
+    if (hour < 0 || hour > 23) throw ArgumentError('Invalid hour: $hour');
+    if (minute < 0 || minute > 59) {
+      throw ArgumentError('Invalid minute: $minute');
+    }
+
+    // Due to leap seconds, the second is allowed to count up to be `60` anot
+    // not just `59`.
+    if (second < 0 || second > 60) {
+      throw ArgumentError('Invalid second: $second');
+    }
+  }
 
   int getSecondFractions(int i) =>
       i < secondFractions.length ? secondFractions[i] : 0;
