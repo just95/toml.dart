@@ -15,10 +15,6 @@ import 'visitor/node.dart';
 ///
 ///     key = simple-key / dotted-key
 ///     dotted-key = simple-key 1*( dot-sep simple-key )
-///
-/// TODO `dotted-keys` were added in TOML 0.5.0 and have not been fully
-/// implemented yet. The keys in key/value pairs must be [TomlSimpleKey]s at
-/// the moment. This class is used to represent the names of tables.
 class TomlKey extends TomlNode {
   /// Separator for dotted keys.
   ///
