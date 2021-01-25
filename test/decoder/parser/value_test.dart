@@ -732,7 +732,7 @@ void main() {
           throwsA(isA<TomlParserException>()),
         );
       });
-      test('allows multi-line values in inline table', () {
+      test('allows multiline values in inline table', () {
         expect(
           TomlValue.parse(
             '{ key = """\n'
@@ -829,8 +829,8 @@ void main() {
           );
         });
       });
-      group('Multi-Line Basic', () {
-        test('can parse empty multi-line basic strings', () {
+      group('Multiline Basic', () {
+        test('can parse empty multiline basic strings', () {
           expect(
             TomlValue.parse(
               '""""""',
@@ -838,7 +838,7 @@ void main() {
             equals(TomlMultilineBasicString('')),
           );
         });
-        test('can parse multi-line basic string without newlines', () {
+        test('can parse multiline basic string without newlines', () {
           expect(
             TomlValue.parse(
               '"""Roses are red, Violets are blue"""',
@@ -848,7 +848,7 @@ void main() {
             )),
           );
         });
-        test('can parse multi-line basic string with newlines', () {
+        test('can parse multiline basic string with newlines', () {
           expect(
             TomlValue.parse(
               '"""Roses are red\n'
@@ -941,8 +941,8 @@ void main() {
           );
         });
       });
-      group('Multi-Line Literal', () {
-        test('can parse empty multi-line literal strings', () {
+      group('Multiline Literal', () {
+        test('can parse empty multiline literal strings', () {
           expect(
             TomlValue.parse("''''''"),
             equals(TomlMultilineLiteralString('')),

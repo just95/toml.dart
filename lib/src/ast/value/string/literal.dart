@@ -21,7 +21,7 @@ class TomlLiteralString extends TomlSinglelineString {
   static final Parser<TomlLiteralString> parser =
       (char(delimiter) & charParser.star().join() & char(delimiter))
           .pick<String>(1)
-          .map((value) => TomlLiteralString(value));
+          .map((value) => TomlLiteralString._fromEncodable(value));
 
   /// Parser for a single character of a basic TOML string.
   ///
@@ -42,7 +42,19 @@ class TomlLiteralString extends TomlSinglelineString {
   final String value;
 
   /// Creates a new literal string value with the given contents.
-  TomlLiteralString(this.value);
+  ///
+  /// Throws a [ArgumentError] when the given value cannot be encoded as a
+  /// literal string (see [canEncode]).
+  factory TomlLiteralString(String value) {
+    if (!canEncode(value)) {
+      throw ArgumentError('Invalid literal string: $value');
+    }
+    return TomlLiteralString._fromEncodable(value);
+  }
+
+  /// Creates a new literal string value with the given contents but skips the
+  /// check whether the value can be encoded as a literal string.
+  TomlLiteralString._fromEncodable(this.value);
 
   @override
   TomlStringType get stringType => TomlStringType.literal;

@@ -28,7 +28,7 @@ class TomlMultilineLiteralString extends TomlMultilineString {
           bodyParser &
           string(delimiter))
       .pick<String>(2)
-      .map((body) => TomlMultilineLiteralString(body));
+      .map((body) => TomlMultilineLiteralString._fromEncodable(body));
 
   ///
   ///
@@ -74,7 +74,20 @@ class TomlMultilineLiteralString extends TomlMultilineString {
   final String value;
 
   /// Creates a new multiline literal TOML string value with the given contents.
-  TomlMultilineLiteralString(this.value);
+  ///
+  /// Throws a [ArgumentError] when the given value cannot be encoded as a
+  /// multiline literal string (see [canEncode]).
+  factory TomlMultilineLiteralString(String value) {
+    if (!canEncode(value)) {
+      throw ArgumentError('Invalid multiline literal string: $value');
+    }
+    return TomlMultilineLiteralString._fromEncodable(value);
+  }
+
+  /// Creates a new multiline literal string value with the given contents
+  /// but skips the check whether the value can be encoded as a multiline
+  /// literal string.
+  TomlMultilineLiteralString._fromEncodable(this.value);
 
   @override
   TomlStringType get stringType => TomlStringType.multilineLiteral;
