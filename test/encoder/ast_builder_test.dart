@@ -183,7 +183,14 @@ void main() {
         var builder = TomlAstBuilder();
         expect(builder.buildValue([]), equals(TomlArray([])));
       });
-      test('builds array from empty Iterable', () {
+      test('builds empty array from empty Iterable', () {
+        var builder = TomlAstBuilder();
+        expect(
+          builder.buildValue([0, 1, 2, 3].where((n) => n.isNegative)),
+          equals(TomlArray([])),
+        );
+      });
+      test('builds array from Iterable', () {
         var builder = TomlAstBuilder();
         expect(
           builder.buildValue([0, 1, 2, 3].where((n) => n.isEven)),

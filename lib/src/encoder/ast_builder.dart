@@ -227,7 +227,7 @@ class TomlAstBuilder {
           types.contains(TomlType.float)) {
         return TomlArray(array.items.map((item) {
           if (item is TomlFloat) return item;
-          if (item is TomlInteger) return TomlFloat(item.value as double);
+          if (item is TomlInteger) return TomlFloat(item.value.toDouble());
           throw ArgumentError('Expected number, but got ${item.type}.');
         }));
       }
