@@ -65,7 +65,7 @@ class TomlOffsetDateTime extends TomlDateTime {
         time.second,
         time.millisecond,
         time.microsecond,
-      ).add(offset.toDuration()); // TODO is this the right direction?
+      ).subtract(offset.toDuration());
 
   @override
   TomlType get type => TomlType.offsetDateTime;
