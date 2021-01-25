@@ -241,8 +241,9 @@ class TomlTimeZoneOffset {
   TomlTimeZoneOffset.fromDuration(Duration offset)
       : isUtc = false,
         isNegative = offset.isNegative,
-        hours = offset.inHours.remainder(Duration.hoursPerDay) as int,
-        minutes = offset.inMinutes.remainder(Duration.minutesPerHour) as int;
+        hours = offset.inHours.remainder(Duration.hoursPerDay).abs() as int,
+        minutes =
+            offset.inMinutes.remainder(Duration.minutesPerHour).abs() as int;
 
   /// Creates a positive time-zone offset.
   TomlTimeZoneOffset.positive(int hours, int minutes)
