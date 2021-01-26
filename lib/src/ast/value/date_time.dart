@@ -120,7 +120,7 @@ class TomlPartialTime {
   /// The fractions of the second as numbers from `0` to `999`.
   ///
   /// The first entry are is the [millisecond], the second entry is the
-  /// [microsend], the third entry is the [nanosecond] and so on. There
+  /// [microsecond], the third entry is the [nanosecond] and so on. There
   /// are no getters for more than [nanosecond] precision but a
   /// [TomlPartialTime] can represent fractions of a second of arbitrary
   /// precision.
@@ -243,7 +243,7 @@ class TomlTimeZoneOffset {
         hours = 0,
         minutes = 0;
 
-  /// Creates a time-zone offset from the given [duration].
+  /// Creates a time-zone offset from the given duration.
   TomlTimeZoneOffset.fromDuration(Duration offset)
       : isUtc = false,
         isNegative = offset.isNegative,
