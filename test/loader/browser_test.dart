@@ -25,11 +25,11 @@ void main() {
           )),
         );
       });
-      test('rejects test file with invalid UTF-8 octet sequence', () {
-        // When a file with an invalid octet sequence is loaded in the browser,
-        // an exception is thrown.
+      test('rejects test file with malformed UTF-8 octet sequence', () {
+        // When a file with an malformed octet sequence is loaded in the
+        // browser, an exception is thrown.
         expect(
-          loadFile('../asset/invalid-utf8.txt'),
+          loadFile('../asset/malformed-utf8.txt'),
           throwsA(isA<FormatException>()),
         );
       });
