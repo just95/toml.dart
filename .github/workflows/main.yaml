@@ -124,8 +124,10 @@ jobs:
         run: dart --version
       - name: Install Dependencies
         run: dart pub get
-      - name: Run Unit Tests
-        run: dart test --reporter expanded --platform firefox
+      - name: Run Headless Unit Tests
+        uses: GabrielBB/xvfb-action@v1
+        with:
+          run: dart test --reporter expanded --platform firefox
 
   # Compiles the test decoder script for the `toml-test` test suite.
   compile-toml-test:
