@@ -57,14 +57,20 @@ jobs:
   test-examples:
     name: Test Examples
     runs-on: ubuntu-latest
-    container:
-      image: google/dart:latest
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+      - name: Use Dart SDK
+        uses: vanesyan/setup-dart@v1
       - name: Print Dart SDK Version
         run: dart --version
       - name: Install Dependencies of Examples
         run: ./tool/get-example-dependencies.sh
-      - name: Check Code Formatting of Examples
-        run: ./tool/test-examples.sh
+      - name: Build Web Examples
+        run: ./tool/build-web-examples.sh
+      - name: Run Tests of Examples
+        run: |
+          export DISPLAY=:99
+          chromedriver --port=4444 --url-base=/wd/hub &
+          sudo Xvfb -ac :99 -screen 0 1280x1024x24 > /dev/null 2>&1 &
+          ./tool/test-examples.sh

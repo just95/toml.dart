@@ -26,13 +26,11 @@ for example in $(find "$examples_dir" -path \*/tool/test.sh); do
   # Change into the example's root directory.
   cd "$example_dir"
 
-  if [[ -f "tool/test.sh" ]]; then
-    echo "Running '$example_name' example..."
-    if ! ./tool/test.sh | awk '{print " | " $0}'; then
-      echo "------------------------------------------------------------------"
-      echo "Error when running test for '$example_name' example!" >&2
-      exit 1
-    fi
+  echo "Running '$example_name' example..."
+  if ! ./tool/test.sh | awk '{print " | " $0}'; then
+    echo "------------------------------------------------------------------"
+    echo "Error when running test for '$example_name' example!" >&2
+    exit 1
   fi
 done
 
