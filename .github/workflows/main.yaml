@@ -129,6 +129,29 @@ jobs:
         with:
           run: dart test --reporter expanded --platform firefox
 
+  # Runs the unit tests of the package with `dart test` in Chrome.
+  chrome-test:
+    name: Run Unit Tests in Chrome
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        dart-version: [latest]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Use Dart SDK
+        uses: vanesyan/setup-dart@v1
+        with:
+          version: ${{ matrix.dart-version }}
+      - name: Print Dart SDK Version
+        run: dart --version
+      - name: Install Dependencies
+        run: dart pub get
+      - name: Run Headless Unit Tests
+        uses: GabrielBB/xvfb-action@v1
+        with:
+          run: dart test --reporter expanded --platform chrome
+
   # Compiles the test decoder script for the `toml-test` test suite.
   compile-toml-test:
     name: Compile `toml-test` Scripts
