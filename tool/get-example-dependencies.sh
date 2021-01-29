@@ -8,6 +8,9 @@
 # The dependencies of the Flutter example are not installed since the Flutter
 # SDK is not available in the CI pipeline.
 
+# Configure bash.
+set -euo pipefail
+
 # Change into the root directory of the package.
 script=$(realpath "$0")
 script_dir=$(dirname "$script")

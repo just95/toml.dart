@@ -11,6 +11,9 @@
 # The flutter and web examples do not have a `tool/test.sh` script and
 # are therefore not executed.
 
+# Configure bash.
+set -euo pipefail
+
 # Change into the root directory of the package.
 script=$(realpath "$0")
 script_dir=$(dirname "$script")

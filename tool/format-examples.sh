@@ -9,6 +9,9 @@
 # If the `--set-exit-if-changed` flag is specified and there is a file that
 # has been formatted, the script exists with error code `1`.
 
+# Configure bash.
+set -euo pipefail
+
 # Change into the root directory of the package.
 script=$(realpath "$0")
 script_dir=$(dirname "$script")

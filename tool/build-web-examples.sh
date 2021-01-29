@@ -3,6 +3,9 @@
 # This script compiles all examples in the `example` directory that have a
 # `web` subdirectory using `webdev build`.
 
+# Configure bash.
+set -euo pipefail
+
 # Change into the root directory of the package.
 script=$(realpath "$0")
 script_dir=$(dirname "$script")
