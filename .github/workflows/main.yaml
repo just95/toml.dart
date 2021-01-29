@@ -110,16 +110,12 @@ jobs:
   firefox-test:
     name: Run Unit Tests in Firefox
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        dart-version: [latest]
+    needs: js-test
     steps:
       - name: Checkout
         uses: actions/checkout@v2
       - name: Use Dart SDK
         uses: vanesyan/setup-dart@v1
-        with:
-          version: ${{ matrix.dart-version }}
       - name: Print Dart SDK Version
         run: dart --version
       - name: Install Dependencies
@@ -133,16 +129,12 @@ jobs:
   chrome-test:
     name: Run Unit Tests in Chrome
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        dart-version: [latest]
+    needs: js-test
     steps:
       - name: Checkout
         uses: actions/checkout@v2
       - name: Use Dart SDK
         uses: vanesyan/setup-dart@v1
-        with:
-          version: ${{ matrix.dart-version }}
       - name: Print Dart SDK Version
         run: dart --version
       - name: Install Dependencies
