@@ -15,8 +15,8 @@ const outputPlaceholder = 'Loading...';
 const maxTries = 5;
 
 Future main() async {
-  // Serve previously compiled `build/web` directory.
-  final staticFiles = VirtualDirectory('./build/web');
+  // Serve previously compiled `build` directory.
+  final staticFiles = VirtualDirectory('./build');
   final server = await HttpServer.bind(InternetAddress.loopbackIPv4, 8080);
   server.listen(staticFiles.serveRequest);
 
@@ -26,16 +26,17 @@ Future main() async {
     scheme: 'http',
     host: server.address.host,
     port: server.port,
+    path: 'index.html',
   ));
-
-  // Get element the output will be written to.
-  final elem = driver.getElement('text');
 
   // Wait for the configuration file to be loaded.
   var success = false;
   for (var i = 0; i < maxTries; i++) {
     print('Waiting for configuration file to be loaded...');
     sleep(Duration(seconds: 1));
+
+    // Get element the output will be written to.
+    final elem = await driver.findElement(By.id('text'));
 
     // Test whether the configuration file has been loaded successfully.
     final output = await elem.text;
