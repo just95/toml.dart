@@ -80,10 +80,10 @@ jobs:
         uses: vanesyan/setup-dart@v1
       - name: Print Dart SDK Version
         run: dart --version
+      - name: Add Executables Installed by Pub to PATH
+        run: echo "$HOME/.pub-cache/bin" >> $GITHUB_PATH
       - name: Install webdev
-        run: |
-          export PATH="$PATH":"$HOME/.pub-cache/bin"
-          dart pub global activate webdev
+        run: dart pub global activate webdev
       - name: Build Web Examples
         run: ./tool/build-web-examples.sh
       - name: Run Tests of Web Examples
