@@ -57,6 +57,22 @@ jobs:
   test-examples:
     name: Test Examples
     runs-on: ubuntu-latest
+    container:
+      image: google/dart:latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Print Dart SDK Version
+        run: dart --version
+      - name: Install Dependencies of Examples
+        run: ./tool/get-example-dependencies.sh
+      - name: Run Tests of Examples
+        run: ./tool/test-examples.sh
+
+  # Runs the `tool/test-web.dart` scripts of the `example`s.
+  test-web-examples:
+    name: Test Web Examples
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -64,13 +80,13 @@ jobs:
         uses: vanesyan/setup-dart@v1
       - name: Print Dart SDK Version
         run: dart --version
-      - name: Install Dependencies of Examples
-        run: ./tool/get-example-dependencies.sh
+      - name: Install webdev
+        run: dart pub global activate webdev
       - name: Build Web Examples
         run: ./tool/build-web-examples.sh
-      - name: Run Tests of Examples
+      - name: Run Tests of Web Examples
         run: |
           export DISPLAY=:99
           chromedriver --port=4444 --url-base=/wd/hub &
           sudo Xvfb -ac :99 -screen 0 1280x1024x24 > /dev/null 2>&1 &
-          ./tool/test-examples.sh
+          ./tool/test-web-examples.sh

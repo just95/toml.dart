@@ -20,6 +20,14 @@ for example in $(find "$examples_dir" -name pubspec.yaml); do
 
   # Compile example if it is a web example.
   if [ -d "web" ]; then
+    # Install dependencies of the example with `pub get`.
+    echo "Installing dependencies of '$example_name' example..."
+    if ! dart pub get | awk '{print " | " $0}'; then
+      echo "------------------------------------------------------------------"
+      echo "Error when installing dependencies for '$example_name' example!" >&2
+      exit 1
+    fi
+
     echo "Building '$example_name' example..."
     if ! webdev build; then
       echo "------------------------------------------------------------------"
