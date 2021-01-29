@@ -34,7 +34,7 @@ for example in $(find "$examples_dir" -name analysis_options.yaml); do
 
   # Analyze the example's source code `dart analyze`.
   echo "Analyzing code of '$example_name' example..."
-  if ! dart analyze "$@" | awk '{print " | " $0}'; then
+  if ! dart analyze "$@" 2>&1 | awk '{print " | " $0}'; then
     echo "------------------------------------------------------------------"
     echo "Error when analyzing code of '$example_name' example!" >&2
     exit 1

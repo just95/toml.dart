@@ -27,7 +27,7 @@ for example in $(find "$examples_dir" -path \*/tool/test.sh); do
   cd "$example_dir"
 
   echo "Running '$example_name' example..."
-  if ! ./tool/test.sh | awk '{print " | " $0}'; then
+  if ! ./tool/test.sh 2>&1 | awk '{print " | " $0}'; then
     echo "------------------------------------------------------------------"
     echo "Error when running test for '$example_name' example!" >&2
     exit 1

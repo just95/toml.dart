@@ -17,7 +17,7 @@ cd "$root_dir"
 
 # Find all examples with a `pubspec.yaml` file.
 echo "Checking formatting of all examples..."
-if ! dart format "$@" bin lib test | awk '{print " | " $0}'; then
+if ! dart format "$@" bin lib test 2>&1 | awk '{print " | " $0}'; then
   echo "------------------------------------------------------------------"
   echo "Error when checking formatting!" >&2
   exit 1

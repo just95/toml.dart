@@ -31,7 +31,7 @@ for example in $(find "$examples_dir" -name pubspec.yaml); do
 
   # Install dependencies of the example with `pub get`.
   echo "Installing dependencies of '$example_name' example..."
-  if ! dart pub get | awk '{print " | " $0}'; then
+  if ! dart pub get 2>&1 | awk '{print " | " $0}'; then
     echo "------------------------------------------------------------------"
     echo "Error when installing dependencies for '$example_name' example!" >&2
     exit 1
