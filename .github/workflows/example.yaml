@@ -86,9 +86,13 @@ jobs:
         run: dart pub global activate webdev
       - name: Build Web Examples
         run: ./tool/build-web-examples.sh
+      - name: Set DISPLAY Environment Variable.
+        run: echo "DISPLAY=:99" >> $GITHUB_ENV
+      - name: Start X Virtual Framebuffer
+        run: sudo Xvfb -ac :99 -screen 0 1280x1024x24 > /dev/null 2>&1 &
+      - name: Start WebDriver
+        run: chromedriver --port=4444 --url-base=/wd/hub &
+      - name: Wait for WebDriver
+        run: while ! nc -z localhost 4444; do sleep 0.1; done
       - name: Run Tests of Web Examples
-        run: |
-          export DISPLAY=:99
-          chromedriver --port=4444 --url-base=/wd/hub &
-          sudo Xvfb -ac :99 -screen 0 1280x1024x24 > /dev/null 2>&1 &
-          ./tool/test-web-examples.sh
+        run: ./tool/test-web-examples.sh
