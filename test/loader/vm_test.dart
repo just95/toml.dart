@@ -1,6 +1,8 @@
 @TestOn('vm')
 library toml.test.loader.vm_test;
 
+import 'dart:io';
+
 import 'package:test/test.dart';
 
 import 'package:toml/src/loader.dart';
@@ -23,6 +25,14 @@ void main() {
           completion(equals(
             'This file starts with a UTF-8 Byte Order Mark (BOM).\n',
           )),
+        );
+      });
+      test('rejects test file with invalid UTF-8 octet sequence', () {
+        // When a file with an invalid octet sequence is loaded in the browser,
+        // an exception is thrown.
+        expect(
+          loadFile('test/asset/invalid-utf8.txt'),
+          throwsA(isA<FileSystemException>()),
         );
       });
     });
