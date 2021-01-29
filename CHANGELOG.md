@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 0.8.0
 
  - Updated to [v0.5.0][toml-spec/v0.5.0] of the TOML specification.
    + Added binary, octal and hexadecimal integer notation.

@@ -35,7 +35,7 @@ class TomlArray<V> extends TomlValue {
   /// Parser for a TOML array value.
   ///
   /// The grammar itself does not enforce arrays to be homogeneous.
-  /// The requirement of TOML 0.4.0 that value types are not mixed,
+  /// The requirement of TOML 0.5.0 that value types are not mixed,
   /// is checked by [TomlArray.fromHomogeneous].
   static final Parser<TomlArray> parser = (char(openingDelimiter) &
           (tomlWhitespaceCommentNewline &
