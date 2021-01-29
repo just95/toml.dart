@@ -192,6 +192,18 @@ void main() {
           )),
         );
       });
+      test('rejects offset date-times with invalid hours', () {
+        expect(
+          () => TomlValue.parse('1989-11-09 18:53:00+24:00'),
+          throwsA(isA<ArgumentError>()),
+        );
+      });
+      test('rejects offset date-times with invalid minutes', () {
+        expect(
+          () => TomlValue.parse('1989-11-09 18:53:00+01:60'),
+          throwsA(isA<ArgumentError>()),
+        );
+      });
     });
     group('Local Date-Time', () {
       test('can parse date-times without time-zone offset', () {

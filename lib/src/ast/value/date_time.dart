@@ -229,38 +229,72 @@ class TomlTimeZoneOffset {
   /// Whether the time-zone is behind (`false`) or ahead of UTC (`true`).
   final bool isNegative;
 
-  /// The difference of the time-zone offset to UTC in full hours.
+  /// The difference of the time-zone offset to UTC in full hours as a number
+  /// from `0` to `23`.
   final int hours;
 
   /// The remaining minutes to the difference of the time-zone offset to UTC
-  /// in minutes.
+  /// in minutes as a number from `0` to `59`.
   final int minutes;
 
+  /// Creates a new time-zone offset and validates the ranges of the
+  /// [hours] and [minutes] arguments.
+  TomlTimeZoneOffset._({
+    this.isUtc,
+    this.isNegative,
+    this.hours,
+    this.minutes,
+  }) {
+    if (hours < 0 || hours > 23) {
+      throw ArgumentError('Invalid hours of time-zone offset: $hours');
+    }
+    if (minutes < 0 || minutes > 59) {
+      throw ArgumentError('Invalid minutes of time-zone offset: $minutes');
+    }
+  }
+
   /// Creates the time-zone offset of the UTC time-zone.
-  TomlTimeZoneOffset.utc()
-      : isUtc = true,
-        isNegative = false,
-        hours = 0,
-        minutes = 0;
+  factory TomlTimeZoneOffset.utc() => TomlTimeZoneOffset._(
+        isUtc: true,
+        isNegative: false,
+        hours: 0,
+        minutes: 0,
+      );
 
   /// Creates a time-zone offset from the given duration.
-  TomlTimeZoneOffset.fromDuration(Duration offset)
-      : isUtc = false,
-        isNegative = offset.isNegative,
-        hours = offset.inHours.remainder(Duration.hoursPerDay).abs() as int,
-        minutes =
-            offset.inMinutes.remainder(Duration.minutesPerHour).abs() as int;
+  ///
+  /// Throws an [ArgumentError] when the given duration does not correspond to
+  /// a valid time zone offset.
+  factory TomlTimeZoneOffset.fromDuration(Duration offset) =>
+      TomlTimeZoneOffset._(
+        isUtc: false,
+        isNegative: offset.isNegative,
+        hours: offset.inHours.abs(),
+        minutes:
+            offset.inMinutes.remainder(Duration.minutesPerHour).abs() as int,
+      );
 
   /// Creates a positive time-zone offset.
-  TomlTimeZoneOffset.positive(int hours, int minutes)
-      : this.fromDuration(Duration(hours: hours, minutes: minutes));
+  factory TomlTimeZoneOffset.positive(int hours, int minutes) =>
+      TomlTimeZoneOffset._(
+        isUtc: false,
+        isNegative: false,
+        hours: hours,
+        minutes: minutes,
+      );
 
   /// Creates a negative time-zone offset.
-  TomlTimeZoneOffset.negative(int hours, int minutes)
-      : this.fromDuration(-Duration(hours: hours, minutes: minutes));
+  factory TomlTimeZoneOffset.negative(int hours, int minutes) =>
+      TomlTimeZoneOffset._(
+        isUtc: false,
+        isNegative: true,
+        hours: hours,
+        minutes: minutes,
+      );
 
   /// Creates a time-zone offset for the local time-zone.
-  TomlTimeZoneOffset.local() : this.fromDuration(DateTime.now().timeZoneOffset);
+  factory TomlTimeZoneOffset.local() =>
+      TomlTimeZoneOffset.fromDuration(DateTime.now().timeZoneOffset);
 
   /// Converts this time-zone offset to a [Duration].
   Duration toDuration() {
