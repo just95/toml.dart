@@ -106,6 +106,27 @@ jobs:
       - name: Run Unit Tests
         run: dart test --reporter expanded --platform node
 
+  # Runs the unit tests of the package with `dart test` in Firefox.
+  firefox-test:
+    name: Run Unit Tests in Firefox
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        dart-version: [latest]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Use Dart SDK
+        uses: vanesyan/setup-dart@v1
+        with:
+          version: ${{ matrix.dart-version }}
+      - name: Print Dart SDK Version
+        run: dart --version
+      - name: Install Dependencies
+        run: dart pub get
+      - name: Run Unit Tests
+        run: dart test --reporter expanded --platform firefox
+
   # Compiles the test decoder script for the `toml-test` test suite.
   compile-toml-test:
     name: Compile `toml-test` Scripts
