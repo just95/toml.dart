@@ -77,7 +77,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       - name: Use Dart SDK
-        uses: dart-lang/setup-dart@v1
+        uses: dart-lang/setup-dart@v0.4
       - name: Print Dart SDK Version
         run: dart --version
       - name: Add Executables Installed by Pub to PATH
