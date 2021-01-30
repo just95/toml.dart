@@ -115,7 +115,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       - name: Use Dart SDK
-        uses: vanesyan/setup-dart@v1
+        uses: dart-lang/setup-dart@v1
       - name: Print Dart SDK Version
         run: dart --version
       - name: Install Dependencies
@@ -134,7 +134,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       - name: Use Dart SDK
-        uses: vanesyan/setup-dart@v1
+        uses: dart-lang/setup-dart@v1
       - name: Print Dart SDK Version
         run: dart --version
       - name: Install Dependencies
