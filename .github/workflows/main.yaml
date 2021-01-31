@@ -81,7 +81,14 @@ jobs:
       - name: Install Dependencies
         run: dart pub get || pub get
       - name: Run Unit Tests
-        run: dart test --reporter expanded || pub run test --reporter expanded
+        run: |
+          dart -DSILENT_OBSERVATORY=true test --reporter expanded --coverage=./coverage/vm/ ||
+          DART_VM_OPTIONS=-DSILENT_OBSERVATORY=true pub run test --reporter expanded --coverage=./coverage/vm/
+      - name: Upload Test Coverage
+        uses: actions/upload-artifact@v2
+        with:
+          name: coverage
+          path: coverage/
 
   # Runs the unit tests of the package with `dart test` in Node.js.
   js-test:
@@ -104,7 +111,12 @@ jobs:
       - name: Install Dependencies
         run: dart pub get
       - name: Run Unit Tests
-        run: dart test --reporter expanded --platform node
+        run: dart test --reporter expanded --platform node --coverage=./coverage/node/
+      - name: Upload Test Coverage
+        uses: actions/upload-artifact@v2
+        with:
+          name: coverage
+          path: coverage/
 
   # Runs the unit tests of the package with `dart test` in Firefox.
   firefox-test:
@@ -123,7 +135,12 @@ jobs:
       - name: Run Headless Unit Tests
         uses: GabrielBB/xvfb-action@v1
         with:
-          run: dart test --reporter expanded --platform firefox
+          run: dart test --reporter expanded --platform firefox --coverage=./coverage/firefox/
+      - name: Upload Test Coverage
+        uses: actions/upload-artifact@v2
+        with:
+          name: coverage
+          path: coverage/
 
   # Runs the unit tests of the package with `dart test` in Chrome.
   chrome-test:
@@ -142,7 +159,46 @@ jobs:
       - name: Run Headless Unit Tests
         uses: GabrielBB/xvfb-action@v1
         with:
-          run: dart test --reporter expanded --platform chrome
+          run: dart test --reporter expanded --platform chrome --coverage=./coverage/chrome/
+      - name: Upload Test Coverage
+        uses: actions/upload-artifact@v2
+        with:
+          name: coverage
+          path: coverage/
+  #
+  coverage:
+    name: Collect Test Coverage
+    runs-on: ubuntu-latest
+    needs:
+      - vm-test
+      - js-test
+      - firefox-test
+      - chrome-test
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Download Coverage
+        uses: actions/download-artifact@v2
+        with:
+          name: coverage
+          path: coverage/
+      - name: Use Dart SDK
+        uses: dart-lang/setup-dart@v0.4
+      - name: Print Dart SDK Version
+        run: dart --version
+      - name: Add Executables Installed by Pub to PATH
+        run: echo "$HOME/.pub-cache/bin" >> $GITHUB_PATH
+      - name: Install Dependencies
+        run: dart pub get
+      - name: Install coverage Package
+        run: dart pub global activate coverage
+      - name: Format Coverage
+        run: format_coverage --packages=.packages -i coverage --report-on lib -l -o coverage/lcov.info
+      - name: Upload Coverage
+        uses: coverallsapp/github-action@v1.1.2
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path-to-lcov: coverage/lcov.info
 
   # Compiles the test decoder script for the `toml-test` test suite.
   compile-toml-test:
