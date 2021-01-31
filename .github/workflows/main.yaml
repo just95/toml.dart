@@ -83,7 +83,9 @@ jobs:
       - name: Run Unit Tests
         run: |
           dart -DSILENT_OBSERVATORY=true test --reporter expanded --coverage=./coverage/vm/ ||
-          DART_VM_OPTIONS=-DSILENT_OBSERVATORY=true pub run test --reporter expanded --coverage=./coverage/vm/
+          DART_VM_OPTIONS=-DSILENT_OBSERVATORY=true pub run test --reporter expanded --coverage=./coverage/vm/$dart_version
+        env:
+          dart_version: ${{ matrix.node-version }}
       - name: Upload Test Coverage
         uses: actions/upload-artifact@v2
         with:
@@ -111,7 +113,9 @@ jobs:
       - name: Install Dependencies
         run: dart pub get
       - name: Run Unit Tests
-        run: dart test --reporter expanded --platform node --coverage=./coverage/node/
+        run: dart test --reporter expanded --platform node --coverage=./coverage/node/$node_version
+        env:
+          node_version: ${{ matrix.node-version }}
       - name: Upload Test Coverage
         uses: actions/upload-artifact@v2
         with:
@@ -122,7 +126,6 @@ jobs:
   firefox-test:
     name: Run Unit Tests in Firefox
     runs-on: ubuntu-latest
-    needs: js-test
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -146,7 +149,6 @@ jobs:
   chrome-test:
     name: Run Unit Tests in Chrome
     runs-on: ubuntu-latest
-    needs: js-test
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -165,7 +167,9 @@ jobs:
         with:
           name: coverage
           path: coverage/
-  #
+
+  # Combines the test coverage information of all other jobs into a `lcov.info`
+  # file and uploads it to coveralls.io.
   coverage:
     name: Collect Test Coverage
     runs-on: ubuntu-latest
@@ -194,7 +198,7 @@ jobs:
         run: dart pub global activate coverage
       - name: Format Coverage
         run: format_coverage --packages=.packages -i coverage --report-on lib -l -o coverage/lcov.info
-      - name: Upload Coverage
+      - name: Upload Coverage to coveralls.io
         uses: coverallsapp/github-action@v1.1.2
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
