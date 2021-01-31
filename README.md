@@ -1,6 +1,7 @@
 # toml.dart
 
 [![Dart CI](https://github.com/just95/toml.dart/workflows/Dart%20CI/badge.svg?branch=main)][toml-dart/actions/main]
+[![Coverage Status](https://img.shields.io/coveralls/github/just95/toml.dart/main)][coveralls/toml-dart]
 [![Pub Package](https://img.shields.io/pub/v/toml.svg)][pub/toml]
 [![GitHub License](https://img.shields.io/badge/license-MIT-blue.svg)][toml-dart/LICENSE]
 
@@ -370,6 +371,10 @@ Unfortunately, some encoder tests from `toml-test` are failing at the moment bec
 
 `toml.dart` is licensed under the MIT license agreement.
 See the [LICENSE][toml-dart/LICENSE] file for details.
+
+[coveralls/toml-dart]:
+  https://coveralls.io/github/just95/toml.dart?branch=main
+  "just95/toml.dart | Coveralls - Test Coverage History & Statistics"
 
 [pub/toml]:
   https://pub.dev/packages/toml
