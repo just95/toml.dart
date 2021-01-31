@@ -82,7 +82,7 @@ jobs:
         run: dart pub get || pub get
       - name: Run Unit Tests
         run: |
-          dart -DSILENT_OBSERVATORY=true test --reporter expanded --coverage=./coverage/vm/ ||
+          dart -DSILENT_OBSERVATORY=true test --reporter expanded --coverage=./coverage/vm/$dart_version ||
           DART_VM_OPTIONS=-DSILENT_OBSERVATORY=true pub run test --reporter expanded --coverage=./coverage/vm/$dart_version
         env:
           dart_version: ${{ matrix.dart-version }}
