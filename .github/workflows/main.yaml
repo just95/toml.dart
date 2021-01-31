@@ -85,7 +85,7 @@ jobs:
           dart -DSILENT_OBSERVATORY=true test --reporter expanded --coverage=./coverage/vm/ ||
           DART_VM_OPTIONS=-DSILENT_OBSERVATORY=true pub run test --reporter expanded --coverage=./coverage/vm/$dart_version
         env:
-          dart_version: ${{ matrix.node-version }}
+          dart_version: ${{ matrix.dart-version }}
       - name: Upload Test Coverage
         uses: actions/upload-artifact@v2
         with:
