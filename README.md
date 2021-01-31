@@ -1,7 +1,7 @@
 # toml.dart
 
 [![Dart CI](https://github.com/just95/toml.dart/workflows/Dart%20CI/badge.svg?branch=main)][toml-dart/actions/main]
-[![Coverage Status](https://img.shields.io/coveralls/github/just95/toml.dart/main)][coveralls/toml-dart]
+[![Coverage Status](https://coveralls.io/repos/github/just95/toml.dart/badge.svg?branch=main)][coveralls/toml-dart]
 [![Pub Package](https://img.shields.io/pub/v/toml.svg)][pub/toml]
 [![GitHub License](https://img.shields.io/badge/license-MIT-blue.svg)][toml-dart/LICENSE]
 
