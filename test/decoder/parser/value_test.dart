@@ -114,10 +114,14 @@ void main() {
           ])),
         );
       });
-      test('rejects homogeneous arrays', () {
+      test('can parse heterogeneous arrays', () {
         expect(
-          () => TomlValue.parse('[1, 2.0, 3]'),
-          throwsA(isA<FormatException>()),
+          TomlValue.parse('[1, true, 3.0]'),
+          equals(TomlArray([
+            TomlInteger.dec(BigInt.from(1)),
+            TomlBoolean(true),
+            TomlFloat(3.0),
+          ])),
         );
       });
       test('can parse array with comments', () {

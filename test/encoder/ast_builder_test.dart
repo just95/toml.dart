@@ -200,6 +200,17 @@ void main() {
           ])),
         );
       });
+      test('can build heterogeneous array', () {
+        var builder = TomlAstBuilder();
+        expect(
+          builder.buildValue([1, true, 3.141]),
+          equals(TomlArray([
+            TomlInteger.dec(BigInt.from(1)),
+            TomlBoolean(true),
+            TomlFloat(3.141),
+          ])),
+        );
+      });
       test('builds empty inline table from empty Map', () {
         var builder = TomlAstBuilder();
         expect(

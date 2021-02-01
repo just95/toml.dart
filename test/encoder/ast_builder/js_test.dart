@@ -15,17 +15,6 @@ void main() {
             equals(TomlInteger.dec(BigInt.from(42))),
           );
         });
-        test('array of floats from mixed array of floats and integers', () {
-          var builder = TomlAstBuilder();
-          expect(
-            builder.buildValue([1.0, 3.141, 42]),
-            equals(TomlArray([
-              TomlFloat(1.0),
-              TomlFloat(3.141),
-              TomlFloat(42.0),
-            ])),
-          );
-        });
       });
     });
   });
