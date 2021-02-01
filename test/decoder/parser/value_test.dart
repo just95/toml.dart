@@ -423,6 +423,12 @@ void main() {
           throwsA(isA<TomlParserException>()),
         );
       });
+      test('allows leading zeros in exponent part', () {
+        expect(
+          TomlValue.parse('12.34e+009'),
+          equals(TomlFloat(12.34e9)),
+        );
+      });
       test('can parse positive infinity without plus sign', () {
         expect(
           TomlValue.parse('inf'),

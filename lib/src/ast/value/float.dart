@@ -24,14 +24,12 @@ class TomlFloat extends TomlValue {
   ///
   ///     exp = "e" float-exp-part
   ///     float-exp-part = [ minus / plus ] zero-prefixable-int
-  ///
-  /// TODO Leading zeros in exponent were allowed in TOML 1.0.0-rc.1 and are not
-  /// supported yet.
   static final Parser<TomlFloat> finalFloatParser = (() {
-    var digits = digit().plus().separatedBy(char('_'));
-    var decimal = anyOf('+-').optional() & (char('0') | digits);
-    var exp = anyOf('eE') & anyOf('+-').optional() & digits;
-    var frac = char('.') & digits;
+    var floatIntPart = char('0') | digit().plus().separatedBy(char('_'));
+    var zeroPrefixableInt = digit().plus().separatedBy(char('_'));
+    var decimal = anyOf('+-').optional() & floatIntPart;
+    var exp = anyOf('eE') & anyOf('+-').optional() & zeroPrefixableInt;
+    var frac = char('.') & zeroPrefixableInt;
     var float = decimal & (exp | frac & exp.optional());
     return float
         .flatten()
