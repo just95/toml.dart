@@ -206,39 +206,9 @@ class TomlAstBuilder {
   /// encoded as a multiline string if possible.
   bool isMultilineString(String str) => str.contains(tomlNewlinePattern);
 
-  /// Converts the given items to TOML values and creates a [TomlArray]
+  /// Converts the given [items] to TOML values and creates a [TomlArray]
   /// from those values.
-  ///
-  /// If there are values of different types a [TomlMixedArrayTypesException]
-  /// is thrown. In JavaScript the array is allowed to contain integers
-  /// and floats. This is because [int] and [double] cannot be distinguished
-  /// in this case. If different number types are mixed, all value of the
-  /// array will be converted to floats.
-  TomlArray buildArray(Iterable items) {
-    var array = TomlArray(items.map(buildValue));
-    var types = array.itemTypes.toSet();
-
-    // Test whether the array is heterogenous.
-    if (types.length > 1) {
-      // In JavaScript integers and floats are allowed to be mixed.
-      if (identical(1, 1.0) &&
-          types.length == 2 &&
-          types.contains(TomlType.integer) &&
-          types.contains(TomlType.float)) {
-        return TomlArray(array.items.map((item) {
-          if (item is TomlFloat) return item;
-          if (item is TomlInteger) return TomlFloat(item.value.toDouble());
-          throw ArgumentError('Expected number, but got ${item.type}.');
-        }));
-      }
-
-      // Otherwise arrays must be homogenous.
-      throw TomlMixedArrayTypesException(array);
-    }
-
-    // The array is homogenous.
-    return array;
-  }
+  TomlArray buildArray(Iterable items) => TomlArray(items.map(buildValue));
 
   /// Converts the given map to an inline table.
   TomlInlineTable buildInlineTable(Map map) =>
