@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+ - Updated to [v1.0.0][toml-spec/v1.0.0] of the TOML specification.
+   + Allowed leading zeros in exponent part.
+   + Allowed heterogeneous arrays.
+
 ## 0.8.0
 
  - Updated to [v0.5.0][toml-spec/v0.5.0] of the TOML specification.
@@ -88,6 +94,9 @@ This is a major update that does not only bring along many changes to the intern
 [toml-spec/v0.5.0]:
   https://toml.io/en/v0.5.0
   "TOML: English v0.5.0"
+[toml-spec/v1.0.0]:
+  https://toml.io/en/v1.0.0
+  "TOML: English v1.0.0"
 
 [toml-test]:
   https://github.com/BurntSushi/toml-test
