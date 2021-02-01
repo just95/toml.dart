@@ -4,7 +4,6 @@ import 'package:toml/src/ast.dart';
 import 'package:toml/src/decoder/parser/util/whitespace.dart';
 
 import 'encodable.dart';
-import 'exception/mixed_array_types.dart';
 import 'exception/unknown_key_type.dart';
 import 'exception/unknown_value_type.dart';
 

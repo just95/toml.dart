@@ -184,27 +184,6 @@ the decoder produces the following `List`.
 ```
 
 The encoder accepts any `Iterable`.
-All elements of the `Iterable` must be mapped to TOML values of the same type by the encoder.
-Otherwise a `TomlMixedArrayTypesException` is thrown.
-In JavaScript, `int` and `double` cannot be distinguished.
-Thus, if integers and floats are mixed, an array of floats is produced.
-If an integer cannot be expressed losslessly as a `double`, it's value is approximated.
-The approximation for very large integers may be `double.infinity`.
-
-For example, encoding the array
-
-```dart
-var array = [1, 2.0, 3.141];
-```
-
-produces the following TOML value in JavaScript
-
-```toml
-array = [1.0, 2.0, 3.141]
-```
-
-but throws a `TomlMixedArrayTypesException` in the VM.
-
 
 ### String
 
