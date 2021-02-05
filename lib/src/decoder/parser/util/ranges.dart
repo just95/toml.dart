@@ -21,6 +21,7 @@ Parser<String> hexDigit([String message = 'hexadecimal digit expected']) =>
     pattern('0-9a-fA-F', message);
 
 /// Parser for non-EOL characters that are allowed in TOML comments.
+///
 ///     non-eol = %x09 / %x20-7F / non-ascii
 final Parser<String> tomlNonEol =
     (char(0x09) | range(0x20, 0x7F) | tomlNonAscii).cast<String>();

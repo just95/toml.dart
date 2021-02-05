@@ -844,6 +844,14 @@ void main() {
             throwsA(isA<TomlParserException>()),
           );
         });
+        test('allows raw tabs', () {
+          expect(
+            TomlValue.parse(
+              '"Column 1\tColumn 2"',
+            ),
+            equals(TomlBasicString('Column 1\tColumn 2')),
+          );
+        });
         test('does not allow control characters', () {
           expect(
             () => TomlValue.parse('"\u0000"'),
@@ -942,6 +950,14 @@ void main() {
             )),
           );
         });
+        test('allows raw tabs', () {
+          expect(
+            TomlValue.parse(
+              '"""Roses are red\tViolets are blue"""',
+            ),
+            equals(TomlMultilineBasicString('Roses are red\tViolets are blue')),
+          );
+        });
         test('does not allow control characters', () {
           expect(
             () => TomlValue.parse('"""\u0000"""'),
@@ -960,6 +976,14 @@ void main() {
           expect(
             TomlValue.parse(r"'C:\Users\nodejs\templates'"),
             equals(TomlLiteralString(r'C:\Users\nodejs\templates')),
+          );
+        });
+        test('allows raw tabs', () {
+          expect(
+            TomlValue.parse(
+              "'Roses are red\tViolets are blue'",
+            ),
+            equals(TomlLiteralString('Roses are red\tViolets are blue')),
           );
         });
       });
@@ -994,6 +1018,16 @@ void main() {
             equals(TomlMultilineLiteralString(
               'Roses are red\n'
               'Violets are blue\n',
+            )),
+          );
+        });
+        test('allows raw tabs', () {
+          expect(
+            TomlValue.parse(
+              "'''Roses are red\tViolets are blue'''",
+            ),
+            equals(TomlMultilineLiteralString(
+              'Roses are red\tViolets are blue',
             )),
           );
         });
