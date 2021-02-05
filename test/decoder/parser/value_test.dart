@@ -858,6 +858,24 @@ void main() {
             throwsA(isA<TomlParserException>()),
           );
         });
+        test('does not allow unpaired UTF-16 surrogate code points', () {
+          expect(
+            () => TomlValue.parse(
+              '"High surrogate \uD83E without low surrogat"',
+            ),
+            throwsA(isA<TomlParserException>()),
+          );
+        });
+        test('allows UTF-16 surrogate pairs', () {
+          expect(
+            TomlValue.parse(
+              '"High and low surrogate \uD83E\uDDA6 as a pair"',
+            ),
+            equals(TomlBasicString(
+              'High and low surrogate \uD83E\uDDA6 as a pair',
+            )),
+          );
+        });
       });
       group('Multiline Basic', () {
         test('can parse empty multiline basic strings', () {
@@ -964,6 +982,24 @@ void main() {
             throwsA(isA<TomlParserException>()),
           );
         });
+        test('does not allow unpaired UTF-16 surrogate code points', () {
+          expect(
+            () => TomlValue.parse(
+              '"""High surrogate \uD83E without low surrogat"""',
+            ),
+            throwsA(isA<TomlParserException>()),
+          );
+        });
+        test('allows UTF-16 surrogate pairs', () {
+          expect(
+            TomlValue.parse(
+              '"""High and low surrogate \uD83E\uDDA6 as a pair"""',
+            ),
+            equals(TomlMultilineBasicString(
+              'High and low surrogate \uD83E\uDDA6 as a pair',
+            )),
+          );
+        });
       });
       group('Literal', () {
         test('can parse empty literal strings', () {
@@ -984,6 +1020,24 @@ void main() {
               "'Roses are red\tViolets are blue'",
             ),
             equals(TomlLiteralString('Roses are red\tViolets are blue')),
+          );
+        });
+        test('does not allow unpaired UTF-16 surrogate code points', () {
+          expect(
+            () => TomlValue.parse(
+              "'High surrogate \uD83E without low surrogat'",
+            ),
+            throwsA(isA<TomlParserException>()),
+          );
+        });
+        test('allows UTF-16 surrogate pairs', () {
+          expect(
+            TomlValue.parse(
+              "'High and low surrogate \uD83E\uDDA6 as a pair'",
+            ),
+            equals(TomlLiteralString(
+              'High and low surrogate \uD83E\uDDA6 as a pair',
+            )),
           );
         });
       });
@@ -1028,6 +1082,24 @@ void main() {
             ),
             equals(TomlMultilineLiteralString(
               'Roses are red\tViolets are blue',
+            )),
+          );
+        });
+        test('does not allow unpaired UTF-16 surrogate code points', () {
+          expect(
+            () => TomlValue.parse(
+              "'''High surrogate \uD83E without low surrogat'''",
+            ),
+            throwsA(isA<TomlParserException>()),
+          );
+        });
+        test('allows UTF-16 surrogate pairs', () {
+          expect(
+            TomlValue.parse(
+              "'''High and low surrogate \uD83E\uDDA6 as a pair'''",
+            ),
+            equals(TomlMultilineLiteralString(
+              'High and low surrogate \uD83E\uDDA6 as a pair',
             )),
           );
         });

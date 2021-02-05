@@ -32,6 +32,22 @@ void main() {
           throwsA(isA<TomlParserException>()),
         );
       });
+      test('comments cannot contain unpaired UTF-16 surrogate code points', () {
+        expect(
+          () => TomlDocument.parse(
+            '# High surrogate \uD83E without low surrogate',
+          ),
+          throwsA(isA<TomlParserException>()),
+        );
+      });
+      test('comments can contain UTF-16 surrogate pairs', () {
+        expect(
+          TomlDocument.parse(
+            '# High and low surrogate \uD83E\uDDA6 as a pair',
+          ),
+          equals(TomlDocument([])),
+        );
+      });
     });
     group('Key/Value Pair', () {
       test('can parse key/value pair with unquoted key', () {
