@@ -378,6 +378,42 @@ void main() {
           }),
         );
       });
+      test('cannot open inline table', () {
+        var builder = TomlMapBuilder();
+        builder.visitKeyValuePair(TomlKeyValuePair(
+          TomlKey([TomlUnquotedKey('table')]),
+          TomlInlineTable([]),
+        ));
+        expect(
+          () => builder.visitStandardTable(TomlStandardTable(
+            TomlKey([TomlUnquotedKey('table')]),
+          )),
+          throwsA(equals(
+            TomlRedefinitionException(TomlKey([TomlUnquotedKey('table')])),
+          )),
+        );
+      });
+      test('cannot create child of inline table', () {
+        var builder = TomlMapBuilder();
+        builder.visitKeyValuePair(TomlKeyValuePair(
+          TomlKey([TomlUnquotedKey('table')]),
+          TomlInlineTable([]),
+        ));
+        expect(
+          () => builder.visitStandardTable(TomlStandardTable(
+            TomlKey([
+              TomlUnquotedKey('table'),
+              TomlUnquotedKey('child'),
+            ]),
+          )),
+          throwsA(equals(
+            TomlNotATableException(TomlKey([
+              TomlUnquotedKey('table'),
+              TomlUnquotedKey('child'),
+            ])),
+          )),
+        );
+      });
     });
 
     group('visitArrayTable', () {
@@ -503,6 +539,27 @@ void main() {
             TomlKey([TomlUnquotedKey('array')]),
           )),
           throwsA(isA<TomlRedefinitionException>()),
+        );
+      });
+      test('cannot create child of inline table', () {
+        var builder = TomlMapBuilder();
+        builder.visitKeyValuePair(TomlKeyValuePair(
+          TomlKey([TomlUnquotedKey('table')]),
+          TomlInlineTable([]),
+        ));
+        expect(
+          () => builder.visitArrayTable(TomlArrayTable(
+            TomlKey([
+              TomlUnquotedKey('table'),
+              TomlUnquotedKey('array'),
+            ]),
+          )),
+          throwsA(equals(
+            TomlNotATableException(TomlKey([
+              TomlUnquotedKey('table'),
+              TomlUnquotedKey('array'),
+            ])),
+          )),
         );
       });
     });
