@@ -358,6 +358,20 @@ void main() {
           ),
         );
       });
+      test('cannot redefine tables already defined using key/value pair', () {
+        var builder = TomlMapBuilder();
+        builder.visitKeyValuePair(TomlKeyValuePair(
+          TomlKey([TomlUnquotedKey('table'), TomlUnquotedKey('key')]),
+          TomlLiteralString('value'),
+        ));
+        expect(
+            () => builder.visitStandardTable(
+                  TomlStandardTable(TomlKey([TomlUnquotedKey('table')])),
+                ),
+            throwsA(equals(TomlRedefinitionException(
+              TomlKey([TomlUnquotedKey('table')]),
+            ))));
+      });
       test('can create sub-tables within tables defined via dotted keys', () {
         var builder = TomlMapBuilder();
         builder.visitKeyValuePair(TomlKeyValuePair(
@@ -365,7 +379,7 @@ void main() {
           TomlInteger.dec(BigInt.from(1)),
         ));
         builder.visitStandardTable(TomlStandardTable(
-          TomlKey([TomlUnquotedKey('parent')]),
+          TomlKey([TomlUnquotedKey('parent'), TomlUnquotedKey('child')]),
         ));
         builder.visitKeyValuePair(TomlKeyValuePair(
           TomlKey([TomlUnquotedKey('key2')]),
@@ -374,10 +388,45 @@ void main() {
         expect(
           builder.build(),
           equals({
-            'parent': {'key1': 1, 'key2': 2}
+            'parent': {
+              'key1': 1,
+              'child': {'key2': 2}
+            }
           }),
         );
       });
+      test(
+        'marks previously implicitly created tables that are defined by '
+        'dotted key/value pairs as explicitly defined',
+        () {
+          var builder = TomlMapBuilder();
+          builder.visitStandardTable(TomlStandardTable(TomlKey([
+            TomlUnquotedKey('parent'),
+            TomlUnquotedKey('table'),
+            TomlUnquotedKey('child'),
+          ])));
+          builder.visitStandardTable(
+              TomlStandardTable(TomlKey([TomlUnquotedKey('parent')])));
+          builder.visitKeyValuePair(TomlKeyValuePair(
+            TomlKey([
+              TomlUnquotedKey('table'),
+              TomlUnquotedKey('key'),
+            ]),
+            TomlLiteralString('value'),
+          ));
+          expect(
+            () => builder.visitStandardTable(
+              TomlStandardTable(TomlKey([
+                TomlUnquotedKey('parent'),
+                TomlUnquotedKey('table'),
+              ])),
+            ),
+            throwsA(equals(TomlRedefinitionException(
+              TomlKey([TomlUnquotedKey('parent'), TomlUnquotedKey('table')]),
+            ))),
+          );
+        },
+      );
       test('cannot open inline table', () {
         var builder = TomlMapBuilder();
         builder.visitKeyValuePair(TomlKeyValuePair(
