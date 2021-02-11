@@ -246,6 +246,18 @@ void main() {
           ])),
         );
       });
+      test('allows standard table header to be indented', () {
+        expect(
+          TomlDocument.parse('  [a.b.c]'),
+          equals(TomlDocument([
+            TomlStandardTable(TomlKey([
+              TomlUnquotedKey('a'),
+              TomlUnquotedKey('b'),
+              TomlUnquotedKey('c'),
+            ]))
+          ])),
+        );
+      });
       test('allows comment after standard table header', () {
         expect(
           TomlDocument.parse('[a.b.c] # Comment'),
@@ -413,6 +425,18 @@ void main() {
             TomlArrayTable(TomlKey([
               TomlUnquotedKey('a'),
               TomlQuotedKey(TomlBasicString('β')),
+              TomlUnquotedKey('c'),
+            ]))
+          ])),
+        );
+      });
+      test('allows array table header to be indented', () {
+        expect(
+          TomlDocument.parse('  [[a.b.c]]'),
+          equals(TomlDocument([
+            TomlArrayTable(TomlKey([
+              TomlUnquotedKey('a'),
+              TomlUnquotedKey('b'),
               TomlUnquotedKey('c'),
             ]))
           ])),
