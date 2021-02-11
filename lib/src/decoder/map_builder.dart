@@ -37,7 +37,10 @@ class TomlMapBuilder extends TomlExpressionVisitor<void> {
     var key = _current.nodeName.deepChild(pair.key),
         valueBuilder = TomlValueBuilder(key),
         value = valueBuilder.visitValue(pair.value),
-        parent = _current.findOrAddChild(pair.key.parentKey);
+        parent = _current.findOrAddChild(
+          pair.key.parentKey,
+          makeExplicit: true,
+        );
     if (parent is _TomlTreeMap) {
       parent.addChild(pair.key.childKey, _TomlTreeLeaf(key, value));
     } else {
@@ -117,14 +120,18 @@ abstract class _TomlTree<V> {
   /// returns the final sub-tree.
   ///
   /// If a node does not exist, a new [_TomlTreeMap] is created. This behavior
-  /// corresponds to the implicit creation of parent tables in TOML.
-  _TomlTree findOrAddChild(TomlKey key) {
+  /// corresponds to the implicit creation of parent tables in TOML. If
+  /// the [makeExplicit] flag is set to `true`
+  _TomlTree findOrAddChild(TomlKey key, {bool makeExplicit = false}) {
     _TomlTree current = this;
     for (var part in key.parts) {
       current = current.getOrAddChild(
         part,
         () => _TomlTreeMap(current.nodeName.child(part)),
       );
+      if (makeExplicit && current is _TomlTreeMap) {
+        current.isExplicitlyDefined = true;
+      }
     }
     return current;
   }
@@ -155,10 +162,11 @@ class _TomlTreeMap extends _TomlTree<Map<String, dynamic>> {
   /// explicitly or implicitly.
   ///
   /// By default all tables are created implicitly (i.e., this flag is set
-  /// to `false`). When a table header is visited by the [TomlMapBuilder],
-  /// the flag is set to `true` for the corresponding table. This information
-  /// is needed to reject TOML documents that explicitly define the same table
-  /// twice.
+  /// to `false`). When a table header is visited by the [TomlMapBuilder] or
+  /// it looks up the parent node to write the value of a dotted key into,
+  /// the flag is set to `true` for the corresponding table or tables. This
+  /// information is needed to reject TOML documents that explicitly define the
+  /// same table twice or a table in both dotted key and `[table]` form.
   bool isExplicitlyDefined;
 
   /// Creates a new node for a standard table.
