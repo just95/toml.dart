@@ -857,6 +857,12 @@ void main() {
             )),
           );
         });
+        test('can parse basic string with escaped backslash', () {
+          expect(
+            TomlValue.parse(r'"some\\windows\\path"'),
+            equals(TomlBasicString(r'some\windows\path')),
+          );
+        });
         test('does not allow invalid escape sequences', () {
           expect(
             () => TomlValue.parse(r'"some\windows\path"'),
@@ -973,6 +979,19 @@ void main() {
             ),
             equals(TomlMultilineBasicString(
               'The quick brown fox jumps over the lazy dog.',
+            )),
+          );
+        });
+        test('requires line-ending backslashes to be unescaped', () {
+          expect(
+            TomlValue.parse(
+              '"""Roses are red \\\\\n'
+              'Violets are blue\n'
+              '"""',
+            ),
+            equals(TomlMultilineBasicString(
+              'Roses are red \\\n'
+              'Violets are blue\n',
             )),
           );
         });
