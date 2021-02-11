@@ -12,8 +12,8 @@ import 'literal.dart';
 
 /// AST node that represents multiline literal TOML strings.
 ///
-///     ml-literal-string =
-///         ml-literal-string-delim ml-literal-body ml-literal-string-delim
+///     ml-literal-string = ml-literal-string-delim [ newline ] ml-literal-body
+///                         ml-literal-string-delim
 class TomlMultilineLiteralString extends TomlMultilineString {
   /// Delimiter for multiline literal TOML strings.
   ///
@@ -34,8 +34,8 @@ class TomlMultilineLiteralString extends TomlMultilineString {
   ///
   ///     ml-literal-body =
   ///         *mll-content *( mll-quotes 1*mll-content ) [ mll-quotes ]
-  static final Parser<String> bodyParser = (charParser.star().join() &
-          (quotesParser & charParser.plus().join()).join().star().join() &
+  static final Parser<String> bodyParser = (contentParser.star().join() &
+          (quotesParser & contentParser.plus().join()).join().star().join() &
           quotesParser.optional(''))
       .castList<String>()
       .join();
@@ -57,7 +57,7 @@ class TomlMultilineLiteralString extends TomlMultilineString {
   ///
   /// Literal strings can contain tabs (i.e., `%x09`) but no `apostrophe`s
   /// (i.e., `%x27`).
-  static final Parser<String> charParser = (char(0x09) |
+  static final Parser<String> contentParser = (char(0x09) |
           range(0x20, 0x26) |
           range(0x28, 0x7E) |
           tomlNonAscii |
@@ -66,7 +66,7 @@ class TomlMultilineLiteralString extends TomlMultilineString {
 
   /// Tests whether the given string can be represented as a literal string.
   ///
-  /// The string must only contain characters matched by [charParser] or up
+  /// The string must only contain characters matched by [contentParser] or up
   /// to two consequtive `apostrophe`s.
   static bool canEncode(String str) => bodyParser.end().accept(str);
 

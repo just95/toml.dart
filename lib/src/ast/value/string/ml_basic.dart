@@ -13,8 +13,8 @@ import 'escape.dart';
 
 /// AST node that represents multiline basic TOML strings.
 ///
-///     ml-basic-string =
-///         ml-basic-string-delim ml-basic-body ml-basic-string-delim
+///     ml-basic-string = ml-basic-string-delim [ newline ] ml-basic-body
+///                       ml-basic-string-delim
 class TomlMultilineBasicString extends TomlMultilineString {
   /// Delimiter for multiline basic TOML strings.
   ///
@@ -33,8 +33,8 @@ class TomlMultilineBasicString extends TomlMultilineString {
   ///
   ///     ml-basic-body =
   ///       *mlb-content *( mlb-quotes 1*mlb-content ) [ mlb-quotes ]
-  static final Parser<String> bodyParser = (charParser.star().join() &
-          (quotesParser & charParser.plus().join()).join().star().join() &
+  static final Parser<String> bodyParser = (contentParser.star().join() &
+          (quotesParser & contentParser.plus().join()).join().star().join() &
           quotesParser.optional(''))
       .castList<String>()
       .join();
@@ -54,7 +54,7 @@ class TomlMultilineBasicString extends TomlMultilineString {
   ///
   ///     mlb-content = mlb-char / newline / mlb-escaped-nl
   ///     mlb-char = mlb-unescaped / escaped
-  static final Parser<String> charParser = (unescapedParser |
+  static final Parser<String> contentParser = (unescapedParser |
           TomlEscapedChar.parser |
           tomlNewline |
           escapedNewlineParser)
