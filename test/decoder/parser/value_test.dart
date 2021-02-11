@@ -28,6 +28,16 @@ void main() {
           ])),
         );
       });
+      test('can parse heterogeneous arrays', () {
+        expect(
+          TomlValue.parse('[1, true, 3.0]'),
+          equals(TomlArray([
+            TomlInteger.dec(BigInt.from(1)),
+            TomlBoolean(true),
+            TomlFloat(3.0),
+          ])),
+        );
+      });
       test('can parse array with trailing comma', () {
         expect(
           TomlValue.parse('[1, 2, 3,]'),
@@ -96,7 +106,11 @@ void main() {
       });
       test('can parse array with newlines after commas', () {
         expect(
-          TomlValue.parse('[1,\n 2,\n 3]'),
+          TomlValue.parse(
+            '[1,\n'
+            ' 2,\n'
+            ' 3]',
+          ),
           equals(TomlArray([
             TomlInteger.dec(BigInt.from(1)),
             TomlInteger.dec(BigInt.from(2)),
@@ -106,7 +120,11 @@ void main() {
       });
       test('can parse array with newlines before commas', () {
         expect(
-          TomlValue.parse('[1\n, 2\n, 3]'),
+          TomlValue.parse(
+            '[1\n'
+            ', 2\n'
+            ', 3]',
+          ),
           equals(TomlArray([
             TomlInteger.dec(BigInt.from(1)),
             TomlInteger.dec(BigInt.from(2)),
@@ -114,24 +132,188 @@ void main() {
           ])),
         );
       });
-      test('can parse heterogeneous arrays', () {
+      test('can parse array with indentation before commas', () {
         expect(
-          TomlValue.parse('[1, true, 3.0]'),
+          TomlValue.parse(
+            '[   1\n'
+            '  , 2\n'
+            '  , 3\n'
+            ']',
+          ),
           equals(TomlArray([
             TomlInteger.dec(BigInt.from(1)),
-            TomlBoolean(true),
-            TomlFloat(3.0),
+            TomlInteger.dec(BigInt.from(2)),
+            TomlInteger.dec(BigInt.from(3))
           ])),
         );
       });
-      test('can parse array with comments', () {
+      test('can parse array with indentation before closing bracket', () {
         expect(
           TomlValue.parse(
-            '[    # Comment after opening bracket\n'
-            '  1, # Comment after comma\n'
-            '  2  # Comment before comma\n'
-            ', 3  # Comment before closing bracket\n'
+            '[ 1, 2, 3\n'
+            '  ]',
+          ),
+          equals(TomlArray([
+            TomlInteger.dec(BigInt.from(1)),
+            TomlInteger.dec(BigInt.from(2)),
+            TomlInteger.dec(BigInt.from(3))
+          ])),
+        );
+      });
+      test('can parse array with comment after opening bracket', () {
+        expect(
+          TomlValue.parse(
+            '[ # Comment\n'
+            '  1, 2, 3 ]',
+          ),
+          equals(TomlArray([
+            TomlInteger.dec(BigInt.from(1)),
+            TomlInteger.dec(BigInt.from(2)),
+            TomlInteger.dec(BigInt.from(3))
+          ])),
+        );
+      });
+      test('can parse array with multiline comment after opening bracket', () {
+        expect(
+          TomlValue.parse(
+            '[ # Line 1\n'
+            '  # Line 2\n'
+            '  1, 2, 3 ]',
+          ),
+          equals(TomlArray([
+            TomlInteger.dec(BigInt.from(1)),
+            TomlInteger.dec(BigInt.from(2)),
+            TomlInteger.dec(BigInt.from(3))
+          ])),
+        );
+      });
+      test('can parse array with comment before closing bracket', () {
+        expect(
+          TomlValue.parse(
+            '[ 1, 2, 3 # Comment\n'
             ']',
+          ),
+          equals(TomlArray([
+            TomlInteger.dec(BigInt.from(1)),
+            TomlInteger.dec(BigInt.from(2)),
+            TomlInteger.dec(BigInt.from(3))
+          ])),
+        );
+      });
+      test('can parse array with multiline comment before closing bracket', () {
+        expect(
+          TomlValue.parse(
+            '[ 1, 2, 3 # Line 1\n'
+            '          # Line 2\n'
+            ']',
+          ),
+          equals(TomlArray([
+            TomlInteger.dec(BigInt.from(1)),
+            TomlInteger.dec(BigInt.from(2)),
+            TomlInteger.dec(BigInt.from(3))
+          ])),
+        );
+      });
+      test('can parse array with comment after comma', () {
+        expect(
+          TomlValue.parse(
+            '[ 1, # Comment\n'
+            '  2, 3 ]',
+          ),
+          equals(TomlArray([
+            TomlInteger.dec(BigInt.from(1)),
+            TomlInteger.dec(BigInt.from(2)),
+            TomlInteger.dec(BigInt.from(3))
+          ])),
+        );
+      });
+      test('can parse array with multiline comment after comma', () {
+        expect(
+          TomlValue.parse(
+            '[ 1, # Line 1\n'
+            '     # Line 2\n'
+            '  2, 3 ]',
+          ),
+          equals(TomlArray([
+            TomlInteger.dec(BigInt.from(1)),
+            TomlInteger.dec(BigInt.from(2)),
+            TomlInteger.dec(BigInt.from(3))
+          ])),
+        );
+      });
+      test('can parse array with comment before comma', () {
+        expect(
+          TomlValue.parse(
+            '[ 1 # Comment\n'
+            ', 2, 3 ]',
+          ),
+          equals(TomlArray([
+            TomlInteger.dec(BigInt.from(1)),
+            TomlInteger.dec(BigInt.from(2)),
+            TomlInteger.dec(BigInt.from(3))
+          ])),
+        );
+      });
+      test('can parse array with multiline comment before comma', () {
+        expect(
+          TomlValue.parse(
+            '[ 1 # Line 1\n'
+            '    # Line 2\n'
+            ', 2, 3 ]',
+          ),
+          equals(TomlArray([
+            TomlInteger.dec(BigInt.from(1)),
+            TomlInteger.dec(BigInt.from(2)),
+            TomlInteger.dec(BigInt.from(3))
+          ])),
+        );
+      });
+      test('can parse array with comment after trailing comma', () {
+        expect(
+          TomlValue.parse(
+            '[ 1, 2, 3, # Comment\n'
+            ']',
+          ),
+          equals(TomlArray([
+            TomlInteger.dec(BigInt.from(1)),
+            TomlInteger.dec(BigInt.from(2)),
+            TomlInteger.dec(BigInt.from(3))
+          ])),
+        );
+      });
+      test('can parse array with multiline comment after trailing comma', () {
+        expect(
+          TomlValue.parse(
+            '[ 1, 2, 3, # Line 1\n'
+            '           # Line 2\n'
+            ']',
+          ),
+          equals(TomlArray([
+            TomlInteger.dec(BigInt.from(1)),
+            TomlInteger.dec(BigInt.from(2)),
+            TomlInteger.dec(BigInt.from(3))
+          ])),
+        );
+      });
+      test('can parse array with comment before trailing comma', () {
+        expect(
+          TomlValue.parse(
+            '[ 1, 2, 3 # Comment\n'
+            ', ]',
+          ),
+          equals(TomlArray([
+            TomlInteger.dec(BigInt.from(1)),
+            TomlInteger.dec(BigInt.from(2)),
+            TomlInteger.dec(BigInt.from(3))
+          ])),
+        );
+      });
+      test('can parse array with multiline comment before trailing comma', () {
+        expect(
+          TomlValue.parse(
+            '[ 1, 2, 3 # Line 1\n'
+            '          # Line 2\n'
+            ', ]',
           ),
           equals(TomlArray([
             TomlInteger.dec(BigInt.from(1)),
