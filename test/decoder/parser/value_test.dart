@@ -355,6 +355,34 @@ void main() {
           equals(TomlFloat(6.626e-34)),
         );
       });
+      test('rejects float with decimal dot but integer part', () {
+        expect(
+          () => TomlValue.parse('.1415'),
+          throwsA(isA<TomlParserException>()),
+        );
+      });
+      test('rejects float with decimal dot but no fractional digits', () {
+        expect(
+          () => TomlValue.parse('3.'),
+          throwsA(isA<TomlParserException>()),
+        );
+      });
+      test(
+        'rejects float with decimal dot and exponent part but no '
+        'fractional digits',
+        () {
+          expect(
+            () => TomlValue.parse('3.e+20'),
+            throwsA(isA<TomlParserException>()),
+          );
+        },
+      );
+      test('requires the fractional part to precede the exponent part', () {
+        expect(
+          () => TomlValue.parse('6e-34.626'),
+          throwsA(isA<TomlParserException>()),
+        );
+      });
       test('allows underscores in integer part', () {
         expect(
           TomlValue.parse('1_2.34e57'),
