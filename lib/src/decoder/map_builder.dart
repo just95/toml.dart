@@ -37,16 +37,24 @@ class TomlMapBuilder extends TomlExpressionVisitor<void> {
     var key = _current.nodeName.deepChild(pair.key),
         valueBuilder = TomlValueBuilder(key),
         value = valueBuilder.visitValue(pair.value),
-        parent = _current.findOrAddChild(pair.key.parentKey,
-            onBeforeGetChild: (node, part) {
-              if (node is! _TomlTreeMap) {
-                throw TomlNotATableException(node.nodeName.child(part));
+        parent = _current.findOrAddChild(
+          pair.key.parentKey,
+          onBeforeGetChild: (node, part) {
+            if (node is! _TomlTreeMap) {
+              throw TomlNotATableException(node.nodeName.child(part));
+            }
+          },
+          buildChild: (dottedTableName) => _TomlTreeMap(dottedTableName),
+          onAfterGetChild: (node) {
+            if (node is _TomlTreeMap) {
+              if (node.isExplicitlyDefined && !node.isDefinedByDottedKey) {
+                throw TomlRedefinitionException(node.nodeName);
               }
-            },
-            buildChild: (dottedTableName) => _TomlTreeMap(dottedTableName),
-            onAfterGetChild: (node) {
-              if (node is _TomlTreeMap) node.isExplicitlyDefined = true;
-            });
+              node.isExplicitlyDefined = true;
+              node.isDefinedByDottedKey = true;
+            }
+          },
+        );
     if (parent is _TomlTreeMap) {
       parent.addChild(pair.key.childKey, _TomlTreeLeaf(key, value));
     } else {
@@ -190,10 +198,21 @@ class _TomlTreeMap extends _TomlTree<Map<String, dynamic>> {
   /// same table twice or a table in both dotted key and `[table]` form.
   bool isExplicitlyDefined;
 
+  /// Whether the table that is represented by this node has been created
+  /// by a dotted key.
+  ///
+  /// When a table is defined by a dotted key that has been defined explicitly
+  /// by a table header already, the a [TomlRedefinitionException] is thrown
+  /// because a table must not be defined twice. However, since there can be
+  /// multiple dotted keys with the same parent, no exception must be thrown
+  /// when the table was defined by a dotted key.
+  bool isDefinedByDottedKey;
+
   /// Creates a new node for a standard table.
   _TomlTreeMap(TomlKey nodeName)
       : children = {},
         isExplicitlyDefined = false,
+        isDefinedByDottedKey = false,
         super(nodeName);
 
   @override

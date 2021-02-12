@@ -463,6 +463,41 @@ void main() {
           )),
         );
       });
+      test('cannot redefine table defined with standard table header', () {
+        var builder = TomlMapBuilder();
+        builder.visitStandardTable(TomlStandardTable(
+          TomlKey([
+            TomlUnquotedKey('a'),
+            TomlUnquotedKey('b'),
+          ]),
+        ));
+        builder.visitKeyValuePair(TomlKeyValuePair(
+          TomlKey([
+            TomlUnquotedKey('c'),
+            TomlUnquotedKey('key1'),
+          ]),
+          TomlInteger.dec(BigInt.from(1)),
+        ));
+        builder.visitStandardTable(TomlStandardTable(
+          TomlKey([
+            TomlUnquotedKey('a'),
+          ]),
+        ));
+        expect(
+          () => builder.visitKeyValuePair(TomlKeyValuePair(
+            TomlKey([
+              TomlUnquotedKey('b'),
+              TomlUnquotedKey('c'),
+              TomlUnquotedKey('key2'),
+            ]),
+            TomlInteger.dec(BigInt.from(2)),
+          )),
+          throwsA(equals(TomlRedefinitionException(TomlKey([
+            TomlUnquotedKey('a'),
+            TomlUnquotedKey('b'),
+          ])))),
+        );
+      });
     });
 
     group('visitArrayTable', () {
