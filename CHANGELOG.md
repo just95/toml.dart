@@ -5,7 +5,7 @@
  - Updated to [v1.0.0][toml-spec/v1.0.0] of the TOML specification.
    + Allowed leading zeros in exponent part.
    + Allowed heterogeneous arrays.
-   + Disallowed tables created by dotted key/value pairs to be redefined in `[table]` form.
+   + Disallowed tables created by dotted key/value pairs to be redefined in `[table]` form and vice versa.
 
 ## 0.8.0
 
