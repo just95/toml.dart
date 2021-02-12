@@ -587,7 +587,9 @@ void main() {
           () => builder.visitArrayTable(TomlArrayTable(
             TomlKey([TomlUnquotedKey('array')]),
           )),
-          throwsA(isA<TomlRedefinitionException>()),
+          throwsA(equals(TomlRedefinitionException(TomlKey([
+            TomlUnquotedKey('array'),
+          ])))),
         );
       });
       test('cannot create child of inline table', () {
@@ -611,6 +613,60 @@ void main() {
           )),
         );
       });
+      test(
+        'cannot add key to last entry of array of tables using dotted keys',
+        () {
+          var builder = TomlMapBuilder();
+          builder.visitArrayTable(TomlArrayTable(
+            TomlKey([TomlUnquotedKey('table'), TomlUnquotedKey('array')]),
+          ));
+          builder.visitStandardTable(TomlStandardTable(
+            TomlKey([TomlUnquotedKey('table')]),
+          ));
+          expect(
+            () => builder.visitKeyValuePair(TomlKeyValuePair(
+              TomlKey([
+                TomlUnquotedKey('array'),
+                TomlUnquotedKey('key'),
+              ]),
+              TomlLiteralString('value'),
+            )),
+            throwsA(equals(TomlNotATableException(TomlKey([
+              TomlUnquotedKey('table'),
+              TomlUnquotedKey('array'),
+              TomlUnquotedKey('key'),
+            ])))),
+          );
+        },
+      );
+      test(
+        'cannot add sub-table to last entry of array of tables using '
+        'dotted keys',
+        () {
+          var builder = TomlMapBuilder();
+          builder.visitArrayTable(TomlArrayTable(
+            TomlKey([TomlUnquotedKey('table'), TomlUnquotedKey('array')]),
+          ));
+          builder.visitStandardTable(TomlStandardTable(
+            TomlKey([TomlUnquotedKey('table')]),
+          ));
+          expect(
+            () => builder.visitKeyValuePair(TomlKeyValuePair(
+              TomlKey([
+                TomlUnquotedKey('array'),
+                TomlUnquotedKey('child'),
+                TomlUnquotedKey('key'),
+              ]),
+              TomlLiteralString('value'),
+            )),
+            throwsA(equals(TomlNotATableException(TomlKey([
+              TomlUnquotedKey('table'),
+              TomlUnquotedKey('array'),
+              TomlUnquotedKey('child'),
+            ])))),
+          );
+        },
+      );
     });
   });
 }
