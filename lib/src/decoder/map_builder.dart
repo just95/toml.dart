@@ -37,10 +37,16 @@ class TomlMapBuilder extends TomlExpressionVisitor<void> {
     var key = _current.nodeName.deepChild(pair.key),
         valueBuilder = TomlValueBuilder(key),
         value = valueBuilder.visitValue(pair.value),
-        parent = _current.findOrAddChild(
-          pair.key.parentKey,
-          makeExplicit: true,
-        );
+        parent = _current.findOrAddChild(pair.key.parentKey,
+            onBeforeGetChild: (node, part) {
+              if (node is! _TomlTreeMap) {
+                throw TomlNotATableException(node.nodeName.child(part));
+              }
+            },
+            buildChild: (dottedTableName) => _TomlTreeMap(dottedTableName),
+            onAfterGetChild: (node) {
+              if (node is _TomlTreeMap) node.isExplicitlyDefined = true;
+            });
     if (parent is _TomlTreeMap) {
       parent.addChild(pair.key.childKey, _TomlTreeLeaf(key, value));
     } else {
@@ -51,7 +57,10 @@ class TomlMapBuilder extends TomlExpressionVisitor<void> {
   @override
   void visitStandardTable(TomlStandardTable table) {
     // Create the standard table.
-    var parent = _topLevel.findOrAddChild(table.name.parentKey),
+    var parent = _topLevel.findOrAddChild(
+          table.name.parentKey,
+          buildChild: (implicitTableName) => _TomlTreeMap(implicitTableName),
+        ),
         child = parent.getOrAddChild(
           table.name.childKey,
           () => _TomlTreeMap(table.name),
@@ -73,7 +82,10 @@ class TomlMapBuilder extends TomlExpressionVisitor<void> {
 
   @override
   void visitArrayTable(TomlArrayTable table) {
-    var parent = _topLevel.findOrAddChild(table.name.parentKey),
+    var parent = _topLevel.findOrAddChild(
+          table.name.parentKey,
+          buildChild: (implicitTableName) => _TomlTreeMap(implicitTableName),
+        ),
         child = parent.getOrAddChild(
           table.name.childKey,
           () => _TomlTreeList(table.name),
@@ -119,19 +131,28 @@ abstract class _TomlTree<V> {
   /// Traverses the tree along the edges identified by the given [key] and
   /// returns the final sub-tree.
   ///
-  /// If a node does not exist, a new [_TomlTreeMap] is created. This behavior
-  /// corresponds to the implicit creation of parent tables in TOML. If
-  /// the [makeExplicit] flag is set to `true`
-  _TomlTree findOrAddChild(TomlKey key, {bool makeExplicit = false}) {
+  /// If a node does not exist, a new node is created with the provided
+  /// function. Usually a [_TomlTreeMap] is created by this function. This
+  /// behavior corresponds to the implicit creation of parent tables in TOML.
+  ///
+  /// The optional [onBeforeGetChild] and [onAfterGetChild] callbacks are
+  /// invoked before and after a child node is looked up. They are used by
+  /// key/value pairs to ensure that dotted keys cannot be used to insert
+  /// values into arrays of tables and to mark each table in the dotted
+  /// key as explicitly defined.
+  _TomlTree findOrAddChild(TomlKey key,
+      {bool makeExplicit,
+      void Function(_TomlTree node, TomlSimpleKey part) onBeforeGetChild,
+      _TomlTree Function(TomlKey childNodeName) buildChild,
+      void Function(_TomlTree node) onAfterGetChild}) {
     _TomlTree current = this;
     for (var part in key.parts) {
+      if (onBeforeGetChild != null) onBeforeGetChild(current, part);
       current = current.getOrAddChild(
         part,
-        () => _TomlTreeMap(current.nodeName.child(part)),
+        () => buildChild(current.nodeName.child(part)),
       );
-      if (makeExplicit && current is _TomlTreeMap) {
-        current.isExplicitlyDefined = true;
-      }
+      if (onAfterGetChild != null) onAfterGetChild(current);
     }
     return current;
   }
