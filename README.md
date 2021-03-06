@@ -344,7 +344,7 @@ $GOPATH/bin/toml-test build/bin/decoder
 $GOPATH/bin/toml-test -encoder build/bin/encoder
 ```
 
-Unfortunately, some encoder tests from `toml-test` are failing at the moment because date times are always encoded as UTC and the encoder never generates inline tables.
+Unfortunately, `toml-test` supports version 0.4.0 of the TOML specification only such that some tests will fail.
 
 ## License
 
