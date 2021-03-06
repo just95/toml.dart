@@ -138,7 +138,7 @@ jobs:
       - name: Run Headless Unit Tests
         uses: GabrielBB/xvfb-action@v1
         with:
-          run: dart test --reporter expanded --platform firefox --coverage=./coverage/firefox/
+          run: dart test --reporter expanded --platform firefox --coverage=./coverage/firefox
       - name: Upload Test Coverage
         uses: actions/upload-artifact@v2
         with:
@@ -146,6 +146,9 @@ jobs:
           path: coverage/
 
   # Runs the unit tests of the package with `dart test` in Chrome.
+  #
+  # The collection of test coverage information had to be disabled in Chrome
+  # since `dart test` does not terminate otherwise at the moment.
   chrome-test:
     name: Run Unit Tests in Chrome
     runs-on: ubuntu-latest
@@ -161,7 +164,7 @@ jobs:
       - name: Run Headless Unit Tests
         uses: GabrielBB/xvfb-action@v1
         with:
-          run: dart test --reporter expanded --platform chrome --coverage=./coverage/chrome/
+          run: dart test --reporter expanded --platform chrome # --coverage=./coverage/chrome
       - name: Upload Test Coverage
         uses: actions/upload-artifact@v2
         with:
