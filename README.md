@@ -7,7 +7,7 @@
 
 This package provides an implementation of a [TOML][toml-spec/website] parser and encoder for Dart.
 
-It currently supports version [0.5.0][toml-spec/v0.5.0] of the TOML specification.
+It currently supports version [1.0.0][toml-spec/v1.0.0] of the TOML specification.
 
 ## Table of Contents
 
@@ -381,9 +381,9 @@ See the [LICENSE][toml-dart/LICENSE] file for details.
   https://github.com/just95/toml.dart/blob/main/LICENSE
   "MIT License | toml.dart"
 
-[toml-spec/v0.5.0]:
-  https://toml.io/en/v0.5.0
-  "TOML: English v0.5.0"
+[toml-spec/v1.0.0]:
+  https://toml.io/en/v1.0.0
+  "TOML: English v1.0.0"
 [toml-spec/website]:
   https://toml.io/en/
   "TOML: Tom's Obvious, Minimal Language"
