@@ -9,5 +9,5 @@ extension JoinParserExtension<T> on Parser<List<T?>> {
   /// Returns a parser that concatenates the string representation for of the
   /// parse results of this parser.
   Parser<String> join([String separator = '']) =>
-      map(((items) => items.join(separator)) as String Function(List<T?>));
+      map((items) => items.join(separator));
 }
