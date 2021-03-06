@@ -1,11 +1,12 @@
 library toml.src.ast.document;
 
 import 'package:petitparser/petitparser.dart';
+import 'package:quiver/collection.dart';
 import 'package:toml/src/decoder.dart';
 import 'package:toml/src/decoder/parser/util/whitespace.dart';
 import 'package:toml/src/encoder.dart';
 import 'package:toml/src/loader.dart';
-import 'package:quiver/collection.dart';
+import 'package:toml/src/util/iterable/where_not_null.dart';
 
 import 'expression.dart';
 import 'node.dart';
@@ -21,9 +22,8 @@ class TomlDocument extends TomlNode {
   /// [TomlExpression.parser] returns `null`. These expressions
   /// are not part of the AST and must be filtered out.
   static final Parser<TomlDocument> parser = TomlExpression.parser
-      .separatedBy<TomlExpression>(tomlNewline, includeSeparators: false)
-      .map((expressions) =>
-          TomlDocument(expressions.where((expression) => expression != null)));
+      .separatedBy<TomlExpression?>(tomlNewline, includeSeparators: false)
+      .map((expressions) => TomlDocument(expressions.whereNotNull()));
 
   /// Parses the given TOML document.
   ///

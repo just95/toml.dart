@@ -2,6 +2,7 @@ library toml.src.ast.value.float;
 
 import 'package:petitparser/petitparser.dart';
 import 'package:quiver/core.dart';
+import 'package:toml/src/util/iterable/where_not_null.dart';
 
 import '../value.dart';
 import '../visitor/value.dart';
@@ -47,11 +48,8 @@ class TomlFloat extends TomlValue {
     var sign = (plus | minus).optional();
     var inf = string('inf').map((_) => double.infinity);
     var nan = string('nan').map((_) => double.nan);
-    return (sign & (inf | nan)).castList<double>().map(
-          (pair) => TomlFloat(pair
-              .where((value) => value != null)
-              .reduce((sign, value) => sign * value)),
-        );
+    return (sign & (inf | nan)).castList<double>().map((pair) =>
+        TomlFloat(pair.whereNotNull().reduce((sign, value) => sign * value)));
   })();
 
   /// The number represented by this node.
