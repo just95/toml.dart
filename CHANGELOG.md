@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 0.9.0
 
  - Updated to [v1.0.0][toml-spec/v1.0.0] of the TOML specification.
    + Allowed leading zeros in exponent part.
