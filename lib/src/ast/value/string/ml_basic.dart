@@ -35,7 +35,7 @@ class TomlMultilineBasicString extends TomlMultilineString {
   ///       *mlb-content *( mlb-quotes 1*mlb-content ) [ mlb-quotes ]
   static final Parser<String> bodyParser = (contentParser.star().join() &
           (quotesParser & contentParser.plus().join()).join().star().join() &
-          quotesParser.optional(''))
+          quotesParser.optionalWith(''))
       .castList<String>()
       .join();
 

@@ -38,7 +38,7 @@ class TomlIntegerFormat {
   final String prefix;
 
   /// Creates a new format for integers of the given base.
-  const TomlIntegerFormat._({this.base, this.prefix});
+  const TomlIntegerFormat._({required this.base, required this.prefix});
 }
 
 /// AST node that represents a TOML integer.
@@ -112,8 +112,8 @@ class TomlInteger extends TomlValue {
   ///  used in place of `x-digit`. The parsed number is converted to a [int]
   ///  using [int.parse] with `radix` set to the [base] of the integer.
   static Parser<BigInt> _makeParser({
-    TomlIntegerFormat format,
-    Parser digitParser,
+    required TomlIntegerFormat format,
+    required Parser digitParser,
   }) {
     var digitsParser = digitParser.plus().separatedBy(char('_'));
     var integerParser = digitsParser.flatten().map(

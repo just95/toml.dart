@@ -41,7 +41,7 @@ class TomlInlineTable extends TomlValue {
             tomlWhitespace & char(separator) & tomlWhitespace,
             includeSeparators: false,
             optionalSeparatorAtEnd: false,
-          )).optional(<TomlKeyValuePair>[]) &
+          )).optionalWith(<TomlKeyValuePair>[]) &
           tomlWhitespace &
           char(closingDelimiter))
       .pick<List<TomlKeyValuePair>>(2)

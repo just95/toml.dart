@@ -16,7 +16,7 @@ class NonStrictParser<T> extends DelegateParser<T> {
   /// The function to build the underlying parser.
   ///
   /// If the [delegate] has been built already, the builder is set to `null`.
-  NonStrictParserBuilder<T> _builder;
+  NonStrictParserBuilder<T>? _builder;
 
   /// Creates a new parser that delegates to the parser built by the given
   /// [NonStrictParserBuilder] function.
@@ -30,7 +30,7 @@ class NonStrictParser<T> extends DelegateParser<T> {
   /// been built before.
   Parser getOrBuildDelegate() {
     if (_builder != null) {
-      delegate = _builder();
+      delegate = _builder!();
       _builder = null;
     }
     return delegate;

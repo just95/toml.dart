@@ -31,7 +31,7 @@ dynamic decodeValue(dynamic value) {
     if (value.length == 2 &&
         value.containsKey('type') &&
         value.containsKey('value')) {
-      var type = value['type'] as String;
+      var type = value['type'] as String?;
       switch (type) {
         case 'string':
           return value['value'];

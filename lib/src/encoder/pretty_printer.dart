@@ -46,12 +46,12 @@ class TomlPrettyPrinter extends TomlVisitor<void>
   }
 
   /// Runs the given function for writing [nodes] of type [T] to the [_buffer]
-  /// for every noder of the given iterable and separated the nodes by running
+  /// for every node of the given iterable and separated the nodes by running
   /// the given separator function.
   void _separatedBy<T>(
     Iterable<T> nodes, {
-    void Function(T node) write,
-    void Function(T node) writeSeparator,
+    required void Function(T node) write,
+    required void Function(T node) writeSeparator,
   }) {
     if (nodes.isNotEmpty) {
       write(nodes.first);
@@ -117,7 +117,7 @@ class TomlPrettyPrinter extends TomlVisitor<void>
     _separatedBy(
       key.parts,
       write: visitSimpleKey,
-      writeSeparator: (_) => _writeToken(TomlKey.separator),
+      writeSeparator: (dynamic _) => _writeToken(TomlKey.separator),
     );
   }
 
@@ -141,7 +141,7 @@ class TomlPrettyPrinter extends TomlVisitor<void>
     _separatedBy(
       array.items,
       write: visitValue,
-      writeSeparator: (_) =>
+      writeSeparator: (dynamic _) =>
           _writeToken(TomlInlineTable.separator, after: true),
     );
     _writeToken(TomlArray.closingDelimiter);
@@ -176,7 +176,7 @@ class TomlPrettyPrinter extends TomlVisitor<void>
     _separatedBy(
       inlineTable.pairs,
       write: visitKeyValuePair,
-      writeSeparator: (_) =>
+      writeSeparator: (dynamic _) =>
           _writeToken(TomlInlineTable.separator, after: true),
     );
     _writeToken(

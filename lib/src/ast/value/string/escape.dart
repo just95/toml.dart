@@ -49,7 +49,7 @@ abstract class TomlEscapedChar {
     if (!escapableChars.containsKey(shortcut)) {
       throw TomlInvalidEscapeSequenceException('\\$shortcut');
     }
-    return String.fromCharCode(escapableChars[shortcut]);
+    return String.fromCharCode(escapableChars[shortcut]!);
   });
 
   /// Parser for unicode escape sequences.

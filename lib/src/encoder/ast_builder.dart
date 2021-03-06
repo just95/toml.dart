@@ -22,13 +22,14 @@ class TomlAstBuilder {
   /// inline tables to standard tables or arrays of tables.
   Iterable<TomlExpression> _expandKeyValuePairs(
     Iterable<TomlKeyValuePair> pairs, {
-    TomlKey prefix,
+    required TomlKey prefix,
   }) sync* {
     // Filter all tables and arrays of tables.
     var tables = <Iterable<TomlExpression> Function()>[];
     for (var pair in pairs) {
       // Test whether the value is an inline table.
-      var key = pair.key, value = pair.value;
+      var key = pair.key;
+      var value = pair.value;
       if (value is TomlInlineTable) {
         tables.add(() sync* {
           var name = prefix.deepChild(key);
@@ -72,7 +73,7 @@ class TomlAstBuilder {
   Iterable<TomlExpression> _removeRedundantHeaders(
     Iterable<TomlExpression> expressions,
   ) sync* {
-    TomlStandardTable lastTable;
+    TomlStandardTable? lastTable;
     for (var expression in expressions) {
       if (expression is TomlStandardTable) {
         if (lastTable != null && !lastTable.name.isPrefixOf(expression.name)) {

@@ -19,7 +19,7 @@ class TomlMapBuilder extends TomlExpressionVisitor<void> {
   /// created if it does not exist already and it is opened. When an array of
   /// tables header is visited, a new table is added to the array of tables
   /// and it is opened.
-  _TomlTreeMap _current;
+  late _TomlTreeMap _current;
 
   /// Creates a map builder for the top-level table.
   factory TomlMapBuilder() => TomlMapBuilder.withPrefix(TomlKey.topLevel);
@@ -34,27 +34,27 @@ class TomlMapBuilder extends TomlExpressionVisitor<void> {
 
   @override
   void visitKeyValuePair(TomlKeyValuePair pair) {
-    var key = _current.nodeName.deepChild(pair.key),
-        valueBuilder = TomlValueBuilder(key),
-        value = valueBuilder.visitValue(pair.value),
-        parent = _current.findOrAddChild(
-          pair.key.parentKey,
-          onBeforeGetChild: (node, part) {
-            if (node is! _TomlTreeMap) {
-              throw TomlNotATableException(node.nodeName.child(part));
-            }
-          },
-          buildChild: (dottedTableName) => _TomlTreeMap(dottedTableName),
-          onAfterGetChild: (node) {
-            if (node is _TomlTreeMap) {
-              if (node.isExplicitlyDefined && !node.isDefinedByDottedKey) {
-                throw TomlRedefinitionException(node.nodeName);
-              }
-              node.isExplicitlyDefined = true;
-              node.isDefinedByDottedKey = true;
-            }
-          },
-        );
+    var key = _current.nodeName.deepChild(pair.key);
+    var valueBuilder = TomlValueBuilder(key);
+    var value = valueBuilder.visitValue(pair.value);
+    var parent = _current.findOrAddChild(
+      pair.key.parentKey,
+      onBeforeGetChild: (node, part) {
+        if (node is! _TomlTreeMap) {
+          throw TomlNotATableException(node.nodeName.child(part));
+        }
+      },
+      buildChild: (dottedTableName) => _TomlTreeMap(dottedTableName),
+      onAfterGetChild: (node) {
+        if (node is _TomlTreeMap) {
+          if (node.isExplicitlyDefined && !node.isDefinedByDottedKey) {
+            throw TomlRedefinitionException(node.nodeName);
+          }
+          node.isExplicitlyDefined = true;
+          node.isDefinedByDottedKey = true;
+        }
+      },
+    );
     if (parent is _TomlTreeMap) {
       parent.addChild(pair.key.childKey, _TomlTreeLeaf(key, value));
     } else {
@@ -149,10 +149,9 @@ abstract class _TomlTree<V> {
   /// values into arrays of tables and to mark each table in the dotted
   /// key as explicitly defined.
   _TomlTree findOrAddChild(TomlKey key,
-      {bool makeExplicit,
-      void Function(_TomlTree node, TomlSimpleKey part) onBeforeGetChild,
-      _TomlTree Function(TomlKey childNodeName) buildChild,
-      void Function(_TomlTree node) onAfterGetChild}) {
+      {void Function(_TomlTree node, TomlSimpleKey part)? onBeforeGetChild,
+      required _TomlTree Function(TomlKey childNodeName) buildChild,
+      void Function(_TomlTree node)? onAfterGetChild}) {
     _TomlTree current = this;
     for (var part in key.parts) {
       if (onBeforeGetChild != null) onBeforeGetChild(current, part);

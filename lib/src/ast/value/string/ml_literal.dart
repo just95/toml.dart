@@ -36,7 +36,7 @@ class TomlMultilineLiteralString extends TomlMultilineString {
   ///         *mll-content *( mll-quotes 1*mll-content ) [ mll-quotes ]
   static final Parser<String> bodyParser = (contentParser.star().join() &
           (quotesParser & contentParser.plus().join()).join().star().join() &
-          quotesParser.optional(''))
+          quotesParser.optionalWith(''))
       .castList<String>()
       .join();
 

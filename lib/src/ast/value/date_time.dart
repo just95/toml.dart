@@ -102,7 +102,7 @@ class TomlPartialTime {
   static final Parser<TomlPartialTime> parser =
       ((_dd & char(':') & _dd & char(':') & _dd)
                   .permute([0, 2, 4]).castList<int>() &
-              (char('.') & _ddd.plus()).pick<List<int>>(1).optional([]))
+              (char('.') & _ddd.plus()).pick<List<int>>(1).optionalWith([]))
           .castList<List<int>>()
           .map((xs) => TomlPartialTime(xs[0][0], xs[0][1], xs[0][2], xs[1]));
 
@@ -240,10 +240,10 @@ class TomlTimeZoneOffset {
   /// Creates a new time-zone offset and validates the ranges of the
   /// [hours] and [minutes] arguments.
   TomlTimeZoneOffset._({
-    this.isUtc,
-    this.isNegative,
-    this.hours,
-    this.minutes,
+    required this.isUtc,
+    required this.isNegative,
+    required this.hours,
+    required this.minutes,
   }) {
     if (hours < 0 || hours > 23) {
       throw ArgumentError('Invalid hours of time-zone offset: $hours');
@@ -271,7 +271,7 @@ class TomlTimeZoneOffset {
         isNegative: offset.isNegative,
         hours: offset.inHours.abs(),
         minutes:
-            offset.inMinutes.remainder(Duration.minutesPerHour).abs() as int,
+            offset.inMinutes.remainder(Duration.minutesPerHour).abs(),
       );
 
   /// Creates a positive time-zone offset.

@@ -15,7 +15,7 @@ import '../visitor/value.dart';
 ///     array-values =  ws-comment-newline val ws-comment-newline array-sep
 ///                     array-values
 ///     array-values =/ ws-comment-newline val ws-comment-newline [ array-sep ]
-class TomlArray<V> extends TomlValue {
+class TomlArray extends TomlValue {
   /// The opening delimiter of arrays.
   ///
   ///     array-open =  %x5B ; [
@@ -42,7 +42,7 @@ class TomlArray<V> extends TomlValue {
                 includeSeparators: false,
                 optionalSeparatorAtEnd: true,
               )
-              .optional(<TomlValue>[]) &
+              .optionalWith(<TomlValue>[]) &
           tomlWhitespaceCommentNewline &
           char(closingDelimiter))
       .pick<List<TomlValue>>(1)
