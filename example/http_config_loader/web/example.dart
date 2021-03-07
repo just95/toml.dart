@@ -4,7 +4,7 @@ import 'dart:html';
 import 'package:toml/toml.dart';
 
 Future main() async {
-  var elem = document.getElementById('text');
+  var elem = document.getElementById('text')!;
   try {
     var document = await TomlDocument.load('config.toml');
     var config = document.toMap();

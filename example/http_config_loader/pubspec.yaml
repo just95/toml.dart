@@ -3,7 +3,7 @@ description: An example that demonstrates how to load a configuration file via H
 repository: https://github.com/just95/toml.dart/tree/main/example/http_config_loader
 publish_to: none
 environment:
-  sdk: '>=2.7.0 <3.0.0'
+  sdk: '>=2.12.0 <3.0.0'
 dependencies:
   toml:
     path: ../../
@@ -13,7 +13,7 @@ dev_dependencies:
   build_runner: any
   build_web_compilers: any
   # Dependencies for `dartanalyzer`.
-  pedantic: ^1.9.2
+  pedantic: ^1.11.0
   # Dependencies for continuous integration.
-  webdriver: any
+  webdriver: ^3.0.0
   http_server: any

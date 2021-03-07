@@ -20,7 +20,7 @@ class MyApp extends StatelessWidget {
 }
 
 class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key}) : super(key: key);
+  MyHomePage({Key? key}) : super(key: key);
 
   @override
   _MyHomePageState createState() => _MyHomePageState();
@@ -36,12 +36,12 @@ class _MyHomePageState extends State<MyHomePage> {
       body: FutureBuilder<String>(
         future: rootBundle.loadString('assets/example.toml'),
         builder: (context, snapshot) {
-          if (snapshot.data == null) {
+          final text = snapshot.data;
+          if (text == null) {
             return Center(
               child: CircularProgressIndicator(),
             );
           }
-          final text = snapshot.data;
           final toml = TomlDocument.parse(text).toMap();
           return Center(
             child: Text(toml['str'] as String),

@@ -21,6 +21,12 @@ for example in $(find "$examples_dir" -name pubspec.yaml); do
   # Change into the example's root directory.
   cd "$example_dir"
 
+  # Skip Flutter example.
+  if [[ "$example_name" = "flutter_example" ]]; then
+    echo "Skipping Flutter example!"
+    continue
+  fi
+
   # Compile example if it is a web example.
   if [ -d "web" ]; then
     # Install dependencies of the example with `pub get`.

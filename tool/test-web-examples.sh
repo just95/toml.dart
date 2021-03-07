@@ -30,7 +30,8 @@ for example in $(find "$examples_dir" -path \*/tool/test-web.dart); do
   cd "$example_dir"
 
   echo "Running '$example_name' example..."
-  if ! dart ./tool/test-web.dart 2>&1 | awk '{print " | " $0}'; then
+  # TODO update web examples to null-safety once dev dependencies are updated.
+  if ! dart --no-sound-null-safety ./tool/test-web.dart 2>&1 | awk '{print " | " $0}'; then
     echo "------------------------------------------------------------------"
     echo "Error when running web test for '$example_name' example!" >&2
     exit 1
