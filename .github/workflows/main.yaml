@@ -50,10 +50,10 @@ jobs:
       - name: Install Dependencies
         run: dart pub get
       - name: Check Code Formatting
-        run: |
-          dart format --show all            \
-                      --output none         \
-                      --set-exit-if-changed \
+        run: >
+          dart format --show all
+                      --output none
+                      --set-exit-if-changed
                       bin lib test
 
   # Runs the unit tests of the package with `dart test` in the Dart VM.
@@ -81,9 +81,9 @@ jobs:
       - name: Install Dependencies
         run: dart pub get
       - name: Run Unit Tests
-        run: |
-          dart -DSILENT_OBSERVATORY=true                   \
-               test --reporter expanded                    \
+        run: >
+          dart -DSILENT_OBSERVATORY=true
+               test --reporter expanded
                     --coverage=./coverage/vm/$dart_version
         env:
           dart_version: ${{ matrix.dart-version }}
@@ -114,9 +114,9 @@ jobs:
       - name: Install Dependencies
         run: dart pub get
       - name: Run Unit Tests
-        run: |
-          dart test --reporter expanded                      \
-                    --platform node                          \
+        run: >
+          dart test --reporter expanded
+                    --platform node
                     --coverage=./coverage/node/$node_version
         env:
           node_version: ${{ matrix.node-version }}
@@ -142,9 +142,9 @@ jobs:
       - name: Run Headless Unit Tests
         uses: GabrielBB/xvfb-action@v1
         with:
-          run: |
-            dart test --reporter expanded           \
-                      --platform firefox            \
+          run: >
+            dart test --reporter expanded
+                      --platform firefox
                       --coverage=./coverage/firefox
       - name: Upload Test Coverage
         uses: actions/upload-artifact@v2
@@ -171,9 +171,9 @@ jobs:
       - name: Run Headless Unit Tests
         uses: GabrielBB/xvfb-action@v1
         with:
-          run: |
-            dart test --reporter expanded            \
-                      --platform chrome              \
+          run: >
+            dart test --reporter expanded
+                      --platform chrome
                       # --coverage=./coverage/chrome
       - name: Upload Test Coverage
         uses: actions/upload-artifact@v2
@@ -210,11 +210,11 @@ jobs:
       - name: Install coverage Package
         run: dart pub global activate coverage
       - name: Format Coverage
-        run: |
-          format_coverage --packages=.packages    \
-                          --in coverage           \
-                          --report-on lib         \
-                          --lcov                  \
+        run: >
+          format_coverage --packages=.packages
+                          --in coverage
+                          --report-on lib
+                          --lcov
                           -out coverage/lcov.info
       - name: Upload Coverage to coveralls.io
         uses: coverallsapp/github-action@v1.1.2

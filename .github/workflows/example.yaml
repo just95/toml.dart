@@ -48,9 +48,9 @@ jobs:
       - name: Install Dependencies of Examples
         run: ./tool/get-example-dependencies.sh
       - name: Check Code Formatting of Examples
-        run: |
-          ./tool/format-examples.sh --show all            \
-                                    --output none         \
+        run: >
+          ./tool/format-examples.sh --show all
+                                    --output none
                                     --set-exit-if-changed
 
   # Runs the `tool/test.sh` scripts of the `example`s.
