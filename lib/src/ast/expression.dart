@@ -21,13 +21,10 @@ abstract class TomlExpression extends TomlNode {
   /// Parser for TOML expressions.
   ///
   /// Returns `null` if the expression is just a blank line or comment.
-  static final Parser<TomlExpression?> parser = tomlWhitespace
-      .before(ChoiceParser([
-        TomlKeyValuePair.parser,
-        TomlTable.parser,
-      ]).optional())
-      .followedBy(tomlWhitespace)
-      .followedBy(tomlComment.optional());
+  static final Parser<TomlExpression?> parser = ChoiceParser([
+    TomlKeyValuePair.parser,
+    TomlTable.parser,
+  ]).optional().surroundedBy(tomlWhitespace).followedBy(tomlComment.optional());
 
   /// Invokes the correct `visit*` method for this expression of the given
   /// visitor.

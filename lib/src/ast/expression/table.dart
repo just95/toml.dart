@@ -93,11 +93,9 @@ class TomlArrayTable extends TomlTable {
   static final String closingDelimiter = ']]';
 
   /// Parser for a TOML array of tables header.
-  static final Parser<TomlArrayTable> parser = string(openingDelimiter)
-      .before(tomlWhitespace)
-      .before(TomlKey.parser)
-      .followedBy(tomlWhitespace)
-      .followedBy(string(closingDelimiter))
+  static final Parser<TomlArrayTable> parser = TomlKey.parser
+      .surroundedBy(tomlWhitespace)
+      .surroundedBy(string(openingDelimiter), string(closingDelimiter))
       .map((TomlKey key) => TomlArrayTable(key));
 
   /// Creates a new TOML array table.
