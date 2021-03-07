@@ -3,6 +3,7 @@ library toml.src.ast.value.integer;
 import 'package:petitparser/petitparser.dart';
 import 'package:toml/src/decoder/parser/util/ranges.dart';
 import 'package:toml/src/decoder/parser/util/seq_pick.dart';
+import 'package:toml/src/decoder/parser/util/or_failure.dart';
 import 'package:quiver/core.dart';
 
 import '../value.dart';
@@ -59,6 +60,7 @@ class TomlInteger extends TomlValue {
   static final Parser<TomlInteger> binParser = TomlInteger._makeParser(
     format: TomlIntegerFormat.bin,
     digitParser: binDigit(),
+    message: 'Binary integer expected',
   ).map((n) => TomlInteger.bin(n));
 
   /// Parser for a binary TOML integer value.
@@ -67,6 +69,7 @@ class TomlInteger extends TomlValue {
   static final Parser<TomlInteger> octParser = TomlInteger._makeParser(
     format: TomlIntegerFormat.oct,
     digitParser: octDigit(),
+    message: 'Octal integer expected',
   ).map((n) => TomlInteger.oct(n));
 
   /// Parser for a decimal TOML interger value.
@@ -82,7 +85,7 @@ class TomlInteger extends TomlValue {
   static final Parser<TomlInteger> decParser = (() {
     var digits = digit().plus().separatedBy(char('_'));
     var decimal = anyOf('+-').optional() & (char('0') | digits);
-    return decimal.flatten().map(
+    return decimal.flatten('Decimal integer expected').map(
           (str) => TomlInteger.dec(BigInt.parse(
             str.replaceAll('_', ''),
             radix: TomlIntegerFormat.dec.base,
@@ -94,9 +97,10 @@ class TomlInteger extends TomlValue {
   ///
   ///     hex-int = hex-prefix HEXDIG *( HEXDIG / underscore HEXDIG )
   static final Parser<TomlInteger> hexParser = TomlInteger._makeParser(
-    format: TomlIntegerFormat.hex,
-    digitParser: hexDigit(),
-  ).map((n) => TomlInteger.hex(n));
+          format: TomlIntegerFormat.hex,
+          digitParser: hexDigit(),
+          message: 'Hexadecimal integer expected')
+      .map((n) => TomlInteger.hex(n));
 
   /// Creates a parser for an decimal integer parser.
   ///
@@ -115,15 +119,16 @@ class TomlInteger extends TomlValue {
   static Parser<BigInt> _makeParser({
     required TomlIntegerFormat format,
     required Parser digitParser,
+    required String message,
   }) {
     var digitsParser = digitParser.plus().separatedBy(char('_'));
-    var integerParser = digitsParser.flatten().map(
+    var integerParser = digitsParser.flatten(message).map(
           (str) => BigInt.parse(
             str.replaceAll('_', ''),
             radix: format.base,
           ),
         );
-    return string(format.prefix).before(integerParser);
+    return string(format.prefix).before(integerParser).orFailure(message);
   }
 
   /// The number represented by this node.

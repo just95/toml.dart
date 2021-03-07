@@ -80,8 +80,12 @@ abstract class TomlEscapedChar {
   ///     escape-seq-char =/ %x75 4HEXDIG ; uXXXX                U+XXXX
   ///     escape-seq-char =/ %x55 8HEXDIG ; UXXXXXXXX            U+XXXXXXXX
   static final Parser<String> escapedUnicodeParser = ChoiceParser([
-    char('u').before(hexDigit().times(4).flatten()),
-    char('U').before(hexDigit().times(8).flatten())
+    char('u').before(
+      hexDigit().times(4).flatten('Four hexadecimal digits expected'),
+    ),
+    char('U').before(
+      hexDigit().times(8).flatten('Eight hexadecimal digits expected'),
+    )
   ]).map((charCodeStr) {
     // Test whether the code point is a scalar Unicode value.
     var charCode = int.parse(charCodeStr, radix: 16);

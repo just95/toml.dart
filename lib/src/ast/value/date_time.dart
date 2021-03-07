@@ -17,16 +17,18 @@ import 'date_time/local_time.dart';
 import 'date_time/offset_date_time.dart';
 
 /// Praser for four consecutive digits.
-Parser<int> _dddd = digit().times(4).flatten().map(int.parse);
+Parser<int> _dddd =
+    digit().times(4).flatten('Four digit number expected').map(int.parse);
 
 /// Parser for one to three consecutive digits.
 Parser<int> _ddd = digit()
     .repeat(1, 3)
-    .flatten()
+    .flatten('Number with one to three digits expected')
     .map((str) => int.parse(str.padRight(3, '0')));
 
 /// Parser for two consecutive digits.
-Parser<int> _dd = digit().times(2).flatten().map(int.parse);
+Parser<int> _dd =
+    digit().times(2).flatten('Two digit number expected').map(int.parse);
 
 /// A date without time and time-zone offset that is used for the internal
 /// representation of TOML date and date-time values.

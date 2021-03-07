@@ -139,7 +139,7 @@ class TomlUnquotedKey extends TomlSimpleKey {
   /// Parser for an unquoted TOML key.
   static final Parser<TomlUnquotedKey> parser = pattern('A-Za-z0-9_-')
       .plus()
-      .flatten()
+      .flatten('Unquoted key expected')
       .map((String name) => TomlUnquotedKey(name));
 
   /// Tests whether the given key does not have to be quoted.

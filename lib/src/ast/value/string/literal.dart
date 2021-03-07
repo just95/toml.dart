@@ -33,7 +33,7 @@ class TomlLiteralString extends TomlSinglelineString {
   /// (i.e., `%x27`).
   static final Parser<String> charParser =
       (char('\x09') | range(0x20, 0x26) | range(0x28, 0x7E) | tomlNonAscii)
-          .flatten();
+          .flatten('Literal string character expected');
 
   /// Tests whether the given string can be represented as a literal string.
   ///

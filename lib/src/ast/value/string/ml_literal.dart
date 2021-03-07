@@ -50,7 +50,7 @@ class TomlMultilineLiteralString extends TomlMultilineString {
       .repeatLazy(char(TomlLiteralString.delimiter).not(), 1, 2)
       .join();
 
-  /// Parser for a single character of a multiline basic TOML string.
+  /// Parser for a single character of a multiline literal TOML string.
   ///
   ///     mll-content = mll-char / newline
   ///     mll-char = %x09 / %x20-26 / %x28-7E / non-ascii
@@ -62,7 +62,7 @@ class TomlMultilineLiteralString extends TomlMultilineString {
           range(0x28, 0x7E) |
           tomlNonAscii |
           tomlNewline)
-      .flatten();
+      .flatten('Multiline literal string character expected');
 
   /// Tests whether the given string can be represented as a literal string.
   ///

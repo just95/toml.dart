@@ -42,7 +42,7 @@ final Parser<String> tomlNonAscii =
 ///
 /// Returns the combined Unicode code-point of the surrogate pair.
 final Parser<String> tomlSurrogatePair =
-    (tomlHighSurrogate & tomlLowSurrogate).flatten();
+    (tomlHighSurrogate & tomlLowSurrogate).flatten('Surrogate pair expected');
 
 /// Parser for high surrogates (`%xD800-DBFF`).
 final Parser<String> tomlHighSurrogate = range(0xD800, 0xDBFF);

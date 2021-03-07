@@ -72,7 +72,7 @@ class TomlMultilineBasicString extends TomlMultilineString {
           range(0x23, 0x5B) |
           range(0x5D, 0x7E) |
           tomlNonAscii)
-      .flatten();
+      .flatten('Unescaped multiline basic string character expected');
 
   /// Parser for an escaped newline.
   ///
