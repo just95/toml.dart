@@ -72,18 +72,19 @@ jobs:
       image: google/dart:${{ matrix.dart-version }}
     strategy:
       matrix:
-        dart-version: ['2.7', '2.8', '2.9', '2.10', latest]
+        dart-version: ['2.12', latest]
     steps:
       - name: Checkout
         uses: actions/checkout@v2
       - name: Print Dart SDK Version
         run: dart --version
       - name: Install Dependencies
-        run: dart pub get || pub get
+        run: dart pub get
       - name: Run Unit Tests
         run: |
-          dart -DSILENT_OBSERVATORY=true test --reporter expanded --coverage=./coverage/vm/$dart_version ||
-          DART_VM_OPTIONS=-DSILENT_OBSERVATORY=true pub run test --reporter expanded --coverage=./coverage/vm/$dart_version
+          dart -DSILENT_OBSERVATORY=true                   \
+               test --reporter expanded                    \
+                    --coverage=./coverage/vm/$dart_version
         env:
           dart_version: ${{ matrix.dart-version }}
       - name: Upload Test Coverage
@@ -113,7 +114,10 @@ jobs:
       - name: Install Dependencies
         run: dart pub get
       - name: Run Unit Tests
-        run: dart test --reporter expanded --platform node --coverage=./coverage/node/$node_version
+        run: |
+          dart test --reporter expanded                      \
+                    --platform node                          \
+                    --coverage=./coverage/node/$node_version
         env:
           node_version: ${{ matrix.node-version }}
       - name: Upload Test Coverage
@@ -138,7 +142,10 @@ jobs:
       - name: Run Headless Unit Tests
         uses: GabrielBB/xvfb-action@v1
         with:
-          run: dart test --reporter expanded --platform firefox --coverage=./coverage/firefox
+          run: |
+            dart test --reporter expanded           \
+                      --platform firefox            \
+                      --coverage=./coverage/firefox
       - name: Upload Test Coverage
         uses: actions/upload-artifact@v2
         with:
@@ -164,7 +171,10 @@ jobs:
       - name: Run Headless Unit Tests
         uses: GabrielBB/xvfb-action@v1
         with:
-          run: dart test --reporter expanded --platform chrome # --coverage=./coverage/chrome
+          run: |
+            dart test --reporter expanded            \
+                      --platform chrome              \
+                      # --coverage=./coverage/chrome
       - name: Upload Test Coverage
         uses: actions/upload-artifact@v2
         with:
@@ -200,7 +210,12 @@ jobs:
       - name: Install coverage Package
         run: dart pub global activate coverage
       - name: Format Coverage
-        run: format_coverage --packages=.packages -i coverage --report-on lib -l -o coverage/lcov.info
+        run: |
+          format_coverage --packages=.packages    \
+                          --in coverage           \
+                          --report-on lib         \
+                          --lcov                  \
+                          -out coverage/lcov.info
       - name: Upload Coverage to coveralls.io
         uses: coverallsapp/github-action@v1.1.2
         with:
