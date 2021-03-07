@@ -120,7 +120,7 @@ class TomlMultilineBasicString extends TomlMultilineString {
   /// iterator.
   ///
   /// Returns `null` if there is no next rune.
-  static int _peekNext(RuneIterator iterator) {
+  static int? _peekNext(RuneIterator iterator) {
     if (iterator.moveNext()) {
       var next = iterator.current;
       iterator.movePrevious();
