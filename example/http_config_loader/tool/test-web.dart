@@ -1,3 +1,6 @@
+// TODO update to null-safety once dev dependencies are updated.
+// @dart=2.9
+
 import 'dart:io';
 
 import 'package:webdriver/io.dart';
