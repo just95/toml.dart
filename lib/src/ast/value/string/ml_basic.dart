@@ -90,7 +90,10 @@ class TomlMultilineBasicString extends TomlMultilineString {
     var buffer = StringBuffer();
     var unescapedOrNewline = unescapedParser | tomlNewline;
     var quotes = 0;
-    for (var rune in value.runes) {
+    var iterator = value.runes.iterator;
+    while (iterator.moveNext()) {
+      final rune = iterator.current;
+
       // If the current rune is a quotation mark and it is preceeded by less
       // than two quotation marks, it does not have to be escaped, because only
       // three or more quotation marks can be confused for a closing delimiter.
@@ -98,11 +101,32 @@ class TomlMultilineBasicString extends TomlMultilineString {
         buffer.writeCharCode(rune);
         quotes++;
       } else {
-        TomlEscapedChar.writeEscapedChar(rune, buffer, unescapedOrNewline);
         quotes = 0;
+
+        // If the current rune is a carriage return and the next rune is a
+        // line feed, the carriage return does not have to be escaped.
+        if (rune == TomlEscapedChar.carriageReturn &&
+            _peekNext(iterator) == TomlEscapedChar.lineFeed) {
+          buffer.writeCharCode(rune);
+        } else {
+          TomlEscapedChar.writeEscapedChar(rune, buffer, unescapedOrNewline);
+        }
       }
     }
     return buffer.toString();
+  }
+
+  /// Reads the next rune from the given iterator without advancing the
+  /// iterator.
+  ///
+  /// Returns `null` if there is no next rune.
+  static int _peekNext(RuneIterator iterator) {
+    if (iterator.moveNext()) {
+      var next = iterator.current;
+      iterator.movePrevious();
+      return next;
+    }
+    return null;
   }
 
   @override

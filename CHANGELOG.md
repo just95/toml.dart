@@ -5,6 +5,14 @@
  - Added support for null-safety.
    + Dart 2.12 is now required.
 
+## 0.9.1
+
+ - Fixed pretty-printing of Windows line endings in multiline basic strings.
+   The `\r` in a `\r\n` sequence is not escaped anymore.
+   A carriage return that is not followed by a line feed is still escaped.
+ - Fixed parsing of multiline basic strings with Windows newlines.
+   A `\r\n` sequence caused a runtime type error in previous releases because it was represented as a `List` instead of a `String` internally.
+
 ## 0.9.0
 
  - Updated to [v1.0.0][toml-spec/v1.0.0] of the TOML specification.

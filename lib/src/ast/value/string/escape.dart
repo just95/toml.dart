@@ -13,16 +13,37 @@ abstract class TomlEscapedChar {
   ///     escape = %x5C                   ; \
   static final String escapeChar = '\\';
 
+  /// Unicode code point of a line feed.
+  static final int backspace = 0x08;
+
+  /// Unicode code point of a line feed.
+  static final int tab = 0x09;
+
+  /// Unicode code point of a line feed.
+  static final int lineFeed = 0x0A;
+
+  /// Unicode code point of a line feed.
+  static final int formFeed = 0x0C;
+
+  /// Unicode code point of a carriage return.
+  static final int carriageReturn = 0x0D;
+
+  /// Unicode code point of a double quote.
+  static final int doubleQuote = 0x22;
+
+  /// Unicode code point of a backslash.
+  static final int backslash = 0x5C;
+
   // Map between escape characters and the corresponding Unicode code point.
   static final BiMap<String, int> escapableChars = BiMap()
     ..addAll({
-      'b': 0x08, // Backspace.
-      't': 0x09, // Tab.
-      'n': 0x0A, // Linefeed.
-      'f': 0x0C, // Form feed.
-      'r': 0x0D, // Carriage return.
-      '"': 0x22, // Quote.
-      r'\': 0x5C // Backslash.
+      'b': backspace,
+      't': tab,
+      'n': lineFeed,
+      'f': formFeed,
+      'r': carriageReturn,
+      '"': doubleQuote,
+      r'\': backslash
     });
 
   /// Parser for escaped characters.
