@@ -350,6 +350,16 @@ void main() {
             prettyPrinter.visitBasicString(TomlBasicString('line 1\r\nline 2'));
             expect(prettyPrinter.toString(), equals(r'"line 1\r\nline 2"'));
           });
+          test('escapes standalone carriage return', () {
+            var prettyPrinter = TomlPrettyPrinter();
+            prettyPrinter.visitBasicString(
+              TomlBasicString('line 1\rstill line 1'),
+            );
+            expect(
+              prettyPrinter.toString(),
+              equals(r'"line 1\rstill line 1"'),
+            );
+          });
         });
         group('visitLiteralString', () {
           test('encodes simple literal strings correctly', () {
@@ -415,6 +425,16 @@ void main() {
             expect(
               prettyPrinter.toString(),
               equals('"""\nline 1\r\nline 2"""'),
+            );
+          });
+          test('escapes standalone carriage return', () {
+            var prettyPrinter = TomlPrettyPrinter();
+            prettyPrinter.visitMultilineBasicString(
+              TomlMultilineBasicString('line 1\rstill line 1'),
+            );
+            expect(
+              prettyPrinter.toString(),
+              equals('"""\nline 1\\rstill line 1"""'),
             );
           });
           test('escapes backslashes', () {
