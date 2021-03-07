@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 0.9.1
 
  - Fixed pretty-printing of Windows line endings in multiline basic strings.
    The `\r` in a `\r\n` sequence is not escaped anymore.
