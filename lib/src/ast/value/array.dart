@@ -10,7 +10,7 @@ import 'package:quiver/collection.dart';
 import '../value.dart';
 import '../visitor/value.dart';
 
-/// AST node that represents a TOML array of values of type [V].
+/// AST node that represents a TOML array value.
 ///
 ///     array = array-open [ array-values ] ws-comment-newline array-close
 ///
