@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+ - Fixed pretty-printing of Windows line endings in multiline basic strings.
+   The `\r` in a `\r\n` sequence is not escaped anymore.
+   A carriage return that is not followed by a line feed is still escaped.
+
 ## 0.9.0
 
  - Updated to [v1.0.0][toml-spec/v1.0.0] of the TOML specification.
