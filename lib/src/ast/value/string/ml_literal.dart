@@ -4,6 +4,7 @@ import 'package:petitparser/petitparser.dart';
 import 'package:toml/src/decoder/parser/util/join.dart';
 import 'package:toml/src/decoder/parser/util/ranges.dart';
 import 'package:toml/src/decoder/parser/util/whitespace.dart';
+import 'package:toml/src/decoder/parser/util/seq_pick.dart';
 import 'package:quiver/core.dart';
 
 import '../../visitor/value/string.dart';
@@ -23,22 +24,21 @@ class TomlMultilineLiteralString extends TomlMultilineString {
   /// Parser for a TOML string value.
   ///
   /// A newline immediately following the opening delimiter is trimmed.
-  static final Parser<TomlMultilineLiteralString> parser = (string(delimiter) &
-          tomlNewline.optional() &
-          bodyParser &
-          string(delimiter))
-      .pick<String>(2)
+  static final Parser<TomlMultilineLiteralString> parser = tomlNewline
+      .optional()
+      .before(bodyParser)
+      .surroundedBy(string(delimiter))
       .map((body) => TomlMultilineLiteralString._fromEncodable(body));
 
   ///
   ///
   ///     ml-literal-body =
   ///         *mll-content *( mll-quotes 1*mll-content ) [ mll-quotes ]
-  static final Parser<String> bodyParser = (contentParser.star().join() &
-          (quotesParser & contentParser.plus().join()).join().star().join() &
-          quotesParser.optionalWith(''))
-      .castList<String>()
-      .join();
+  static final Parser<String> bodyParser = SequenceParser([
+    contentParser.star().join(),
+    (quotesParser & contentParser.plus().join()).join().star().join(),
+    quotesParser.optionalWith('')
+  ]).join();
 
   /// Parser for one or two apostrophes.
   ///

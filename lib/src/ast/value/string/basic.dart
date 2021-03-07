@@ -4,6 +4,7 @@ import 'package:petitparser/petitparser.dart';
 import 'package:toml/src/decoder/parser/util/join.dart';
 import 'package:toml/src/decoder/parser/util/ranges.dart';
 import 'package:toml/src/decoder/parser/util/whitespace.dart';
+import 'package:toml/src/decoder/parser/util/seq_pick.dart';
 import 'package:quiver/core.dart';
 
 import '../../visitor/value/string.dart';
@@ -20,16 +21,17 @@ class TomlBasicString extends TomlSinglelineString {
   static final String delimiter = '"';
 
   /// Parser for a basic TOML string value.
-  static final Parser<TomlBasicString> parser =
-      (char(delimiter) & charParser.star().join() & char(delimiter))
-          .pick<String>(1)
-          .map((value) => TomlBasicString(value));
+  static final Parser<TomlBasicString> parser = charParser
+      .star()
+      .join()
+      .surroundedBy(char(delimiter))
+      .map((value) => TomlBasicString(value));
 
   /// Parser for a single character of a basic TOML string.
   ///
   ///     basic-char = basic-unescaped / escaped
   static final Parser<String> charParser =
-      (unescapedParser | TomlEscapedChar.parser).cast<String>();
+      ChoiceParser([unescapedParser, TomlEscapedChar.parser]);
 
   /// Parser for a single unescaped character of a basic TOML string.
   ///
@@ -37,12 +39,13 @@ class TomlBasicString extends TomlSinglelineString {
   ///
   ///  This range excludes `%x22` which is the `quotation-mark` character `"`
   ///  and `%x5C` which is the `escape` character `\`.
-  static final Parser<String> unescapedParser = (tomlWhitespaceChar |
-          char(0x21) |
-          range(0x23, 0x5B) |
-          range(0x5D, 0x7E) |
-          tomlNonAscii)
-      .cast<String>();
+  static final Parser<String> unescapedParser = ChoiceParser([
+    tomlWhitespaceChar,
+    char(0x21),
+    range(0x23, 0x5B),
+    range(0x5D, 0x7E),
+    tomlNonAscii
+  ]);
 
   /// Escapes all characters of the given string that are not allowed to
   /// occur unescaped in a basic string.

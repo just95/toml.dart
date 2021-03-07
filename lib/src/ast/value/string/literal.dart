@@ -3,6 +3,7 @@ library toml.src.ast.value.string.literal;
 import 'package:petitparser/petitparser.dart';
 import 'package:toml/src/decoder/parser/util/join.dart';
 import 'package:toml/src/decoder/parser/util/ranges.dart';
+import 'package:toml/src/decoder/parser/util/seq_pick.dart';
 import 'package:quiver/core.dart';
 
 import '../../visitor/value/string.dart';
@@ -18,10 +19,11 @@ class TomlLiteralString extends TomlSinglelineString {
   static final String delimiter = "'";
 
   /// Parser for a literal TOML string value.
-  static final Parser<TomlLiteralString> parser =
-      (char(delimiter) & charParser.star().join() & char(delimiter))
-          .pick<String>(1)
-          .map((value) => TomlLiteralString._fromEncodable(value));
+  static final Parser<TomlLiteralString> parser = charParser
+      .star()
+      .join()
+      .surroundedBy(char(delimiter))
+      .map((value) => TomlLiteralString._fromEncodable(value));
 
   /// Parser for a single character of a basic TOML string.
   ///

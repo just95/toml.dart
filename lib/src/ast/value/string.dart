@@ -33,11 +33,12 @@ enum TomlStringType {
 ///            / literal-string
 abstract class TomlString extends TomlValue {
   /// Parser for a TOML string value.
-  static final Parser<TomlString> parser = (TomlMultilineBasicString.parser |
-          TomlBasicString.parser |
-          TomlMultilineLiteralString.parser |
-          TomlLiteralString.parser)
-      .cast<TomlString>();
+  static final Parser<TomlString> parser = ChoiceParser([
+    TomlMultilineBasicString.parser,
+    TomlBasicString.parser,
+    TomlMultilineLiteralString.parser,
+    TomlLiteralString.parser
+  ]);
 
   /// The contents of the string.
   String get value;
@@ -65,8 +66,7 @@ abstract class TomlString extends TomlValue {
 abstract class TomlSinglelineString extends TomlString {
   /// Parser for a singleline TOML string value.
   static final Parser<TomlSinglelineString> parser =
-      (TomlBasicString.parser | TomlLiteralString.parser)
-          .cast<TomlSinglelineString>();
+      ChoiceParser([TomlBasicString.parser, TomlLiteralString.parser]);
 }
 
 /// Base class for AST nodes that represent multiline TOML strings.
@@ -75,7 +75,8 @@ abstract class TomlSinglelineString extends TomlString {
 /// [TomlSinglelineString].
 abstract class TomlMultilineString extends TomlString {
   /// Parser for a multiline TOML string value.
-  static final Parser<TomlMultilineString> parser =
-      (TomlMultilineBasicString.parser | TomlMultilineLiteralString.parser)
-          .cast<TomlMultilineString>();
+  static final Parser<TomlMultilineString> parser = ChoiceParser([
+    TomlMultilineBasicString.parser,
+    TomlMultilineLiteralString.parser,
+  ]);
 }

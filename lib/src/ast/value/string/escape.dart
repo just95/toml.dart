@@ -5,6 +5,7 @@ import 'package:quiver/collection.dart';
 import 'package:toml/src/decoder/exception/invalid_escape_sequence.dart';
 import 'package:toml/src/decoder/parser/util/ranges.dart';
 import 'package:toml/src/decoder/parser/util/whitespace.dart';
+import 'package:toml/src/decoder/parser/util/seq_pick.dart';
 
 abstract class TomlEscapedChar {
   /// The character that is used to escape other characters.
@@ -27,9 +28,10 @@ abstract class TomlEscapedChar {
   /// Parser for escaped characters.
   ///
   ///     escaped = escape escape-seq-char
-  static final Parser<String> parser =
-      (char(escapeChar) & (escapedUnicodeParser | escapedCharParser))
-          .pick<String>(1);
+  static final Parser<String> parser = char(escapeChar).before(ChoiceParser([
+    escapedUnicodeParser,
+    escapedCharParser,
+  ]));
 
   /// Parser for escaped characters with shorthand notation.
   ///
@@ -56,12 +58,10 @@ abstract class TomlEscapedChar {
   ///
   ///     escape-seq-char =/ %x75 4HEXDIG ; uXXXX                U+XXXX
   ///     escape-seq-char =/ %x55 8HEXDIG ; UXXXXXXXX            U+XXXXXXXX
-  static final Parser<String> escapedUnicodeParser =
-      (char('u') & hexDigit().times(4).flatten() |
-              char('U') & hexDigit().times(8).flatten())
-          .cast<List>()
-          .pick<String>(1)
-          .map((charCodeStr) {
+  static final Parser<String> escapedUnicodeParser = ChoiceParser([
+    char('u').before(hexDigit().times(4).flatten()),
+    char('U').before(hexDigit().times(8).flatten())
+  ]).map((charCodeStr) {
     // Test whether the code point is a scalar Unicode value.
     var charCode = int.parse(charCodeStr, radix: 16);
     if (0x0000 <= charCode && charCode <= 0xD7FF ||

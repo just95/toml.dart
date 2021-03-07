@@ -2,6 +2,7 @@ library toml.src.ast.value.integer;
 
 import 'package:petitparser/petitparser.dart';
 import 'package:toml/src/decoder/parser/util/ranges.dart';
+import 'package:toml/src/decoder/parser/util/seq_pick.dart';
 import 'package:quiver/core.dart';
 
 import '../value.dart';
@@ -50,7 +51,7 @@ class TomlInteger extends TomlValue {
   /// Decimal integers have to be parsed last such that the zero in the
   /// prefixes of non-decimal numbers is not consumed by the [decParser].
   static final Parser<TomlInteger> parser =
-      (binParser | octParser | hexParser | decParser).cast<TomlInteger>();
+      ChoiceParser([binParser, octParser, hexParser, decParser]);
 
   /// Parser for a binary TOML integer value.
   ///
@@ -122,7 +123,7 @@ class TomlInteger extends TomlValue {
             radix: format.base,
           ),
         );
-    return (string(format.prefix) & integerParser).pick<BigInt>(1);
+    return string(format.prefix).before(integerParser);
   }
 
   /// The number represented by this node.

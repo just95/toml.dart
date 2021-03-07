@@ -3,6 +3,8 @@ library toml.src.ast.value.date_time;
 import 'package:petitparser/petitparser.dart';
 import 'package:quiver/collection.dart';
 import 'package:quiver/core.dart';
+import 'package:toml/src/decoder/parser/util/pair.dart';
+import 'package:toml/src/decoder/parser/util/seq_pick.dart';
 import 'package:toml/src/encoder.dart';
 import 'package:toml/src/util/date.dart';
 
@@ -37,11 +39,11 @@ Parser<int> _dd = digit().times(2).flatten().map(int.parse);
 ///                                 ; based on month/year
 class TomlFullDate {
   /// Parser for a full date.
-  static final Parser<TomlFullDate> parser =
-      (_dddd & char('-') & _dd & char('-') & _dd)
-          .permute([0, 2, 4])
-          .castList<int>()
-          .map((xs) => TomlFullDate(xs[0], xs[1], xs[2]));
+  static final Parser<TomlFullDate> parser = SequenceParser([
+    _dddd.followedBy(char('-')),
+    _dd.followedBy(char('-')),
+    _dd,
+  ]).map((xs) => TomlFullDate(xs[0], xs[1], xs[2]));
 
   /// The full year.
   final int year;
@@ -99,12 +101,19 @@ class TomlFullDate {
 ///     time-secfrac   = "." 1*DIGIT
 class TomlPartialTime {
   /// Parser for a partial time value with microsecond precision.
-  static final Parser<TomlPartialTime> parser =
-      ((_dd & char(':') & _dd & char(':') & _dd)
-                  .permute([0, 2, 4]).castList<int>() &
-              (char('.') & _ddd.plus()).pick<List<int>>(1).optionalWith([]))
-          .castList<List<int>>()
-          .map((xs) => TomlPartialTime(xs[0][0], xs[0][1], xs[0][2], xs[1]));
+  static final Parser<TomlPartialTime> parser = PairParser(
+          SequenceParser([
+            _dd.followedBy(char(':')),
+            _dd.followedBy(char(':')),
+            _dd,
+          ]),
+          char('.').before(_ddd.plus()).optionalWith(<int>[]))
+      .map((pair) => TomlPartialTime(
+            pair.first[0],
+            pair.first[1],
+            pair.first[2],
+            pair.second,
+          ));
 
   /// The hour of the day, expressed as in a 24-hour clock (as a number from
   /// `0` to `23`).
@@ -199,26 +208,25 @@ class TomlPartialTime {
 class TomlTimeZoneOffset {
   /// Parser for a time-zone offset.
   static final Parser<TomlTimeZoneOffset> parser =
-      (_utcParser | _positiveParser | _negativeParser)
-          .cast<TomlTimeZoneOffset>();
+      ChoiceParser([_utcParser, _positiveParser, _negativeParser]);
 
   /// Parser for the UTC time-zone offset.
   static final Parser<TomlTimeZoneOffset> _utcParser =
       anyOf('zZ').map((_) => TomlTimeZoneOffset.utc());
 
   /// Parser for a positive time-zone offset.
-  static final Parser<TomlTimeZoneOffset> _positiveParser =
-      (char('+') & _dd & char(':') & _dd)
-          .permute([1, 3])
-          .castList<int>()
-          .map((xs) => TomlTimeZoneOffset.positive(xs[0], xs[1]));
+  static final Parser<TomlTimeZoneOffset> _positiveParser = char('+')
+      .before(_unsignedParser)
+      .map((pair) => TomlTimeZoneOffset.positive(pair.first, pair.second));
 
   /// Parser for a negative time-zone offset.
-  static final Parser<TomlTimeZoneOffset> _negativeParser =
-      (char('-') & _dd & char(':') & _dd)
-          .permute([1, 3])
-          .castList<int>()
-          .map((xs) => TomlTimeZoneOffset.negative(xs[0], xs[1]));
+  static final Parser<TomlTimeZoneOffset> _negativeParser = char('-')
+      .before(_unsignedParser)
+      .map((pair) => TomlTimeZoneOffset.negative(pair.first, pair.second));
+
+  /// Parser for an unsigned time-zone offset.
+  static final Parser<Pair<int, int>> _unsignedParser =
+      PairParser(_dd.followedBy(char(':')), _dd);
 
   /// Whether this offset identifies the UTC time-zone.
   ///
@@ -270,8 +278,7 @@ class TomlTimeZoneOffset {
         isUtc: false,
         isNegative: offset.isNegative,
         hours: offset.inHours.abs(),
-        minutes:
-            offset.inMinutes.remainder(Duration.minutesPerHour).abs(),
+        minutes: offset.inMinutes.remainder(Duration.minutesPerHour).abs(),
       );
 
   /// Creates a positive time-zone offset.
@@ -331,11 +338,12 @@ class TomlTimeZoneOffset {
 ///                    / local-time
 abstract class TomlDateTime extends TomlValue {
   /// Parser for a TOML date, time or date-time value.
-  static final Parser<TomlDateTime> parser = (TomlOffsetDateTime.parser |
-          TomlLocalDateTime.parser |
-          TomlLocalDate.parser |
-          TomlLocalTime.parser)
-      .cast<TomlDateTime>();
+  static final Parser<TomlDateTime> parser = ChoiceParser([
+    TomlOffsetDateTime.parser,
+    TomlLocalDateTime.parser,
+    TomlLocalDate.parser,
+    TomlLocalTime.parser,
+  ]);
 
   @override
   T acceptValueVisitor<T>(TomlValueVisitor<T> visitor) =>

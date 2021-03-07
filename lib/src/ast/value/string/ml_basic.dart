@@ -4,6 +4,7 @@ import 'package:petitparser/petitparser.dart';
 import 'package:toml/src/decoder/parser/util/join.dart';
 import 'package:toml/src/decoder/parser/util/ranges.dart';
 import 'package:toml/src/decoder/parser/util/whitespace.dart';
+import 'package:toml/src/decoder/parser/util/seq_pick.dart';
 import 'package:quiver/core.dart';
 
 import '../../visitor/value/string.dart';
@@ -22,22 +23,21 @@ class TomlMultilineBasicString extends TomlMultilineString {
   static final String delimiter = TomlBasicString.delimiter * 3;
 
   /// Parser for a multiline basic TOML string value.
-  static final Parser<TomlMultilineBasicString> parser = (string(delimiter) &
-          tomlNewline.optional() &
-          bodyParser &
-          string(delimiter))
-      .pick<String>(2)
+  static final Parser<TomlMultilineBasicString> parser = tomlNewline
+      .optional()
+      .before(bodyParser)
+      .surroundedBy(string(delimiter))
       .map((body) => TomlMultilineBasicString(body));
 
   /// Parser for the body of a multiline basic TOML string.
   ///
   ///     ml-basic-body =
   ///       *mlb-content *( mlb-quotes 1*mlb-content ) [ mlb-quotes ]
-  static final Parser<String> bodyParser = (contentParser.star().join() &
-          (quotesParser & contentParser.plus().join()).join().star().join() &
-          quotesParser.optionalWith(''))
-      .castList<String>()
-      .join();
+  static final Parser<String> bodyParser = SequenceParser([
+    contentParser.star().join(),
+    (quotesParser & contentParser.plus().join()).join().star().join(),
+    quotesParser.optionalWith(''),
+  ]).join();
 
   /// Parser for one or two quotation marks.
   ///
@@ -54,11 +54,12 @@ class TomlMultilineBasicString extends TomlMultilineString {
   ///
   ///     mlb-content = mlb-char / newline / mlb-escaped-nl
   ///     mlb-char = mlb-unescaped / escaped
-  static final Parser<String> contentParser = (unescapedParser |
-          TomlEscapedChar.parser |
-          tomlNewline |
-          escapedNewlineParser)
-      .cast<String>();
+  static final Parser<String> contentParser = ChoiceParser([
+    unescapedParser,
+    TomlEscapedChar.parser,
+    tomlNewline,
+    escapedNewlineParser,
+  ]);
 
   /// Parser for a single unescaped character of a multiline basic TOML string.
   ///

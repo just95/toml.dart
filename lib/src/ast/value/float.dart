@@ -2,7 +2,7 @@ library toml.src.ast.value.float;
 
 import 'package:petitparser/petitparser.dart';
 import 'package:quiver/core.dart';
-import 'package:toml/src/util/iterable/where_not_null.dart';
+import 'package:toml/src/decoder/parser/util/pair.dart';
 
 import '../value.dart';
 import '../visitor/value.dart';
@@ -14,7 +14,7 @@ import '../visitor/value.dart';
 class TomlFloat extends TomlValue {
   /// Parser for a TOML floating point value.
   static final Parser<TomlFloat> parser =
-      (finalFloatParser | specialFloatParser).cast<TomlFloat>();
+      ChoiceParser([finalFloatParser, specialFloatParser]);
 
   /// Parser for a regular TOML floating point value.
   ///
@@ -45,11 +45,11 @@ class TomlFloat extends TomlValue {
   static final Parser<TomlFloat> specialFloatParser = (() {
     var plus = char('+').map((_) => 1.0);
     var minus = char('-').map((_) => -1.0);
-    var sign = (plus | minus).optional();
+    var sign = ChoiceParser([plus, minus]).optionalWith(1.0);
     var inf = string('inf').map((_) => double.infinity);
     var nan = string('nan').map((_) => double.nan);
-    return (sign & (inf | nan)).castList<double>().map((pair) =>
-        TomlFloat(pair.whereNotNull().reduce((sign, value) => sign * value)));
+    return PairParser(sign, ChoiceParser([inf, nan]))
+        .map((pair) => TomlFloat(pair.first * pair.second));
   })();
 
   /// The number represented by this node.

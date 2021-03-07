@@ -2,6 +2,8 @@ library toml.src.ast.value.local_date_time;
 
 import 'package:petitparser/petitparser.dart';
 import 'package:quiver/core.dart';
+import 'package:toml/src/decoder/parser/util/pair.dart';
+import 'package:toml/src/decoder/parser/util/seq_pick.dart';
 
 import '../../value.dart';
 import '../../visitor/value/date_time.dart';
@@ -15,12 +17,10 @@ import '../date_time/offset_date_time.dart';
 ///     time-delim     = "T" / %x20 ; T, t, or space
 class TomlLocalDateTime extends TomlDateTime {
   /// Parser for a TOML local date-time value.
-  static final Parser<TomlLocalDateTime> parser =
-      (TomlFullDate.parser & anyOf('Tt ') & TomlPartialTime.parser)
-          .permute([0, 2]).map((xs) => TomlLocalDateTime(
-                xs[0] as TomlFullDate,
-                xs[1] as TomlPartialTime,
-              ));
+  static final Parser<TomlLocalDateTime> parser = PairParser(
+    TomlFullDate.parser,
+    anyOf('Tt ').before(TomlPartialTime.parser),
+  ).map((pair) => TomlLocalDateTime(pair.first, pair.second));
 
   /// The date.
   final TomlFullDate date;

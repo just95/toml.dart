@@ -2,6 +2,8 @@ library toml.src.ast.value.table;
 
 import 'package:petitparser/petitparser.dart';
 import 'package:toml/src/decoder/parser/util/whitespace.dart';
+import 'package:toml/src/decoder/parser/util/separated_without.dart';
+import 'package:toml/src/decoder/parser/util/seq_pick.dart';
 import 'package:quiver/core.dart';
 import 'package:quiver/collection.dart';
 
@@ -35,17 +37,12 @@ class TomlInlineTable extends TomlValue {
   ///
   /// Trailing commas are currently not allowed.
   /// See https://github.com/toml-lang/toml/pull/235#issuecomment-73578529
-  static final Parser<TomlInlineTable> parser = (char(openingDelimiter) &
-          tomlWhitespace &
-          (TomlKeyValuePair.parser.separatedBy<TomlKeyValuePair>(
-            tomlWhitespace & char(separator) & tomlWhitespace,
-            includeSeparators: false,
-            optionalSeparatorAtEnd: false,
-          )).optionalWith(<TomlKeyValuePair>[]) &
-          tomlWhitespace &
-          char(closingDelimiter))
-      .pick<List<TomlKeyValuePair>>(2)
-      .map((List<TomlKeyValuePair> pairs) => TomlInlineTable(pairs));
+  static final Parser<TomlInlineTable> parser = TomlKeyValuePair.parser
+      .separatedWithout(tomlWhitespace & char(separator) & tomlWhitespace)
+      .optionalWith(<TomlKeyValuePair>[])
+      .surroundedBy(tomlWhitespace)
+      .surroundedBy(char(openingDelimiter), char(closingDelimiter))
+      .map((pairs) => TomlInlineTable(pairs));
 
   /// The key/value pairs of the inline table.
   final List<TomlKeyValuePair> pairs;

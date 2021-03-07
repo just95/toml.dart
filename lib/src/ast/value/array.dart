@@ -2,6 +2,8 @@ library toml.src.ast.value.array;
 
 import 'package:petitparser/petitparser.dart';
 import 'package:toml/src/decoder/parser/util/whitespace.dart';
+import 'package:toml/src/decoder/parser/util/seq_pick.dart';
+import 'package:toml/src/decoder/parser/util/separated_without.dart';
 import 'package:quiver/core.dart';
 import 'package:quiver/collection.dart';
 
@@ -32,20 +34,12 @@ class TomlArray extends TomlValue {
   static final String closingDelimiter = ']';
 
   /// Parser for a TOML array value.
-  static final Parser<TomlArray> parser = (char(openingDelimiter) &
-          (tomlWhitespaceCommentNewline &
-                  TomlValue.parser &
-                  tomlWhitespaceCommentNewline)
-              .pick(1)
-              .separatedBy<TomlValue>(
-                char(separator),
-                includeSeparators: false,
-                optionalSeparatorAtEnd: true,
-              )
-              .optionalWith(<TomlValue>[]) &
-          tomlWhitespaceCommentNewline &
-          char(closingDelimiter))
-      .pick<List<TomlValue>>(1)
+  static final Parser<TomlArray> parser = TomlValue.parser
+      .surroundedBy(tomlWhitespaceCommentNewline)
+      .separatedWithout(char(separator), optionalSeparatorAtEnd: true)
+      .optionalWith(<TomlValue>[])
+      .followedBy(tomlWhitespaceCommentNewline)
+      .surroundedBy(char(openingDelimiter), char(closingDelimiter))
       .map((items) => TomlArray(items));
 
   /// The array items.

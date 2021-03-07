@@ -2,6 +2,8 @@ library toml.src.ast.value.offset_date_time;
 
 import 'package:petitparser/petitparser.dart';
 import 'package:quiver/core.dart';
+import 'package:toml/src/decoder/parser/util/pair.dart';
+import 'package:toml/src/decoder/parser/util/seq_pick.dart';
 
 import '../../value.dart';
 import '../../visitor/value/date_time.dart';
@@ -15,15 +17,16 @@ import '../date_time.dart';
 ///     full-time      = partial-time time-offset
 class TomlOffsetDateTime extends TomlDateTime {
   /// Parser for a TOML offset date-time value.
-  static final Parser<TomlOffsetDateTime> parser = (TomlFullDate.parser &
-          anyOf('Tt ') &
-          TomlPartialTime.parser &
-          TomlTimeZoneOffset.parser)
-      .permute([0, 2, 3]).map((xs) => TomlOffsetDateTime(
-            xs[0] as TomlFullDate,
-            xs[1] as TomlPartialTime,
-            xs[2] as TomlTimeZoneOffset,
-          ));
+  static final Parser<TomlOffsetDateTime> parser = PairParser(
+      TomlFullDate.parser,
+      PairParser(
+        anyOf('Tt ').before(TomlPartialTime.parser),
+        TomlTimeZoneOffset.parser,
+      )).map((pair) => TomlOffsetDateTime(
+        pair.first,
+        pair.second.first,
+        pair.second.second,
+      ));
 
   /// The date.
   final TomlFullDate date;

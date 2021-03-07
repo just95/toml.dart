@@ -2,6 +2,7 @@ library toml.src.ast.expression.table;
 
 import 'package:petitparser/petitparser.dart';
 import 'package:toml/src/decoder/parser/util/whitespace.dart';
+import 'package:toml/src/decoder/parser/util/seq_pick.dart';
 import 'package:quiver/core.dart';
 
 import '../expression.dart';
@@ -26,7 +27,7 @@ enum TomlTableType {
 abstract class TomlTable extends TomlExpression {
   /// Parser for a TOML table header.
   static final Parser<TomlTable> parser =
-      (TomlStandardTable.parser | TomlArrayTable.parser).cast<TomlTable>();
+      ChoiceParser([TomlStandardTable.parser, TomlArrayTable.parser]);
 
   /// The name of the table or array of tables.
   final TomlKey name;
@@ -53,13 +54,10 @@ class TomlStandardTable extends TomlTable {
   static final String closingDelimiter = ']';
 
   /// Parser for a standard TOML table header.
-  static final Parser<TomlStandardTable> parser = (char(openingDelimiter) &
-          tomlWhitespace &
-          TomlKey.parser &
-          tomlWhitespace &
-          char(closingDelimiter))
-      .pick<TomlKey>(2)
-      .map((TomlKey key) => TomlStandardTable(key));
+  static final Parser<TomlStandardTable> parser = TomlKey.parser
+      .surroundedBy(tomlWhitespace)
+      .surroundedBy(char(openingDelimiter), char(closingDelimiter))
+      .map((key) => TomlStandardTable(key));
 
   /// Creates a new TOML standard table.
   TomlStandardTable(TomlKey name) : super(name);
@@ -95,12 +93,11 @@ class TomlArrayTable extends TomlTable {
   static final String closingDelimiter = ']]';
 
   /// Parser for a TOML array of tables header.
-  static final Parser<TomlArrayTable> parser = (string(openingDelimiter) &
-          tomlWhitespace &
-          TomlKey.parser &
-          tomlWhitespace &
-          string(closingDelimiter))
-      .pick<TomlKey>(2)
+  static final Parser<TomlArrayTable> parser = string(openingDelimiter)
+      .before(tomlWhitespace)
+      .before(TomlKey.parser)
+      .followedBy(tomlWhitespace)
+      .followedBy(string(closingDelimiter))
       .map((TomlKey key) => TomlArrayTable(key));
 
   /// Creates a new TOML array table.

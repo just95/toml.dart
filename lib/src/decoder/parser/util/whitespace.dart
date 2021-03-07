@@ -20,7 +20,7 @@ final Parser<String> tomlWhitespaceChar =
 ///
 ///     newline =  %x0A     ; LF
 ///     newline =/ %x0D.0A  ; CRLF
-final Parser tomlNewline = char('\n') | char('\r') & char('\n');
+final Parser<String> tomlNewline = ChoiceParser([char('\n'), string('\r\n')]);
 
 /// A regular expression for [tomlNewline].
 final RegExp tomlNewlinePattern = RegExp('\n|\r\n');

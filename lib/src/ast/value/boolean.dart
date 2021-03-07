@@ -14,10 +14,10 @@ import '../visitor/value.dart';
 ///     false   = %x66.61.6C.73.65  ; false
 class TomlBoolean extends TomlValue {
   /// Parser for a boolean TOML value.
-  static final Parser<TomlBoolean> parser =
-      (string('true').map((_) => TomlBoolean(true)) |
-              string('false').map((_) => TomlBoolean(false)))
-          .cast<TomlBoolean>();
+  static final Parser<TomlBoolean> parser = ChoiceParser([
+    string('true').map((_) => TomlBoolean(true)),
+    string('false').map((_) => TomlBoolean(false))
+  ]);
 
   /// The boolean value represented by this node.
   final bool value;

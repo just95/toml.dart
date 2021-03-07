@@ -2,6 +2,8 @@ library toml.src.ast.expression.key_value_pair;
 
 import 'package:petitparser/petitparser.dart';
 import 'package:toml/src/decoder/parser/util/whitespace.dart';
+import 'package:toml/src/decoder/parser/util/seq_pick.dart';
+import 'package:toml/src/decoder/parser/util/pair.dart';
 import 'package:quiver/core.dart';
 
 import '../expression.dart';
@@ -19,15 +21,12 @@ class TomlKeyValuePair extends TomlExpression {
   static final String separator = '=';
 
   /// Parser for a TOML key/value pair.
-  static final Parser<TomlKeyValuePair> parser = (TomlKey.parser &
-          tomlWhitespace &
-          char(separator) &
-          tomlWhitespace &
-          TomlValue.parser)
-      .permute([0, 4]).map((List pair) => TomlKeyValuePair(
-            pair[0] as TomlKey,
-            pair[1] as TomlValue,
-          ));
+  static final Parser<TomlKeyValuePair> parser = PairParser(
+    TomlKey.parser.followedBy(
+      tomlWhitespace & char(separator) & tomlWhitespace,
+    ),
+    TomlValue.parser,
+  ).map((pair) => TomlKeyValuePair(pair.first, pair.second));
 
   /// The AST node that represents the key of the key/value pair.
   final TomlKey key;

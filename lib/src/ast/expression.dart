@@ -1,6 +1,7 @@
 library toml.src.ast.expression;
 
 import 'package:petitparser/petitparser.dart';
+import 'package:toml/src/decoder/parser/util/seq_pick.dart';
 import 'package:toml/src/decoder/parser/util/whitespace.dart';
 
 import 'expression/key_value_pair.dart';
@@ -20,11 +21,13 @@ abstract class TomlExpression extends TomlNode {
   /// Parser for TOML expressions.
   ///
   /// Returns `null` if the expression is just a blank line or comment.
-  static final Parser<TomlExpression> parser = (tomlWhitespace &
-          (TomlKeyValuePair.parser | TomlTable.parser).optional() &
-          tomlWhitespace &
-          tomlComment.optional())
-      .pick<TomlExpression>(1);
+  static final Parser<TomlExpression?> parser = tomlWhitespace
+      .before(ChoiceParser([
+        TomlKeyValuePair.parser,
+        TomlTable.parser,
+      ]).optional())
+      .followedBy(tomlWhitespace)
+      .followedBy(tomlComment.optional());
 
   /// Invokes the correct `visit*` method for this expression of the given
   /// visitor.

@@ -5,6 +5,7 @@ import 'package:quiver/collection.dart';
 import 'package:quiver/core.dart';
 import 'package:toml/src/decoder/exception/parser.dart';
 import 'package:toml/src/decoder/parser/util/whitespace.dart';
+import 'package:toml/src/decoder/parser/util/separated_without.dart';
 
 import 'node.dart';
 import 'value/string.dart';
@@ -23,10 +24,8 @@ class TomlKey extends TomlNode {
 
   /// Parser for a dotted TOML key.
   static final Parser<TomlKey> parser = TomlSimpleKey.parser
-      .separatedBy<TomlSimpleKey>(
-          tomlWhitespace & char(separator) & tomlWhitespace,
-          includeSeparators: false)
-      .map((List<TomlSimpleKey> parts) => TomlKey(parts));
+      .separatedWithout(tomlWhitespace & char(separator) & tomlWhitespace)
+      .map((parts) => TomlKey(parts));
 
   /// Parses the given TOML key.
   ///
@@ -90,7 +89,7 @@ class TomlKey extends TomlNode {
 abstract class TomlSimpleKey extends TomlNode {
   /// Parser for a simple TOML key.
   static final Parser<TomlSimpleKey> parser =
-      (TomlQuotedKey.parser | TomlUnquotedKey.parser).cast<TomlSimpleKey>();
+      ChoiceParser([TomlQuotedKey.parser, TomlUnquotedKey.parser]);
 
   /// The actual name of this key.
   String get name;
