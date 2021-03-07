@@ -2,7 +2,7 @@ library toml.src.ast.value;
 
 import 'package:petitparser/petitparser.dart';
 import 'package:toml/src/decoder/exception/parser.dart';
-import 'package:toml/src/decoder/parser/util/non_strict.dart';
+import 'package:toml/src/decoder/parser/util/late.dart';
 import 'package:toml/src/encoder.dart';
 
 import 'node.dart';
@@ -61,14 +61,14 @@ enum TomlType {
 abstract class TomlValue extends TomlNode {
   /// Parser for a TOML value.
   ///
-  /// We have to use a [NonStrictParser] since values (arrays for example)
-  /// can contain values themselves. If we didn't use [NonStrictParser], the
+  /// We have to use a [LateParser] since values (arrays for example)
+  /// can contain values themselves. If we didn't use [LateParser], the
   /// initialization of [parser] would be cyclic which is not allowed.
   ///
   /// It is important that `TomlDateTime` and `TomlFloat` and are parsed before
   /// `TomlInteger`, since a `TomlDateTime` and a `TomlFloat` can start with a
   /// `TomlInteger`.
-  static final Parser<TomlValue> parser = NonStrictParser(() => ChoiceParser([
+  static final Parser<TomlValue> parser = LateParser(() => ChoiceParser([
         TomlDateTime.parser,
         TomlFloat.parser,
         TomlInteger.parser,

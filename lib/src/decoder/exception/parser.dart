@@ -35,7 +35,11 @@ class TomlParserException extends TomlException implements FormatException {
 
   /// Creates a parser exception with the given message, source code and offset
   /// within the source code.
-  TomlParserException({required this.message, required this.source, required this.offset});
+  TomlParserException({
+    required this.message,
+    required this.source,
+    required this.offset,
+  });
 
   /// Converts a [ParserException] from `petitparser` to a
   /// [TomlParserException].
@@ -46,20 +50,14 @@ class TomlParserException extends TomlException implements FormatException {
       );
 
   /// Lazyly evaluated tuple of the [line] and [column].
-  List<int>? _lineAndColumn;
+  late final List<int> _lineAndColumn = Token.lineAndColumnOf(source, offset);
 
   /// The line that contains the [offset] within the [source].
-  int get line {
-    _lineAndColumn ??= Token.lineAndColumnOf(source, offset);
-    return _lineAndColumn![0];
-  }
+  int get line => _lineAndColumn[0];
 
   /// The coulumn within the [line] that corresponds to the [offset] within
   /// the [source].
-  int get column {
-    _lineAndColumn ??= Token.lineAndColumnOf(source, offset);
-    return _lineAndColumn![1];
-  }
+  int get column => _lineAndColumn[1];
 
   @override
   bool operator ==(Object other) =>
