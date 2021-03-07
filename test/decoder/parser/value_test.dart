@@ -1124,6 +1124,16 @@ void main() {
             )),
           );
         });
+        test('allows Windows newlines', () {
+          expect(
+            TomlValue.parse(
+              '"""Roses are red\r\nViolets are blue"""',
+            ),
+            equals(TomlMultilineBasicString(
+              'Roses are red\r\nViolets are blue',
+            )),
+          );
+        });
         test('trims first newline after opening delimiter', () {
           expect(
             TomlValue.parse(
@@ -1311,6 +1321,16 @@ void main() {
             ),
             equals(TomlMultilineLiteralString(
               'Roses are red\tViolets are blue',
+            )),
+          );
+        });
+        test('allows Windows newlines', () {
+          expect(
+            TomlValue.parse(
+              "'''Roses are red\r\nViolets are blue'''",
+            ),
+            equals(TomlMultilineLiteralString(
+              'Roses are red\r\nViolets are blue',
             )),
           );
         });

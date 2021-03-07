@@ -345,7 +345,7 @@ void main() {
             prettyPrinter.visitBasicString(TomlBasicString('line 1\nline 2'));
             expect(prettyPrinter.toString(), equals(r'"line 1\nline 2"'));
           });
-          test('escapes windows newlines', () {
+          test('escapes Windows newlines', () {
             var prettyPrinter = TomlPrettyPrinter();
             prettyPrinter.visitBasicString(TomlBasicString('line 1\r\nline 2'));
             expect(prettyPrinter.toString(), equals(r'"line 1\r\nline 2"'));
@@ -407,7 +407,7 @@ void main() {
             );
             expect(prettyPrinter.toString(), equals('"""\nline 1\nline 2"""'));
           });
-          test('does not escape windows newlines', () {
+          test('does not escape Windows newlines', () {
             var prettyPrinter = TomlPrettyPrinter();
             prettyPrinter.visitMultilineBasicString(
               TomlMultilineBasicString('line 1\r\nline 2'),
@@ -459,7 +459,7 @@ void main() {
             );
             expect(prettyPrinter.toString(), equals("'''\nline 1\nline 2'''"));
           });
-          test('does not escape windows newlines', () {
+          test('does not escape Windows newlines', () {
             var prettyPrinter = TomlPrettyPrinter();
             prettyPrinter.visitMultilineLiteralString(
               TomlMultilineLiteralString('line 1\r\nline 2'),
