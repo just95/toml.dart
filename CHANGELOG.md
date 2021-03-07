@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 0.10.0
 
  - Added support for null-safety.
    + Dart 2.12 is now required.
