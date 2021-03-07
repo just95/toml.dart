@@ -1,5 +1,10 @@
 # Changelog
 
+## Unreleased
+
+ - Added support for null-safety.
+   + Dart 2.12 is now required.
+
 ## 0.9.0
 
  - Updated to [v1.0.0][toml-spec/v1.0.0] of the TOML specification.
