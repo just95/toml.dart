@@ -168,8 +168,8 @@ jobs:
         uses: GabrielBB/xvfb-action@v1
         with:
           run: 'dart test --reporter expanded
-                          --platform chrome
-                          # --coverage=./coverage/chrome'
+                          --platform chrome'
+                          # --coverage=./coverage/chrome
       - name: Upload Test Coverage
         uses: actions/upload-artifact@v2
         with:
