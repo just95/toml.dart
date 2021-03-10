@@ -285,6 +285,21 @@ void main() {
           equals(TomlInteger.dec(BigInt.from(42))),
         );
       });
+      test('rejects null values', () {
+        var builder = TomlAstBuilder();
+        expect(
+          () => builder.buildValue(null),
+          throwsA(equals(TomlUnknownValueTypeException(null))),
+        );
+      });
+      test('rejects values of types that are not encodable', () {
+        var builder = TomlAstBuilder();
+        var obj = Object();
+        expect(
+          () => builder.buildValue(obj),
+          throwsA(equals(TomlUnknownValueTypeException(obj))),
+        );
+      });
     });
     group('buildSimpleKey', () {
       test(
@@ -324,6 +339,21 @@ void main() {
         expect(
           builder.buildSimpleKey('\n'),
           equals(TomlQuotedKey(TomlBasicString('\n'))),
+        );
+      });
+      test('rejects null as keys', () {
+        var builder = TomlAstBuilder();
+        expect(
+          () => builder.buildSimpleKey(null),
+          throwsA(equals(TomlUnknownKeyTypeException(null))),
+        );
+      });
+      test('rejects keys of types that are not encodable', () {
+        var builder = TomlAstBuilder();
+        var obj = Object();
+        expect(
+          () => builder.buildSimpleKey(obj),
+          throwsA(equals(TomlUnknownKeyTypeException(obj))),
         );
       });
     });
