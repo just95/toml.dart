@@ -36,5 +36,24 @@ void main() {
         },
       );
     });
+    group('daysOfMonth', () {
+      test('returns 28 for february of non-leap years', () {
+        expect(2021.daysOfMonth(DateTime.february), 28);
+      });
+      test('returns 29 for february of leap years', () {
+        expect(2020.daysOfMonth(DateTime.february), 29);
+      });
+      test('rejects months before January', () {
+        expect(() => 1995.daysOfMonth(0), throwsA(isA<ArgumentError>()));
+      });
+      test('accepts months between 1 and 12', () {
+        for (var month = 1; month <= 12; month++) {
+          expect(() => 1995.daysOfMonth(month), returnsNormally);
+        }
+      });
+      test('rejects months after December', () {
+        expect(() => 1995.daysOfMonth(13), throwsA(isA<ArgumentError>()));
+      });
+    });
   });
 }
