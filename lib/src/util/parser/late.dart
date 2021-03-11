@@ -13,11 +13,25 @@ import '../container/late.dart';
 /// parser has been built.
 class LateParser<T> extends Parser<T> {
   /// The lazily evaluared actual parser.
-  final Late<Parser<T>> _delegate;
+  Late<Parser<T>> _delegate;
 
   /// Creates a new parser that delegates to the parser built by the given
   /// function.
   LateParser(Thunk<Parser<T>> thunk) : _delegate = Late(thunk);
+
+  /// Creates a new parser that delegates to the parser built by the given
+  /// fixed point operation.
+  ///
+  /// In contrast to the default constructor, the function is given the
+  /// created [LateParser] as an argument.
+  ///
+  /// This constructor only needs to be used when the [LateParser] is written
+  /// to a local variable since local variables cannot be accessed within their
+  /// initializer.
+  factory LateParser.fix(Parser<T> Function(LateParser<T> self) fix) {
+    LateParser<T>? result;
+    return result = LateParser(() => fix(result!));
+  }
 
   /// Constructor used by [copy].
   LateParser._(this._delegate);
@@ -37,6 +51,9 @@ class LateParser<T> extends Parser<T> {
 
   @override
   void replace(Parser source, Parser target) {
-    _delegate.value.replace(source, target);
+    super.replace(source, target);
+    if (_delegate.value == source) {
+      _delegate = Late.eager(target as Parser<T>);
+    }
   }
 }
