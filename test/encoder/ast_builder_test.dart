@@ -19,7 +19,7 @@ class TomlEncodableWrapper extends TomlEncodableKey {
   dynamic toTomlValue() => value;
 
   @override
-  dynamic toTomlKey() => key ?? value;
+  dynamic toTomlKey() => key ?? super.toTomlKey();
 }
 
 void main() {
