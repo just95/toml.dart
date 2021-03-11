@@ -22,6 +22,11 @@ void main() {
         ]),
       );
     });
+    test('can use circular parser in fast mode', () {
+      var parser = LateParser.fix((parser) => letter() & parser.optional());
+      var result = parser.fastParseOn('abc', 0);
+      expect(result, equals(3));
+    });
     test('copy shares lazy computation of delegate with original', () {
       var counter = 0;
       var delegate = letter();
