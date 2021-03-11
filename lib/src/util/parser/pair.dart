@@ -1,29 +1,8 @@
 library toml.src.util.parser.pair;
 
-import 'package:quiver/core.dart';
 import 'package:petitparser/petitparser.dart';
 
-/// Utility class that stores a pair of values of types `F` and `S`.
-class Pair<F, S> {
-  /// The first component of the pair.
-  final F first;
-
-  /// The second component of the pair.
-  final S second;
-
-  /// Creates a new pair.
-  Pair(this.first, this.second);
-
-  @override
-  int get hashCode => hash2(first, second);
-
-  @override
-  bool operator ==(other) =>
-      other is Pair && first == other.first && second == other.second;
-
-  @override
-  String toString() => 'Pair($first, $second)';
-}
+import '../container/pair.dart';
 
 /// A parser for the sequence of two parsers that preserves type information.
 class PairParser<F, S> extends Parser<Pair<F, S>> {

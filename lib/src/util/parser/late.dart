@@ -2,21 +2,7 @@ library toml.src.util.parser.late;
 
 import 'package:petitparser/petitparser.dart';
 
-/// A function that is used by [LateParser] to build the underlying parser.
-typedef _LateParserBuilder<T> = Parser<T> Function();
-
-/// Container with a late reference to the parser built by a
-/// [_LateParserBuilder].
-class _LateParserProvider<T> {
-  /// The function to build the [parser].
-  final _LateParserBuilder<T> _builder;
-
-  /// The parser that is built by the [_builder].
-  late final Parser<T> parser = _builder();
-
-  /// Creates a new container for the parser built by the given function.
-  _LateParserProvider(this._builder);
-}
+import '../container/late.dart';
 
 /// Since Dart is a strict programming language, we cannot construct a
 /// cyclic parsing expression. This class simulates non-strictness by
@@ -26,33 +12,31 @@ class _LateParserProvider<T> {
 /// parsers can refer to the [LateParser] instance before the underlying
 /// parser has been built.
 class LateParser<T> extends Parser<T> {
-  /// The function to build the underlying parser.
-  final _LateParserProvider<T> _provider;
+  /// The lazily evaluared actual parser.
+  final Late<Parser<T>> _delegate;
 
   /// Creates a new parser that delegates to the parser built by the given
   /// function.
-  LateParser(_LateParserBuilder<T> _builder)
-      : _provider = _LateParserProvider(_builder);
+  LateParser(Thunk<Parser<T>> thunk) : _delegate = Late(thunk);
 
   /// Constructor used by [copy].
-  LateParser._(this._provider);
+  LateParser._(this._delegate);
 
   @override
-  Result<T> parseOn(Context context) =>
-      _provider.parser.cast<T>().parseOn(context);
+  Result<T> parseOn(Context context) => _delegate.value.parseOn(context);
 
   @override
   int fastParseOn(String buffer, int position) =>
-      _provider.parser.fastParseOn(buffer, position);
+      _delegate.value.fastParseOn(buffer, position);
 
   @override
-  List<Parser> get children => [_provider.parser];
+  List<Parser> get children => [_delegate.value];
 
   @override
-  LateParser<T> copy() => LateParser<T>._(_provider);
+  LateParser<T> copy() => LateParser<T>._(_delegate);
 
   @override
   void replace(Parser source, Parser target) {
-    _provider.parser.replace(source, target);
+    _delegate.value.replace(source, target);
   }
 }
