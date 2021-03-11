@@ -2,7 +2,7 @@ library toml.src.ast.value.float;
 
 import 'package:petitparser/petitparser.dart';
 import 'package:quiver/core.dart';
-import 'package:toml/src/decoder/parser/util/pair.dart';
+import 'package:toml/src/util/parser.dart';
 
 import '../value.dart';
 import '../visitor/value.dart';

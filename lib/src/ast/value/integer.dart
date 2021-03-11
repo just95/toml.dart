@@ -1,9 +1,8 @@
 library toml.src.ast.value.integer;
 
 import 'package:petitparser/petitparser.dart';
-import 'package:toml/src/decoder/parser/util/ranges.dart';
-import 'package:toml/src/decoder/parser/util/seq_pick.dart';
-import 'package:toml/src/decoder/parser/util/or_failure.dart';
+import 'package:toml/src/decoder/parser/ranges.dart';
+import 'package:toml/src/util/parser.dart';
 import 'package:quiver/core.dart';
 
 import '../value.dart';
@@ -59,7 +58,7 @@ class TomlInteger extends TomlValue {
   ///     bin-int = bin-prefix digit0-1 *( digit0-1 / underscore digit0-1 )
   static final Parser<TomlInteger> binParser = TomlInteger._makeParser(
     format: TomlIntegerFormat.bin,
-    digitParser: binDigit(),
+    digitParser: tomlBinDigit(),
     message: 'Binary integer expected',
   ).map((n) => TomlInteger.bin(n));
 
@@ -68,7 +67,7 @@ class TomlInteger extends TomlValue {
   ///     oct-int = oct-prefix digit0-7 *( digit0-7 / underscore digit0-7 )
   static final Parser<TomlInteger> octParser = TomlInteger._makeParser(
     format: TomlIntegerFormat.oct,
-    digitParser: octDigit(),
+    digitParser: tomlOctDigit(),
     message: 'Octal integer expected',
   ).map((n) => TomlInteger.oct(n));
 
@@ -98,7 +97,7 @@ class TomlInteger extends TomlValue {
   ///     hex-int = hex-prefix HEXDIG *( HEXDIG / underscore HEXDIG )
   static final Parser<TomlInteger> hexParser = TomlInteger._makeParser(
           format: TomlIntegerFormat.hex,
-          digitParser: hexDigit(),
+          digitParser: tomlHexDigit(),
           message: 'Hexadecimal integer expected')
       .map((n) => TomlInteger.hex(n));
 

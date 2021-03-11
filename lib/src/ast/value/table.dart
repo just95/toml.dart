@@ -1,9 +1,8 @@
 library toml.src.ast.value.table;
 
 import 'package:petitparser/petitparser.dart';
-import 'package:toml/src/decoder/parser/util/whitespace.dart';
-import 'package:toml/src/decoder/parser/util/separated_without.dart';
-import 'package:toml/src/decoder/parser/util/seq_pick.dart';
+import 'package:toml/src/decoder/parser/whitespace.dart';
+import 'package:toml/src/util/parser.dart';
 import 'package:quiver/core.dart';
 import 'package:quiver/collection.dart';
 

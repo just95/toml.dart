@@ -3,9 +3,9 @@ library toml.src.parser.escape;
 import 'package:petitparser/petitparser.dart';
 import 'package:quiver/collection.dart';
 import 'package:toml/src/decoder/exception/invalid_escape_sequence.dart';
-import 'package:toml/src/decoder/parser/util/ranges.dart';
-import 'package:toml/src/decoder/parser/util/whitespace.dart';
-import 'package:toml/src/decoder/parser/util/seq_pick.dart';
+import 'package:toml/src/decoder/parser/ranges.dart';
+import 'package:toml/src/decoder/parser/whitespace.dart';
+import 'package:toml/src/util/parser.dart';
 
 abstract class TomlEscapedChar {
   /// The character that is used to escape other characters.
@@ -81,10 +81,10 @@ abstract class TomlEscapedChar {
   ///     escape-seq-char =/ %x55 8HEXDIG ; UXXXXXXXX            U+XXXXXXXX
   static final Parser<String> escapedUnicodeParser = ChoiceParser([
     char('u').before(
-      hexDigit().times(4).flatten('Four hexadecimal digits expected'),
+      tomlHexDigit().times(4).flatten('Four hexadecimal digits expected'),
     ),
     char('U').before(
-      hexDigit().times(8).flatten('Eight hexadecimal digits expected'),
+      tomlHexDigit().times(8).flatten('Eight hexadecimal digits expected'),
     )
   ]).map((charCodeStr) {
     // Test whether the code point is a scalar Unicode value.

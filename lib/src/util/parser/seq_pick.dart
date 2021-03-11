@@ -1,4 +1,4 @@
-library toml.src.decoder.parser.util.seq_pick;
+library toml.src.util.parser.seq_pick;
 
 import 'package:petitparser/petitparser.dart';
 

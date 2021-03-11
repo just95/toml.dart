@@ -1,4 +1,4 @@
-library toml.src.decoder.parser.util.or_failure;
+library toml.src.util.parser.or_failure;
 
 import 'package:petitparser/petitparser.dart';
 

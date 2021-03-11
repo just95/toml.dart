@@ -1,4 +1,4 @@
-library toml.src.decoder.parser.util.separated_without;
+library toml.src.util.parser.separated_without;
 
 import 'package:petitparser/petitparser.dart';
 

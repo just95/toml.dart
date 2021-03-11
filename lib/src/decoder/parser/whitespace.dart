@@ -1,8 +1,8 @@
 library toml.src.parser.util.whitespace;
 
 import 'package:petitparser/petitparser.dart';
+import 'package:toml/src/util/parser.dart';
 
-import 'join.dart';
 import 'ranges.dart';
 
 /// Parser for TOML whitespace.

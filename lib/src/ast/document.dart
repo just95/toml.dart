@@ -3,7 +3,7 @@ library toml.src.ast.document;
 import 'package:petitparser/petitparser.dart';
 import 'package:quiver/collection.dart';
 import 'package:toml/src/decoder.dart';
-import 'package:toml/src/decoder/parser/util/whitespace.dart';
+import 'package:toml/src/decoder/parser/whitespace.dart';
 import 'package:toml/src/encoder.dart';
 import 'package:toml/src/loader.dart';
 import 'package:toml/src/util/iterable/where_not_null.dart';

@@ -1,9 +1,8 @@
 library toml.src.ast.value.string.literal;
 
 import 'package:petitparser/petitparser.dart';
-import 'package:toml/src/decoder/parser/util/join.dart';
-import 'package:toml/src/decoder/parser/util/ranges.dart';
-import 'package:toml/src/decoder/parser/util/seq_pick.dart';
+import 'package:toml/src/util/parser.dart';
+import 'package:toml/src/decoder/parser/ranges.dart';
 import 'package:quiver/core.dart';
 
 import '../../visitor/value/string.dart';

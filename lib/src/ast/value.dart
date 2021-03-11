@@ -2,7 +2,7 @@ library toml.src.ast.value;
 
 import 'package:petitparser/petitparser.dart';
 import 'package:toml/src/decoder/exception/parser.dart';
-import 'package:toml/src/decoder/parser/util/late.dart';
+import 'package:toml/src/util/parser.dart';
 import 'package:toml/src/encoder.dart';
 
 import 'node.dart';

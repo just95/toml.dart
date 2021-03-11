@@ -3,8 +3,7 @@ library toml.src.ast.value.date_time;
 import 'package:petitparser/petitparser.dart';
 import 'package:quiver/collection.dart';
 import 'package:quiver/core.dart';
-import 'package:toml/src/decoder/parser/util/pair.dart';
-import 'package:toml/src/decoder/parser/util/seq_pick.dart';
+import 'package:toml/src/util/parser.dart';
 import 'package:toml/src/encoder.dart';
 import 'package:toml/src/util/date.dart';
 

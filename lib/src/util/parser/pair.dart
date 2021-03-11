@@ -1,4 +1,4 @@
-library toml.src.decoder.parser.util.pair;
+library toml.src.util.parser.pair;
 
 import 'package:quiver/core.dart';
 import 'package:petitparser/petitparser.dart';

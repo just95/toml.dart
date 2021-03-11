@@ -1,4 +1,4 @@
-library toml.src.parser.util.join;
+library toml.src.util.parser.join;
 
 import 'package:petitparser/petitparser.dart';
 
