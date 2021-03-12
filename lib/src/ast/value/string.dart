@@ -34,10 +34,8 @@ enum TomlStringType {
 abstract class TomlString extends TomlValue {
   /// Parser for a TOML string value.
   static final Parser<TomlString> parser = ChoiceParser([
-    TomlMultilineBasicString.parser,
-    TomlBasicString.parser,
-    TomlMultilineLiteralString.parser,
-    TomlLiteralString.parser
+    TomlMultilineString.parser,
+    TomlSinglelineString.parser,
   ]);
 
   /// The contents of the string.
@@ -65,8 +63,10 @@ abstract class TomlString extends TomlValue {
 /// string on type level.
 abstract class TomlSinglelineString extends TomlString {
   /// Parser for a singleline TOML string value.
-  static final Parser<TomlSinglelineString> parser =
-      ChoiceParser([TomlBasicString.parser, TomlLiteralString.parser]);
+  static final Parser<TomlSinglelineString> parser = ChoiceParser([
+    TomlBasicString.parser,
+    TomlLiteralString.parser,
+  ]);
 }
 
 /// Base class for AST nodes that represent multiline TOML strings.
