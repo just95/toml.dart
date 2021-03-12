@@ -1,5 +1,7 @@
 library toml.src.ast.key;
 
+import 'dart:math';
+
 import 'package:petitparser/petitparser.dart';
 import 'package:quiver/collection.dart';
 import 'package:quiver/core.dart';
@@ -50,7 +52,7 @@ class TomlKey extends TomlNode {
   ///
   /// If this key identifies the [topLevel] table, a key for the [topLevel]
   /// table is returned.
-  TomlKey get parentKey => TomlKey(parts.take(parts.length - 1));
+  TomlKey get parentKey => TomlKey(parts.take(max(0, parts.length - 1)));
 
   /// Gets the last key part (i.e., the name of this key within the table
   /// called [parentKey]).

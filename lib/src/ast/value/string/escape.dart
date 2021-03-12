@@ -119,7 +119,7 @@ abstract class TomlEscapedChar {
       // Unicode code point must be escaped.
       var length = rune & 0xffff == rune ? 4 : 8;
       buffer.write(escapeChar);
-      buffer.write(length == 4 ? r'u' : r'U');
+      buffer.write(length == 4 ? 'u' : 'U');
       buffer.write(rune.toRadixString(16).padLeft(length, '0'));
     }
   }
