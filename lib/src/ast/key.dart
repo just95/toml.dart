@@ -60,11 +60,11 @@ class TomlKey extends TomlNode {
 
   /// Creates a new key that identifies the given child in the table identified
   /// by this key.
-  TomlKey child(TomlSimpleKey child) => TomlKey(parts + [child]);
+  TomlKey child(TomlSimpleKey child) => TomlKey(parts.followedBy([child]));
 
   /// Creates a new key that identifies the given deeply nested child in the
   /// table identified by this key.
-  TomlKey deepChild(TomlKey child) => TomlKey(parts + child.parts);
+  TomlKey deepChild(TomlKey child) => TomlKey(parts.followedBy(child.parts));
 
   /// Tests whether the [parts] of the given key start with all parts of
   /// this key.

@@ -48,9 +48,6 @@ class TomlArray extends TomlValue {
   TomlArray(Iterable<TomlValue> items)
       : items = List.from(items, growable: false);
 
-  /// Gets the TOML types of the [items].
-  Iterable<TomlType> get itemTypes => items.map((item) => item.type);
-
   @override
   TomlType get type => TomlType.array;
 
