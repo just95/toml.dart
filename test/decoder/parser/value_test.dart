@@ -662,19 +662,13 @@ void main() {
         );
       });
       test('can parse NaN without sign', () {
-        var output = TomlValue.parse('nan');
-        expect(output, isA<TomlFloat>());
-        if (output is TomlFloat) expect(output.value, isNaN);
+        expect(TomlValue.parse('nan'), equals(TomlFloat(double.nan)));
       });
       test('can parse NaN with plus sign', () {
-        var output = TomlValue.parse('+nan');
-        expect(output, isA<TomlFloat>());
-        if (output is TomlFloat) expect(output.value, isNaN);
+        expect(TomlValue.parse('+nan'), equals(TomlFloat(double.nan)));
       });
       test('can parse NaN with minus sign', () {
-        var output = TomlValue.parse('-nan');
-        expect(output, isA<TomlFloat>());
-        if (output is TomlFloat) expect(output.value, isNaN);
+        expect(TomlValue.parse('-nan'), equals(TomlFloat(double.nan)));
       });
     });
     group('Integer', () {

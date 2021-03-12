@@ -66,7 +66,9 @@ class TomlFloat extends TomlValue {
       visitor.visitFloat(this);
 
   @override
-  bool operator ==(dynamic other) => other is TomlFloat && value == other.value;
+  bool operator ==(dynamic other) =>
+      other is TomlFloat &&
+      (value == other.value || value.isNaN && other.value.isNaN);
 
   @override
   int get hashCode => hash2(type, value);
