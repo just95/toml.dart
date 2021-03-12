@@ -163,25 +163,25 @@ void main() {
     group('positive', () {
       test('cannot construct offset with negative hours', () {
         expect(
-          TomlTimeZoneOffset.positive(-1, 0),
+          () => TomlTimeZoneOffset.positive(-1, 0),
           throwsA(isA<ArgumentError>()),
         );
       });
       test('cannot construct offset with hours greater than 23', () {
         expect(
-          TomlTimeZoneOffset.positive(24, 0),
+          () => TomlTimeZoneOffset.positive(24, 0),
           throwsA(isA<ArgumentError>()),
         );
       });
       test('cannot construct offset with negative minutes', () {
         expect(
-          TomlTimeZoneOffset.positive(0, -1),
+          () => TomlTimeZoneOffset.positive(0, -1),
           throwsA(isA<ArgumentError>()),
         );
       });
       test('cannot construct offset with minutes greater than 59', () {
         expect(
-          TomlTimeZoneOffset.positive(0, 60),
+          () => TomlTimeZoneOffset.positive(0, 60),
           throwsA(isA<ArgumentError>()),
         );
       });
@@ -189,25 +189,25 @@ void main() {
     group('negative', () {
       test('cannot construct offset with negative hours', () {
         expect(
-          TomlTimeZoneOffset.negative(-1, 0),
+          () => TomlTimeZoneOffset.negative(-1, 0),
           throwsA(isA<ArgumentError>()),
         );
       });
       test('cannot construct offset with hours greater than 23', () {
         expect(
-          TomlTimeZoneOffset.negative(24, 0),
+          () => TomlTimeZoneOffset.negative(24, 0),
           throwsA(isA<ArgumentError>()),
         );
       });
       test('cannot construct offset with negative minutes', () {
         expect(
-          TomlTimeZoneOffset.negative(0, -1),
+          () => TomlTimeZoneOffset.negative(0, -1),
           throwsA(isA<ArgumentError>()),
         );
       });
       test('cannot construct offset with minutes greater than 59', () {
         expect(
-          TomlTimeZoneOffset.negative(0, 60),
+          () => TomlTimeZoneOffset.negative(0, 60),
           throwsA(isA<ArgumentError>()),
         );
       });
