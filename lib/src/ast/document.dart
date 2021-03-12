@@ -1,6 +1,7 @@
 library toml.src.ast.document;
 
 import 'package:petitparser/petitparser.dart';
+import 'package:quiver/core.dart';
 import 'package:quiver/collection.dart';
 import 'package:toml/src/decoder.dart';
 import 'package:toml/src/decoder/parser/whitespace.dart';
@@ -67,5 +68,5 @@ class TomlDocument extends TomlNode {
       other is TomlDocument && listsEqual(expressions, other.expressions);
 
   @override
-  int get hashCode => expressions.hashCode;
+  int get hashCode => hashObjects(expressions);
 }
