@@ -66,7 +66,7 @@ class TomlMultilineLiteralString extends TomlMultilineString {
   /// Tests whether the given string can be represented as a literal string.
   ///
   /// The string must only contain characters matched by [contentParser] or up
-  /// to two consequtive `apostrophe`s.
+  /// to two consecutive `apostrophe`s.
   static bool canEncode(String str) => bodyParser.end().accept(str);
 
   @override
