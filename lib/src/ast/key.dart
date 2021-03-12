@@ -30,8 +30,11 @@ class TomlKey extends TomlNode {
   /// Parses the given TOML key.
   ///
   /// Throws a [ParserException] if there is a syntax error.
-  static TomlKey parse(String input) =>
-      parser.end().parse(input).valueOrTomlException;
+  static TomlKey parse(String input) => parser
+      .surroundedBy(tomlWhitespace)
+      .end()
+      .parse(input)
+      .valueOrTomlException;
 
   /// A key that identifies the top-level table.
   static TomlKey topLevel = TomlKey([]);
