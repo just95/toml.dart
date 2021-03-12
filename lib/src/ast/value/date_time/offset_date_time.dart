@@ -84,5 +84,5 @@ class TomlOffsetDateTime extends TomlDateTime {
       offset == other.offset;
 
   @override
-  int get hashCode => hashObjects([type, date, time, offset]);
+  int get hashCode => hash4(type, date, time, offset);
 }

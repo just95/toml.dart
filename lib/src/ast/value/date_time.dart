@@ -171,6 +171,7 @@ class TomlPartialTime {
     }
   }
 
+  /// Gets the [i]th entry of [secondFractions] or `0` if it does not exist.
   int getSecondFractions(int i) =>
       i < secondFractions.length ? secondFractions[i] : 0;
 
@@ -192,7 +193,7 @@ class TomlPartialTime {
       listsEqual(secondFractions, other.secondFractions);
 
   @override
-  int get hashCode => hashObjects([hour, minute, second, secondFractions]);
+  int get hashCode => hashObjects([hour, minute, second] + secondFractions);
 
   @override
   String toString() {
@@ -321,7 +322,7 @@ class TomlTimeZoneOffset {
       minutes == other.minutes;
 
   @override
-  int get hashCode => hashObjects([isUtc, isNegative, hours, minutes]);
+  int get hashCode => hash4(isUtc, isNegative, hours, minutes);
 
   @override
   String toString() {
