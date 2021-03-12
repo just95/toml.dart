@@ -158,7 +158,7 @@ class TomlPartialTime {
       throw ArgumentError('Invalid minute: $minute');
     }
 
-    // Due to leap seconds, the second is allowed to count up to be `60` anot
+    // Due to leap seconds, the second is allowed to count up to be `60` and
     // not just `59`.
     if (second < 0 || second > 60) {
       throw ArgumentError('Invalid second: $second');
