@@ -39,12 +39,34 @@ void main() {
           equals('\u{1f9a6}'),
         );
       });
-      test('escapes standalone high surrogate characters', () {
-        expect(TomlMultilineBasicString.escape('\ud83e'), equals(r'\ud83e'));
+      test('cannot escape standalone high surrogate characters', () {
+        expect(
+          () => TomlMultilineBasicString.escape('\ud83e'),
+          throwsA(equals(TomlInvalidEscapeSequenceException('\\ud83e'))),
+        );
       });
-      test('escapes standalone low surrogate characters', () {
-        expect(TomlMultilineBasicString.escape('\udda6'), equals(r'\udda6'));
+      test('cannot escape standalone low surrogate characters', () {
+        expect(
+          () => TomlMultilineBasicString.escape('\udda6'),
+          throwsA(equals(TomlInvalidEscapeSequenceException('\\udda6'))),
+        );
       });
+    });
+    group('canEncode', () {
+      test('cannot encode strings with non-scalar Unicode values', () {
+        expect(TomlMultilineBasicString.canEncode('\udda6'), isFalse);
+      });
+    });
+    group('construct', () {
+      test(
+        'cannot construct basic string strings with non-scalar Unicode value',
+        () {
+          expect(
+            () => TomlMultilineBasicString('\udda6'),
+            throwsA(isA<ArgumentError>()),
+          );
+        },
+      );
     });
     group('hashCode', () {
       test('two equal multiline basic strings have the same hash code', () {

@@ -12,7 +12,7 @@ import 'package:toml/src/exception.dart';
 /// throws an [TomlInvalidEscapeSequenceException] with [escapeSequence]
 /// set to `r'\w'`.
 ///
-/// An exception of thos type is also thrown when there are Unicode escape
+/// An exception of this type is also thrown when there are Unicode escape
 /// sequences for non-scalar values.
 ///
 /// Example:

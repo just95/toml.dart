@@ -75,7 +75,7 @@ abstract class TomlEscapedChar {
     return String.fromCharCode(escapableChars[shortcut]!);
   });
 
-  /// Parser for unicode escape sequences.
+  /// Parser for Unicode escape sequences.
   ///
   ///     escape-seq-char =/ %x75 4HEXDIG ; uXXXX                U+XXXX
   ///     escape-seq-char =/ %x55 8HEXDIG ; UXXXXXXXX            U+XXXXXXXX
@@ -87,16 +87,20 @@ abstract class TomlEscapedChar {
       tomlHexDigit().times(8).flatten('Eight hexadecimal digits expected'),
     )
   ]).map((charCodeStr) {
-    // Test whether the code point is a scalar Unicode value.
     var charCode = int.parse(charCodeStr, radix: 16);
-    if (0x0000 <= charCode && charCode <= 0xD7FF ||
-        0xE000 <= charCode && charCode <= 0x10FFFF) {
+    if (isScalarUnicodeValue(charCode)) {
       return String.fromCharCode(charCode);
     }
     throw TomlInvalidEscapeSequenceException(
       charCodeStr.length == 4 ? '\\u$charCodeStr' : '\\U$charCodeStr',
     );
   });
+
+  /// Tests whether the given code point is a scalar Unicode value, i.e., in
+  /// the range ``.
+  static bool isScalarUnicodeValue(int charCode) =>
+      0x0000 <= charCode && charCode <= 0xD7FF ||
+      0xE000 <= charCode && charCode <= 0x10FFFF;
 
   /// Writes the given [rune] into the [buffer] and escapes it if necessary.
   ///
@@ -116,11 +120,17 @@ abstract class TomlEscapedChar {
       buffer.write(escapableChars.inverse[rune]);
     } else {
       // The current rune must be escaped but there is no shortcut, i.e., the
-      // Unicode code point must be escaped.
+      // Unicode code point must be escaped. However, Unicode escape sequences
+      // are only allowed for scalar Unicode values.
       var length = rune & 0xffff == rune ? 4 : 8;
+      var prefix = length == 4 ? 'u' : 'U';
+      var hexCode = rune.toRadixString(16).padLeft(length, '0');
+      if (!isScalarUnicodeValue(rune)) {
+        throw TomlInvalidEscapeSequenceException('$escapeChar$prefix$hexCode');
+      }
       buffer.write(escapeChar);
-      buffer.write(length == 4 ? 'u' : 'U');
-      buffer.write(rune.toRadixString(16).padLeft(length, '0'));
+      buffer.write(prefix);
+      buffer.write(hexCode);
     }
   }
 }

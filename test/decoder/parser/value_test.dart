@@ -1033,6 +1033,12 @@ void main() {
             )),
           );
         });
+        test('can parse basic string with long Unicode escape sequences', () {
+          expect(
+            TomlValue.parse(r'"\U0001f9a6"'),
+            equals(TomlBasicString('\u{1f9a6}')),
+          );
+        });
         test('can parse basic string with escaped backslash', () {
           expect(
             TomlValue.parse(r'"some\\windows\\path"'),
@@ -1086,6 +1092,27 @@ void main() {
             )),
           );
         });
+        test(
+          'does not allow escape sequences for unpaired UTF-16 surrogate code '
+          'points',
+          () {
+            expect(
+              () => TomlValue.parse(r'"\uD83E"'),
+              throwsA(equals(TomlInvalidEscapeSequenceException(r'\uD83E'))),
+            );
+          },
+        );
+        test(
+          'does not allow escape sequences for non-scalar Unicode values',
+          () {
+            expect(
+              () => TomlValue.parse(r'"\U00110000"'),
+              throwsA(
+                equals(TomlInvalidEscapeSequenceException(r'\U00110000')),
+              ),
+            );
+          },
+        );
       });
       group('Multiline Basic', () {
         test('can parse empty multiline basic strings', () {

@@ -26,7 +26,7 @@ class TomlMultilineBasicString extends TomlMultilineString {
       .optional()
       .before(bodyParser)
       .surroundedBy(string(delimiter))
-      .map((body) => TomlMultilineBasicString(body));
+      .map((body) => TomlMultilineBasicString._fromEncodable(body));
 
   /// Parser for the body of a multiline basic TOML string.
   ///
@@ -115,6 +115,14 @@ class TomlMultilineBasicString extends TomlMultilineString {
     return buffer.toString();
   }
 
+  /// Tests whether the given string can be represented as a multiline basic
+  /// string.
+  ///
+  /// Multiline basic strings can represent all strings that do only contain
+  /// scalar Unicode values. While a basic string can contain surrogate pairs,
+  /// there must be no unpaired high or low surrogate characters.
+  static bool canEncode(String value) => TomlBasicString.canEncode(value);
+
   /// Reads the next rune from the given iterator without advancing the
   /// iterator.
   ///
@@ -132,7 +140,19 @@ class TomlMultilineBasicString extends TomlMultilineString {
   final String value;
 
   /// Creates a new multiline basic TOML string value with the given contents.
-  TomlMultilineBasicString(this.value);
+  ///
+  /// Throws a [ArgumentError] when the given value cannot be encoded as a
+  /// multiline basic string (see [canEncode]).
+  factory TomlMultilineBasicString(String value) {
+    if (!canEncode(value)) {
+      throw ArgumentError('Invalid multiline basic string: $value');
+    }
+    return TomlMultilineBasicString._fromEncodable(value);
+  }
+
+  /// Creates a new basic string value with the given contents but skips the
+  /// check whether the value can be encoded as a basic string.
+  TomlMultilineBasicString._fromEncodable(this.value);
 
   @override
   TomlStringType get stringType => TomlStringType.multilineBasic;

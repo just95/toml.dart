@@ -24,7 +24,7 @@ class TomlBasicString extends TomlSinglelineString {
       .star()
       .join()
       .surroundedBy(char(delimiter))
-      .map((value) => TomlBasicString(value));
+      .map((value) => TomlBasicString._fromEncodable(value));
 
   /// Parser for a single character of a basic TOML string.
   ///
@@ -56,11 +56,31 @@ class TomlBasicString extends TomlSinglelineString {
     return buffer.toString();
   }
 
+  /// Tests whether the given string can be represented as a basic string.
+  ///
+  /// Basic strings can represent all strings that do only contain scalar
+  /// Unicode values. While a basic string can contain surrogate pairs,
+  /// there must be no unpaired high or low surrogate characters.
+  static bool canEncode(String value) =>
+      value.runes.every(TomlEscapedChar.isScalarUnicodeValue);
+
   @override
   final String value;
 
   /// Creates a new basic TOML string value with the given contents.
-  TomlBasicString(this.value);
+  ///
+  /// Throws a [ArgumentError] when the given value cannot be encoded as a
+  /// basic string (see [canEncode]).
+  factory TomlBasicString(String value) {
+    if (!canEncode(value)) {
+      throw ArgumentError('Invalid basic string: $value');
+    }
+    return TomlBasicString._fromEncodable(value);
+  }
+
+  /// Creates a new basic string value with the given contents but skips the
+  /// check whether the value can be encoded as a basic string.
+  TomlBasicString._fromEncodable(this.value);
 
   @override
   TomlStringType get stringType => TomlStringType.basic;
