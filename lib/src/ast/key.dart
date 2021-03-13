@@ -7,6 +7,7 @@ import 'package:quiver/collection.dart';
 import 'package:quiver/core.dart';
 import 'package:toml/src/decoder/exception/parser.dart';
 import 'package:toml/src/decoder/parser/whitespace.dart';
+import 'package:toml/src/encoder.dart';
 import 'package:toml/src/util/parser.dart';
 
 import 'node.dart';
@@ -95,6 +96,13 @@ abstract class TomlSimpleKey extends TomlNode {
   /// Parser for a simple TOML key.
   static final Parser<TomlSimpleKey> parser =
       ChoiceParser([TomlQuotedKey.parser, TomlUnquotedKey.parser]);
+
+  /// Converts the given [key] to an AST node.
+  ///
+  /// Throws a [TomlUnknownKeyTypeException] when the given key cannot be
+  /// encoded by TOML.
+  static TomlSimpleKey from(dynamic key) =>
+      TomlAstBuilder().buildSimpleKey(key);
 
   /// The actual name of this key.
   String get name;
