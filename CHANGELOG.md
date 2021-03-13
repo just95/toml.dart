@@ -1,5 +1,23 @@
 # Changelog
 
+## Unreleased
+
+This update mainly improves test coverage and fixes some bugs.
+
+ - Disallowed non-scalar Unicode values when encoding (multiline) basic strings.
+   + Added `TomlBasicString.canEncode` and `TomlMultilineString.canEncode`.
+   + The constructors of `TomlBasicString` and `TomlMultilineString` methods throw an `ArgumentError` if a string cannot be encoded.
+   + The `TomlBasicString.escape` and `TomlMultilineBasicString.escape` methods throw a `TomlInvalidEscapeSequenceException` if a string cannot be encoded.
+ - Fixed `hashCode` and `operator ==` of some AST nodes.
+   + Two `TomlDocument`s with equal expressions now have the same hash codes.
+   + Two `TomlPartialTime`s with equal fractional seconds now have the same hash code.
+   + Two `TomlFloat`s that both represent a `nan` value are now considered equal.
+ - Added `TomlSimpleKey.from` factory method.
+ - Allowed leading and trailing whitespace in `TomlKey.parse`.
+ - Fixed `TomlKey.parentKey` for `TomlKey.topLevel`.
+ - Removed unused getter `TomlArray.itemTypes`.
+ - Removed redundant `TomlKeyVisitor` interface.
+
 ## 0.10.0
 
  - Added support for null-safety.

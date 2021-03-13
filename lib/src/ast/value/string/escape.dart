@@ -97,7 +97,7 @@ abstract class TomlEscapedChar {
   });
 
   /// Tests whether the given code point is a scalar Unicode value, i.e., in
-  /// the range ``.
+  /// the range `U+0000` to `U+D7FF` or `U+E000` to `U+10FFFF`.
   static bool isScalarUnicodeValue(int charCode) =>
       0x0000 <= charCode && charCode <= 0xD7FF ||
       0xE000 <= charCode && charCode <= 0x10FFFF;
