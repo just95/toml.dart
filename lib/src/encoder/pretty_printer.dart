@@ -10,7 +10,6 @@ import 'package:toml/src/ast.dart';
 class TomlPrettyPrinter extends TomlVisitor<void>
     with
         TomlExpressionVisitor<void>,
-        TomlKeyVisitor<void>,
         TomlSimpleKeyVisitor<void>,
         TomlValueVisitor<void>,
         TomlDateTimeVisitor<void>,
