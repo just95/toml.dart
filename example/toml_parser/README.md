@@ -23,7 +23,7 @@ dart pub get
 Now you can run the example as follows.
 
 ```bash
-dart pub run example < config.toml
+dart run example < config.toml
 ```
 
 The command above should print `Hello, World!`.

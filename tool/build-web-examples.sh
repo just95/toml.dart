@@ -12,7 +12,7 @@ script_dir=$(dirname "$script")
 root_dir=$(dirname "$script_dir")
 cd "$root_dir"
 
-# Find all examples with a `test-web.dart` file.
+# Find all non-Flutter examples with a `web` directory.
 examples_dir="$root_dir/example"
 for example in $(find "$examples_dir" -name pubspec.yaml); do
   example_dir=$(dirname "$example")

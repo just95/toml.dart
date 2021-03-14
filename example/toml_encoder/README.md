@@ -27,7 +27,7 @@ dart pub get
 Now you can run the example as follows.
 
 ```bash
-dart pub run example
+dart run example
 ```
 
 The command above should print the following TOML document.

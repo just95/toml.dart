@@ -68,7 +68,7 @@ jobs:
       - name: Run Tests of Examples
         run: ./tool/test-examples.sh
 
-  # Runs the `tool/test-web.dart` scripts of the `example`s.
+  # Runs the `tool/test_web.dart` scripts of the `example`s.
   test-web-examples:
     name: Test Web Examples
     runs-on: ubuntu-latest

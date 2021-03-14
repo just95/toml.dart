@@ -55,7 +55,7 @@ linter:
     - empty_constructor_bodies
     - unnecessary_new
     - unnecessary_const
-    - avoid_catches_without_on_clauses # avoid
+    # - avoid_catches_without_on_clauses # avoid # Disabled because it is sometimes necessary to catch everything.
     - avoid_catching_errors
     - use_rethrow_when_possible
 

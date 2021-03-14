@@ -13,4 +13,4 @@ WORKDIR /app/example/toml_to_json
 RUN dart pub get
 
 CMD []
-ENTRYPOINT ["/usr/bin/dart", "bin/toml-to-json.dart"]
+ENTRYPOINT ["/usr/bin/dart", "bin/toml_to_json.dart"]

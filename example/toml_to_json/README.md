@@ -19,7 +19,7 @@ dart pub get
 Now you can run the example as follows.
 
 ```bash
-dart pub run toml-to-json <INPUT-FILE...>
+dart run toml_to_json <INPUT-FILE...>
 ```
 
 The given input file is converted to JSON and printed to the console.

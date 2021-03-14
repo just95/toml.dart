@@ -61,9 +61,6 @@ jobs:
   # the unit tests are executed with all supported versions (according to the
   # lower SDK constraint specified in `pubspec.yaml`) in addition to the latest
   # version.
-  #
-  # For support of SDK versions prior to 2.10, the `dart pub get` and
-  # `dart test` commands have to fallback to `pub get` and `pub run test`.
   vm-test:
     name: Run Unit Tests in Dart VM
     runs-on: ubuntu-latest

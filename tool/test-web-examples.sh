@@ -22,7 +22,7 @@ cd "$root_dir"
 
 # Find all examples with a `test.sh` file.
 examples_dir="$root_dir/example"
-for example in $(find "$examples_dir" -path \*/tool/test-web.dart); do
+for example in $(find "$examples_dir" -path \*/tool/test_web.dart); do
   example_dir=$(dirname $(dirname "$example"))
   example_name=$(basename "$example_dir")
 
@@ -31,7 +31,7 @@ for example in $(find "$examples_dir" -path \*/tool/test-web.dart); do
 
   echo "Running '$example_name' example..."
   # TODO update web examples to null-safety once dev dependencies are updated.
-  if ! dart --no-sound-null-safety ./tool/test-web.dart 2>&1 | awk '{print " | " $0}'; then
+  if ! dart --no-sound-null-safety ./tool/test_web.dart 2>&1 | awk '{print " | " $0}'; then
     echo "------------------------------------------------------------------"
     echo "Error when running web test for '$example_name' example!" >&2
     exit 1
