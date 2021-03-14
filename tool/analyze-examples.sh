@@ -22,7 +22,7 @@ cd "$root_dir"
 
 # Find all examples with a `analysis_options.yaml` file.
 examples_dir="$root_dir/example"
-for example in $(find "$examples_dir" -name analysis_options.yaml); do
+for example in $(find "$examples_dir" -maxdepth 2 -name analysis_options.yaml); do
   example_dir=$(dirname "$example")
   example_name=$(basename "$example_dir")
 
