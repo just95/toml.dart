@@ -1,7 +1,9 @@
 library toml.src.decoder.exception.redefinition;
 
-import 'package:toml/src/ast.dart';
-import 'package:toml/src/exception.dart';
+import 'package:meta/meta.dart';
+
+import '../../ast.dart';
+import '../../exception.dart';
 
 /// An exception which is thrown when a table or key is defined more than once.
 ///
@@ -11,6 +13,7 @@ import 'package:toml/src/exception.dart';
 ///     a = 2
 ///
 /// throws a [TomlRedefinitionException] because `a` is defined twice.
+@immutable
 class TomlRedefinitionException extends TomlException {
   /// Fully qualified name of the table or key.
   final TomlKey name;

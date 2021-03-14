@@ -9,7 +9,7 @@ import 'package:toml/toml.dart';
 /// Encodes a table.
 Map<String, dynamic> encodeTable(Map<String, dynamic> table) {
   var result = <String, dynamic>{};
-  table.forEach((String key, dynamic value) {
+  table.forEach((key, value) {
     result[key] = encodeValue(value);
   });
   return result;

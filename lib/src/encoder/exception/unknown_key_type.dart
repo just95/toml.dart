@@ -1,6 +1,8 @@
 library toml.src.encoder.exception.unknown_key_type;
 
-import 'package:toml/src/exception.dart';
+import 'package:meta/meta.dart';
+
+import '../../exception.dart';
 
 /// An error which is thrown when an object cannot be encoded as a key.
 ///
@@ -14,6 +16,7 @@ import 'package:toml/src/exception.dart';
 ///
 /// throws an [TomlUnknownKeyTypeException] because integers cannot be used as
 /// a key in TOML.
+@immutable
 class TomlUnknownKeyTypeException extends TomlException {
   /// The object which cannot be encoded as a TOML value.
   final dynamic value;

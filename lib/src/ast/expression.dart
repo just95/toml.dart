@@ -1,9 +1,9 @@
 library toml.src.ast.expression;
 
 import 'package:petitparser/petitparser.dart';
-import 'package:toml/src/util/parser.dart';
-import 'package:toml/src/decoder/parser/whitespace.dart';
 
+import '../decoder/parser/whitespace.dart';
+import '../util/parser.dart';
 import 'expression/key_value_pair.dart';
 import 'expression/table.dart';
 import 'node.dart';

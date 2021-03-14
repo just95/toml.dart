@@ -1,6 +1,8 @@
 library toml.src.decoder.exception.invalid_escape_sequence;
 
-import 'package:toml/src/exception.dart';
+import 'package:meta/meta.dart';
+
+import '../../exception.dart';
 
 /// An exception which is thrown when the parser encounters an unspecified
 /// escape sequence.
@@ -21,6 +23,7 @@ import 'package:toml/src/exception.dart';
 ///
 /// throws an [TomlInvalidEscapeSequenceException] with [escapeSequence]
 /// set to `r'\uD801'` because `0xD800` is a high-surrogate code unit.
+@immutable
 class TomlInvalidEscapeSequenceException extends TomlException {
   /// The invalid escape sequence.
   final String escapeSequence;

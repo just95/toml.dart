@@ -1,6 +1,6 @@
 library toml.src.encoder.pretty_printer;
 
-import 'package:toml/src/ast.dart';
+import '../ast.dart';
 
 /// A visitor for TOML AST nodes that converts them to a TOML formatted string.
 ///
@@ -71,7 +71,7 @@ class TomlPrettyPrinter
     _separatedBy(
       document.expressions,
       write: visitExpression,
-      writeSeparator: (TomlExpression next) {
+      writeSeparator: (next) {
         // All expresissions are are on a line by themselves but there is an
         // additional blank line before every table header (except if it is
         // the very first expression of the document).

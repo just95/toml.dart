@@ -1,8 +1,10 @@
 library toml.src.decoder.exception.parser;
 
+import 'package:meta/meta.dart';
 import 'package:petitparser/petitparser.dart';
-import 'package:toml/src/exception.dart';
 import 'package:quiver/core.dart';
+
+import '../../exception.dart';
 
 /// An exception which is thrown when there is an error while parsing a TOML
 /// document or value.
@@ -13,6 +15,7 @@ import 'package:quiver/core.dart';
 ///
 /// throws a [TomlParserException] because the closing bracket of the table
 /// definition is missing.
+@immutable
 class TomlParserException extends TomlException implements FormatException {
   /// Gets the value of the given parse [result] if it represents a [Success]
   /// or throws a [TomlParserException] if it is a [Failure].
@@ -77,5 +80,7 @@ class TomlParserException extends TomlException implements FormatException {
 /// method that behaves like [Result.value] but throws a [TomlParserException]
 /// instead of a [ParserException] when the result is a [Failure].
 extension TomlParserExceptionExtension<T> on Result<T> {
+  /// Like [value] but throws an [TomlParserException] when this
+  /// result is a [Failure].
   T get valueOrTomlException => TomlParserException.fromResult(this);
 }

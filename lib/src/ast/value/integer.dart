@@ -1,10 +1,11 @@
 library toml.src.ast.value.integer;
 
+import 'package:meta/meta.dart';
 import 'package:petitparser/petitparser.dart';
-import 'package:toml/src/decoder/parser/ranges.dart';
-import 'package:toml/src/util/parser.dart';
 import 'package:quiver/core.dart';
 
+import '../../decoder/parser/ranges.dart';
+import '../../util/parser.dart';
 import '../value.dart';
 import '../visitor/value.dart';
 
@@ -45,6 +46,7 @@ class TomlIntegerFormat {
 /// AST node that represents a TOML integer.
 ///
 ///     integer = dec-int / hex-int / oct-int / bin-int
+@immutable
 class TomlInteger extends TomlValue {
   /// Parser for a TOML interger value.
   ///
@@ -180,7 +182,7 @@ class TomlInteger extends TomlValue {
       visitor.visitInteger(this);
 
   @override
-  bool operator ==(dynamic other) =>
+  bool operator ==(Object other) =>
       other is TomlInteger && value == other.value && format == other.format;
 
   @override

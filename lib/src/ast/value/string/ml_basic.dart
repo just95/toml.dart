@@ -1,11 +1,12 @@
 library toml.src.ast.value.string.ml_basic;
 
+import 'package:meta/meta.dart';
 import 'package:petitparser/petitparser.dart';
-import 'package:toml/src/util/parser.dart';
-import 'package:toml/src/decoder/parser/ranges.dart';
-import 'package:toml/src/decoder/parser/whitespace.dart';
 import 'package:quiver/core.dart';
 
+import '../../../decoder/parser/ranges.dart';
+import '../../../decoder/parser/whitespace.dart';
+import '../../../util/parser.dart';
 import '../../visitor/value/string.dart';
 import '../string.dart';
 import 'basic.dart';
@@ -15,6 +16,7 @@ import 'escape.dart';
 ///
 ///     ml-basic-string = ml-basic-string-delim [ newline ] ml-basic-body
 ///                       ml-basic-string-delim
+@immutable
 class TomlMultilineBasicString extends TomlMultilineString {
   /// Delimiter for multiline basic TOML strings.
   ///
@@ -162,7 +164,7 @@ class TomlMultilineBasicString extends TomlMultilineString {
       visitor.visitMultilineBasicString(this);
 
   @override
-  bool operator ==(dynamic other) =>
+  bool operator ==(Object other) =>
       other is TomlMultilineBasicString && value == other.value;
 
   @override

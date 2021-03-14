@@ -1,7 +1,6 @@
 library toml.src.ast.node;
 
-import 'package:toml/src/encoder.dart';
-
+import '../encoder.dart';
 import 'visitor/node.dart';
 
 /// Base class of all TOML AST nodes.

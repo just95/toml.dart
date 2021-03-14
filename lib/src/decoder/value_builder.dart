@@ -1,7 +1,6 @@
 library toml.src.ast.decoder.value_builder;
 
-import 'package:toml/src/ast.dart';
-
+import '../ast.dart';
 import 'map_builder.dart';
 
 /// A visitor for [TomlValue]s that builds Dart values from their internal

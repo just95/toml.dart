@@ -1,10 +1,11 @@
 library toml.src.ast.expression.table;
 
+import 'package:meta/meta.dart';
 import 'package:petitparser/petitparser.dart';
-import 'package:toml/src/decoder/parser/whitespace.dart';
-import 'package:toml/src/util/parser.dart';
 import 'package:quiver/core.dart';
 
+import '../../decoder/parser/whitespace.dart';
+import '../../util/parser.dart';
 import '../expression.dart';
 import '../key.dart';
 import '../visitor/expression.dart';
@@ -43,6 +44,7 @@ abstract class TomlTable extends TomlExpression {
 /// table.
 ///
 ///     std-table = std-table-open key std-table-close
+@immutable
 class TomlStandardTable extends TomlTable {
   /// The opening delimited of the standard table header.
   ///
@@ -70,7 +72,7 @@ class TomlStandardTable extends TomlTable {
       visitor.visitStandardTable(this);
 
   @override
-  bool operator ==(dynamic other) =>
+  bool operator ==(Object other) =>
       other is TomlStandardTable && name == other.name;
 
   @override
@@ -81,6 +83,7 @@ class TomlStandardTable extends TomlTable {
 /// an array of tables.
 ///
 ///     array-table = array-table-open key array-table-close
+@immutable
 class TomlArrayTable extends TomlTable {
   /// The opening delimited of the array of tables header.
   ///
@@ -96,7 +99,7 @@ class TomlArrayTable extends TomlTable {
   static final Parser<TomlArrayTable> parser = TomlKey.parser
       .surroundedBy(tomlWhitespace)
       .surroundedBy(string(openingDelimiter), string(closingDelimiter))
-      .map((TomlKey key) => TomlArrayTable(key));
+      .map((key) => TomlArrayTable(key));
 
   /// Creates a new TOML array table.
   TomlArrayTable(TomlKey name) : super(name);
@@ -109,7 +112,7 @@ class TomlArrayTable extends TomlTable {
       visitor.visitArrayTable(this);
 
   @override
-  bool operator ==(dynamic other) =>
+  bool operator ==(Object other) =>
       other is TomlArrayTable && name == other.name;
 
   @override

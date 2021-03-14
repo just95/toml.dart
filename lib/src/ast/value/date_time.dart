@@ -1,13 +1,14 @@
 library toml.src.ast.value.date_time;
 
+import 'package:meta/meta.dart';
 import 'package:petitparser/petitparser.dart';
 import 'package:quiver/collection.dart';
 import 'package:quiver/core.dart';
-import 'package:toml/src/util/container.dart';
-import 'package:toml/src/util/parser.dart';
-import 'package:toml/src/encoder.dart';
-import 'package:toml/src/util/date.dart';
 
+import '../../encoder.dart';
+import '../../util/container.dart';
+import '../../util/date.dart';
+import '../../util/parser.dart';
 import '../value.dart';
 import '../visitor/value.dart';
 import '../visitor/value/date_time.dart';
@@ -39,6 +40,7 @@ Parser<int> _dd =
 ///     date-month     = 2DIGIT     ; 01-12
 ///     date-mday      = 2DIGIT     ; 01-28, 01-29, 01-30, 01-31
 ///                                 ; based on month/year
+@immutable
 class TomlFullDate {
   /// Parser for a full date.
   static final Parser<TomlFullDate> parser = SequenceParser([
@@ -73,7 +75,7 @@ class TomlFullDate {
   }
 
   @override
-  bool operator ==(dynamic other) =>
+  bool operator ==(Object other) =>
       other is TomlFullDate &&
       year == other.year &&
       month == other.month &&
@@ -101,6 +103,7 @@ class TomlFullDate {
 ///     time-second    = 2DIGIT     ; 00-58, 00-59, 00-60
 ///                                 ; based on leap second rules
 ///     time-secfrac   = "." 1*DIGIT
+@immutable
 class TomlPartialTime {
   /// Parser for a partial time value with microsecond precision.
   static final Parser<TomlPartialTime> parser = PairParser(
@@ -185,7 +188,7 @@ class TomlPartialTime {
   int get nanosecond => getSecondFractions(2);
 
   @override
-  bool operator ==(dynamic other) =>
+  bool operator ==(Object other) =>
       other is TomlPartialTime &&
       hour == other.hour &&
       minute == other.minute &&
@@ -208,6 +211,7 @@ class TomlPartialTime {
 ///
 ///     time-offset    = "Z" / time-numoffset
 ///     time-numoffset = ( "+" / "-" ) time-hour ":" time-minute
+@immutable
 class TomlTimeZoneOffset {
   /// Parser for a time-zone offset.
   static final Parser<TomlTimeZoneOffset> parser =
@@ -314,7 +318,7 @@ class TomlTimeZoneOffset {
   }
 
   @override
-  bool operator ==(dynamic other) =>
+  bool operator ==(Object other) =>
       other is TomlTimeZoneOffset &&
       isUtc == other.isUtc &&
       isNegative == other.isNegative &&

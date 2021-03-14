@@ -9,7 +9,7 @@ import 'package:toml/toml.dart';
 /// Decodes a JSON encoded TOML table.
 Map<String, dynamic> decodeTable(Map<String, dynamic> table) {
   var result = <String, dynamic>{};
-  table.forEach((String key, dynamic value) {
+  table.forEach((key, value) {
     result[key] = decodeValue(value);
   });
   return result;

@@ -1,9 +1,10 @@
 library toml.src.ast.value.offset_date_time;
 
+import 'package:meta/meta.dart';
 import 'package:petitparser/petitparser.dart';
 import 'package:quiver/core.dart';
-import 'package:toml/src/util/parser.dart';
 
+import '../../../util/parser.dart';
 import '../../value.dart';
 import '../../visitor/value/date_time.dart';
 import '../date_time.dart';
@@ -14,6 +15,7 @@ import '../date_time.dart';
 ///
 ///     time-delim     = "T" / %x20 ; T, t, or space
 ///     full-time      = partial-time time-offset
+@immutable
 class TomlOffsetDateTime extends TomlDateTime {
   /// Parser for a TOML offset date-time value.
   static final Parser<TomlOffsetDateTime> parser = PairParser(
@@ -77,7 +79,7 @@ class TomlOffsetDateTime extends TomlDateTime {
       visitor.visitOffsetDateTime(this);
 
   @override
-  bool operator ==(dynamic other) =>
+  bool operator ==(Object other) =>
       other is TomlOffsetDateTime &&
       time == other.time &&
       date == other.date &&

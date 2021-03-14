@@ -1,11 +1,12 @@
 library toml.src.ast.value.array;
 
+import 'package:meta/meta.dart';
 import 'package:petitparser/petitparser.dart';
-import 'package:toml/src/decoder/parser/whitespace.dart';
-import 'package:toml/src/util/parser.dart';
-import 'package:quiver/core.dart';
 import 'package:quiver/collection.dart';
+import 'package:quiver/core.dart';
 
+import '../../decoder/parser/whitespace.dart';
+import '../../util/parser.dart';
 import '../value.dart';
 import '../visitor/value.dart';
 
@@ -16,6 +17,7 @@ import '../visitor/value.dart';
 ///     array-values =  ws-comment-newline val ws-comment-newline array-sep
 ///                     array-values
 ///     array-values =/ ws-comment-newline val ws-comment-newline [ array-sep ]
+@immutable
 class TomlArray extends TomlValue {
   /// The opening delimiter of arrays.
   ///
@@ -56,7 +58,7 @@ class TomlArray extends TomlValue {
       visitor.visitArray(this);
 
   @override
-  bool operator ==(dynamic other) =>
+  bool operator ==(Object other) =>
       other is TomlArray && listsEqual(items, other.items);
 
   @override

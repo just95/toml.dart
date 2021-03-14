@@ -1,11 +1,12 @@
 library toml.src.ast.value.table;
 
+import 'package:meta/meta.dart';
 import 'package:petitparser/petitparser.dart';
-import 'package:toml/src/decoder/parser/whitespace.dart';
-import 'package:toml/src/util/parser.dart';
 import 'package:quiver/core.dart';
 import 'package:quiver/collection.dart';
 
+import '../../decoder/parser/whitespace.dart';
+import '../../util/parser.dart';
 import '../expression/key_value_pair.dart';
 import '../value.dart';
 import '../visitor/value.dart';
@@ -16,6 +17,7 @@ import '../visitor/value.dart';
 ///         inline-table-open [ inline-table-keyvals ] inline-table-close
 ///
 ///     inline-table-keyvals = keyval [ inline-table-sep inline-table-keyvals ]
+@immutable
 class TomlInlineTable extends TomlValue {
   /// The opening delimiter of inline tables.
   ///
@@ -58,7 +60,7 @@ class TomlInlineTable extends TomlValue {
       visitor.visitInlineTable(this);
 
   @override
-  bool operator ==(dynamic other) =>
+  bool operator ==(Object other) =>
       other is TomlInlineTable && listsEqual(pairs, other.pairs);
 
   @override

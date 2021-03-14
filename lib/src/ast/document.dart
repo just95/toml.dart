@@ -1,14 +1,14 @@
 library toml.src.ast.document;
 
+import 'package:meta/meta.dart';
 import 'package:petitparser/petitparser.dart';
-import 'package:quiver/core.dart';
 import 'package:quiver/collection.dart';
-import 'package:toml/src/decoder.dart';
-import 'package:toml/src/decoder/parser/whitespace.dart';
-import 'package:toml/src/encoder.dart';
-import 'package:toml/src/loader.dart';
-import 'package:toml/src/util/iterable/where_not_null.dart';
+import 'package:quiver/core.dart';
 
+import '../decoder.dart';
+import '../encoder.dart';
+import '../loader.dart';
+import '../util/iterable/where_not_null.dart';
 import 'expression.dart';
 import 'node.dart';
 import 'visitor/node.dart';
@@ -16,6 +16,7 @@ import 'visitor/node.dart';
 /// Abstract syntax tree for a TOML document.
 ///
 ///     toml = expression *( newline expression )
+@immutable
 class TomlDocument extends TomlNode {
   /// Parser for TOML documents.
   ///
@@ -64,7 +65,7 @@ class TomlDocument extends TomlNode {
   T acceptVisitor<T>(TomlVisitor<T> visitor) => visitor.visitDocument(this);
 
   @override
-  bool operator ==(dynamic other) =>
+  bool operator ==(Object other) =>
       other is TomlDocument && listsEqual(expressions, other.expressions);
 
   @override

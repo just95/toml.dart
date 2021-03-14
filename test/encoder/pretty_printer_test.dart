@@ -74,7 +74,8 @@ void main() {
                 prettyPrinter.toString(), equals('1969-07-20 20:17:00.123Z'));
           });
           test(
-            'pretty prints UTC date-time with milli- and microseconds correctly',
+            'pretty prints UTC date-time with milli- and microseconds '
+            'correctly',
             () {
               var prettyPrinter = TomlPrettyPrinter();
               prettyPrinter.visitOffsetDateTime(TomlOffsetDateTime(

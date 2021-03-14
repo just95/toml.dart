@@ -1,8 +1,7 @@
 library toml.src.encoder.ast_builder;
 
-import 'package:toml/src/ast.dart';
-import 'package:toml/src/decoder/parser/whitespace.dart';
-
+import '../ast.dart';
+import '../decoder/parser/whitespace.dart';
 import 'encodable.dart';
 import 'exception/unknown_key_type.dart';
 import 'exception/unknown_value_type.dart';

@@ -1,11 +1,12 @@
 library toml.src.ast.value.string.ml_literal;
 
+import 'package:meta/meta.dart';
 import 'package:petitparser/petitparser.dart';
-import 'package:toml/src/util/parser.dart';
-import 'package:toml/src/decoder/parser/ranges.dart';
-import 'package:toml/src/decoder/parser/whitespace.dart';
 import 'package:quiver/core.dart';
 
+import '../../../decoder/parser/ranges.dart';
+import '../../../decoder/parser/whitespace.dart';
+import '../../../util/parser.dart';
 import '../../visitor/value/string.dart';
 import '../string.dart';
 import 'literal.dart';
@@ -14,6 +15,7 @@ import 'literal.dart';
 ///
 ///     ml-literal-string = ml-literal-string-delim [ newline ] ml-literal-body
 ///                         ml-literal-string-delim
+@immutable
 class TomlMultilineLiteralString extends TomlMultilineString {
   /// Delimiter for multiline literal TOML strings.
   ///
@@ -96,7 +98,7 @@ class TomlMultilineLiteralString extends TomlMultilineString {
       visitor.visitMultilineLiteralString(this);
 
   @override
-  bool operator ==(dynamic other) =>
+  bool operator ==(Object other) =>
       other is TomlMultilineLiteralString && value == other.value;
 
   @override

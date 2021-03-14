@@ -1,8 +1,10 @@
 library toml.src.util.container.pair;
 
+import 'package:meta/meta.dart';
 import 'package:quiver/core.dart';
 
 /// Utility class that stores a pair of values of types `F` and `S`.
+@immutable
 class Pair<F, S> {
   /// The first component of the pair.
   final F first;
@@ -17,7 +19,7 @@ class Pair<F, S> {
   int get hashCode => hash2(first, second);
 
   @override
-  bool operator ==(other) =>
+  bool operator ==(Object other) =>
       other is Pair && first == other.first && second == other.second;
 
   @override

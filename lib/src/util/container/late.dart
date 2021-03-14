@@ -5,6 +5,7 @@ typedef Thunk<T> = T Function();
 
 /// Container for a value of type `T` that can be evaluated lazily.
 abstract class Late<T> {
+  /// The actual value.
   T get value;
 
   /// Creates a new container for a lazily evaluted [value].

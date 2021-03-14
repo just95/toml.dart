@@ -1,7 +1,9 @@
 library toml.src.decoder.exception.not_a_table;
 
-import 'package:toml/src/ast.dart';
-import 'package:toml/src/exception.dart';
+import 'package:meta/meta.dart';
+
+import '../../ast.dart';
+import '../../exception.dart';
 
 /// An exception which is thrown when the parent element of a table is not
 /// a table or array of tables.
@@ -16,6 +18,7 @@ import 'package:toml/src/exception.dart';
 ///
 /// throws a [TomlNotATableException] because `a.b.c` fails to create a
 /// sub-table of `a.b` which is an integer rather than a table.
+@immutable
 class TomlNotATableException extends TomlException {
   /// The name of the table which could not be created because its parent
   /// is not a table.

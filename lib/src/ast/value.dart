@@ -1,10 +1,10 @@
 library toml.src.ast.value;
 
 import 'package:petitparser/petitparser.dart';
-import 'package:toml/src/decoder/exception/parser.dart';
-import 'package:toml/src/util/parser.dart';
-import 'package:toml/src/encoder.dart';
 
+import '../decoder/exception/parser.dart';
+import '../encoder.dart';
+import '../util/parser.dart';
 import 'node.dart';
 import 'value/array.dart';
 import 'value/boolean.dart';

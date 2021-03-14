@@ -1,9 +1,10 @@
 library toml.src.ast.value.float;
 
+import 'package:meta/meta.dart';
 import 'package:petitparser/petitparser.dart';
 import 'package:quiver/core.dart';
-import 'package:toml/src/util/parser.dart';
 
+import '../../util/parser.dart';
 import '../value.dart';
 import '../visitor/value.dart';
 
@@ -11,6 +12,7 @@ import '../visitor/value.dart';
 ///
 ///     float = float-int-part ( exp / frac [ exp ] )
 ///     float =/ special-float
+@immutable
 class TomlFloat extends TomlValue {
   /// Parser for a TOML floating point value.
   static final Parser<TomlFloat> parser =
@@ -66,7 +68,7 @@ class TomlFloat extends TomlValue {
       visitor.visitFloat(this);
 
   @override
-  bool operator ==(dynamic other) =>
+  bool operator ==(Object other) =>
       other is TomlFloat &&
       (value == other.value || value.isNaN && other.value.isNaN);
 

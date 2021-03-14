@@ -2,14 +2,15 @@ library toml.src.ast.key;
 
 import 'dart:math';
 
+import 'package:meta/meta.dart';
 import 'package:petitparser/petitparser.dart';
 import 'package:quiver/collection.dart';
 import 'package:quiver/core.dart';
-import 'package:toml/src/decoder/exception/parser.dart';
-import 'package:toml/src/decoder/parser/whitespace.dart';
-import 'package:toml/src/encoder.dart';
-import 'package:toml/src/util/parser.dart';
 
+import '../decoder/exception/parser.dart';
+import '../decoder/parser/whitespace.dart';
+import '../encoder.dart';
+import '../util/parser.dart';
 import 'node.dart';
 import 'value/string.dart';
 import 'visitor/key.dart';
@@ -19,6 +20,7 @@ import 'visitor/node.dart';
 ///
 ///     key = simple-key / dotted-key
 ///     dotted-key = simple-key 1*( dot-sep simple-key )
+@immutable
 class TomlKey extends TomlNode {
   /// Separator for dotted keys.
   ///
@@ -92,6 +94,7 @@ class TomlKey extends TomlNode {
 /// (i.e. non-dotted keys).
 ///
 ///     simple-key = quoted-key / unquoted-key
+@immutable
 abstract class TomlSimpleKey extends TomlNode {
   /// Parser for a simple TOML key.
   static final Parser<TomlSimpleKey> parser =
@@ -118,10 +121,11 @@ abstract class TomlSimpleKey extends TomlNode {
 /// AST node that represents a quoted key.
 ///
 ///     quoted-key = basic-string / literal-string
+@immutable
 class TomlQuotedKey extends TomlSimpleKey {
   /// Parser for a quoted TOML key.
-  static final Parser<TomlQuotedKey> parser = TomlSinglelineString.parser
-      .map((TomlSinglelineString string) => TomlQuotedKey(string));
+  static final Parser<TomlQuotedKey> parser =
+      TomlSinglelineString.parser.map((string) => TomlQuotedKey(string));
 
   /// The string literal that represents this key.
   final TomlSinglelineString string;
@@ -148,12 +152,13 @@ class TomlQuotedKey extends TomlSimpleKey {
 ///
 ///     unquoted-key = 1*( ALPHA / DIGIT / %x2D / %x5F )
 ///                  ; A-Z / a-z / 0-9 / - / _
+@immutable
 class TomlUnquotedKey extends TomlSimpleKey {
   /// Parser for an unquoted TOML key.
   static final Parser<TomlUnquotedKey> parser = pattern('A-Za-z0-9_-')
       .plus()
       .flatten('Unquoted key expected')
-      .map((String name) => TomlUnquotedKey(name));
+      .map((name) => TomlUnquotedKey(name));
 
   /// Tests whether the given key does not have to be quoted.
   static bool canEncode(String key) => parser.end().accept(key);

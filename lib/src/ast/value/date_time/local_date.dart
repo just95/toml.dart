@@ -1,5 +1,6 @@
 library toml.src.ast.value.local_date;
 
+import 'package:meta/meta.dart';
 import 'package:petitparser/petitparser.dart';
 import 'package:quiver/core.dart';
 
@@ -11,6 +12,7 @@ import 'local_date_time.dart';
 /// AST node that represents a TOML local date value.
 ///
 ///     local-date = full-date
+@immutable
 class TomlLocalDate extends TomlDateTime {
   /// Parser for a TOML local date value.
   static final Parser<TomlLocalDate> parser =
@@ -34,7 +36,7 @@ class TomlLocalDate extends TomlDateTime {
       visitor.visitLocalDate(this);
 
   @override
-  bool operator ==(dynamic other) =>
+  bool operator ==(Object other) =>
       other is TomlLocalDate && date == other.date;
 
   @override

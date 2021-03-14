@@ -1,7 +1,6 @@
 library toml.src.ast.decoder.map_builder;
 
-import 'package:toml/src/ast.dart';
-
+import '../ast.dart';
 import 'exception/not_a_table.dart';
 import 'exception/redefinition.dart';
 import 'value_builder.dart';
@@ -112,7 +111,7 @@ class TomlMapBuilder with TomlExpressionVisitorMixin<void> {
   }
 }
 
-/// Base class for the data type that is used internally by the [MapBuilder]
+/// Base class for the data type that is used internally by the [TomlMapBuilder]
 /// to store information about the map that is currently constructed.
 ///
 /// This data structure is a tree where the inner nodes represent tables and

@@ -2,11 +2,13 @@ library toml.src.parser.escape;
 
 import 'package:petitparser/petitparser.dart';
 import 'package:quiver/collection.dart';
-import 'package:toml/src/decoder/exception/invalid_escape_sequence.dart';
-import 'package:toml/src/decoder/parser/ranges.dart';
-import 'package:toml/src/decoder/parser/whitespace.dart';
-import 'package:toml/src/util/parser.dart';
 
+import '../../../decoder/exception/invalid_escape_sequence.dart';
+import '../../../decoder/parser/ranges.dart';
+import '../../../decoder/parser/whitespace.dart';
+import '../../../util/parser.dart';
+
+/// Collection of parsers for escape sequences.
 abstract class TomlEscapedChar {
   /// The character that is used to escape other characters.
   ///
@@ -34,7 +36,7 @@ abstract class TomlEscapedChar {
   /// Unicode code point of a backslash.
   static final int backslash = 0x5C;
 
-  // Map between escape characters and the corresponding Unicode code point.
+  /// Map between escape characters and the corresponding Unicode code point.
   static final BiMap<String, int> escapableChars = BiMap()
     ..addAll({
       'b': backspace,

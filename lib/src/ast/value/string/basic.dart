@@ -1,11 +1,12 @@
 library toml.src.ast.value.string.basic;
 
+import 'package:meta/meta.dart';
 import 'package:petitparser/petitparser.dart';
-import 'package:toml/src/decoder/parser/ranges.dart';
-import 'package:toml/src/decoder/parser/whitespace.dart';
-import 'package:toml/src/util/parser.dart';
 import 'package:quiver/core.dart';
 
+import '../../../decoder/parser/ranges.dart';
+import '../../../decoder/parser/whitespace.dart';
+import '../../../util/parser.dart';
 import '../../visitor/value/string.dart';
 import '../string.dart';
 import 'escape.dart';
@@ -13,6 +14,7 @@ import 'escape.dart';
 /// AST node that represents basic TOML strings.
 ///
 ///     basic-string = quotation-mark *basic-char quotation-mark
+@immutable
 class TomlBasicString extends TomlSinglelineString {
   /// Delimiter for basic TOML strings.
   ///
@@ -90,7 +92,7 @@ class TomlBasicString extends TomlSinglelineString {
       visitor.visitBasicString(this);
 
   @override
-  bool operator ==(dynamic other) =>
+  bool operator ==(Object other) =>
       other is TomlBasicString && value == other.value;
 
   @override

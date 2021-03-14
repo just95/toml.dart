@@ -1,10 +1,11 @@
 library toml.src.ast.expression.key_value_pair;
 
+import 'package:meta/meta.dart';
 import 'package:petitparser/petitparser.dart';
-import 'package:toml/src/decoder/parser/whitespace.dart';
-import 'package:toml/src/util/parser.dart';
 import 'package:quiver/core.dart';
 
+import '../../decoder/parser/whitespace.dart';
+import '../../util/parser.dart';
 import '../expression.dart';
 import '../key.dart';
 import '../value.dart';
@@ -13,6 +14,7 @@ import '../visitor/expression.dart';
 /// A TOML expression AST node that represents a key/value pair.
 ///
 ///     keyval = key keyval-sep val
+@immutable
 class TomlKeyValuePair extends TomlExpression {
   /// The separator between the key and value.
   ///
@@ -41,7 +43,7 @@ class TomlKeyValuePair extends TomlExpression {
       visitor.visitKeyValuePair(this);
 
   @override
-  bool operator ==(dynamic other) =>
+  bool operator ==(Object other) =>
       other is TomlKeyValuePair && key == other.key && value == other.value;
 
   @override

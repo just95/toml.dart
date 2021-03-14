@@ -1,5 +1,6 @@
 library toml.src.ast.value.boolean;
 
+import 'package:meta/meta.dart';
 import 'package:petitparser/petitparser.dart';
 import 'package:quiver/core.dart';
 
@@ -12,6 +13,7 @@ import '../visitor/value.dart';
 ///
 ///     true    = %x74.72.75.65     ; true
 ///     false   = %x66.61.6C.73.65  ; false
+@immutable
 class TomlBoolean extends TomlValue {
   /// Parser for a boolean TOML value.
   static final Parser<TomlBoolean> parser = ChoiceParser([
@@ -33,7 +35,7 @@ class TomlBoolean extends TomlValue {
       visitor.visitBoolean(this);
 
   @override
-  bool operator ==(dynamic other) =>
+  bool operator ==(Object other) =>
       other is TomlBoolean && value == other.value;
 
   @override

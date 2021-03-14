@@ -1,16 +1,18 @@
 library toml.src.ast.value.string.literal;
 
+import 'package:meta/meta.dart';
 import 'package:petitparser/petitparser.dart';
-import 'package:toml/src/util/parser.dart';
-import 'package:toml/src/decoder/parser/ranges.dart';
 import 'package:quiver/core.dart';
 
+import '../../../decoder/parser/ranges.dart';
+import '../../../util/parser.dart';
 import '../../visitor/value/string.dart';
 import '../string.dart';
 
 /// AST node that represents literal TOML strings.
 ///
 ///     literal-string = apostrophe *literal-char apostrophe
+@immutable
 class TomlLiteralString extends TomlSinglelineString {
   /// Delimiter for basic TOML strings.
   ///
@@ -65,7 +67,7 @@ class TomlLiteralString extends TomlSinglelineString {
       visitor.visitLiteralString(this);
 
   @override
-  bool operator ==(dynamic other) =>
+  bool operator ==(Object other) =>
       other is TomlLiteralString && value == other.value;
 
   @override
