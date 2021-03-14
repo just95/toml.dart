@@ -7,22 +7,22 @@ import '../../value/string/ml_basic.dart';
 import '../../value/string/ml_literal.dart';
 
 /// Interface for visitors of [TomlString]s.
-abstract class TomlStringVisitor<T> {
+abstract class TomlStringVisitor<R> {
   /// Visits the given basic string.
-  T visitBasicString(TomlBasicString string);
+  R visitBasicString(TomlBasicString string);
 
   /// Visits the given literal string.
-  T visitLiteralString(TomlLiteralString string);
+  R visitLiteralString(TomlLiteralString string);
 
   /// Visits the given multiline basic string.
-  T visitMultilineBasicString(TomlMultilineBasicString string);
+  R visitMultilineBasicString(TomlMultilineBasicString string);
 
   /// Visits the given multiline literal string.
-  T visitMultilineLiteralString(TomlMultilineLiteralString string);
+  R visitMultilineLiteralString(TomlMultilineLiteralString string);
 
   /// Visits the given [value].
   ///
   /// This method is using [TomlString.acceptStringVisitor] to invoke the right
   /// visitor method from above.
-  T visitString(TomlString value) => value.acceptStringVisitor(this);
+  R visitString(TomlString value) => value.acceptStringVisitor(this);
 }

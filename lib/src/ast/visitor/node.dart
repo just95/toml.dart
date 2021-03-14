@@ -7,25 +7,25 @@ import '../node.dart';
 import '../value.dart';
 
 /// Interface for visitors of [TomlNode]s.
-abstract class TomlVisitor<T> {
+abstract class TomlVisitor<R> {
   /// Visits the given document.
-  T visitDocument(TomlDocument document);
+  R visitDocument(TomlDocument document);
 
   /// Visits the given expression.
-  T visitExpression(TomlExpression expr);
+  R visitExpression(TomlExpression expr);
 
   /// Visits the given dotted key.
-  T visitKey(TomlKey key);
+  R visitKey(TomlKey key);
 
   /// Visits the given non-dotted key.
-  T visitSimpleKey(TomlSimpleKey key);
+  R visitSimpleKey(TomlSimpleKey key);
 
   /// Visits the given value.
-  T visitValue(TomlValue value);
+  R visitValue(TomlValue value);
 
   /// Visits the given [node].
   ///
   /// This method is using [TomlValue.acceptVisitor] to invoke the right
   /// visitor method from above.
-  T visit(TomlNode node) => node.acceptVisitor(this);
+  R visit(TomlNode node) => node.acceptVisitor(this);
 }
