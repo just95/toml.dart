@@ -5,7 +5,7 @@ import 'package:toml/src/ast.dart';
 
 /// A visitor that returns the name of its method that visited the node that
 /// acceted the visitor.
-class TomlValueTestVisitor extends TomlValueVisitor<String> {
+class TomlValueTestVisitor with TomlValueVisitorMixin<String> {
   @override
   String visitArray(_) => 'visitArray';
 

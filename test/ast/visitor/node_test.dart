@@ -5,7 +5,7 @@ import 'package:toml/src/ast.dart';
 
 /// A visitor that returns the name of its method that visited the node that
 /// acceted the visitor.
-class TomlTestVisitor extends TomlVisitor<String> {
+class TomlTestVisitor with TomlVisitorMixin<String> {
   @override
   String visitDocument(_) => 'visitDocument';
 

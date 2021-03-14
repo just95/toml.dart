@@ -22,7 +22,12 @@ abstract class TomlVisitor<R> {
 
   /// Visits the given value.
   R visitValue(TomlValue value);
+}
 
+/// Mixin that adds a [visitExpression] method to classes implementing
+/// [TomlExpressionVisitor] that automatically selects the appropriate
+/// visitor method using [TomlValue.acceptVisitor].
+mixin TomlVisitorMixin<R> implements TomlVisitor<R> {
   /// Visits the given [node].
   ///
   /// This method is using [TomlValue.acceptVisitor] to invoke the right

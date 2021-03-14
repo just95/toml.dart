@@ -7,13 +7,14 @@ import 'package:toml/src/ast.dart';
 /// To pretty print an AST node, call the corresponding `visit*` method.
 /// To get the TOML formatted string of the visited AST node call the
 /// [toString] method of the pretty printer.
-class TomlPrettyPrinter extends TomlVisitor<void>
+class TomlPrettyPrinter
     with
-        TomlExpressionVisitor<void>,
-        TomlSimpleKeyVisitor<void>,
-        TomlValueVisitor<void>,
-        TomlDateTimeVisitor<void>,
-        TomlStringVisitor<void> {
+        TomlVisitorMixin<void>,
+        TomlExpressionVisitorMixin<void>,
+        TomlSimpleKeyVisitorMixin<void>,
+        TomlValueVisitorMixin<void>,
+        TomlDateTimeVisitorMixin<void>,
+        TomlStringVisitorMixin<void> {
   /// Buffer for constructing the TOML formatted string.
   final StringBuffer _buffer;
 

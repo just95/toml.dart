@@ -19,7 +19,16 @@ abstract class TomlStringVisitor<R> {
 
   /// Visits the given multiline literal string.
   R visitMultilineLiteralString(TomlMultilineLiteralString string);
+}
 
+/// Mixin that adds a [visitString] method to classes implementing
+/// [TomlStringVisitor] that automatically selects the appropriate
+/// visitor method using [TomlString.acceptStringVisitor].
+///
+/// This class is usually used when the visitor also implements the
+/// [TomlValueVisitor] interface to provide a default implementation
+/// for [TomlValueVisitor.visitString].
+mixin TomlStringVisitorMixin<R> implements TomlStringVisitor<R> {
   /// Visits the given [value].
   ///
   /// This method is using [TomlString.acceptStringVisitor] to invoke the right

@@ -6,8 +6,8 @@ import 'map_builder.dart';
 
 /// A visitor for [TomlValue]s that builds Dart values from their internal
 /// representatons.
-class TomlValueBuilder extends TomlValueVisitor<dynamic>
-    with TomlStringVisitor<String> {
+class TomlValueBuilder
+    with TomlValueVisitorMixin<dynamic>, TomlStringVisitorMixin<String> {
   /// A that identifies the currently converted value.
   ///
   /// This value is used for error reporting only.

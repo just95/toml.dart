@@ -19,7 +19,16 @@ abstract class TomlDateTimeVisitor<R> {
 
   /// Visits the given local time value.
   R visitLocalTime(TomlLocalTime localTime);
+}
 
+/// Mixin that adds a [visitDateTime] method to classes implementing
+/// [TomlDateTimeVisitor] that automatically selects the appropriate
+/// visitor method using [TomlDateTime.acceptDateTimeVisitor].
+///
+/// This class is usually used when the visitor also implements the
+/// [TomlValueVisitor] interface to provide a default implementation
+/// for [TomlValueVisitor.visitDateTime].
+mixin TomlDateTimeVisitorMixin<R> implements TomlDateTimeVisitor<R> {
   /// Visits the given [value].
   ///
   /// This method is using [TomlDateTime.acceptDateTimeVisitor] to invoke the

@@ -7,7 +7,7 @@ import 'exception/redefinition.dart';
 import 'value_builder.dart';
 
 /// A visitor for [TomlExpression]s that builds a [Map] from a TOML document.
-class TomlMapBuilder extends TomlExpressionVisitor<void> {
+class TomlMapBuilder with TomlExpressionVisitorMixin<void> {
   /// Internal representation of the top-level table.
   final _TomlTreeMap _topLevel;
 

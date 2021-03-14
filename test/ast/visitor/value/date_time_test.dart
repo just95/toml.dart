@@ -5,7 +5,7 @@ import 'package:toml/src/ast.dart';
 
 /// A visitor that returns the name of its method that visited the node that
 /// acceted the visitor.
-class TomlDateTimeStringVisitor extends TomlDateTimeVisitor<String> {
+class TomlDateTimeStringVisitor with TomlDateTimeVisitorMixin<String> {
   @override
   String visitLocalDate(_) => 'visitLocalDate';
 
