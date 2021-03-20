@@ -80,7 +80,7 @@ class TomlParserException extends TomlException implements FormatException {
 /// method that behaves like [Result.value] but throws a [TomlParserException]
 /// instead of a [ParserException] when the result is a [Failure].
 extension TomlParserExceptionExtension<T> on Result<T> {
-  /// Like [value] but throws an [TomlParserException] when this
-  /// result is a [Failure].
+  /// Returns the parsed value of this result, or throws a TOML parser
+  /// exception if this is a parse failure.
   T get valueOrTomlException => TomlParserException.fromResult(this);
 }
