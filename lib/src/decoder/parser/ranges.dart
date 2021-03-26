@@ -22,9 +22,9 @@ Parser<String> tomlHexDigit([String message = 'hexadecimal digit expected']) =>
 
 /// Parser for non-EOL characters that are allowed in TOML comments.
 ///
-///     non-eol = %x09 / %x20-7F / non-ascii
+///     non-eol = %x09 / %x20-7E / non-ascii
 final Parser<String> tomlNonEol =
-    (char(0x09) | range(0x20, 0x7F) | tomlNonAscii).cast<String>();
+    (char(0x09) | range(0x20, 0x7E) | tomlNonAscii).cast<String>();
 
 /// Parser for non-ASCII characters that are allowed in TOML comments and
 /// literal strings.

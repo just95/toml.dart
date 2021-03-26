@@ -32,6 +32,12 @@ void main() {
           throwsA(isA<TomlParserException>()),
         );
       });
+      test('comments cannot contain DEL character', () {
+        expect(
+          () => TomlDocument.parse('# Comment \x7F'),
+          throwsA(isA<TomlParserException>()),
+        );
+      });
       test('comments cannot contain unpaired UTF-16 surrogate code points', () {
         expect(
           () => TomlDocument.parse(
