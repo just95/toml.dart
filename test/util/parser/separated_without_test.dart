@@ -25,7 +25,7 @@ void main() {
         expect(result.isSuccess, isTrue);
         expect(result.value, equals(['a', 'b', 'c']));
       });
-      test('can parse list with optional comma', () {
+      test('can parse list with optional trailing comma', () {
         var parser = letter()
             .separatedWithout(
               char(','),
@@ -36,7 +36,7 @@ void main() {
         expect(result.isSuccess, isTrue);
         expect(result.value, equals(['a', 'b', 'c']));
       });
-      test('can parse list without optional comma', () {
+      test('can parse list without optional trailing comma', () {
         var parser = letter()
             .separatedWithout(
               char(','),

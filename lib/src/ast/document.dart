@@ -9,6 +9,7 @@ import '../decoder.dart';
 import '../encoder.dart';
 import '../loader.dart';
 import '../util/iterable/where_not_null.dart';
+import '../util/parser.dart';
 import 'expression.dart';
 import 'node.dart';
 import 'visitor/node.dart';
@@ -24,7 +25,7 @@ class TomlDocument extends TomlNode {
   /// [TomlExpression.parser] returns `null`. These expressions
   /// are not part of the AST and must be filtered out.
   static final Parser<TomlDocument> parser = TomlExpression.parser
-      .separatedBy<TomlExpression?>(tomlNewline, includeSeparators: false)
+      .separatedWithout(tomlNewline)
       .map((expressions) => TomlDocument(expressions.whereNotNull()));
 
   /// Parses the given TOML document.

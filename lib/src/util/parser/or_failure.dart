@@ -10,5 +10,8 @@ extension OrFailureParserExtension<T> on Parser<T> {
   ///
   /// This method is equivalent to `.or(failure(message))` but preserves the
   /// type of the receiver.
-  Parser<T> orFailure(String message) => ChoiceParser([this, failure(message)]);
+  Parser<T> orFailure(String message) => ChoiceParser(
+        [this, failure(message)],
+        failureJoiner: selectFarthest,
+      );
 }

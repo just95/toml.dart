@@ -100,7 +100,10 @@ class TomlArrayTable extends TomlTable {
   /// Parser for a TOML array of tables header.
   static final Parser<TomlArrayTable> parser = TomlKey.parser
       .surroundedBy(tomlWhitespace)
-      .surroundedBy(string(openingDelimiter), string(closingDelimiter))
+      .surroundedBy(
+        string(openingDelimiter, '"$openingDelimiter" expected'),
+        string(closingDelimiter, '"$closingDelimiter" expected'),
+      )
       .map((key) => TomlArrayTable(key));
 
   /// Creates a new TOML array table.

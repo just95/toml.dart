@@ -27,23 +27,36 @@ void main() {
         );
       });
       test('comments cannot contain control characters', () {
+        var input = '# Comment \u0000';
         expect(
-          () => TomlDocument.parse('# Comment \u0000'),
-          throwsA(isA<TomlParserException>()),
+          () => TomlDocument.parse(input),
+          throwsA(TomlParserException(
+            message: 'newline or end of input expected',
+            source: input,
+            offset: 10,
+          )),
         );
       });
       test('comments cannot contain DEL character', () {
+        var input = '# Comment \x7F';
         expect(
-          () => TomlDocument.parse('# Comment \x7F'),
-          throwsA(isA<TomlParserException>()),
+          () => TomlDocument.parse(input),
+          throwsA(TomlParserException(
+            message: 'newline or end of input expected',
+            source: input,
+            offset: 10,
+          )),
         );
       });
       test('comments cannot contain unpaired UTF-16 surrogate code points', () {
+        var input = '# High surrogate \uD83E without low surrogate';
         expect(
-          () => TomlDocument.parse(
-            '# High surrogate \uD83E without low surrogate',
-          ),
-          throwsA(isA<TomlParserException>()),
+          () => TomlDocument.parse(input),
+          throwsA(TomlParserException(
+            message: 'newline or end of input expected',
+            source: input,
+            offset: 17,
+          )),
         );
       });
       test('comments can contain UTF-16 surrogate pairs', () {
@@ -120,23 +133,29 @@ void main() {
         );
       });
       test('does not allow newlines after dots', () {
-        expect(
-          () => TomlDocument.parse(
-            'a.\n'
+        var input = 'a.\n'
             'b.\n'
-            'c = "value"',
-          ),
-          throwsA(isA<TomlParserException>()),
+            'c = "value"';
+        expect(
+          () => TomlDocument.parse(input),
+          throwsA(equals(TomlParserException(
+            message: '"=" expected',
+            source: input,
+            offset: 1,
+          ))),
         );
       });
       test('does not allow newlines before dots', () {
-        expect(
-          () => TomlDocument.parse(
-            'a\n'
+        var input = 'a\n'
             '.b\n'
-            '.c = "value"',
-          ),
-          throwsA(isA<TomlParserException>()),
+            '.c = "value"';
+        expect(
+          () => TomlDocument.parse(input),
+          throwsA(equals(TomlParserException(
+            message: '"=" expected',
+            source: input,
+            offset: 1,
+          ))),
         );
       });
       test('allows whitespace around equals sign to be omitted', () {
@@ -172,25 +191,42 @@ void main() {
           ])),
         );
       });
-      test('does not allow the key to be on a new line', () {
+      test('does not allow syntax errors in values', () {
+        var input = 'key = "value';
         expect(
-          () => TomlDocument.parse(
-            'key\n'
-            ' = "value"',
-          ),
-          throwsA(isA<TomlParserException>()),
+          () => TomlDocument.parse(input),
+          throwsA(equals(TomlParserException(
+            message: "closing '\"' expected",
+            source: input,
+            offset: 12,
+          ))),
+        );
+      });
+      test('does not allow the equal sign to be on a new line', () {
+        var input = 'key\n'
+            ' = "value"';
+        expect(
+          () => TomlDocument.parse(input),
+          throwsA(equals(TomlParserException(
+            message: '"=" expected',
+            source: input,
+            offset: 3,
+          ))),
         );
       });
       test('does not allow the value to be on a new line', () {
+        var input = 'key =\n'
+            '  "value"';
         expect(
-          () => TomlDocument.parse(
-            'key =\n'
-            '  "value"',
-          ),
-          throwsA(isA<TomlParserException>()),
+          () => TomlDocument.parse(input),
+          throwsA(equals(TomlParserException(
+            message: 'value expected',
+            source: input,
+            offset: 5,
+          ))),
         );
       });
-      test('allows two key/value pairs on the different lines', () {
+      test('allows two key/value pairs on different lines', () {
         expect(
           TomlDocument.parse(
             'key1 = 1\n'
@@ -209,9 +245,14 @@ void main() {
         );
       });
       test('rejects two key/value pairs on the same line', () {
+        var input = 'key1 = 1 key2 = 2';
         expect(
-          () => TomlDocument.parse('key1 = 1 key2 = 2'),
-          throwsA(isA<TomlParserException>()),
+          () => TomlDocument.parse(input),
+          throwsA(equals(TomlParserException(
+            message: 'newline or end of input expected',
+            source: input,
+            offset: 9,
+          ))),
         );
       });
     });
@@ -313,71 +354,108 @@ void main() {
         );
       });
       test('rejects empty standard table header', () {
+        var input = '[]';
         expect(
-          () => TomlDocument.parse('[]'),
-          throwsA(isA<TomlParserException>()),
+          () => TomlDocument.parse(input),
+          throwsA(equals(TomlParserException(
+            message: 'key expected',
+            source: input,
+            offset: 1,
+          ))),
         );
       });
-      test('rejects empty standard table header that ends with dot', () {
+      test('rejects standard table header that ends with dot', () {
+        var input = '[a.b.c.]';
         expect(
-          () => TomlDocument.parse('[a.b.c.]'),
-          throwsA(isA<TomlParserException>()),
+          () => TomlDocument.parse(input),
+          throwsA(equals(TomlParserException(
+            message: '"]" expected',
+            source: input,
+            offset: 6,
+          ))),
         );
       });
-      test('rejects empty standard table header that starts with dot', () {
+      test('rejects standard table header that starts with dot', () {
+        var input = '[.a.b.c]';
         expect(
-          () => TomlDocument.parse('[.a.b.c]'),
-          throwsA(isA<TomlParserException>()),
+          () => TomlDocument.parse(input),
+          throwsA(equals(TomlParserException(
+            message: 'key expected',
+            source: input,
+            offset: 1,
+          ))),
         );
       });
       test('rejects standard table header with consecutive dots', () {
+        var input = '[a..b.c]';
         expect(
-          () => TomlDocument.parse('[a..b.c]'),
-          throwsA(isA<TomlParserException>()),
+          () => TomlDocument.parse(input),
+          throwsA(equals(TomlParserException(
+            message: '"]" expected',
+            source: input,
+            offset: 2,
+          ))),
         );
       });
       test('rejects standard table header that contains a dot only', () {
+        var input = '[.]';
         expect(
-          () => TomlDocument.parse('[.]'),
-          throwsA(isA<TomlParserException>()),
+          () => TomlDocument.parse(input),
+          throwsA(equals(TomlParserException(
+            message: 'key expected',
+            source: input,
+            offset: 1,
+          ))),
         );
       });
       test('rejects newlines after opening bracket', () {
+        var input = '[\n'
+            'a.b.c]';
         expect(
-          () => TomlDocument.parse(
-            '[\n'
-            'a.b.c]',
-          ),
-          throwsA(isA<TomlParserException>()),
+          () => TomlDocument.parse(input),
+          throwsA(equals(TomlParserException(
+            message: 'key expected',
+            source: input,
+            offset: 1,
+          ))),
         );
       });
       test('rejects newlines before closing bracket', () {
+        var input = '[a.b.c\n'
+            ']';
         expect(
-          () => TomlDocument.parse(
-            '[a.b.c\n'
-            ']',
-          ),
-          throwsA(isA<TomlParserException>()),
+          () => TomlDocument.parse(input),
+          throwsA(equals(TomlParserException(
+            message: '"]" expected',
+            source: input,
+            offset: 6,
+          ))),
         );
       });
       test('rejects newlines after dots', () {
-        expect(
-          () => TomlDocument.parse(
-            '[a.\n'
+        var input = '[a.\n'
             'b.\n'
-            'c]',
-          ),
-          throwsA(isA<TomlParserException>()),
+            'c]';
+        expect(
+          () => TomlDocument.parse(input),
+          throwsA(equals(TomlParserException(
+            message: '"]" expected',
+            source: input,
+            offset: 2,
+          ))),
         );
       });
       test('rejects newlines before dots', () {
-        expect(
-          () => TomlDocument.parse(
-            '[a\n'
+        var input = '[a\n'
             '.b\n'
-            '.c]',
-          ),
-          throwsA(isA<TomlParserException>()),
+            '.c]';
+        expect(
+          () => TomlDocument.parse(input),
+          throwsA(equals(TomlParserException(
+            message: '"]" expected',
+            source: input,
+            offset: 2,
+          ))),
         );
       });
       test('allows two standard table headers on the different lines', () {
@@ -393,9 +471,14 @@ void main() {
         );
       });
       test('rejects two standard table headers on the same line', () {
+        var input = '[a] [b]';
         expect(
-          () => TomlDocument.parse('[a] [b]'),
-          throwsA(isA<TomlParserException>()),
+          () => TomlDocument.parse(input),
+          throwsA(equals(TomlParserException(
+            message: 'newline or end of input expected',
+            source: input,
+            offset: 4,
+          ))),
         );
       });
     });
@@ -497,65 +580,97 @@ void main() {
         );
       });
       test('rejects whitespace between backets', () {
+        var input = '[ [a.b.c] ]';
         expect(
-          () => TomlDocument.parse('[ [a.b.c] ]'),
-          throwsA(isA<TomlParserException>()),
+          () => TomlDocument.parse(input),
+          throwsA(equals(TomlParserException(
+            message: 'key expected',
+            source: input,
+            offset: 2,
+          ))),
         );
       });
       test('rejects array table header with consecutive dots', () {
+        var input = '[[a..b.c]]';
         expect(
-          () => TomlDocument.parse('[[a..b.c]]'),
-          throwsA(isA<TomlParserException>()),
+          () => TomlDocument.parse(input),
+          throwsA(equals(TomlParserException(
+            message: '"]]" expected',
+            source: input,
+            offset: 3,
+          ))),
         );
       });
       test('rejects array table header that contains a dot only', () {
+        var input = '[[.]]';
         expect(
-          () => TomlDocument.parse('[[.]]'),
-          throwsA(isA<TomlParserException>()),
+          () => TomlDocument.parse(input),
+          throwsA(equals(TomlParserException(
+            message: 'key expected',
+            source: input,
+            offset: 2,
+          ))),
         );
       });
       test('rejects newlines after opening brackets', () {
+        var input = '[[\n'
+            'a.b.c]]';
         expect(
-          () => TomlDocument.parse(
-            '[[\n'
-            'a.b.c]]',
-          ),
-          throwsA(isA<TomlParserException>()),
+          () => TomlDocument.parse(input),
+          throwsA(equals(TomlParserException(
+            message: 'key expected',
+            source: input,
+            offset: 2,
+          ))),
         );
       });
       test('rejects newlines before closing brackets', () {
+        var input = '[[a.b.c\n'
+            ']]';
         expect(
-          () => TomlDocument.parse(
-            '[[a.b.c\n'
-            ']]',
-          ),
-          throwsA(isA<TomlParserException>()),
+          () => TomlDocument.parse(input),
+          throwsA(equals(TomlParserException(
+            message: '"]]" expected',
+            source: input,
+            offset: 7,
+          ))),
         );
       });
       test('rejects newlines after dots', () {
-        expect(
-          () => TomlDocument.parse(
-            '[[a.\n'
+        var input = '[[a.\n'
             'b.\n'
-            'c]]',
-          ),
-          throwsA(isA<TomlParserException>()),
+            'c]]';
+        expect(
+          () => TomlDocument.parse(input),
+          throwsA(equals(TomlParserException(
+            message: '"]]" expected',
+            source: input,
+            offset: 3,
+          ))),
         );
       });
       test('rejects newlines before dots', () {
-        expect(
-          () => TomlDocument.parse(
-            '[[a\n'
+        var input = '[[a\n'
             '.b\n'
-            '.c]]',
-          ),
-          throwsA(isA<TomlParserException>()),
+            '.c]]';
+        expect(
+          () => TomlDocument.parse(input),
+          throwsA(equals(TomlParserException(
+            message: '"]]" expected',
+            source: input,
+            offset: 3,
+          ))),
         );
       });
       test('rejects empty array table header', () {
+        var input = '[[]]';
         expect(
-          () => TomlDocument.parse('[[]]'),
-          throwsA(isA<TomlParserException>()),
+          () => TomlDocument.parse(input),
+          throwsA(equals(TomlParserException(
+            message: 'key expected',
+            source: input,
+            offset: 2,
+          ))),
         );
       });
       test('allows two array table headers on the different lines', () {
@@ -571,9 +686,14 @@ void main() {
         );
       });
       test('rejects two array table headers on the same line', () {
+        var input = '[[a]] [[b]]';
         expect(
-          () => TomlDocument.parse('[[a]] [[b]]'),
-          throwsA(isA<TomlParserException>()),
+          () => TomlDocument.parse(input),
+          throwsA(equals(TomlParserException(
+            message: 'newline or end of input expected',
+            source: input,
+            offset: 6,
+          ))),
         );
       });
     });
