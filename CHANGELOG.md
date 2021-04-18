@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 0.11.0
 
  - Disallowed non-scalar Unicode values when encoding (multiline) basic strings.
    + Added `TomlBasicString.canEncode` and `TomlMultilineBasicString.canEncode`.
