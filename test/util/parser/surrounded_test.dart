@@ -1,9 +1,9 @@
-library toml.test.util.parser.seq_pick_test;
+library toml.test.util.parser.surrounded_test;
 
 import 'package:test/test.dart';
 import 'package:petitparser/petitparser.dart';
 
-import 'package:toml/src/util/parser/seq_pick.dart';
+import 'package:toml/src/util/parser/surrounded.dart';
 
 void main() {
   group('SequencePickParserExtension', () {
