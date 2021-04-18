@@ -49,9 +49,14 @@ void main() {
         );
       });
       test('cannot parse array with comma only', () {
+        var input = '[,]';
         expect(
-          () => TomlValue.parse('[,]'),
-          throwsA(isA<TomlParserException>()),
+          () => TomlValue.parse(input),
+          throwsA(equals(TomlParserException(
+            message: '"]" expected',
+            source: input,
+            offset: 1,
+          ))),
         );
       });
       test('can parse array with whitespace after the opening bracket', () {
@@ -333,6 +338,17 @@ void main() {
           ))),
         );
       });
+      test('cannot parse array with missing value', () {
+        var input = '[ 1, , 3 ]';
+        expect(
+          () => TomlValue.parse(input),
+          throwsA(equals(TomlParserException(
+            message: '"]" expected',
+            source: input,
+            offset: 5,
+          ))),
+        );
+      });
     });
     group('Boolean', () {
       test('can parse true', () {
@@ -549,31 +565,51 @@ void main() {
         );
       });
       test('rejects float with decimal dot but integer part', () {
+        var input = '.1415';
         expect(
-          () => TomlValue.parse('.1415'),
-          throwsA(isA<TomlParserException>()),
+          () => TomlValue.parse(input),
+          throwsA(equals(TomlParserException(
+            message: 'value expected',
+            source: input,
+            offset: 0,
+          ))),
         );
       });
       test('rejects float with decimal dot but no fractional digits', () {
+        var input = '3.';
         expect(
-          () => TomlValue.parse('3.'),
-          throwsA(isA<TomlParserException>()),
+          () => TomlValue.parse(input),
+          throwsA(equals(TomlParserException(
+            message: 'end of input expected',
+            source: input,
+            offset: 1,
+          ))),
         );
       });
       test(
         'rejects float with decimal dot and exponent part but no '
         'fractional digits',
         () {
+          var input = '3.e+20';
           expect(
-            () => TomlValue.parse('3.e+20'),
-            throwsA(isA<TomlParserException>()),
+            () => TomlValue.parse(input),
+            throwsA(equals(TomlParserException(
+              message: 'end of input expected',
+              source: input,
+              offset: 1,
+            ))),
           );
         },
       );
       test('requires the fractional part to precede the exponent part', () {
+        var input = '6e-34.626';
         expect(
-          () => TomlValue.parse('6e-34.626'),
-          throwsA(isA<TomlParserException>()),
+          () => TomlValue.parse(input),
+          throwsA(equals(TomlParserException(
+            message: 'end of input expected',
+            source: input,
+            offset: 5,
+          ))),
         );
       });
       test('allows underscores in integer part', () {
@@ -595,57 +631,102 @@ void main() {
         );
       });
       test('does not allow leading underscores in integer part', () {
+        var input = '_12.34e57';
         expect(
-          () => TomlValue.parse('_12.34e57'),
-          throwsA(isA<TomlParserException>()),
+          () => TomlValue.parse(input),
+          throwsA(equals(TomlParserException(
+            message: 'value expected',
+            source: input,
+            offset: 0,
+          ))),
         );
       });
       test('does not allow leading underscores in fractional part', () {
+        var input = '12._34e57';
         expect(
-          () => TomlValue.parse('12._34e57'),
-          throwsA(isA<TomlParserException>()),
+          () => TomlValue.parse(input),
+          throwsA(equals(TomlParserException(
+            message: 'end of input expected',
+            source: input,
+            offset: 2,
+          ))),
         );
       });
       test('does not allow leading underscores in exponent', () {
+        var input = '12.34e_57';
         expect(
-          () => TomlValue.parse('12.34e_57'),
-          throwsA(isA<TomlParserException>()),
+          () => TomlValue.parse(input),
+          throwsA(equals(TomlParserException(
+            message: 'end of input expected',
+            source: input,
+            offset: 5,
+          ))),
         );
       });
       test('does not allow trailing underscores in integer part', () {
+        var input = '12_.34e57';
         expect(
-          () => TomlValue.parse('12_.34e57'),
-          throwsA(isA<TomlParserException>()),
+          () => TomlValue.parse(input),
+          throwsA(equals(TomlParserException(
+            message: 'end of input expected',
+            source: input,
+            offset: 2,
+          ))),
         );
       });
       test('does not allow trailing underscores in fractional part', () {
+        var input = '12.34_e57';
         expect(
-          () => TomlValue.parse('12.34_e57'),
-          throwsA(isA<TomlParserException>()),
+          () => TomlValue.parse(input),
+          throwsA(equals(TomlParserException(
+            message: 'end of input expected',
+            source: input,
+            offset: 5,
+          ))),
         );
       });
       test('does not allow trailing underscores in exponent', () {
+        var input = '12.34e57_';
         expect(
-          () => TomlValue.parse('12.34e57_'),
-          throwsA(isA<TomlParserException>()),
+          () => TomlValue.parse(input),
+          throwsA(equals(TomlParserException(
+            message: 'end of input expected',
+            source: input,
+            offset: 8,
+          ))),
         );
       });
       test('does not allow consecutive underscores in integer part', () {
+        var input = '1__2.34e57';
         expect(
-          () => TomlValue.parse('1__2.34e57'),
-          throwsA(isA<TomlParserException>()),
+          () => TomlValue.parse(input),
+          throwsA(equals(TomlParserException(
+            message: 'end of input expected',
+            source: input,
+            offset: 1,
+          ))),
         );
       });
       test('does not allow consecutive underscores in fractional part', () {
+        var input = '12.3__4e57';
         expect(
-          () => TomlValue.parse('12.3__4e57'),
-          throwsA(isA<TomlParserException>()),
+          () => TomlValue.parse(input),
+          throwsA(equals(TomlParserException(
+            message: 'end of input expected',
+            source: input,
+            offset: 4,
+          ))),
         );
       });
       test('does not allow consecutive underscores in exponent', () {
+        var input = '12.34e5__7';
         expect(
-          () => TomlValue.parse('12.34e5__7'),
-          throwsA(isA<TomlParserException>()),
+          () => TomlValue.parse(input),
+          throwsA(equals(TomlParserException(
+            message: 'end of input expected',
+            source: input,
+            offset: 7,
+          ))),
         );
       });
       test('allows leading zeros in exponent part', () {
@@ -703,33 +784,58 @@ void main() {
           );
         });
         test('cannot parse binary integer with leading underscores', () {
+          var input = '0b_101010';
           expect(
-            () => TomlValue.parse('0b_101010'),
-            throwsA(isA<TomlParserException>()),
+            () => TomlValue.parse(input),
+            throwsA(equals(TomlParserException(
+              message: 'end of input expected',
+              source: input,
+              offset: 1,
+            ))),
           );
         });
         test('cannot parse binary integer with trailing underscores', () {
+          var input = '0b101010_';
           expect(
-            () => TomlValue.parse('0b101010_'),
-            throwsA(isA<TomlParserException>()),
+            () => TomlValue.parse(input),
+            throwsA(equals(TomlParserException(
+              message: 'end of input expected',
+              source: input,
+              offset: 8,
+            ))),
           );
         });
         test('cannot parse binary integer with consecutive underscores', () {
+          var input = '0b10__1010';
           expect(
-            () => TomlValue.parse('0b10__1010'),
-            throwsA(isA<TomlParserException>()),
+            () => TomlValue.parse(input),
+            throwsA(equals(TomlParserException(
+              message: 'end of input expected',
+              source: input,
+              offset: 4,
+            ))),
           );
         });
         test('cannot parse binary integer without digits', () {
+          var input = '0b';
           expect(
-            () => TomlValue.parse('0b'),
-            throwsA(isA<TomlParserException>()),
+            () => TomlValue.parse(input),
+            throwsA(equals(TomlParserException(
+              message: 'end of input expected',
+              source: input,
+              offset: 1,
+            ))),
           );
         });
         test('cannot parse binary integer with non-binary digits', () {
+          var input = '0b123';
           expect(
-            () => TomlValue.parse('0b123'),
-            throwsA(isA<TomlParserException>()),
+            () => TomlValue.parse(input),
+            throwsA(equals(TomlParserException(
+              message: 'end of input expected',
+              source: input,
+              offset: 3,
+            ))),
           );
         });
       });
@@ -753,33 +859,58 @@ void main() {
           );
         });
         test('cannot parse octal integer with leading underscores', () {
+          var input = '0o_755';
           expect(
-            () => TomlValue.parse('0o_755'),
-            throwsA(isA<TomlParserException>()),
+            () => TomlValue.parse(input),
+            throwsA(equals(TomlParserException(
+              message: 'end of input expected',
+              source: input,
+              offset: 1,
+            ))),
           );
         });
         test('cannot parse octal integer with trailing underscores', () {
+          var input = '0o755_';
           expect(
-            () => TomlValue.parse('0o755_'),
-            throwsA(isA<TomlParserException>()),
+            () => TomlValue.parse(input),
+            throwsA(equals(TomlParserException(
+              message: 'end of input expected',
+              source: input,
+              offset: 5,
+            ))),
           );
         });
         test('cannot parse octal integer with consecutive underscores', () {
+          var input = '0o7__55';
           expect(
-            () => TomlValue.parse('0o7__55'),
-            throwsA(isA<TomlParserException>()),
+            () => TomlValue.parse(input),
+            throwsA(equals(TomlParserException(
+              message: 'end of input expected',
+              source: input,
+              offset: 3,
+            ))),
           );
         });
         test('cannot parse octal integer without digits', () {
+          var input = '0o';
           expect(
-            () => TomlValue.parse('0o'),
-            throwsA(isA<TomlParserException>()),
+            () => TomlValue.parse(input),
+            throwsA(equals(TomlParserException(
+              message: 'end of input expected',
+              source: input,
+              offset: 1,
+            ))),
           );
         });
         test('cannot parse octal integer with non-octal digits', () {
+          var input = '0o888';
           expect(
-            () => TomlValue.parse('0o888'),
-            throwsA(isA<TomlParserException>()),
+            () => TomlValue.parse(input),
+            throwsA(equals(TomlParserException(
+              message: 'end of input expected',
+              source: input,
+              offset: 1,
+            ))),
           );
         });
       });
@@ -821,9 +952,14 @@ void main() {
           );
         });
         test('does not allow leading zeros', () {
+          var input = '0777';
           expect(
-            () => TomlValue.parse('0777'),
-            throwsA(isA<TomlParserException>()),
+            () => TomlValue.parse(input),
+            throwsA(equals(TomlParserException(
+              message: 'end of input expected',
+              source: input,
+              offset: 1,
+            ))),
           );
         });
         test('allows underscores to be used as separators', () {
@@ -839,21 +975,36 @@ void main() {
           );
         });
         test('does not allow leading underscores', () {
+          var input = '_1000';
           expect(
-            () => TomlValue.parse('_1000'),
-            throwsA(isA<TomlParserException>()),
+            () => TomlValue.parse(input),
+            throwsA(equals(TomlParserException(
+              message: 'value expected',
+              source: input,
+              offset: 0,
+            ))),
           );
         });
         test('does not allow trailing underscores', () {
+          var input = '1000_';
           expect(
-            () => TomlValue.parse('1000_'),
-            throwsA(isA<TomlParserException>()),
+            () => TomlValue.parse(input),
+            throwsA(equals(TomlParserException(
+              message: 'end of input expected',
+              source: input,
+              offset: 4,
+            ))),
           );
         });
         test('does not allow consecutive underscores', () {
+          var input = '1__000';
           expect(
-            () => TomlValue.parse('1__000'),
-            throwsA(isA<TomlParserException>()),
+            () => TomlValue.parse(input),
+            throwsA(equals(TomlParserException(
+              message: 'end of input expected',
+              source: input,
+              offset: 1,
+            ))),
           );
         });
       });
@@ -889,33 +1040,58 @@ void main() {
           );
         });
         test('cannot parse octal integer with leading underscores', () {
+          var input = '0x_badc0ded';
           expect(
-            () => TomlValue.parse('0x_badc0ded'),
-            throwsA(isA<TomlParserException>()),
+            () => TomlValue.parse(input),
+            throwsA(equals(TomlParserException(
+              message: 'end of input expected',
+              source: input,
+              offset: 1,
+            ))),
           );
         });
         test('cannot parse octal integer with trailing underscores', () {
+          var input = '0xbadc0ded_';
           expect(
-            () => TomlValue.parse('0xbadc0ded_'),
-            throwsA(isA<TomlParserException>()),
+            () => TomlValue.parse(input),
+            throwsA(equals(TomlParserException(
+              message: 'end of input expected',
+              source: input,
+              offset: 10,
+            ))),
           );
         });
         test('cannot parse octal integer with consecutive underscores', () {
+          var input = '0xbad__c0ded';
           expect(
-            () => TomlValue.parse('0xbad__c0ded'),
-            throwsA(isA<TomlParserException>()),
+            () => TomlValue.parse(input),
+            throwsA(equals(TomlParserException(
+              message: 'end of input expected',
+              source: input,
+              offset: 5,
+            ))),
           );
         });
         test('cannot parse octal integer without digits', () {
+          var input = '0x';
           expect(
-            () => TomlValue.parse('0x'),
-            throwsA(isA<TomlParserException>()),
+            () => TomlValue.parse(input),
+            throwsA(equals(TomlParserException(
+              message: 'end of input expected',
+              source: input,
+              offset: 1,
+            ))),
           );
         });
         test('cannot parse octal integer with non-octal digits', () {
+          var input = '0xZZZ';
           expect(
-            () => TomlValue.parse('0xZZZ'),
-            throwsA(isA<TomlParserException>()),
+            () => TomlValue.parse(input),
+            throwsA(equals(TomlParserException(
+              message: 'end of input expected',
+              source: input,
+              offset: 1,
+            ))),
           );
         });
       });
@@ -964,9 +1140,14 @@ void main() {
         );
       });
       test('does not allow trailing comma in inline table', () {
+        var input = '{ x = 1, y = 2, z = 3, }';
         expect(
-          () => TomlValue.parse('{ x = 1, y = 2, z = 3, }'),
-          throwsA(isA<TomlParserException>()),
+          () => TomlValue.parse(input),
+          throwsA(equals(TomlParserException(
+            message: '"}" expected',
+            source: input,
+            offset: 21,
+          ))),
         );
       });
       test('allows multiline values in inline table', () {
@@ -984,41 +1165,53 @@ void main() {
         );
       });
       test('does not allow newline after opening brace of inline table', () {
+        var input = '{\n'
+            '  x = 1, y = 2, z = 3 }';
         expect(
-          () => TomlValue.parse(
-            '{\n'
-            '  x = 1, y = 2, z = 3 }',
-          ),
-          throwsA(isA<TomlParserException>()),
+          () => TomlValue.parse(input),
+          throwsA(equals(TomlParserException(
+            message: '"}" expected',
+            source: input,
+            offset: 1,
+          ))),
         );
       });
       test('does not allow newline before closing brace of inline table', () {
+        var input = '{ x = 1, y = 2, z = 3 \n'
+            '}';
         expect(
-          () => TomlValue.parse(
-            '{ x = 1, y = 2, z = 3 \n'
-            '}',
-          ),
-          throwsA(isA<TomlParserException>()),
+          () => TomlValue.parse(input),
+          throwsA(equals(TomlParserException(
+            message: '"}" expected',
+            source: input,
+            offset: 22,
+          ))),
         );
       });
       test('does not allow newline before commas in inline table', () {
-        expect(
-          () => TomlValue.parse(
-            '{ x = 1\n'
+        var input = '{ x = 1\n'
             ', y = 2\n'
-            ', z = 3 }',
-          ),
-          throwsA(isA<TomlParserException>()),
+            ', z = 3 }';
+        expect(
+          () => TomlValue.parse(input),
+          throwsA(equals(TomlParserException(
+            message: '"}" expected',
+            source: input,
+            offset: 7,
+          ))),
         );
       });
       test('does not allow newline after commas in inline table', () {
-        expect(
-          () => TomlValue.parse(
-            '{ x = 1,\n'
+        var input = '{ x = 1,\n'
             '  y = 2,\n'
-            '  z = 3 }',
-          ),
-          throwsA(isA<TomlParserException>()),
+            '  z = 3 }';
+        expect(
+          () => TomlValue.parse(input),
+          throwsA(equals(TomlParserException(
+            message: '"}" expected',
+            source: input,
+            offset: 7,
+          ))),
         );
       });
       test('cannot parse inline table with missing closing brace', () {
@@ -1074,12 +1267,15 @@ void main() {
           );
         });
         test('does not allow newlines', () {
+          var input = '"Line 1\n'
+              'Line 2"';
           expect(
-            () => TomlValue.parse(
-              '"Line 1\n'
-              'Line 2"',
-            ),
-            throwsA(isA<TomlParserException>()),
+            () => TomlValue.parse(input),
+            throwsA(equals(TomlParserException(
+              message: "closing '\"' expected",
+              source: input,
+              offset: 7,
+            ))),
           );
         });
         test('allows raw tabs', () {
@@ -1091,17 +1287,25 @@ void main() {
           );
         });
         test('does not allow control characters', () {
+          var input = '"\u0000"';
           expect(
-            () => TomlValue.parse('"\u0000"'),
-            throwsA(isA<TomlParserException>()),
+            () => TomlValue.parse(input),
+            throwsA(equals(TomlParserException(
+              message: "closing '\"' expected",
+              source: input,
+              offset: 1,
+            ))),
           );
         });
         test('does not allow unpaired UTF-16 surrogate code points', () {
+          var input = '"High surrogate \uD83E without low surrogate"';
           expect(
-            () => TomlValue.parse(
-              '"High surrogate \uD83E without low surrogat"',
-            ),
-            throwsA(isA<TomlParserException>()),
+            () => TomlValue.parse(input),
+            throwsA(equals(TomlParserException(
+              message: "closing '\"' expected",
+              source: input,
+              offset: 16,
+            ))),
           );
         });
         test('allows UTF-16 surrogate pairs', () {
@@ -1250,9 +1454,14 @@ void main() {
           );
         });
         test('requires the third consecutive double quote to be escaped', () {
+          var input = '"""Foo """Bar""" Baz"""';
           expect(
-            () => TomlValue.parse('"""Foo """Bar""" Baz"""'),
-            throwsA(isA<TomlParserException>()),
+            () => TomlValue.parse(input),
+            throwsA(equals(TomlParserException(
+              message: 'end of input expected',
+              source: input,
+              offset: 10,
+            ))),
           );
           expect(
             TomlValue.parse(r'"""Foo ""\"Bar""\" Baz"""'),
@@ -1270,17 +1479,25 @@ void main() {
           );
         });
         test('does not allow control characters', () {
+          var input = '"""\u0000"""';
           expect(
-            () => TomlValue.parse('"""\u0000"""'),
-            throwsA(isA<TomlParserException>()),
+            () => TomlValue.parse(input),
+            throwsA(equals(TomlParserException(
+              message: "closing '\"\"\"' expected",
+              source: input,
+              offset: 3,
+            ))),
           );
         });
         test('does not allow unpaired UTF-16 surrogate code points', () {
+          var input = '"""High surrogate \uD83E without low surrogate"""';
           expect(
-            () => TomlValue.parse(
-              '"""High surrogate \uD83E without low surrogat"""',
-            ),
-            throwsA(isA<TomlParserException>()),
+            () => TomlValue.parse(input),
+            throwsA(equals(TomlParserException(
+              message: "closing '\"\"\"' expected",
+              source: input,
+              offset: 18,
+            ))),
           );
         });
         test('allows UTF-16 surrogate pairs', () {
@@ -1330,11 +1547,14 @@ void main() {
           );
         });
         test('does not allow unpaired UTF-16 surrogate code points', () {
+          var input = "'High surrogate \uD83E without low surrogate'";
           expect(
-            () => TomlValue.parse(
-              "'High surrog\ate \uD83E without low surrogat'",
-            ),
-            throwsA(isA<TomlParserException>()),
+            () => TomlValue.parse(input),
+            throwsA(equals(TomlParserException(
+              message: 'closing "\'" expected',
+              source: input,
+              offset: 16,
+            ))),
           );
         });
         test('allows UTF-16 surrogate pairs', () {
@@ -1414,11 +1634,14 @@ void main() {
           );
         });
         test('does not allow unpaired UTF-16 surrogate code points', () {
+          var input = "'''High surrogate \uD83E without low surrogate'''";
           expect(
-            () => TomlValue.parse(
-              "'''High surrogate \uD83E without low surrogat'''",
-            ),
-            throwsA(isA<TomlParserException>()),
+            () => TomlValue.parse(input),
+            throwsA(equals(TomlParserException(
+              message: 'closing "\'\'\'" expected',
+              source: input,
+              offset: 18,
+            ))),
           );
         });
         test('allows UTF-16 surrogate pairs', () {
