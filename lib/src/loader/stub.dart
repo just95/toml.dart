@@ -1,4 +1,4 @@
-library toml.src.loader.interface;
+library toml.src.loader.stub;
 
 import 'dart:async';
 

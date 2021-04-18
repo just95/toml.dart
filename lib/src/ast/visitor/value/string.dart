@@ -1,4 +1,4 @@
-library toml.src.ast.value.visitor.string;
+library toml.src.ast.visitor.value.string;
 
 import '../../value/string.dart';
 import '../../value/string/basic.dart';

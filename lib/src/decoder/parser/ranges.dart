@@ -1,4 +1,4 @@
-library toml.src.parser.util.ranges;
+library toml.src.decoder.parser.ranges;
 
 import 'package:petitparser/petitparser.dart';
 

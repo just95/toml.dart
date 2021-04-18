@@ -1,5 +1,5 @@
 @TestOn('vm')
-library toml.test.ast.date_time.offset_date_time_test;
+library toml.test.ast.date_time.offset_date_time.vm_test;
 
 import 'package:test/test.dart';
 import 'package:toml/toml.dart';

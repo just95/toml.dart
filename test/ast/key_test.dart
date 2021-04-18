@@ -1,4 +1,4 @@
-library toml.test.ast.document_test;
+library toml.test.ast.key_test;
 
 import 'package:test/test.dart';
 import 'package:toml/src/ast.dart';

@@ -1,4 +1,4 @@
-library toml.src.loader.fs;
+library toml.src.loader.io;
 
 import 'dart:async';
 import 'dart:io';

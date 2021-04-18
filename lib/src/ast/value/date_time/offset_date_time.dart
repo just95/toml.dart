@@ -1,4 +1,4 @@
-library toml.src.ast.value.offset_date_time;
+library toml.src.ast.value.date_time.offset_date_time;
 
 import 'package:meta/meta.dart';
 import 'package:petitparser/petitparser.dart';

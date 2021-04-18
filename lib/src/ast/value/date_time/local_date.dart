@@ -1,4 +1,4 @@
-library toml.src.ast.value.local_date;
+library toml.src.ast.value.date_time.local_date;
 
 import 'package:meta/meta.dart';
 import 'package:petitparser/petitparser.dart';

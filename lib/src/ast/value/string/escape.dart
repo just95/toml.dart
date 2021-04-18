@@ -1,4 +1,4 @@
-library toml.src.parser.escape;
+library toml.src.ast.value.string.escape;
 
 import 'package:petitparser/petitparser.dart';
 import 'package:quiver/collection.dart';
