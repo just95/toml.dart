@@ -89,7 +89,7 @@ void main() {
             equals(TomlOffsetDateTime(
               TomlFullDate(1969, 7, 20),
               TomlPartialTime(20, 17, 0),
-              TomlTimeZoneOffset.local(),
+              TomlTimeZoneOffset.localAtInstant(date),
             )));
       });
       test('preserves TOML offset date-time values', () {

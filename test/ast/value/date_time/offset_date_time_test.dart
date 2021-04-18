@@ -149,14 +149,13 @@ void main() {
       test(
         'converts non-utc date-times to offset date-times in local time zone',
         () {
+          var dateTime = DateTime(1989, 11, 9, 17, 53);
           expect(
-            TomlOffsetDateTime.fromDateTime(
-              DateTime(1989, 11, 9, 17, 53),
-            ),
+            TomlOffsetDateTime.fromDateTime(dateTime),
             equals(TomlOffsetDateTime(
               TomlFullDate(1989, 11, 9),
               TomlPartialTime(17, 53, 0),
-              TomlTimeZoneOffset.local(),
+              TomlTimeZoneOffset.localAtInstant(dateTime),
             )),
           );
         },

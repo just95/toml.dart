@@ -306,9 +306,19 @@ class TomlTimeZoneOffset {
         minutes: minutes,
       );
 
-  /// Creates a time-zone offset for the local time-zone.
+  /// Creates a time-zone offset for the local time-zone at the current instant.
+  ///
+  /// When this constructor is invoked twice and there is a daylight-saving
+  /// change between the two invocations, the returned time-zone offsets will
+  /// be different.
   factory TomlTimeZoneOffset.local() =>
-      TomlTimeZoneOffset.fromDuration(DateTime.now().timeZoneOffset);
+      TomlTimeZoneOffset.localAtInstant(DateTime.now());
+
+  /// Creates a time-zone offset for the local time-zone at the given [instant].
+  ///
+  /// Due to daylight-savings the local time zone of a country can change.
+  factory TomlTimeZoneOffset.localAtInstant(DateTime instant) =>
+      TomlTimeZoneOffset.fromDuration(instant.toLocal().timeZoneOffset);
 
   /// Converts this time-zone offset to a [Duration].
   Duration toDuration() {
