@@ -25,14 +25,19 @@ class TomlBasicString extends TomlSinglelineString {
   static final Parser<TomlBasicString> parser = charParser
       .star()
       .join()
-      .surroundedBy(char(delimiter))
+      .surroundedBy(
+        char(delimiter, "opening '$delimiter' expected"),
+        char(delimiter, "closing '$delimiter' expected"),
+      )
       .map((value) => TomlBasicString._fromEncodable(value));
 
   /// Parser for a single character of a basic TOML string.
   ///
   ///     basic-char = basic-unescaped / escaped
-  static final Parser<String> charParser =
-      ChoiceParser([unescapedParser, TomlEscapedChar.parser]);
+  static final Parser<String> charParser = ChoiceParser([
+    unescapedParser,
+    TomlEscapedChar.parser,
+  ], failureJoiner: selectFarthestJoined);
 
   /// Parser for a single unescaped character of a basic TOML string.
   ///
@@ -46,7 +51,7 @@ class TomlBasicString extends TomlSinglelineString {
     range(0x23, 0x5B),
     range(0x5D, 0x7E),
     tomlNonAscii
-  ]);
+  ]).flatten('Basic string character expected');
 
   /// Escapes all characters of the given string that are not allowed to
   /// occur unescaped in a basic string.

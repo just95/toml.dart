@@ -27,8 +27,10 @@ enum TomlTableType {
 ///     table = std-table / array-table
 abstract class TomlTable extends TomlExpression {
   /// Parser for a TOML table header.
-  static final Parser<TomlTable> parser =
-      ChoiceParser([TomlStandardTable.parser, TomlArrayTable.parser]);
+  static final Parser<TomlTable> parser = ChoiceParser([
+    TomlStandardTable.parser,
+    TomlArrayTable.parser,
+  ], failureJoiner: selectFarthestJoined);
 
   /// The name of the table or array of tables.
   final TomlKey name;

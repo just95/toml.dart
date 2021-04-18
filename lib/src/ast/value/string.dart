@@ -2,6 +2,7 @@ library toml.src.ast.value.string;
 
 import 'package:petitparser/petitparser.dart';
 
+import '../../util/parser.dart';
 import '../value.dart';
 import '../visitor/value.dart';
 import '../visitor/value/string.dart';
@@ -36,7 +37,7 @@ abstract class TomlString extends TomlValue {
   static final Parser<TomlString> parser = ChoiceParser([
     TomlMultilineString.parser,
     TomlSinglelineString.parser,
-  ]);
+  ], failureJoiner: selectFarthestJoined);
 
   /// The contents of the string.
   String get value;
@@ -63,10 +64,20 @@ abstract class TomlString extends TomlValue {
 /// string on type level.
 abstract class TomlSinglelineString extends TomlString {
   /// Parser for a singleline TOML string value.
+  ///
+  /// Even though `""` and `''` are valid single line strings, this parser
+  /// does not accept them if the input starts with `"""` or `'''`.
+  /// Without this optimization [TomlString.parser] would always accept
+  /// multiline strings that contain syntax errors and the unconsumed quotation
+  /// mark would cause a less descriptive error message later.
   static final Parser<TomlSinglelineString> parser = ChoiceParser([
-    TomlBasicString.parser,
-    TomlLiteralString.parser,
-  ]);
+    string(TomlMultilineBasicString.delimiter)
+        .not()
+        .before(TomlBasicString.parser),
+    string(TomlMultilineLiteralString.delimiter)
+        .not()
+        .before(TomlLiteralString.parser),
+  ], failureJoiner: selectFarthestJoined);
 }
 
 /// Base class for AST nodes that represent multiline TOML strings.
@@ -78,5 +89,5 @@ abstract class TomlMultilineString extends TomlString {
   static final Parser<TomlMultilineString> parser = ChoiceParser([
     TomlMultilineBasicString.parser,
     TomlMultilineLiteralString.parser,
-  ]);
+  ], failureJoiner: selectFarthestJoined);
 }

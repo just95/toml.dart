@@ -322,6 +322,17 @@ void main() {
           ])),
         );
       });
+      test('cannot parse array with missing closing bracket', () {
+        var input = '[ 1, 2, 3';
+        expect(
+          () => TomlValue.parse(input),
+          throwsA(equals(TomlParserException(
+            message: '"]" expected',
+            source: input,
+            offset: 9,
+          ))),
+        );
+      });
     });
     group('Boolean', () {
       test('can parse true', () {
@@ -1010,6 +1021,17 @@ void main() {
           throwsA(isA<TomlParserException>()),
         );
       });
+      test('cannot parse inline table with missing closing brace', () {
+        var input = '{ x = 1, y = 2, z = 3';
+        expect(
+          () => TomlValue.parse(input),
+          throwsA(equals(TomlParserException(
+            message: '"}" expected',
+            source: input,
+            offset: 21,
+          ))),
+        );
+      });
     });
     group('String', () {
       group('Basic', () {
@@ -1113,6 +1135,17 @@ void main() {
             );
           },
         );
+        test('cannot parse basic string without closing delimiter', () {
+          var input = '"Hello, World!';
+          expect(
+            () => TomlValue.parse(input),
+            throwsA(equals(TomlParserException(
+              message: "closing '\"' expected",
+              source: input,
+              offset: 14,
+            ))),
+          );
+        });
       });
       group('Multiline Basic', () {
         test('can parse empty multiline basic strings', () {
@@ -1260,6 +1293,20 @@ void main() {
             )),
           );
         });
+        test(
+          'cannot parse multiline basic string without closing delimiter',
+          () {
+            var input = '"""Hello, World!';
+            expect(
+              () => TomlValue.parse(input),
+              throwsA(equals(TomlParserException(
+                message: "closing '\"\"\"' expected",
+                source: input,
+                offset: 16,
+              ))),
+            );
+          },
+        );
       });
       group('Literal', () {
         test('can parse empty literal strings', () {
@@ -1285,7 +1332,7 @@ void main() {
         test('does not allow unpaired UTF-16 surrogate code points', () {
           expect(
             () => TomlValue.parse(
-              "'High surrogate \uD83E without low surrogat'",
+              "'High surrog\ate \uD83E without low surrogat'",
             ),
             throwsA(isA<TomlParserException>()),
           );
@@ -1298,6 +1345,17 @@ void main() {
             equals(TomlLiteralString(
               'High and low surrogate \uD83E\uDDA6 as a pair',
             )),
+          );
+        });
+        test('cannot parse literal string without closing delimiter', () {
+          var input = "'Hello, World!";
+          expect(
+            () => TomlValue.parse(input),
+            throwsA(equals(TomlParserException(
+              message: 'closing "\'" expected',
+              source: input,
+              offset: 14,
+            ))),
           );
         });
       });
@@ -1373,6 +1431,20 @@ void main() {
             )),
           );
         });
+        test(
+          'cannot parse multiline literal string without closing delimiter',
+          () {
+            var input = "'''Hello, World!";
+            expect(
+              () => TomlValue.parse(input),
+              throwsA(equals(TomlParserException(
+                message: 'closing "\'\'\'" expected',
+                source: input,
+                offset: 16,
+              ))),
+            );
+          },
+        );
       });
     });
   });

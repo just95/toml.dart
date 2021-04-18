@@ -23,7 +23,10 @@ class TomlLiteralString extends TomlSinglelineString {
   static final Parser<TomlLiteralString> parser = charParser
       .star()
       .join()
-      .surroundedBy(char(delimiter))
+      .surroundedBy(
+        char(delimiter, 'opening "$delimiter" expected'),
+        char(delimiter, 'closing "$delimiter" expected'),
+      )
       .map((value) => TomlLiteralString._fromEncodable(value));
 
   /// Parser for a single character of a basic TOML string.

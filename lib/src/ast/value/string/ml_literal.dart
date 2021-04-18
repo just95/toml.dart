@@ -22,16 +22,19 @@ class TomlMultilineLiteralString extends TomlMultilineString {
   ///     ml-literal-string-delim = 3apostrophe
   static final String delimiter = TomlLiteralString.delimiter * 3;
 
-  /// Parser for a TOML string value.
+  /// Parser for a multiline literal TOML string value.
   ///
   /// A newline immediately following the opening delimiter is trimmed.
   static final Parser<TomlMultilineLiteralString> parser = tomlNewline
       .optional()
       .before(bodyParser)
-      .surroundedBy(string(delimiter))
+      .surroundedBy(
+        string(delimiter, 'opening "$delimiter" expected'),
+        string(delimiter, 'closing "$delimiter" expected'),
+      )
       .map((body) => TomlMultilineLiteralString._fromEncodable(body));
 
-  ///
+  /// Parser fir the body of a multiline literal TOML string.
   ///
   ///     ml-literal-body =
   ///         *mll-content *( mll-quotes 1*mll-content ) [ mll-quotes ]

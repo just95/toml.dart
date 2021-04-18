@@ -27,7 +27,10 @@ class TomlMultilineBasicString extends TomlMultilineString {
   static final Parser<TomlMultilineBasicString> parser = tomlNewline
       .optional()
       .before(bodyParser)
-      .surroundedBy(string(delimiter))
+      .surroundedBy(
+        string(delimiter, "opening '$delimiter' expected"),
+        string(delimiter, "closing '$delimiter' expected"),
+      )
       .map((body) => TomlMultilineBasicString._fromEncodable(body));
 
   /// Parser for the body of a multiline basic TOML string.
@@ -60,7 +63,7 @@ class TomlMultilineBasicString extends TomlMultilineString {
     TomlEscapedChar.parser,
     tomlNewline,
     escapedNewlineParser,
-  ]);
+  ], failureJoiner: selectFarthestJoined);
 
   /// Parser for a single unescaped character of a multiline basic TOML string.
   ///
@@ -83,14 +86,20 @@ class TomlMultilineBasicString extends TomlMultilineString {
       (char(TomlEscapedChar.escapeChar) &
               tomlWhitespace &
               tomlNewline &
-              ChoiceParser([tomlWhitespaceChar, tomlNewline]).star())
+              ChoiceParser(
+                [tomlWhitespaceChar, tomlNewline],
+                failureJoiner: selectFarthestJoined,
+              ).star())
           .map((_) => '');
 
   /// Escapes all characters of the given string that are not allowed to
   /// occur unescaped in a multiline basic string.
   static String escape(String value) {
     var buffer = StringBuffer();
-    var unescapedOrNewline = ChoiceParser([unescapedParser, tomlNewline]);
+    var unescapedOrNewline = ChoiceParser(
+      [unescapedParser, tomlNewline],
+      failureJoiner: selectFarthestJoined,
+    );
     var quotes = 0;
     var iterator = value.runes.iterator;
     while (iterator.moveNext()) {

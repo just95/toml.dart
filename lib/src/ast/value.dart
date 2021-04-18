@@ -76,7 +76,7 @@ abstract class TomlValue extends TomlNode {
         TomlString.parser,
         TomlArray.parser,
         TomlInlineTable.parser
-      ]));
+      ], failureJoiner: selectFarthestJoined));
 
   /// Parses the given TOML value.
   ///

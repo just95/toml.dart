@@ -214,8 +214,11 @@ class TomlPartialTime {
 @immutable
 class TomlTimeZoneOffset {
   /// Parser for a time-zone offset.
-  static final Parser<TomlTimeZoneOffset> parser =
-      ChoiceParser([_utcParser, _positiveParser, _negativeParser]);
+  static final Parser<TomlTimeZoneOffset> parser = ChoiceParser([
+    _utcParser,
+    _positiveParser,
+    _negativeParser,
+  ]);
 
   /// Parser for the UTC time-zone offset.
   static final Parser<TomlTimeZoneOffset> _utcParser =
@@ -360,7 +363,7 @@ abstract class TomlDateTime extends TomlValue {
     TomlLocalDateTime.parser,
     TomlLocalDate.parser,
     TomlLocalTime.parser,
-  ]);
+  ], failureJoiner: selectFarthestJoined);
 
   @override
   T acceptValueVisitor<T>(TomlValueVisitor<T> visitor) =>

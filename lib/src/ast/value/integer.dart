@@ -52,8 +52,10 @@ class TomlInteger extends TomlValue {
   ///
   /// Decimal integers have to be parsed last such that the zero in the
   /// prefixes of non-decimal numbers is not consumed by the [decParser].
-  static final Parser<TomlInteger> parser =
-      ChoiceParser([binParser, octParser, hexParser, decParser]);
+  static final Parser<TomlInteger> parser = ChoiceParser(
+    [binParser, octParser, hexParser, decParser],
+    failureJoiner: selectFarthest,
+  );
 
   /// Parser for a binary TOML integer value.
   ///

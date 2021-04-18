@@ -54,7 +54,7 @@ abstract class TomlEscapedChar {
   static final Parser<String> parser = char(escapeChar).before(ChoiceParser([
     escapedUnicodeParser,
     escapedCharParser,
-  ]));
+  ], failureJoiner: selectFarthest));
 
   /// Parser for escaped characters with shorthand notation.
   ///

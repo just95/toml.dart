@@ -97,8 +97,10 @@ class TomlKey extends TomlNode {
 @immutable
 abstract class TomlSimpleKey extends TomlNode {
   /// Parser for a simple TOML key.
-  static final Parser<TomlSimpleKey> parser =
-      ChoiceParser([TomlQuotedKey.parser, TomlUnquotedKey.parser]);
+  static final Parser<TomlSimpleKey> parser = ChoiceParser([
+    TomlQuotedKey.parser,
+    TomlUnquotedKey.parser,
+  ], failureJoiner: selectFarthestJoined);
 
   /// Converts the given [key] to an AST node.
   ///

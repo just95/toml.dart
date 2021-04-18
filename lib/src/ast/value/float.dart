@@ -15,8 +15,10 @@ import '../visitor/value.dart';
 @immutable
 class TomlFloat extends TomlValue {
   /// Parser for a TOML floating point value.
-  static final Parser<TomlFloat> parser =
-      ChoiceParser([finalFloatParser, specialFloatParser]);
+  static final Parser<TomlFloat> parser = ChoiceParser([
+    finalFloatParser,
+    specialFloatParser,
+  ], failureJoiner: selectFarthest);
 
   /// Parser for a regular TOML floating point value.
   ///
