@@ -238,6 +238,28 @@ void main() {
         );
       });
     });
+    group('local', () {
+      test('creates a non-UTC time zone offset', () {
+        expect(
+          TomlTimeZoneOffset.local().isUtc,
+          isFalse,
+        );
+      });
+    });
+    group('localAtInstant', () {
+      test('creates a non-UTC time zone offset from local DateTime', () {
+        expect(
+          TomlTimeZoneOffset.localAtInstant(DateTime(1989, 11, 9)).isUtc,
+          isFalse,
+        );
+      });
+      test('creates a non-UTC time zone offset from UTC DateTime', () {
+        expect(
+          TomlTimeZoneOffset.localAtInstant(DateTime.utc(1989, 11, 9)).isUtc,
+          isFalse,
+        );
+      });
+    });
     group('toString', () {
       test('can convert UTC time-zone offset to a string', () {
         expect(TomlTimeZoneOffset.utc().toString(), equals('Z'));
