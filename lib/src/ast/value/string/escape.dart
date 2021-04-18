@@ -70,7 +70,7 @@ abstract class TomlEscapedChar {
   /// throws a [TomlInvalidEscapeSequenceException] if the parsed character
   /// is not escapable.
   static final Parser<String> escapedCharParser =
-      (tomlNewline | tomlWhitespaceChar).neg().map((shortcut) {
+      ChoiceParser([tomlNewline, tomlWhitespaceChar]).neg().map((shortcut) {
     if (!escapableChars.containsKey(shortcut)) {
       throw TomlInvalidEscapeSequenceException('\\$shortcut');
     }

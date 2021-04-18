@@ -58,12 +58,13 @@ class TomlMultilineLiteralString extends TomlMultilineString {
   ///
   /// Literal strings can contain tabs (i.e., `%x09`) but no `apostrophe`s
   /// (i.e., `%x27`).
-  static final Parser<String> contentParser = (char(0x09) |
-          range(0x20, 0x26) |
-          range(0x28, 0x7E) |
-          tomlNonAscii |
-          tomlNewline)
-      .flatten('Multiline literal string character expected');
+  static final Parser<String> contentParser = ChoiceParser([
+    char(0x09),
+    range(0x20, 0x26),
+    range(0x28, 0x7E),
+    tomlNonAscii,
+    tomlNewline,
+  ]).flatten('Multiline literal string character expected');
 
   /// Tests whether the given string can be represented as a literal string.
   ///

@@ -68,12 +68,13 @@ class TomlMultilineBasicString extends TomlMultilineString {
   ///
   ///  This range excludes `%x22` which is the `quotation-mark` character `"`
   ///  and `%x5C` which is the `escape` character `\`.
-  static final Parser<String> unescapedParser = (tomlWhitespaceChar |
-          char(0x21) |
-          range(0x23, 0x5B) |
-          range(0x5D, 0x7E) |
-          tomlNonAscii)
-      .flatten('Unescaped multiline basic string character expected');
+  static final Parser<String> unescapedParser = ChoiceParser([
+    tomlWhitespaceChar,
+    char(0x21),
+    range(0x23, 0x5B),
+    range(0x5D, 0x7E),
+    tomlNonAscii
+  ]).flatten('Unescaped multiline basic string character expected');
 
   /// Parser for an escaped newline.
   ///
@@ -82,14 +83,14 @@ class TomlMultilineBasicString extends TomlMultilineString {
       (char(TomlEscapedChar.escapeChar) &
               tomlWhitespace &
               tomlNewline &
-              (tomlWhitespaceChar | tomlNewline).star())
+              ChoiceParser([tomlWhitespaceChar, tomlNewline]).star())
           .map((_) => '');
 
   /// Escapes all characters of the given string that are not allowed to
   /// occur unescaped in a multiline basic string.
   static String escape(String value) {
     var buffer = StringBuffer();
-    var unescapedOrNewline = unescapedParser | tomlNewline;
+    var unescapedOrNewline = ChoiceParser([unescapedParser, tomlNewline]);
     var quotes = 0;
     var iterator = value.runes.iterator;
     while (iterator.moveNext()) {

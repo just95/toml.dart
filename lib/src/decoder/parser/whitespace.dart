@@ -13,8 +13,7 @@ final Parser<String> tomlWhitespace = tomlWhitespaceChar.star().join();
 /// Parser for a single TOML whitepsace character.
 ///     wschar =  %x20  ; Space
 ///     wschar =/ %x09  ; Horizontal tab
-final Parser<String> tomlWhitespaceChar =
-    (char(' ') | char('\t')).cast<String>();
+final Parser<String> tomlWhitespaceChar = ChoiceParser([char(' '), char('\t')]);
 
 /// Parser for a TOML newline.
 ///
@@ -35,5 +34,7 @@ final Parser tomlComment = char('#') & tomlNonEol.star();
 /// [tomlComment]s.
 ///
 ///     ws-comment-newline = *( wschar / [ comment ] newline )
-final Parser tomlWhitespaceCommentNewline =
-    (tomlWhitespaceChar | tomlComment.optional() & tomlNewline).star();
+final Parser tomlWhitespaceCommentNewline = ChoiceParser([
+  tomlWhitespaceChar,
+  tomlComment.optional() & tomlNewline,
+]).star();

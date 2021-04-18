@@ -24,7 +24,7 @@ Parser<String> tomlHexDigit([String message = 'hexadecimal digit expected']) =>
 ///
 ///     non-eol = %x09 / %x20-7E / non-ascii
 final Parser<String> tomlNonEol =
-    (char(0x09) | range(0x20, 0x7E) | tomlNonAscii).cast<String>();
+    ChoiceParser([char(0x09), range(0x20, 0x7E), tomlNonAscii]);
 
 /// Parser for non-ASCII characters that are allowed in TOML comments and
 /// literal strings.
@@ -34,9 +34,11 @@ final Parser<String> tomlNonEol =
 /// The subrange `%x10000-10FFFF` is represented as surrogate pairs by Dart.
 /// Since `petitparser` can only work with 16-Bit code units, we have to
 /// parse the surrogate pairs manually.
-final Parser<String> tomlNonAscii =
-    (range(0x80, 0xD7FF) | range(0xE000, 0xFFFF) | _tomlSurrogatePair)
-        .cast<String>();
+final Parser<String> tomlNonAscii = ChoiceParser([
+  range(0x80, 0xD7FF),
+  range(0xE000, 0xFFFF),
+  _tomlSurrogatePair,
+]);
 
 /// Parser for a UTF-16 surrogate pair.
 ///

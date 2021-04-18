@@ -28,12 +28,15 @@ class TomlFloat extends TomlValue {
   ///     exp = "e" float-exp-part
   ///     float-exp-part = [ minus / plus ] zero-prefixable-int
   static final Parser<TomlFloat> finalFloatParser = (() {
-    var floatIntPart = char('0') | digit().plus().separatedBy(char('_'));
+    var floatIntPart = ChoiceParser([
+      char('0'),
+      digit().plus().separatedBy(char('_')),
+    ]);
     var zeroPrefixableInt = digit().plus().separatedBy(char('_'));
     var decimal = anyOf('+-').optional() & floatIntPart;
     var exp = anyOf('eE') & anyOf('+-').optional() & zeroPrefixableInt;
     var frac = char('.') & zeroPrefixableInt;
-    var float = decimal & (exp | frac & exp.optional());
+    var float = decimal & ChoiceParser([exp, frac & exp.optional()]);
     return float
         .flatten('Floating point number expected')
         .map((str) => TomlFloat(double.parse(str.replaceAll('_', ''))));

@@ -85,7 +85,7 @@ class TomlInteger extends TomlValue {
   ///     DIGIT = %x30-39 ; 0-9
   static final Parser<TomlInteger> decParser = (() {
     var digits = digit().plus().separatedBy(char('_'));
-    var decimal = anyOf('+-').optional() & (char('0') | digits);
+    var decimal = anyOf('+-').optional() & ChoiceParser([char('0'), digits]);
     return decimal.flatten('Decimal integer expected').map(
           (str) => TomlInteger.dec(BigInt.parse(
             str.replaceAll('_', ''),
