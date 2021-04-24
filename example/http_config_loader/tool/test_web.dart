@@ -4,7 +4,8 @@
 import 'dart:io';
 
 import 'package:webdriver/io.dart';
-import 'package:http_server/http_server.dart';
+import 'package:shelf/shelf_io.dart' as shelf_io;
+import 'package:shelf_static/shelf_static.dart' as shelf_static;
 
 /// The output that is expected to be written to the element with id `text`.
 const expectedOutput = 'Hello, World!';
@@ -19,9 +20,8 @@ const maxTries = 5;
 
 Future main() async {
   // Serve previously compiled `build` directory.
-  final staticFiles = VirtualDirectory('./build');
-  final server = await HttpServer.bind(InternetAddress.loopbackIPv4, 8080);
-  server.listen(staticFiles.serveRequest);
+  final handler = shelf_static.createStaticHandler('./build', defaultDocument: 'index.html');
+  shelf_io.serve(handler, InternetAddress.loopbackIPv4, 8080);
 
   // Load the example web site.
   final driver = await createDriver(spec: WebDriverSpec.JsonWire);
