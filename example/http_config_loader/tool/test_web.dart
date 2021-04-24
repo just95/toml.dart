@@ -1,9 +1,7 @@
-// TODO update to null-safety once dev dependencies are updated.
-// @dart=2.9
-
 import 'dart:io';
 
 import 'package:webdriver/io.dart';
+import 'package:shelf/shelf.dart' as shelf;
 import 'package:shelf/shelf_io.dart' as shelf_io;
 import 'package:shelf_static/shelf_static.dart' as shelf_static;
 
@@ -20,11 +18,24 @@ const maxTries = 5;
 
 Future main() async {
   // Serve previously compiled `build` directory.
-  final handler = shelf_static.createStaticHandler('./build', defaultDocument: 'index.html');
-  shelf_io.serve(handler, InternetAddress.loopbackIPv4, 8080);
+  final pipeline = const shelf.Pipeline().addMiddleware(shelf.logRequests());
+  final handler = pipeline.addHandler(shelf_static.createStaticHandler(
+    './build',
+    defaultDocument: 'index.html',
+  ));
+  final server = await shelf_io.serve(
+    handler,
+    InternetAddress.loopbackIPv4,
+    8080,
+  );
+  print('Serving at http://${server.address.host}:${server.port}');
+
+  // Connect to the web driver.
+  print('Connecting to web driver...');
+  final driver = await createDriver(spec: WebDriverSpec.JsonWire);
 
   // Load the example web site.
-  final driver = await createDriver(spec: WebDriverSpec.JsonWire);
+  print('Loading example web site...');
   await driver.get(Uri(
     scheme: 'http',
     host: server.address.host,
