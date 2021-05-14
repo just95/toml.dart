@@ -6,6 +6,8 @@ This directory contains examples for the usage of the `toml.dart` package.
 
  - [`./filesystem_config_loader`][toml-dart/example/filesystem_config_loader] contains an example for how to load a configuration file in the Dart VM from the local filesystem.
 
+ - [`./filesystem_config_saver`][toml-dart/example/filesystem_config_saver] contains an example for how to save a configuration file in the Dart VM to the local filesystem.
+
  - [`./flutter_example`][toml-dart/example/flutter_example] contains a Flutter example for how to use the `toml.dart` library to decode a TOML document as an asset string.
 
  - [`./http_config_loader`][toml-dart/example/http_config_loader] contains an example for how to load a configuration file in the browser via HTTP.
