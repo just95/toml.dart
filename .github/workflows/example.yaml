@@ -7,11 +7,15 @@ name: Example CI
 # development braches with the `-ci` postfix. The workflow also runs when
 # files outside of the `example` directory change because the examples depend
 # on the `toml` package.
+#
+# Additionally, the workflow runs once every day at 6am on the `main` branch.
 on:
   push:
     branches:
       - 'main'
       - '*-ci'
+  schedule:
+      - cron: "0 6 * * *"
 
 jobs:
   # Analyzes the Dart code of the examples (i.e., all `.dart` files in the `lib`,

@@ -7,6 +7,8 @@ name: Dart CI
 # development braches with the `-ci` postfix. Commits that only modify examples
 # do not trigger the workflow. There is a separate workflow that checks
 # the example source code.
+#
+# Additionally, the workflow runs once every day at 6am on the `main` branch.
 on:
   push:
     branches:
@@ -14,6 +16,8 @@ on:
       - '*-ci'
     paths-ignore:
       - 'example/**'
+  schedule:
+      - cron: "0 6 * * *"
 
 jobs:
   # Analyzes the Dart code of the package (i.e., all `.dart` files in the `lib`,
