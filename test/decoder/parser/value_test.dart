@@ -1242,8 +1242,8 @@ void main() {
               r'Name\tJos\u00E9\nLocation\tSF."',
             ),
             equals(TomlBasicString(
-              'I\'m a string. '
-              '\"You can quote me\". '
+              "I'm a string. "
+              '"You can quote me". '
               'Name\tJos\u00E9\nLocation\tSF.',
             )),
           );

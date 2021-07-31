@@ -22,7 +22,7 @@ abstract class TomlExpression extends TomlNode {
   ///
   /// Returns `null` if the expression is just a blank line or comment.
   static final Parser<TomlExpression?> parser = ChoiceParser(
-    [_keyvalParser, _tableParser, _blackParser],
+    [_keyvalParser, _tableParser, _blankParser.cast<TomlExpression?>()],
     failureJoiner: selectFarthestJoined,
   );
 
@@ -39,7 +39,7 @@ abstract class TomlExpression extends TomlNode {
       .followedBy(_lookAheadParser);
 
   /// Parser for blank line with optional comment.
-  static final Parser<Null> _blackParser = epsilonWith(null)
+  static final Parser<void> _blankParser = epsilonWith(null)
       .followedBy(tomlWhitespace)
       .followedBy(tomlComment.optional())
       .followedBy(_lookAheadParser);
@@ -49,7 +49,7 @@ abstract class TomlExpression extends TomlNode {
   ///
   /// This parser improves the error message that is reported when there
   /// are multiple expressions on the same line. Without this parser syntax
-  /// errors in expressions would not be reported either since [_blackParser]
+  /// errors in expressions would not be reported either since [_blankParser]
   /// would always match.
   static final Parser _lookAheadParser = ChoiceParser([
     tomlNewline,
