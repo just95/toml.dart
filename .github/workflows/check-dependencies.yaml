@@ -1,0 +1,61 @@
+# This workflow contains checks that test whether there are outdated
+# dependencies in the package or one of its examples. It is not part of the
+# main workflows since it is only intended to notify the maintainers that
+# they should update the package.
+
+name: Dependencies
+
+# Trigger the workflow whenever commits are pushed to the `main` branch or
+# development braches with the `-ci` postfix that modify a `pubspec.yaml`
+# file or the workflow file itself.
+#
+# Additionally, the workflow runs once every day at 6am on the `main` branch.
+on:
+  push:
+    branches:
+      - 'main'
+      - '*-ci'
+    paths:
+      - '.github/workflows/check-dependencies.yaml'
+      - '**/pubspec.yaml'
+  schedule:
+      - cron: "0 6 * * *"
+
+jobs:
+  # This job runs the `dart pub outdated` command and uploads the JSON output
+  # as an artifact.
+  find-outdated-packages:
+    name: Check Dependencies
+    runs-on: ubuntu-latest
+    container:
+      image: google/dart:latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Print Dart SDK Version
+        run: dart --version
+      - name: Find Outdated Packages
+        run: dart pub outdated --json > outdated.json
+      - name: Upload Output of `dart pub outdated`
+        uses: actions/upload-artifact@v2
+        with:
+          name: outdated
+          path: outdated.json
+
+  # This job checks the JSON output artifact of the `dart pub outdated`
+  # command. The `packages` property must be an empty array. Otherwise,
+  # this job fails.
+  check-outdated-packages:
+    name: Check Dependencies
+    runs-on: ubuntu-latest
+    steps:
+      - name:
+        - name: Checkout
+          uses: actions/checkout@v2
+        - name: Download Output of `dart pub outdated`
+          uses: actions/download-artifact@v2
+          with:
+            name: outdated
+            path: outdated.json
+        - name: Find Outdated Packages
+          run: 'jq -e ".packages | length == 0" outdated.json'
