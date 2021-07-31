@@ -34,6 +34,8 @@ jobs:
         uses: actions/checkout@v2
       - name: Print Dart SDK Version
         run: dart --version
+      - name: Install Dependencies
+        run: dart pub get
       - name: Find Outdated Packages
         run: dart pub outdated --json > outdated.json
       - name: Upload Output of `dart pub outdated`
