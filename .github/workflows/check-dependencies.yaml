@@ -59,6 +59,5 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: outdated
-          path: outdated.json
       - name: Find Outdated Packages
         run: 'jq -e ".packages | length == 0" outdated.json'
