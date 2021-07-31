@@ -49,13 +49,12 @@ jobs:
     name: Check Dependencies
     runs-on: ubuntu-latest
     steps:
-      - name:
-        - name: Checkout
-          uses: actions/checkout@v2
-        - name: Download Output of `dart pub outdated`
-          uses: actions/download-artifact@v2
-          with:
-            name: outdated
-            path: outdated.json
-        - name: Find Outdated Packages
-          run: 'jq -e ".packages | length == 0" outdated.json'
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Download Output of `dart pub outdated`
+        uses: actions/download-artifact@v2
+        with:
+          name: outdated
+          path: outdated.json
+      - name: Find Outdated Packages
+        run: 'jq -e ".packages | length == 0" outdated.json'
