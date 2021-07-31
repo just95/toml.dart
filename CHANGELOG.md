@@ -1,5 +1,10 @@
 # Changelog
 
+## Unreleased
+
+ - Dart 2.13 is now required.
+ - Upgraded dependencies.
+
 ## 0.11.0
 
  - Disallowed non-scalar Unicode values when encoding (multiline) basic strings.
