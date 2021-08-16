@@ -45,8 +45,11 @@ jobs:
           path: outdated.json
 
   # This job checks the JSON output artifact of the `dart pub outdated`
-  # command. The `packages` property must be an empty array. Otherwise,
-  # this job fails.
+  # command. The `current` version field of all `packages` must be set to
+  # the `resolvable` version. Otherwise, this job fails. If there are
+  # packages with a newer version but that cannot be upgraded, because the
+  # version of the package is constrainted by a dependency, the job does not
+  # fail.
   check-outdated-packages:
     name: Check Outdated Packages
     runs-on: ubuntu-latest
@@ -60,4 +63,7 @@ jobs:
         with:
           name: outdated
       - name: Find Outdated Packages
-        run: 'jq -e ".packages | length == 0" outdated.json'
+        run: 'jq -e "[.packages
+                     | .[]
+                     | .current.version == .resolvable.version
+                     ] | all" outdated.json'
