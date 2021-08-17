@@ -106,3 +106,22 @@ jobs:
         run: while ! nc -z localhost 4444; do sleep 0.1; done
       - name: Run Tests of Web Examples
         run: ./tool/test-web-examples.sh
+
+  # Builds the Docker image for the `toml_to_json` example and pushes it to
+  # DockerHub.
+  build-and-push-toml-to-json-docker-image:
+    name: Build and Push `toml_to_json` Docker Image
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+      - name: Login to DockerHub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Build and Push
+        uses: docker/build-push-action@v2
+        with:
+          push: true
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/toml-to-json:latest

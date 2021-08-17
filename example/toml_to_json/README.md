@@ -27,7 +27,7 @@ If multiple input files are specified, the hash maps of all documents are merged
 
  - Two tables are merged by adding the keys from the second table to the first table.
    If the same key exists in both tables, it is overwritten in favor of the second value.
- - Arrays (including arrays of tables) are merged by adding the items of the second array to end of the first array.
+ - Arrays (including arrays of tables) are merged by adding the items of the second array to the end of the first array.
  - If two values cannot be merged because they have different types, the value is overwritten in favor of the second document.
  - `DateTime`s are converted to strings.
 
