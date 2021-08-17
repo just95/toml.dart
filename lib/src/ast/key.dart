@@ -48,8 +48,7 @@ class TomlKey extends TomlNode {
   final List<TomlSimpleKey> parts;
 
   /// Creates a new dotted key with the given parts.
-  TomlKey(Iterable<TomlSimpleKey> parts)
-      : parts = List.from(parts, growable: false);
+  TomlKey(Iterable<TomlSimpleKey> parts) : parts = List.unmodifiable(parts);
 
   /// Gets a key for the parent table of this key.
   ///

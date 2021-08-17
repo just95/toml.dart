@@ -155,7 +155,7 @@ class TomlPartialTime {
     this.minute,
     this.second, [
     List<int> secondFractions = const [],
-  ]) : secondFractions = List.from(secondFractions, growable: false) {
+  ]) : secondFractions = List.unmodifiable(secondFractions) {
     if (hour < 0 || hour > 23) throw ArgumentError('Invalid hour: $hour');
     if (minute < 0 || minute > 59) {
       throw ArgumentError('Invalid minute: $minute');

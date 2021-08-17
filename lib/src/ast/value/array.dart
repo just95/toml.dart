@@ -47,8 +47,7 @@ class TomlArray extends TomlValue {
   final List<TomlValue> items;
 
   /// Creates a new array value.
-  TomlArray(Iterable<TomlValue> items)
-      : items = List.from(items, growable: false);
+  TomlArray(Iterable<TomlValue> items) : items = List.unmodifiable(items);
 
   @override
   TomlType get type => TomlType.array;

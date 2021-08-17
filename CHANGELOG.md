@@ -4,6 +4,8 @@
 
  - Dart 2.13 is now required.
  - Upgraded dependencies.
+ - Fixed immutability of AST.
+   The AST is intended to be immutable, but `List` properties of the AST were only ungrowable not unmodifiable.
 
 ## 0.11.0
 

@@ -50,7 +50,7 @@ class TomlDocument extends TomlNode {
 
   /// Creates a TOML document with the given expressions.
   TomlDocument(Iterable<TomlExpression> expressions)
-      : expressions = List.from(expressions, growable: false);
+      : expressions = List.unmodifiable(expressions);
 
   /// Creates a TOML document from the given map.
   factory TomlDocument.fromMap(Map map) => TomlAstBuilder().buildDocument(map);
