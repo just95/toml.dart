@@ -256,15 +256,18 @@ jobs:
         run: dart --version
       - name: Install Dependencies
         run: dart pub get
-      - name: Compile Decoder Scripts
+      - name: Compile Decoder and Encoder Scripts
         run: |
           mkdir -p build/bin
           dart compile exe -o build/bin/decoder bin/decoder.dart
+          dart compile exe -o build/bin/encoder bin/encoder.dart
       - name: Upload Decoder Executable
         uses: actions/upload-artifact@v2
         with:
-          name: toml-test-decoder
-          path: build/bin/decoder
+          name: toml-test
+          path: |
+            build/bin/decoder
+            build/bin/encoder
 
   # Runs the `toml-test` test suite against the executable built by the
   # `compile-toml-test` job.
@@ -282,9 +285,13 @@ jobs:
       - name: Download Decoder Executable
         uses: actions/download-artifact@v2
         with:
-          name: toml-test-decoder
+          name: toml-test
           path: build/bin
-      - name: Set Decoder Executable Permissions
-        run: chmod +x build/bin/decoder
+      - name: Set Executable Permissions
+        run: |
+          chmod +x build/bin/decoder
+          chmod +x build/bin/encoder
       - name: Run `toml-test` Against Decoder
         run: $GOPATH/bin/toml-test build/bin/decoder
+      - name: Run `toml-test` Against Encoder
+        run: $GOPATH/bin/toml-test build/bin/encoder -encoder
