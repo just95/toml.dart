@@ -326,25 +326,21 @@ dart test
 You may pass the `--platform` command line argument to test the package on other platforms than the VM.
 Run `dart test --help` for a list of all available platforms.
 
-Alternatively, you can run [`toml-test`][toml-test] (again from the package root):
-
-```sh
-$GOPATH/bin/toml-test bin/decoder.dart
-$GOPATH/bin/toml-test -encoder bin/encoder.dart
-```
-
-To speedup the tests, it is recommended to compile the encoder and decoder scripts before running `toml-test`.
+Additionally, the platform agnostic test suite [`toml-test`][toml-test] is supported.
+To speedup the tests, it is recommended to compile the encoder and decoder scripts first.
 
 ```sh
 mkdir -p build/bin
 dart compile exe -o build/bin/decoder bin/decoder.dart
 dart compile exe -o build/bin/encoder bin/encoder.dart
-
-$GOPATH/bin/toml-test build/bin/decoder
-$GOPATH/bin/toml-test -encoder build/bin/encoder
 ```
 
-Unfortunately, `toml-test` supports version 0.4.0 of the TOML specification only such that some tests will fail.
+Then run the tests as follows.
+
+```sh
+toml-test build/bin/decoder
+toml-test -encoder build/bin/encoder
+```
 
 ## License
 

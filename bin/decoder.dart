@@ -16,18 +16,7 @@ Map<String, dynamic> encodeTable(Map<String, dynamic> table) {
 }
 
 /// Encodes an array.
-///
-/// * Arrays of tables are encoded as a JSON array.
-/// * All other arrays are encoded as JSON objects of the form
-///   `{"type": "array", "value": [...]}`.
-dynamic encodeArray(Iterable items) {
-  var encodedItems = items.map<dynamic>(encodeValue).toList();
-  if (items.isEmpty ||
-      !items.every((dynamic item) => item is Map<String, dynamic>)) {
-    return {'type': 'array', 'value': encodedItems};
-  }
-  return encodedItems;
-}
+dynamic encodeArray(Iterable items) => items.map<dynamic>(encodeValue).toList();
 
 /// Encodes a TOML [value] as a JSON object.
 ///
@@ -48,15 +37,7 @@ dynamic encodeValue(dynamic value) {
   if (value is Map<String, dynamic>) return encodeTable(value);
   if (value is Iterable) return encodeArray(value);
 
-  var str = value.toString();
-
-  // Since toml-test supports TOML 0.4.0 only, it expects a `T` instead of a
-  // space as a separator between the date and time.
-  if (value is TomlOffsetDateTime) {
-    str = str.replaceFirst(' ', 'T');
-  }
-
-  return {'type': getValueType(value), 'value': str};
+  return {'type': getValueType(value), 'value': serializeValue(value)};
 }
 
 /// Determines the TOML type of the supplied [value].
@@ -66,9 +47,18 @@ String getValueType(dynamic value) {
   if (value is String) return 'string';
   if (value is int) return 'integer';
   if (value is double) return 'float';
-  if (value is TomlDateTime) return 'datetime';
+  if (value is TomlOffsetDateTime) return 'datetime';
+  if (value is TomlLocalDateTime) return 'datetime-local';
+  if (value is TomlLocalDate) return 'date-local';
+  if (value is TomlLocalTime) return 'time-local';
   if (value is bool) return 'bool';
   throw UnsupportedError('Unsupported value type: $value');
+}
+
+/// Converts a value to a string in the format expected by `toml-test`.
+String serializeValue(dynamic value) {
+  if (value is double) return value.toString().toLowerCase();
+  return value.toString();
 }
 
 Future main() async {

@@ -5,6 +5,7 @@ import 'package:petitparser/petitparser.dart';
 import 'package:quiver/collection.dart';
 import 'package:quiver/core.dart';
 
+import '../../decoder.dart';
 import '../../encoder.dart';
 import '../../util/container.dart';
 import '../../util/date.dart';
@@ -364,6 +365,10 @@ abstract class TomlDateTime extends TomlValue {
     TomlLocalDate.parser,
     TomlLocalTime.parser,
   ], failureJoiner: selectFarthestJoined);
+
+  /// Parses the given string as a TOML date, time or date-time value.
+  static TomlDateTime parse(String input) =>
+      parser.end().parse(input).valueOrTomlException;
 
   @override
   T acceptValueVisitor<T>(TomlValueVisitor<T> visitor) =>

@@ -4,6 +4,7 @@ import 'package:meta/meta.dart';
 import 'package:petitparser/petitparser.dart';
 import 'package:quiver/core.dart';
 
+import '../../../decoder.dart';
 import '../../../util/parser.dart';
 import '../../value.dart';
 import '../../visitor/value/date_time.dart';
@@ -28,6 +29,10 @@ class TomlOffsetDateTime extends TomlDateTime {
         pair.second.first,
         pair.second.second,
       ));
+
+  /// Parses the given string as a TOML offset date-time.
+  static TomlOffsetDateTime parse(String input) =>
+      parser.end().parse(input).valueOrTomlException;
 
   /// The date.
   final TomlFullDate date;

@@ -31,16 +31,32 @@ dynamic decodeValue(dynamic value) {
     if (value.length == 2 &&
         value.containsKey('type') &&
         value.containsKey('value')) {
-      var type = value['type'] as String?;
+      var type = value['type'] as String;
       switch (type) {
         case 'string':
-          return value['value'];
+          return value['value'] as String;
         case 'integer':
           return int.parse(value['value'] as String);
         case 'float':
-          return double.parse(value['value'] as String);
+          switch (value['value']) {
+            case 'nan':
+              return double.nan;
+            case 'inf':
+            case '+inf':
+              return double.infinity;
+            case '-inf':
+              return double.negativeInfinity;
+            default:
+              return double.parse(value['value'] as String);
+          }
         case 'datetime':
-          return DateTime.parse(value['value'] as String);
+          return TomlOffsetDateTime.parse(value['value'] as String);
+        case 'datetime-local':
+          return TomlLocalDateTime.parse(value['value'] as String);
+        case 'date-local':
+          return TomlLocalDate.parse(value['value'] as String);
+        case 'time-local':
+          return TomlLocalTime.parse(value['value'] as String);
         case 'bool':
           return value['value'] == 'true';
         case 'array':

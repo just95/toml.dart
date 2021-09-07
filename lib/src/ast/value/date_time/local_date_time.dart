@@ -4,6 +4,7 @@ import 'package:meta/meta.dart';
 import 'package:petitparser/petitparser.dart';
 import 'package:quiver/core.dart';
 
+import '../../../decoder.dart';
 import '../../../util/parser.dart';
 import '../../value.dart';
 import '../../visitor/value/date_time.dart';
@@ -22,6 +23,10 @@ class TomlLocalDateTime extends TomlDateTime {
     TomlFullDate.parser,
     anyOf('Tt ').before(TomlPartialTime.parser),
   ).map((pair) => TomlLocalDateTime(pair.first, pair.second));
+
+  /// Parses the given string as a TOML local date-time.
+  static TomlLocalDateTime parse(String input) =>
+      parser.end().parse(input).valueOrTomlException;
 
   /// The date.
   final TomlFullDate date;

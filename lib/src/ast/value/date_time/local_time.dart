@@ -4,6 +4,7 @@ import 'package:meta/meta.dart';
 import 'package:petitparser/petitparser.dart';
 import 'package:quiver/core.dart';
 
+import '../../../decoder.dart';
 import '../../value.dart';
 import '../../visitor/value/date_time.dart';
 import '../date_time.dart';
@@ -17,6 +18,10 @@ class TomlLocalTime extends TomlDateTime {
   /// Parser for a TOML local time value.
   static final Parser<TomlLocalTime> parser =
       TomlPartialTime.parser.map((time) => TomlLocalTime(time));
+
+  /// Parses the given string as a TOML local time.
+  static TomlLocalTime parse(String input) =>
+      parser.end().parse(input).valueOrTomlException;
 
   /// The time without time-zone offset.
   final TomlPartialTime time;

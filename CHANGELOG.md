@@ -4,6 +4,7 @@
 
  - Dart 2.13 is now required.
  - Upgraded dependencies.
+ - Added support for 1.0.0 compliant version of `toml-test` test suite.
  - Fixed immutability of AST.
    The AST is intended to be immutable, but `List` properties of the AST were only ungrowable not unmodifiable.
 
