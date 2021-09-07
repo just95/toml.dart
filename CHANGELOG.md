@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 0.12.0
 
  - Dart 2.13 is now required.
  - Upgraded dependencies.

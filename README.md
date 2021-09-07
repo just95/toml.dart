@@ -38,7 +38,7 @@ To get started add `toml` as a dependency to your `pubspec.yaml` and run the
 
 ```yaml
 dependencies:
-  toml: "^0.11.0"
+  toml: "^0.12.0"
 ```
 
 ## Usage
@@ -326,7 +326,7 @@ dart test
 You may pass the `--platform` command line argument to test the package on other platforms than the VM.
 Run `dart test --help` for a list of all available platforms.
 
-Additionally, the platform agnostic test suite [`toml-test`][toml-test] is supported.
+Additionally, the language-agnostic test suite [`toml-test`][toml-test] is supported.
 To speedup the tests, it is recommended to compile the encoder and decoder scripts first.
 
 ```sh
