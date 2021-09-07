@@ -242,3 +242,49 @@ jobs:
         with:
           name: api-documentation
           path: doc/api
+
+  # Compiles the test decoder script for the `toml-test` test suite.
+  compile-toml-test:
+    name: Compile `toml-test` Scripts
+    runs-on: ubuntu-latest
+    container:
+      image: google/dart:latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Print Dart SDK Version
+        run: dart --version
+      - name: Install Dependencies
+        run: dart pub get
+      - name: Compile Decoder Scripts
+        run: |
+          mkdir -p build/bin
+          dart compile exe -o build/bin/decoder bin/decoder.dart
+      - name: Upload Decoder Executable
+        uses: actions/upload-artifact@v2
+        with:
+          name: toml-test-decoder
+          path: build/bin/decoder
+
+  # Runs the `toml-test` test suite against the executable built by the
+  # `compile-toml-test` job.
+  toml-test:
+    name: Run `toml-test` Test Suite
+    runs-on: ubuntu-latest
+    container:
+      image: golang:1.17
+    needs: compile-toml-test
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Install `toml-test`
+        run: go install github.com/BurntSushi/toml-test/cmd/toml-test@v1.0.0
+      - name: Download Decoder Executable
+        uses: actions/download-artifact@v2
+        with:
+          name: toml-test-decoder
+          path: build/bin
+      - name: Set Decoder Executable Permissions
+        run: chmod +x build/bin/decoder
+      - name: Run `toml-test` Against Decoder
+        run: $GOPATH/bin/toml-test build/bin/decoder
