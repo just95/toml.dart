@@ -1470,6 +1470,96 @@ void main() {
             )),
           );
         });
+        test('allows double quote after opening delimiter', () {
+          expect(
+            TomlValue.parse('""""Foo"""'),
+            equals(TomlMultilineBasicString(
+              '"Foo',
+            )),
+          );
+        });
+        test('allows two double quotes after opening delimiter', () {
+          expect(
+            TomlValue.parse('"""""Foo"""'),
+            equals(TomlMultilineBasicString(
+              '""Foo',
+            )),
+          );
+        });
+        test(
+          'requires the third double quote after opening delimiter to be '
+          'escaped',
+          () {
+            var input = '""""""Foo"""';
+            expect(
+              () => TomlValue.parse(input),
+              throwsA(equals(TomlParserException(
+                message: 'end of input expected',
+                source: input,
+                offset: 6,
+              ))),
+            );
+            expect(
+              TomlValue.parse(r'"""""\"Foo"""'),
+              equals(TomlMultilineBasicString(
+                '"""Foo',
+              )),
+            );
+          },
+        );
+        test('allows double quote before closing delimiter', () {
+          expect(
+            TomlValue.parse('"""Foo""""'),
+            equals(TomlMultilineBasicString(
+              'Foo"',
+            )),
+          );
+        });
+        test('allows two double quotes before closing delimiter', () {
+          expect(
+            TomlValue.parse('"""Foo"""""'),
+            equals(TomlMultilineBasicString(
+              'Foo""',
+            )),
+          );
+        });
+        test(
+          'requires the third double quote before closing delimiter to be '
+          'escaped',
+          () {
+            var input = '"""Foo""""""';
+            expect(
+              () => TomlValue.parse(input),
+              throwsA(equals(TomlParserException(
+                message: 'end of input expected',
+                source: input,
+                offset: 9,
+              ))),
+            );
+            expect(
+              TomlValue.parse(r'"""Foo""\""""'),
+              equals(TomlMultilineBasicString(
+                'Foo"""',
+              )),
+            );
+          },
+        );
+        test(
+          'rejects more than three double quotes before closing delimiter',
+          () {
+            for (var i = 4; i < 9; i++) {
+              var input = '"""Foo${'"' * i}"""';
+              expect(
+                () => TomlValue.parse(input),
+                throwsA(equals(TomlParserException(
+                  message: 'end of input expected',
+                  source: input,
+                  offset: 9,
+                ))),
+              );
+            }
+          },
+        );
         test('allows raw tabs', () {
           expect(
             TomlValue.parse(
@@ -1613,6 +1703,95 @@ void main() {
             )),
           );
         });
+        test('allows two consecutive single quotes', () {
+          expect(
+            TomlValue.parse("'''Foo ''Bar'' Baz'''"),
+            equals(TomlMultilineLiteralString(
+              "Foo ''Bar'' Baz",
+            )),
+          );
+        });
+        test('rejects three consecutive single quotes', () {
+          var input = "'''Foo '''Bar''' Baz'''";
+          expect(
+            () => TomlValue.parse(input),
+            throwsA(equals(TomlParserException(
+              message: 'end of input expected',
+              source: input,
+              offset: 10,
+            ))),
+          );
+        });
+        test('allows single quote after opening delimiter', () {
+          expect(
+            TomlValue.parse("''''Foo'''"),
+            equals(TomlMultilineLiteralString(
+              "'Foo",
+            )),
+          );
+        });
+        test('allows two single quotes after opening delimiter', () {
+          expect(
+            TomlValue.parse("'''''Foo'''"),
+            equals(TomlMultilineLiteralString(
+              "''Foo",
+            )),
+          );
+        });
+        test('rejects three single quotes after opening delimiter', () {
+          var input = "''''''Foo'''";
+          expect(
+            () => TomlValue.parse(input),
+            throwsA(equals(TomlParserException(
+              message: 'end of input expected',
+              source: input,
+              offset: 6,
+            ))),
+          );
+        });
+        test('allows single quote before closing delimiter', () {
+          expect(
+            TomlValue.parse("'''Foo''''"),
+            equals(TomlMultilineLiteralString(
+              "Foo'",
+            )),
+          );
+        });
+        test('allows two single quotes before closing delimiter', () {
+          expect(
+            TomlValue.parse("'''Foo'''''"),
+            equals(TomlMultilineLiteralString(
+              "Foo''",
+            )),
+          );
+        });
+        test('rejects three single quotes before closing delimiter', () {
+          var input = "'''Foo''''''";
+          expect(
+            () => TomlValue.parse(input),
+            throwsA(equals(TomlParserException(
+              message: 'end of input expected',
+              source: input,
+              offset: 9,
+            ))),
+          );
+        });
+        test(
+          'rejects more than three single quotes before closing delimiter',
+          () {
+            for (var i = 4; i < 9; i++) {
+              var input = "'''Foo${"'" * i}'''";
+              expect(
+                () => TomlValue.parse(input),
+                throwsA(equals(TomlParserException(
+                  message: 'end of input expected',
+                  source: input,
+                  offset: 9,
+                ))),
+              );
+            }
+          },
+        );
         test('allows raw tabs', () {
           expect(
             TomlValue.parse(

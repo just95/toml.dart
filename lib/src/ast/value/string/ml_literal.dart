@@ -51,7 +51,11 @@ class TomlMultilineLiteralString extends TomlMultilineString {
   ///
   ///     mll-quotes = 1*2apostrophe
   static final Parser<String> quotesParser = char(TomlLiteralString.delimiter)
-      .repeatLazy(char(TomlLiteralString.delimiter).not(), 1, 2)
+      .repeatLazy(
+        string(delimiter).optional() & char(TomlLiteralString.delimiter).not(),
+        1,
+        2,
+      )
       .join();
 
   /// Parser for a single character of a multiline literal TOML string.

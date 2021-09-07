@@ -51,7 +51,11 @@ class TomlMultilineBasicString extends TomlMultilineString {
   ///
   ///     mlb-quotes = 1*2quotation-mark
   static final Parser<String> quotesParser = char(TomlBasicString.delimiter)
-      .repeatLazy(char(TomlBasicString.delimiter).not(), 1, 2)
+      .repeatLazy(
+        string(delimiter).optional() & char(TomlBasicString.delimiter).not(),
+        1,
+        2,
+      )
       .join();
 
   /// Parser for a single character of a multiline basic TOML string.

@@ -5,6 +5,7 @@
  - Dart 2.13 is now required.
  - Upgraded dependencies.
  - Added support for 1.0.0 compliant version of `toml-test` test suite.
+ - Fixed parsing of multi-line literal and multi-line basic strings with up to two (unescaped) double quotes or single quotes before the closing delimiter.
  - Fixed immutability of AST.
    The AST is intended to be immutable, but `List` properties of the AST were only ungrowable not unmodifiable.
 
