@@ -2,8 +2,8 @@ library toml.src.ast.value.table;
 
 import 'package:meta/meta.dart';
 import 'package:petitparser/petitparser.dart';
-import 'package:quiver/core.dart';
 import 'package:quiver/collection.dart';
+import 'package:quiver/core.dart';
 
 import '../../decoder/parser/whitespace.dart';
 import '../../util/parser.dart';

@@ -1,7 +1,7 @@
 library toml.test.util.parser.pair_test;
 
-import 'package:test/test.dart';
 import 'package:petitparser/petitparser.dart';
+import 'package:test/test.dart';
 
 import 'package:toml/src/util/container/pair.dart';
 import 'package:toml/src/util/parser/pair.dart';

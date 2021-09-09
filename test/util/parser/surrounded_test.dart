@@ -1,7 +1,7 @@
 library toml.test.util.parser.surrounded_test;
 
-import 'package:test/test.dart';
 import 'package:petitparser/petitparser.dart';
+import 'package:test/test.dart';
 
 import 'package:toml/src/util/parser/surrounded.dart';
 
