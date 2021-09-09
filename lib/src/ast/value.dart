@@ -2,17 +2,17 @@ library toml.src.ast.value;
 
 import 'package:petitparser/petitparser.dart';
 
-import '../decoder/exception/parser.dart';
 import '../encoder.dart';
+import '../exception.dart';
 import '../util/parser.dart';
 import 'node.dart';
-import 'value/array.dart';
-import 'value/boolean.dart';
-import 'value/date_time.dart';
-import 'value/float.dart';
-import 'value/integer.dart';
-import 'value/string.dart';
-import 'value/table.dart';
+import 'value/compound/array.dart';
+import 'value/compound/table.dart';
+import 'value/primitive/boolean.dart';
+import 'value/primitive/date_time.dart';
+import 'value/primitive/float.dart';
+import 'value/primitive/integer.dart';
+import 'value/primitive/string.dart';
 import 'visitor/node.dart';
 import 'visitor/value.dart';
 
@@ -76,7 +76,7 @@ abstract class TomlValue extends TomlNode {
             TomlBoolean.parser,
             TomlString.parser,
             TomlArray.parser,
-            TomlInlineTable.parser
+            TomlInlineTable.parser,
           ], failureJoiner: selectFarthestJoined)
               .orFailure('value expected'));
 

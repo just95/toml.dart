@@ -6,12 +6,12 @@ import 'package:collection/collection.dart';
 import 'package:meta/meta.dart';
 import 'package:petitparser/petitparser.dart';
 
-import '../decoder/exception/parser.dart';
 import '../decoder/parser/whitespace.dart';
 import '../encoder.dart';
+import '../exception.dart';
 import '../util/parser.dart';
 import 'node.dart';
-import 'value/string.dart';
+import 'value/primitive/string.dart';
 import 'visitor/key.dart';
 import 'visitor/node.dart';
 

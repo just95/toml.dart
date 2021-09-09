@@ -1,36 +1,16 @@
 library toml.src.ast.visitor.value;
 
 import '../value.dart';
-import '../value/array.dart';
-import '../value/boolean.dart';
-import '../value/date_time.dart';
-import '../value/float.dart';
-import '../value/integer.dart';
-import '../value/string.dart';
-import '../value/table.dart';
+import '../value/compound.dart';
+import '../value/primitive.dart';
 
 /// Interface for visitors of [TomlValue]s.
 abstract class TomlValueVisitor<R> {
-  /// Visits the given array value.
-  R visitArray(TomlArray array);
+  /// Visits the given primitive value.
+  R visitPrimitiveValue(TomlPrimitiveValue value);
 
-  /// Visits the given boolean value.
-  R visitBoolean(TomlBoolean boolean);
-
-  /// Visits the given date or time value.
-  R visitDateTime(TomlDateTime dateTime);
-
-  /// Visits the given floating point number.
-  R visitFloat(TomlFloat float);
-
-  /// Visits the given integer.
-  R visitInteger(TomlInteger integer);
-
-  /// Visits the given string value.
-  R visitString(TomlString string);
-
-  /// Visits the given inline table.
-  R visitInlineTable(TomlInlineTable inlineTable);
+  /// Visits the given compound value, i.e., array or inline table.
+  R visitCompoundValue(TomlCompoundValue value);
 }
 
 /// Mixin that adds a [visitValue] method to classes implementing

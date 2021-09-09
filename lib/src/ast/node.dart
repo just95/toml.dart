@@ -15,8 +15,7 @@ import 'visitor/node.dart';
 /// The [toString] method is overwritten such that the AST is pretty printed
 /// with TOML syntax. See [TomlPrettyPrinter] for details.
 abstract class TomlNode {
-  /// Invokes the correct `visit*` method for this value of the given
-  /// visitor.
+  /// Invokes the correct `visit*` method for this value of the given visitor.
   T acceptVisitor<T>(TomlVisitor<T> visitor);
 
   @override

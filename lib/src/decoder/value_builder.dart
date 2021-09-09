@@ -1,23 +1,13 @@
 library toml.src.ast.decoder.value_builder;
 
 import '../ast.dart';
-import 'map_builder.dart';
 
 /// A visitor for [TomlValue]s that builds Dart values from their internal
 /// representatons.
 class TomlValueBuilder
-    with TomlValueVisitorMixin<dynamic>, TomlStringVisitorMixin<String> {
-  /// A that identifies the currently converted value.
-  ///
-  /// This value is used for error reporting only.
-  final TomlKey _currentKey;
-
-  /// Creates a new value builder.
-  TomlValueBuilder(this._currentKey);
-
-  @override
-  Iterable visitArray(TomlArray array) => array.items.map(visitValue).toList();
-
+    with
+        TomlPrimitiveValueVisitorMixin<dynamic>,
+        TomlStringVisitorMixin<String> {
   @override
   bool visitBoolean(TomlBoolean boolean) => boolean.value;
 
@@ -26,13 +16,6 @@ class TomlValueBuilder
 
   @override
   double visitFloat(TomlFloat float) => float.value;
-
-  @override
-  Map<String, dynamic> visitInlineTable(TomlInlineTable inlineTable) {
-    var builder = TomlMapBuilder.withPrefix(_currentKey);
-    inlineTable.pairs.forEach(builder.visitExpression);
-    return builder.build();
-  }
 
   @override
   dynamic visitInteger(TomlInteger integer) {

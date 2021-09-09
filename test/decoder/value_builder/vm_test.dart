@@ -21,28 +21,28 @@ void main() {
     group('TomlValueBuilder', () {
       group('visitInteger', () {
         test('uses int for smallest negative 64-bit integer', () {
-          var builder = TomlValueBuilder(TomlKey.topLevel);
+          var builder = TomlValueBuilder();
           expect(
             builder.visitInteger(TomlInteger.dec(minInt64Big)),
             equals(minInt64),
           );
         });
         test('uses BigInt for number too small for signed 64-bit integer', () {
-          var builder = TomlValueBuilder(TomlKey.topLevel);
+          var builder = TomlValueBuilder();
           expect(
             builder.visitInteger(TomlInteger.dec(minInt64Big - BigInt.one)),
             equals(minInt64Big - BigInt.one),
           );
         });
         test('uses int for largest positive 64-bit integer', () {
-          var builder = TomlValueBuilder(TomlKey.topLevel);
+          var builder = TomlValueBuilder();
           expect(
             builder.visitInteger(TomlInteger.dec(maxInt64Big)),
             equals(maxInt64),
           );
         });
         test('uses BigInt for number too large for signed 64-bit integer', () {
-          var builder = TomlValueBuilder(TomlKey.topLevel);
+          var builder = TomlValueBuilder();
           expect(
             builder.visitInteger(TomlInteger.dec(maxInt64Big + BigInt.one)),
             equals(maxInt64Big + BigInt.one),

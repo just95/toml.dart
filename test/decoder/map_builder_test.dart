@@ -70,7 +70,7 @@ void main() {
             TomlInteger.dec(BigInt.from(2)),
           )),
           throwsA(equals(
-            TomlRedefinitionException(TomlKey([TomlUnquotedKey('key')])),
+            TomlRedefinitionException(TomlAccessorKey.from(['key'])),
           )),
         );
       });
@@ -96,11 +96,11 @@ void main() {
               TomlLiteralString('value'),
             )),
             throwsA(equals(
-              TomlNotATableException(TomlKey([
-                TomlUnquotedKey('a'),
-                TomlUnquotedKey('b'),
-                TomlUnquotedKey('c'),
-              ])),
+              TomlTypeException(
+                TomlAccessorKey.from(['a', 'b']),
+                expectedType: TomlAccessorType.table,
+                actualType: TomlAccessorType.value,
+              ),
             )),
           );
         },
@@ -126,10 +126,11 @@ void main() {
               TomlLiteralString('value'),
             )),
             throwsA(equals(
-              TomlNotATableException(TomlKey([
-                TomlUnquotedKey('a'),
-                TomlUnquotedKey('b'),
-              ])),
+              TomlTypeException(
+                TomlAccessorKey.from(['a']),
+                expectedType: TomlAccessorType.table,
+                actualType: TomlAccessorType.value,
+              ),
             )),
           );
         },
@@ -151,10 +152,7 @@ void main() {
               TomlLiteralString('value'),
             )),
             throwsA(equals(
-              TomlNotATableException(TomlKey([
-                TomlUnquotedKey('table'),
-                TomlUnquotedKey('key'),
-              ])),
+              TomlRedefinitionException(TomlAccessorKey.from(['table'])),
             )),
           );
         },
@@ -293,7 +291,7 @@ void main() {
           ]))),
           throwsA(
             equals(
-              TomlRedefinitionException(TomlKey([TomlUnquotedKey('table')])),
+              TomlRedefinitionException(TomlAccessorKey.from(['table'])),
             ),
           ),
         );
@@ -310,7 +308,7 @@ void main() {
           ]))),
           throwsA(
             equals(
-              TomlRedefinitionException(TomlKey([TomlUnquotedKey('key')])),
+              TomlRedefinitionException(TomlAccessorKey.from(['key'])),
             ),
           ),
         );
@@ -327,14 +325,11 @@ void main() {
             TomlUnquotedKey('child1'),
             TomlUnquotedKey('child2'),
           ]))),
-          throwsA(
-            equals(
-              TomlNotATableException(TomlKey([
-                TomlUnquotedKey('key'),
-                TomlUnquotedKey('child1'),
-              ])),
-            ),
-          ),
+          throwsA(equals(TomlTypeException(
+            TomlAccessorKey.from(['key']),
+            expectedType: TomlAccessorType.table,
+            actualType: TomlAccessorType.value,
+          ))),
         );
       });
       test('throws an exception if a parent is an inline table', () {
@@ -350,10 +345,7 @@ void main() {
           ]))),
           throwsA(
             equals(
-              TomlNotATableException(TomlKey([
-                TomlUnquotedKey('key'),
-                TomlUnquotedKey('child'),
-              ])),
+              TomlRedefinitionException(TomlAccessorKey.from(['key'])),
             ),
           ),
         );
@@ -369,7 +361,7 @@ void main() {
                   TomlStandardTable(TomlKey([TomlUnquotedKey('table')])),
                 ),
             throwsA(equals(TomlRedefinitionException(
-              TomlKey([TomlUnquotedKey('table')]),
+              TomlAccessorKey.from(['table']),
             ))));
       });
       test('can create sub-tables within tables defined via dotted keys', () {
@@ -422,7 +414,7 @@ void main() {
               ])),
             ),
             throwsA(equals(TomlRedefinitionException(
-              TomlKey([TomlUnquotedKey('parent'), TomlUnquotedKey('table')]),
+              TomlAccessorKey.from(['parent', 'table']),
             ))),
           );
         },
@@ -438,7 +430,7 @@ void main() {
             TomlKey([TomlUnquotedKey('table')]),
           )),
           throwsA(equals(
-            TomlRedefinitionException(TomlKey([TomlUnquotedKey('table')])),
+            TomlRedefinitionException(TomlAccessorKey.from(['table'])),
           )),
         );
       });
@@ -456,10 +448,7 @@ void main() {
             ]),
           )),
           throwsA(equals(
-            TomlNotATableException(TomlKey([
-              TomlUnquotedKey('table'),
-              TomlUnquotedKey('child'),
-            ])),
+            TomlRedefinitionException(TomlAccessorKey.from(['table'])),
           )),
         );
       });
@@ -492,10 +481,9 @@ void main() {
             ]),
             TomlInteger.dec(BigInt.from(2)),
           )),
-          throwsA(equals(TomlRedefinitionException(TomlKey([
-            TomlUnquotedKey('a'),
-            TomlUnquotedKey('b'),
-          ])))),
+          throwsA(equals(
+            TomlRedefinitionException(TomlAccessorKey.from(['a', 'b'])),
+          )),
         );
       });
     });
@@ -575,7 +563,7 @@ void main() {
               TomlKey([TomlUnquotedKey('foo')]),
             )),
             throwsA(equals(TomlRedefinitionException(
-              TomlKey([TomlUnquotedKey('foo')]),
+              TomlAccessorKey.from(['foo']),
             ))),
           );
         },
@@ -590,8 +578,10 @@ void main() {
           () => builder.visitArrayTable(TomlArrayTable(
             TomlKey([TomlUnquotedKey('key'), TomlUnquotedKey('array')]),
           )),
-          throwsA(equals(TomlNotATableException(
-            TomlKey([TomlUnquotedKey('key'), TomlUnquotedKey('array')]),
+          throwsA(equals(TomlTypeException(
+            TomlAccessorKey.from(['key']),
+            expectedType: TomlAccessorType.table,
+            actualType: TomlAccessorType.value,
           ))),
         );
       });
@@ -622,9 +612,9 @@ void main() {
           () => builder.visitArrayTable(TomlArrayTable(
             TomlKey([TomlUnquotedKey('array')]),
           )),
-          throwsA(equals(TomlRedefinitionException(TomlKey([
-            TomlUnquotedKey('array'),
-          ])))),
+          throwsA(equals(
+            TomlRedefinitionException(TomlAccessorKey.from(['array'])),
+          )),
         );
       });
       test('cannot create child of inline table', () {
@@ -641,10 +631,7 @@ void main() {
             ]),
           )),
           throwsA(equals(
-            TomlNotATableException(TomlKey([
-              TomlUnquotedKey('table'),
-              TomlUnquotedKey('array'),
-            ])),
+            TomlRedefinitionException(TomlAccessorKey.from(['table'])),
           )),
         );
       });
@@ -666,11 +653,11 @@ void main() {
               ]),
               TomlLiteralString('value'),
             )),
-            throwsA(equals(TomlNotATableException(TomlKey([
-              TomlUnquotedKey('table'),
-              TomlUnquotedKey('array'),
-              TomlUnquotedKey('key'),
-            ])))),
+            throwsA(equals(TomlTypeException(
+              TomlAccessorKey.from(['table', 'array']),
+              expectedType: TomlAccessorType.table,
+              actualType: TomlAccessorType.array,
+            ))),
           );
         },
       );
@@ -694,11 +681,11 @@ void main() {
               ]),
               TomlLiteralString('value'),
             )),
-            throwsA(equals(TomlNotATableException(TomlKey([
-              TomlUnquotedKey('table'),
-              TomlUnquotedKey('array'),
-              TomlUnquotedKey('child'),
-            ])))),
+            throwsA(equals(TomlTypeException(
+              TomlAccessorKey.from(['table', 'array']),
+              expectedType: TomlAccessorType.table,
+              actualType: TomlAccessorType.array,
+            ))),
           );
         },
       );

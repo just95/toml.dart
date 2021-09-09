@@ -6,6 +6,7 @@ import 'package:petitparser/petitparser.dart';
 
 import '../decoder.dart';
 import '../encoder.dart';
+import '../exception.dart';
 import '../loader.dart';
 import '../util/parser.dart';
 import 'expression.dart';

@@ -13,13 +13,12 @@ class TomlPrettyPrinter
         TomlExpressionVisitorMixin<void>,
         TomlSimpleKeyVisitorMixin<void>,
         TomlValueVisitorMixin<void>,
+        TomlCompoundValueVisitorMixin<void>,
+        TomlPrimitiveValueVisitorMixin<void>,
         TomlDateTimeVisitorMixin<void>,
         TomlStringVisitorMixin<void> {
   /// Buffer for constructing the TOML formatted string.
-  final StringBuffer _buffer;
-
-  /// Creates a new pretty printer for TOML AST nodes.
-  TomlPrettyPrinter() : _buffer = StringBuffer();
+  final StringBuffer _buffer = StringBuffer();
 
   @override
   String toString() => _buffer.toString();

@@ -2,9 +2,8 @@ library toml.src.encoder.ast_builder;
 
 import '../ast.dart';
 import '../decoder/parser/whitespace.dart';
+import '../exception.dart';
 import 'encodable.dart';
-import 'exception/unknown_key_type.dart';
-import 'exception/unknown_value_type.dart';
 
 /// A builder for various TOML AST nodes.
 class TomlAstBuilder {

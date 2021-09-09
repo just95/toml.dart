@@ -23,14 +23,14 @@ void main() {
     group('TomlValueBuilder', () {
       group('visitInteger', () {
         test('uses int for smallest safe JavaScript integer', () {
-          var builder = TomlValueBuilder(TomlKey.topLevel);
+          var builder = TomlValueBuilder();
           expect(
             builder.visitInteger(TomlInteger.dec(minSafeBigInt)),
             equals(minSafeInt),
           );
         });
         test('uses BigInt for number smaller than safe JavaScript integer', () {
-          var builder = TomlValueBuilder(TomlKey.topLevel);
+          var builder = TomlValueBuilder();
           expect(
             builder.visitInteger(TomlInteger.dec(minSafeBigInt - BigInt.two)),
             equals(minSafeBigInt - BigInt.two),
@@ -39,7 +39,7 @@ void main() {
         test(
           'uses int for safe JavaScript integer smaller than min. safe integer',
           () {
-            var builder = TomlValueBuilder(TomlKey.topLevel);
+            var builder = TomlValueBuilder();
             expect(
               builder.visitInteger(
                 TomlInteger.dec(BigInt.two * (minSafeBigInt - BigInt.one)),
@@ -49,14 +49,14 @@ void main() {
           },
         );
         test('uses int for greatest safe JavaScript integer', () {
-          var builder = TomlValueBuilder(TomlKey.topLevel);
+          var builder = TomlValueBuilder();
           expect(
             builder.visitInteger(TomlInteger.dec(maxSafeBigInt)),
             equals(maxSafeInt),
           );
         });
         test('uses BigInt for number greater than safe JavaScript integer', () {
-          var builder = TomlValueBuilder(TomlKey.topLevel);
+          var builder = TomlValueBuilder();
           expect(
             builder.visitInteger(TomlInteger.dec(maxSafeBigInt + BigInt.two)),
             equals(maxSafeBigInt + BigInt.two),
@@ -65,7 +65,7 @@ void main() {
         test(
           'uses int for safe JavaScript integer greater than max. safe integer',
           () {
-            var builder = TomlValueBuilder(TomlKey.topLevel);
+            var builder = TomlValueBuilder();
             expect(
               builder.visitInteger(
                 TomlInteger.dec(BigInt.two * (maxSafeBigInt + BigInt.one)),
