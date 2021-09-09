@@ -76,7 +76,7 @@ jobs:
       image: google/dart:${{ matrix.dart-version }}
     strategy:
       matrix:
-        dart-version: ['2.13', latest]
+        dart-version: ['2.14', latest]
     steps:
       - name: Checkout
         uses: actions/checkout@v2
