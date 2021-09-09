@@ -1,9 +1,8 @@
 library toml.src.ast.value.date_time;
 
+import 'package:collection/collection.dart';
 import 'package:meta/meta.dart';
 import 'package:petitparser/petitparser.dart';
-import 'package:quiver/collection.dart';
-import 'package:quiver/core.dart';
 
 import '../../decoder.dart';
 import '../../encoder.dart';
@@ -83,7 +82,7 @@ class TomlFullDate {
       day == other.day;
 
   @override
-  int get hashCode => hash3(year, month, day);
+  int get hashCode => Object.hash(year, month, day);
 
   @override
   String toString() {
@@ -194,10 +193,15 @@ class TomlPartialTime {
       hour == other.hour &&
       minute == other.minute &&
       second == other.second &&
-      listsEqual(secondFractions, other.secondFractions);
+      ListEquality().equals(secondFractions, other.secondFractions);
 
   @override
-  int get hashCode => hashObjects([hour, minute, second] + secondFractions);
+  int get hashCode => Object.hashAll([
+        hour,
+        minute,
+        second,
+        ...secondFractions,
+      ]);
 
   @override
   String toString() {
@@ -340,7 +344,7 @@ class TomlTimeZoneOffset {
       minutes == other.minutes;
 
   @override
-  int get hashCode => hash4(isUtc, isNegative, hours, minutes);
+  int get hashCode => Object.hash(isUtc, isNegative, hours, minutes);
 
   @override
   String toString() {

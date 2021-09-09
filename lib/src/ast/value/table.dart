@@ -1,9 +1,8 @@
 library toml.src.ast.value.table;
 
+import 'package:collection/collection.dart';
 import 'package:meta/meta.dart';
 import 'package:petitparser/petitparser.dart';
-import 'package:quiver/collection.dart';
-import 'package:quiver/core.dart';
 
 import '../../decoder/parser/whitespace.dart';
 import '../../util/parser.dart';
@@ -61,8 +60,8 @@ class TomlInlineTable extends TomlValue {
 
   @override
   bool operator ==(Object other) =>
-      other is TomlInlineTable && listsEqual(pairs, other.pairs);
+      other is TomlInlineTable && ListEquality().equals(pairs, other.pairs);
 
   @override
-  int get hashCode => hashObjects(<dynamic>[type].followedBy(pairs));
+  int get hashCode => Object.hashAll([type, ...pairs]);
 }

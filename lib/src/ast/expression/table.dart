@@ -2,7 +2,6 @@ library toml.src.ast.expression.table;
 
 import 'package:meta/meta.dart';
 import 'package:petitparser/petitparser.dart';
-import 'package:quiver/core.dart';
 
 import '../../decoder/parser/whitespace.dart';
 import '../../util/parser.dart';
@@ -78,7 +77,7 @@ class TomlStandardTable extends TomlTable {
       other is TomlStandardTable && name == other.name;
 
   @override
-  int get hashCode => hash2(type, name);
+  int get hashCode => Object.hash(type, name);
 }
 
 /// A TOML expression AST node that represents the header of an entry of
@@ -121,5 +120,5 @@ class TomlArrayTable extends TomlTable {
       other is TomlArrayTable && name == other.name;
 
   @override
-  int get hashCode => hash2(type, name);
+  int get hashCode => Object.hash(type, name);
 }

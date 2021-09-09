@@ -2,7 +2,6 @@ library toml.src.ast.value.date_time.local_date;
 
 import 'package:meta/meta.dart';
 import 'package:petitparser/petitparser.dart';
-import 'package:quiver/core.dart';
 
 import '../../../decoder.dart';
 import '../../value.dart';
@@ -45,5 +44,5 @@ class TomlLocalDate extends TomlDateTime {
       other is TomlLocalDate && date == other.date;
 
   @override
-  int get hashCode => hash2(type, date);
+  int get hashCode => Object.hash(type, date);
 }

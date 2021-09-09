@@ -2,10 +2,9 @@ library toml.src.ast.key;
 
 import 'dart:math';
 
+import 'package:collection/collection.dart';
 import 'package:meta/meta.dart';
 import 'package:petitparser/petitparser.dart';
-import 'package:quiver/collection.dart';
-import 'package:quiver/core.dart';
 
 import '../decoder/exception/parser.dart';
 import '../decoder/parser/whitespace.dart';
@@ -79,11 +78,11 @@ class TomlKey extends TomlNode {
   }
 
   @override
-  int get hashCode => hashObjects(parts);
+  int get hashCode => Object.hashAll(parts);
 
   @override
   bool operator ==(Object other) =>
-      other is TomlKey && listsEqual(parts, other.parts);
+      other is TomlKey && ListEquality().equals(parts, other.parts);
 
   @override
   T acceptVisitor<T>(TomlVisitor<T> visitor) => visitor.visitKey(this);

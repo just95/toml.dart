@@ -2,7 +2,6 @@ library toml.src.ast.value.string.literal;
 
 import 'package:meta/meta.dart';
 import 'package:petitparser/petitparser.dart';
-import 'package:quiver/core.dart';
 
 import '../../../decoder/parser/ranges.dart';
 import '../../../util/parser.dart';
@@ -77,5 +76,5 @@ class TomlLiteralString extends TomlSinglelineString {
       other is TomlLiteralString && value == other.value;
 
   @override
-  int get hashCode => hash3(type, stringType, value);
+  int get hashCode => Object.hash(type, stringType, value);
 }

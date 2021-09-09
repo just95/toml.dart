@@ -2,7 +2,6 @@ library toml.src.ast.expression.key_value_pair;
 
 import 'package:meta/meta.dart';
 import 'package:petitparser/petitparser.dart';
-import 'package:quiver/core.dart';
 
 import '../../decoder/parser/whitespace.dart';
 import '../../util/parser.dart';
@@ -47,5 +46,5 @@ class TomlKeyValuePair extends TomlExpression {
       other is TomlKeyValuePair && key == other.key && value == other.value;
 
   @override
-  int get hashCode => hash2(key, value);
+  int get hashCode => Object.hash(key, value);
 }

@@ -2,7 +2,6 @@ library toml.src.ast.value.date_time.offset_date_time;
 
 import 'package:meta/meta.dart';
 import 'package:petitparser/petitparser.dart';
-import 'package:quiver/core.dart';
 
 import '../../../decoder.dart';
 import '../../../util/parser.dart';
@@ -91,5 +90,5 @@ class TomlOffsetDateTime extends TomlDateTime {
       offset == other.offset;
 
   @override
-  int get hashCode => hash4(type, date, time, offset);
+  int get hashCode => Object.hash(type, date, time, offset);
 }

@@ -2,7 +2,6 @@ library toml.src.ast.value.integer;
 
 import 'package:meta/meta.dart';
 import 'package:petitparser/petitparser.dart';
-import 'package:quiver/core.dart';
 
 import '../../decoder/parser/ranges.dart';
 import '../../util/parser.dart';
@@ -188,5 +187,5 @@ class TomlInteger extends TomlValue {
       other is TomlInteger && value == other.value && format == other.format;
 
   @override
-  int get hashCode => hash3(type, value, format);
+  int get hashCode => Object.hash(type, value, format);
 }

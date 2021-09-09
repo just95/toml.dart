@@ -2,7 +2,6 @@ library toml.src.ast.value.float;
 
 import 'package:meta/meta.dart';
 import 'package:petitparser/petitparser.dart';
-import 'package:quiver/core.dart';
 
 import '../../util/parser.dart';
 import '../value.dart';
@@ -78,5 +77,5 @@ class TomlFloat extends TomlValue {
       (value == other.value || value.isNaN && other.value.isNaN);
 
   @override
-  int get hashCode => hash2(type, value);
+  int get hashCode => Object.hash(type, value);
 }

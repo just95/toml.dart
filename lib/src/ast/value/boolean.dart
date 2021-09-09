@@ -2,7 +2,6 @@ library toml.src.ast.value.boolean;
 
 import 'package:meta/meta.dart';
 import 'package:petitparser/petitparser.dart';
-import 'package:quiver/core.dart';
 
 import '../value.dart';
 import '../visitor/value.dart';
@@ -39,5 +38,5 @@ class TomlBoolean extends TomlValue {
       other is TomlBoolean && value == other.value;
 
   @override
-  int get hashCode => hash2(type, value);
+  int get hashCode => Object.hash(type, value);
 }

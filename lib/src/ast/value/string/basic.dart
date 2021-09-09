@@ -2,7 +2,6 @@ library toml.src.ast.value.string.basic;
 
 import 'package:meta/meta.dart';
 import 'package:petitparser/petitparser.dart';
-import 'package:quiver/core.dart';
 
 import '../../../decoder/parser/ranges.dart';
 import '../../../decoder/parser/whitespace.dart';
@@ -101,5 +100,5 @@ class TomlBasicString extends TomlSinglelineString {
       other is TomlBasicString && value == other.value;
 
   @override
-  int get hashCode => hash3(type, stringType, value);
+  int get hashCode => Object.hash(type, stringType, value);
 }

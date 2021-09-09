@@ -1,14 +1,12 @@
 library toml.src.ast.document;
 
+import 'package:collection/collection.dart';
 import 'package:meta/meta.dart';
 import 'package:petitparser/petitparser.dart';
-import 'package:quiver/collection.dart';
-import 'package:quiver/core.dart';
 
 import '../decoder.dart';
 import '../encoder.dart';
 import '../loader.dart';
-import '../util/iterable/where_not_null.dart';
 import '../util/parser.dart';
 import 'expression.dart';
 import 'node.dart';
@@ -67,8 +65,9 @@ class TomlDocument extends TomlNode {
 
   @override
   bool operator ==(Object other) =>
-      other is TomlDocument && listsEqual(expressions, other.expressions);
+      other is TomlDocument &&
+      ListEquality().equals(expressions, other.expressions);
 
   @override
-  int get hashCode => hashObjects(expressions);
+  int get hashCode => Object.hashAll(expressions);
 }

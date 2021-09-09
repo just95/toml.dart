@@ -1,7 +1,6 @@
 library toml.src.ast.value.string.escape;
 
 import 'package:petitparser/petitparser.dart';
-import 'package:quiver/collection.dart';
 
 import '../../../decoder/exception/invalid_escape_sequence.dart';
 import '../../../decoder/parser/ranges.dart';
@@ -37,16 +36,19 @@ abstract class TomlEscapedChar {
   static final int backslash = 0x5C;
 
   /// Map between escape characters and the corresponding Unicode code point.
-  static final BiMap<String, int> escapableChars = BiMap()
-    ..addAll({
-      'b': backspace,
-      't': tab,
-      'n': lineFeed,
-      'f': formFeed,
-      'r': carriageReturn,
-      '"': doubleQuote,
-      r'\': backslash
-    });
+  static final Map<String, int> escapableChars = {
+    'b': backspace,
+    't': tab,
+    'n': lineFeed,
+    'f': formFeed,
+    'r': carriageReturn,
+    '"': doubleQuote,
+    r'\': backslash
+  };
+
+  /// The inverse mapping to [escapableChars].
+  static final Map<int, String> escapableCharsInverse =
+      Map.fromIterables(escapableChars.values, escapableChars.keys);
 
   /// Parser for escaped characters.
   ///
@@ -116,10 +118,10 @@ abstract class TomlEscapedChar {
     if (unescapedParser.accept(String.fromCharCode(rune))) {
       // The current rune can be encoded unescaped.
       buffer.writeCharCode(rune);
-    } else if (escapableChars.inverse.containsKey(rune)) {
+    } else if (escapableCharsInverse.containsKey(rune)) {
       // The current rune must be escaped and there is a shortcut.
       buffer.write(escapeChar);
-      buffer.write(escapableChars.inverse[rune]);
+      buffer.write(escapableCharsInverse[rune]);
     } else {
       // The current rune must be escaped but there is no shortcut, i.e., the
       // Unicode code point must be escaped. However, Unicode escape sequences

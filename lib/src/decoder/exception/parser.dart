@@ -2,7 +2,6 @@ library toml.src.decoder.exception.parser;
 
 import 'package:meta/meta.dart';
 import 'package:petitparser/petitparser.dart';
-import 'package:quiver/core.dart';
 
 import '../../exception.dart';
 
@@ -70,7 +69,7 @@ class TomlParserException extends TomlException implements FormatException {
       other.source == source;
 
   @override
-  int get hashCode => hash3(message, offset, source);
+  int get hashCode => Object.hash(message, offset, source);
 
   @override
   String toString() => 'TOML parse error: $message at $line:$column';

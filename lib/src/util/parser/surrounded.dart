@@ -1,8 +1,7 @@
 library toml.src.util.parser.surrounded;
 
+import 'package:collection/collection.dart';
 import 'package:petitparser/petitparser.dart';
-
-import '../iterable/where_not_null.dart';
 
 /// Extension for utility methods to construct [SurroundedParser]s.
 extension SurroundedParserExtension<T> on Parser<T> {

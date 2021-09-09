@@ -1,9 +1,8 @@
 library toml.src.ast.value.array;
 
+import 'package:collection/collection.dart';
 import 'package:meta/meta.dart';
 import 'package:petitparser/petitparser.dart';
-import 'package:quiver/collection.dart';
-import 'package:quiver/core.dart';
 
 import '../../decoder/parser/whitespace.dart';
 import '../../util/parser.dart';
@@ -58,8 +57,8 @@ class TomlArray extends TomlValue {
 
   @override
   bool operator ==(Object other) =>
-      other is TomlArray && listsEqual(items, other.items);
+      other is TomlArray && ListEquality().equals(items, other.items);
 
   @override
-  int get hashCode => hashObjects(<dynamic>[type].followedBy(items));
+  int get hashCode => Object.hashAll([type, ...items]);
 }
