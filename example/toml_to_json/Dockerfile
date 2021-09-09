@@ -1,4 +1,4 @@
-FROM google/dart:2.13
+FROM google/dart:2.14
 
 # Add files for `toml.dart`.
 ADD ./pubspec.yaml /app/
