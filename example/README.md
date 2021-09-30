@@ -26,6 +26,10 @@ This directory contains examples for the usage of the `toml.dart` package.
   https://github.com/just95/toml.dart/tree/main/example/filesystem_config_loader
   "FilesystemConfigLoader Example | toml.dart"
 
+[toml-dart/example/filesystem_config_saver]:
+  https://github.com/just95/toml.dart/tree/main/example/filesystem_config_saver
+  "Saving to Filesystem Example | toml.dart"
+
 [toml-dart/example/flutter_example]:
   https://github.com/just95/toml.dart/tree/main/example/flutter_example
   "Flutter Example | toml.dart"
