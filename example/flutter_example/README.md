@@ -1,4 +1,4 @@
-# **Flutter** example
+# Flutter Example
 
 This example demonstrates how to load and parse a TOML asset and display `Hello, World!` in a `Text` widget.
 
@@ -6,7 +6,7 @@ This example demonstrates how to load and parse a TOML asset and display `Hello,
 
 You need to have installed the [Flutter SDK][flutter-sdk].
 
-## Running on a device
+## Running on a Device
 
 Connect your device or start your emulator and see that it's connected using:
 

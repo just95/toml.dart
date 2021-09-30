@@ -1,4 +1,4 @@
-# TOML encoder example
+# TOML Encoder Example
 
 This example demonstrates how to encode a `Map` as a TOML document.
 
@@ -10,7 +10,7 @@ The `document` contains value of a custom type `Point`.
 The class `Point` is an example for a `TomlEncodableValue`.
 Objects whose classes implement the `TomlEncodableValue` interface are implicitly converted to a value that can be encoded by `TomlDocument.fromMap` using their `toTomlValue` method.
 
-## Running locally
+## Running Locally
 
 All of the following commands have to be executed in the root directory of this example.
 

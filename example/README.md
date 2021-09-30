@@ -24,7 +24,7 @@ This directory contains examples for the usage of the `toml.dart` package.
 
 [toml-dart/example/filesystem_config_loader]:
   https://github.com/just95/toml.dart/tree/main/example/filesystem_config_loader
-  "FilesystemConfigLoader Example | toml.dart"
+  "Loading from Filesystem Example | toml.dart"
 
 [toml-dart/example/filesystem_config_saver]:
   https://github.com/just95/toml.dart/tree/main/example/filesystem_config_saver
@@ -36,11 +36,11 @@ This directory contains examples for the usage of the `toml.dart` package.
 
 [toml-dart/example/http_config_loader]:
   https://github.com/just95/toml.dart/tree/main/example/http_config_loader
-  "HttpConfigLoader Example | toml.dart"
+  "HTTP Example | toml.dart"
 
 [toml-dart/example/toml_encoder]:
   https://github.com/just95/toml.dart/tree/main/example/toml_encoder
-  "TomlEncoder Example | toml.dart"
+  "TOML Encoder Example | toml.dart"
 
 [toml-dart/example/toml_parser]:
   https://github.com/just95/toml.dart/tree/main/example/toml_parser
@@ -48,4 +48,4 @@ This directory contains examples for the usage of the `toml.dart` package.
 
 [toml-dart/example/toml_to_json]:
   https://github.com/just95/toml.dart/tree/main/example/toml_to_json
-  "TOML to JSON Converter Example Application | toml.dart"
+  "TOML to JSON Example | toml.dart"

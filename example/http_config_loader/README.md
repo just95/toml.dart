@@ -1,4 +1,4 @@
-# HTTP example
+# HTTP Example
 
 This example demonstrates how to load a configuration file in the browser from via HTTP.
 
@@ -14,7 +14,7 @@ You have to have [`webdev`][dart/webdev] installed and in your `PATH`.
 dart pub global activate webdev
 ```
 
-## Running locally
+## Running Locally
 
 All of the following commands have to be executed in the root directory of this example.
 

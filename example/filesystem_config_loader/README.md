@@ -1,11 +1,11 @@
-# `dart:io` example
+# Loading from Filesystem Example
 
 This example demonstrates how to load a configuration file in the Dart VM from the local filesystem.
 
 The example in `./bin/example.dart` loads the configuration file `config.toml`.
 If the configuration file is loaded successfully, the value of the key `table.array.key` of the first table of the array of tables `table.array` is printed to the console.
 
-## Running locally
+## Running Locally
 
 All of the following commands have to be executed in the root directory of this example.
 

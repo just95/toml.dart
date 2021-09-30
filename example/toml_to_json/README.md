@@ -1,8 +1,8 @@
-# TOML to JSON example
+# TOML to JSON Example
 
 This example contains an application for the conversion of TOML documents to JSON.
 
-## Running locally
+## Running Locally
 
 All of the following commands have to be executed in the root directory of this example.
 

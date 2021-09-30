@@ -1,10 +1,10 @@
-# Saving TOML documents example
+# Saving to Filesystem Example
 
 This example demonstrates how to save a configuration file in the Dart VM from the local filesystem.
 
 The example in `./bin/example.dart` creates a new TOML document from a map and saves the document to `config.toml`.
 
-## Running locally
+## Running Locally
 
 All of the following commands have to be executed in the root directory of this example.
 
