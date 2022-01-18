@@ -156,7 +156,7 @@ class TomlAccessorBuilder
 
   /// Sets the [_current]ly open node.
   ///
-  /// Optionally a callback can be specified fow how to add children to the
+  /// Optionally a callback can be specified for how to add children to the
   /// the newly opened node.
   void _setCurrent(
     TomlAccessor newCurrent, {
