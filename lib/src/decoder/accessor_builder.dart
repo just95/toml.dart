@@ -3,9 +3,27 @@ library toml.src.decoder.accessor_builder;
 import '../accessor.dart';
 import '../ast.dart';
 import '../exception.dart';
+import 'value_builder.dart';
+
+/// Extension that adds a method to 'TomlDocument' for converting the abstract
+/// syntax tree to an accessor.
+extension TomlDocumentToAccessorExtension on TomlDocument {
+  /// Converts this document to a 'TomlDocumentAccessor'.
+  TomlDocumentAccessor toAccessor() {
+    var builder = TomlAccessorBuilder();
+    expressions.forEach(builder.visitExpression);
+    return builder.topLevel;
+  }
+
+  /// Converts this document to a map from keys to values.
+  Map<String, dynamic> toMap() => toAccessor().toMap(TomlValueBuilder());
+}
 
 /// A visitor for [TomlExpression]s that builds a [TomlAccessor] from a TOML
-/// document's abstract syntax tree.
+/// document's abstract syntax tree (AST).
+///
+/// This visitor implements the semantics of the TOML document represented by
+/// the visited AST.
 class TomlAccessorBuilder
     with
         TomlExpressionVisitorMixin<void>,

@@ -91,11 +91,17 @@ class TomlArrayAccessor extends TomlAccessor {
   late final List<TomlAccessor> items = UnmodifiableListView(_items);
 
   /// A modifiable version of [items].
-  final List<TomlAccessor> _items = [];
+  final List<TomlAccessor> _items;
 
   /// How the array represented by this node has been defined or `null` if
   /// the array has been created programmatically.
   TomlArrayDefinitionMethod? definedBy;
+
+  /// Creates a new array accessor with the given [items].
+  ///
+  /// Creates an accessor for an empty array if no items are given.
+  TomlArrayAccessor([List<TomlAccessor> items = const []])
+      : _items = List.of(items);
 
   @override
   TomlAccessorType get type => TomlAccessorType.array;
@@ -116,7 +122,13 @@ class TomlArrayAccessor extends TomlAccessor {
 
 /// The root node of the [TomlAccessor] data structure that represents the
 /// top-level table.
-class TomlDocumentAccessor extends TomlTableAccessor {}
+class TomlDocumentAccessor extends TomlTableAccessor {
+  /// Creates a new document accessor with the given [children].
+  ///
+  /// Creates an accessor for an empty document if no children are given.
+  TomlDocumentAccessor([Map<String, TomlAccessor> children = const {}])
+      : super(children);
+}
 
 /// Data type for the different methods of defining a table accessor.
 enum TomlTableDefinitionMethod {
@@ -141,11 +153,17 @@ class TomlTableAccessor extends TomlAccessor {
       UnmodifiableMapView(_children);
 
   /// A modifiable version of [children].
-  final Map<String, TomlAccessor> _children = {};
+  final Map<String, TomlAccessor> _children;
 
   /// How the table represented by this node has been defined or `null` if
   /// the table has been created programmatically.
   TomlTableDefinitionMethod? definedBy;
+
+  /// Creates a new table accessor with the given [children].
+  ///
+  /// Creates an accessor for an empty table if no children are given.
+  TomlTableAccessor([Map<String, TomlAccessor> children = const {}])
+      : _children = Map.of(children);
 
   @override
   TomlAccessorType get type => TomlAccessorType.table;

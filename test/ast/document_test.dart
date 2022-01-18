@@ -2,6 +2,7 @@ library toml.test.ast.document_test;
 
 import 'package:test/test.dart';
 import 'package:toml/src/ast.dart';
+import 'package:toml/src/decoder.dart';
 
 void main() {
   group('TomlDocument', () {

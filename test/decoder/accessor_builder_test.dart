@@ -1,21 +1,68 @@
-library toml.test.decoder.map_builder_test;
+library toml.test.decoder.accessor_builder_test;
 
 import 'package:test/test.dart';
 import 'package:toml/toml.dart';
 
+/// A custom matcher that uses the custom 'TomlAccessorEquality' to compare
+/// accessors.
+///
+/// The [equals] matcher cannot be used because 'TomlAccessor' does not
+/// override `operator ==` since it is not immutable.
+class TomlAccessorMatcher extends Matcher {
+  /// The accessor that is expected by this matcher.
+  final TomlAccessor expected;
+
+  /// Creates a new matcher for the given expected accessor.
+  const TomlAccessorMatcher(this.expected);
+
+  @override
+  bool matches(dynamic item, Map matchState) {
+    if (item is! TomlAccessor) return false;
+    matchState['isAccessor'] = true;
+    return TomlAccessorEquality().equals(item, expected);
+  }
+
+  @override
+  Description describe(Description description) =>
+      description.add('Equals accessor').addDescriptionOf(expected);
+
+  @override
+  Description describeMismatch(
+    dynamic item,
+    Description mismatchDescription,
+    Map matchState,
+    bool verbose,
+  ) {
+    if (matchState['isAccessor'] == true) {
+      return mismatchDescription.add('is not an accessor');
+    }
+    return mismatchDescription.add('does not match');
+  }
+}
+
+/// Returns a matcher that matches if the value is equal to the given
+/// [accessor] according to [TomlAccessorEquality].
+TomlAccessorMatcher equalsAccessor(TomlAccessor accessor) =>
+    TomlAccessorMatcher(accessor);
+
 void main() {
-  group('TomlMapBuilder', () {
+  group('TomlAccessorBuilder', () {
     group('visitKeyValuePair', () {
       test('key/value pairs are inserted at top-level by default', () {
-        var builder = TomlMapBuilder();
+        var builder = TomlAccessorBuilder();
         builder.visitKeyValuePair(TomlKeyValuePair(
           TomlKey([TomlUnquotedKey('key')]),
           TomlLiteralString('value'),
         ));
-        expect(builder.build(), equals({'key': 'value'}));
+        expect(
+          builder.topLevel,
+          equalsAccessor(TomlDocumentAccessor({
+            'key': TomlValueAccessor(TomlLiteralString('value')),
+          })),
+        );
       });
       test('dotted key/value pairs are inserted into child tables', () {
-        var builder = TomlMapBuilder();
+        var builder = TomlAccessorBuilder();
         builder.visitKeyValuePair(TomlKeyValuePair(
           TomlKey([
             TomlUnquotedKey('a'),
@@ -25,15 +72,18 @@ void main() {
           TomlLiteralString('value'),
         ));
         expect(
-            builder.build(),
-            equals({
-              'a': {
-                'b': {'c': 'value'}
-              }
-            }));
+          builder.topLevel,
+          equalsAccessor(TomlDocumentAccessor({
+            'a': TomlTableAccessor({
+              'b': TomlTableAccessor({
+                'c': TomlValueAccessor(TomlLiteralString('value')),
+              })
+            })
+          })),
+        );
       });
       test('allows multiple dotted keys with same parent', () {
-        var builder = TomlMapBuilder();
+        var builder = TomlAccessorBuilder();
         builder.visitKeyValuePair(TomlKeyValuePair(
           TomlKey([
             TomlUnquotedKey('a'),
@@ -50,16 +100,19 @@ void main() {
           TomlInteger.dec(BigInt.from(2)),
         ));
         expect(
-            builder.build(),
-            equals({
-              'a': {
-                'b': {'c': 1},
-                'd': 2
-              }
-            }));
+          builder.topLevel,
+          equalsAccessor(TomlDocumentAccessor({
+            'a': TomlTableAccessor({
+              'b': TomlTableAccessor({
+                'c': TomlValueAccessor(TomlInteger.dec(BigInt.from(1))),
+              }),
+              'd': TomlValueAccessor(TomlInteger.dec(BigInt.from(2))),
+            })
+          })),
+        );
       });
       test('throws an exception if the key/value pair is defined already', () {
-        var builder = TomlMapBuilder();
+        var builder = TomlAccessorBuilder();
         builder.visitKeyValuePair(TomlKeyValuePair(
           TomlKey([TomlUnquotedKey('key')]),
           TomlInteger.dec(BigInt.from(1)),
@@ -78,7 +131,7 @@ void main() {
         'throws an exception if the immediate parent of dotted key exists and '
         'is not a table',
         () {
-          var builder = TomlMapBuilder();
+          var builder = TomlAccessorBuilder();
           builder.visitKeyValuePair(TomlKeyValuePair(
             TomlKey([
               TomlUnquotedKey('a'),
@@ -109,7 +162,7 @@ void main() {
         'throws an exception if a parent of dotted key exists and is not a '
         'table',
         () {
-          var builder = TomlMapBuilder();
+          var builder = TomlAccessorBuilder();
           builder.visitKeyValuePair(TomlKeyValuePair(
             TomlKey([
               TomlUnquotedKey('a'),
@@ -138,7 +191,7 @@ void main() {
       test(
         'cannot insert key/value pair into inline table',
         () {
-          var builder = TomlMapBuilder();
+          var builder = TomlAccessorBuilder();
           builder.visitKeyValuePair(TomlKeyValuePair(
             TomlKey([TomlUnquotedKey('table')]),
             TomlInlineTable([]),
@@ -161,17 +214,17 @@ void main() {
 
     group('visitStandardTable', () {
       test('standalone standard table headers create empty tables', () {
-        var builder = TomlMapBuilder();
+        var builder = TomlAccessorBuilder();
         builder.visitStandardTable(TomlStandardTable(
           TomlKey([TomlUnquotedKey('table')]),
         ));
         expect(
-          builder.build(),
-          equals({'table': {}}),
+          builder.topLevel,
+          equalsAccessor(TomlDocumentAccessor({'table': TomlTableAccessor()})),
         );
       });
       test('key/value pairs are relative to current standard table', () {
-        var builder = TomlMapBuilder();
+        var builder = TomlAccessorBuilder();
         builder.visitStandardTable(TomlStandardTable(
           TomlKey([TomlUnquotedKey('table')]),
         ));
@@ -180,14 +233,16 @@ void main() {
           TomlLiteralString('value'),
         ));
         expect(
-          builder.build(),
-          equals({
-            'table': {'key': 'value'}
-          }),
+          builder.topLevel,
+          equalsAccessor(TomlDocumentAccessor({
+            'table': TomlTableAccessor({
+              'key': TomlValueAccessor(TomlLiteralString('value')),
+            })
+          })),
         );
       });
       test('names of standard tables headers are absolute', () {
-        var builder = TomlMapBuilder();
+        var builder = TomlAccessorBuilder();
         builder.visitStandardTable(TomlStandardTable(
           TomlKey([TomlUnquotedKey('table1')]),
         ));
@@ -195,12 +250,15 @@ void main() {
           TomlKey([TomlUnquotedKey('table2')]),
         ));
         expect(
-          builder.build(),
-          equals({'table1': {}, 'table2': {}}),
+          builder.topLevel,
+          equalsAccessor(TomlDocumentAccessor({
+            'table1': TomlTableAccessor(),
+            'table2': TomlTableAccessor(),
+          })),
         );
       });
       test('standard table headers create parent table implicitly', () {
-        var builder = TomlMapBuilder();
+        var builder = TomlAccessorBuilder();
         builder.visitStandardTable(TomlStandardTable(
           TomlKey([
             TomlUnquotedKey('parent'),
@@ -212,17 +270,19 @@ void main() {
           TomlLiteralString('value'),
         ));
         expect(
-          builder.build(),
-          equals({
-            'parent': {
-              'table': {'key': 'value'}
-            }
-          }),
+          builder.topLevel,
+          equalsAccessor(TomlDocumentAccessor({
+            'parent': TomlTableAccessor({
+              'table': TomlTableAccessor({
+                'key': TomlValueAccessor(TomlLiteralString('value')),
+              })
+            })
+          })),
         );
       });
       test("explicit declarations don't overwrite implicitly created tables",
           () {
-        var builder = TomlMapBuilder();
+        var builder = TomlAccessorBuilder();
         builder.visitStandardTable(TomlStandardTable(
           TomlKey([
             TomlUnquotedKey('parent'),
@@ -241,18 +301,19 @@ void main() {
           TomlInteger.dec(BigInt.from(2)),
         ));
         expect(
-          builder.build(),
-          equals({
-            'parent': {
-              'table': {'key1': 1},
-              'key2': 2
-            }
-          }),
+          builder.topLevel,
+          equalsAccessor(TomlDocumentAccessor({
+            'parent': TomlTableAccessor({
+              'table': TomlTableAccessor(
+                  {'key1': TomlValueAccessor(TomlInteger.dec(BigInt.from(1)))}),
+              'key2': TomlValueAccessor(TomlInteger.dec(BigInt.from(2)))
+            })
+          })),
         );
       });
       test("implicit declarations don't overwrite explicitly created tables",
           () {
-        var builder = TomlMapBuilder();
+        var builder = TomlAccessorBuilder();
         builder.visitStandardTable(TomlStandardTable(
           TomlKey([TomlUnquotedKey('parent')]),
         ));
@@ -271,17 +332,18 @@ void main() {
           TomlInteger.dec(BigInt.from(2)),
         ));
         expect(
-          builder.build(),
-          equals({
-            'parent': {
-              'key1': 1,
-              'table': {'key2': 2}
-            }
-          }),
+          builder.topLevel,
+          equalsAccessor(TomlDocumentAccessor({
+            'parent': TomlTableAccessor({
+              'key1': TomlValueAccessor(TomlInteger.dec(BigInt.from(1))),
+              'table': TomlTableAccessor(
+                  {'key2': TomlValueAccessor(TomlInteger.dec(BigInt.from(2)))})
+            })
+          })),
         );
       });
       test('throws an exception if the table is defined already', () {
-        var builder = TomlMapBuilder();
+        var builder = TomlAccessorBuilder();
         builder.visitStandardTable(TomlStandardTable(TomlKey([
           TomlUnquotedKey('table'),
         ])));
@@ -297,7 +359,7 @@ void main() {
         );
       });
       test('throws an exception if a value with the same name exists', () {
-        var builder = TomlMapBuilder();
+        var builder = TomlAccessorBuilder();
         builder.visitKeyValuePair(TomlKeyValuePair(
           TomlKey([TomlUnquotedKey('key')]),
           TomlLiteralString('value'),
@@ -314,7 +376,7 @@ void main() {
         );
       });
       test('throws an exception if a parent is not a table', () {
-        var builder = TomlMapBuilder();
+        var builder = TomlAccessorBuilder();
         builder.visitKeyValuePair(TomlKeyValuePair(
           TomlKey([TomlUnquotedKey('key')]),
           TomlLiteralString('value'),
@@ -333,7 +395,7 @@ void main() {
         );
       });
       test('throws an exception if a parent is an inline table', () {
-        var builder = TomlMapBuilder();
+        var builder = TomlAccessorBuilder();
         builder.visitKeyValuePair(TomlKeyValuePair(
           TomlKey([TomlUnquotedKey('key')]),
           TomlInlineTable([]),
@@ -351,7 +413,7 @@ void main() {
         );
       });
       test('cannot redefine tables already defined using key/value pair', () {
-        var builder = TomlMapBuilder();
+        var builder = TomlAccessorBuilder();
         builder.visitKeyValuePair(TomlKeyValuePair(
           TomlKey([TomlUnquotedKey('table'), TomlUnquotedKey('key')]),
           TomlLiteralString('value'),
@@ -365,7 +427,7 @@ void main() {
             ))));
       });
       test('can create sub-tables within tables defined via dotted keys', () {
-        var builder = TomlMapBuilder();
+        var builder = TomlAccessorBuilder();
         builder.visitKeyValuePair(TomlKeyValuePair(
           TomlKey([TomlUnquotedKey('parent'), TomlUnquotedKey('key1')]),
           TomlInteger.dec(BigInt.from(1)),
@@ -378,20 +440,21 @@ void main() {
           TomlInteger.dec(BigInt.from(2)),
         ));
         expect(
-          builder.build(),
-          equals({
-            'parent': {
-              'key1': 1,
-              'child': {'key2': 2}
-            }
-          }),
+          builder.topLevel,
+          equalsAccessor(TomlDocumentAccessor({
+            'parent': TomlTableAccessor({
+              'key1': TomlValueAccessor(TomlInteger.dec(BigInt.from(1))),
+              'child': TomlTableAccessor(
+                  {'key2': TomlValueAccessor(TomlInteger.dec(BigInt.from(2)))})
+            })
+          })),
         );
       });
       test(
         'marks previously implicitly created tables that are defined by '
         'dotted key/value pairs as explicitly defined',
         () {
-          var builder = TomlMapBuilder();
+          var builder = TomlAccessorBuilder();
           builder.visitStandardTable(TomlStandardTable(TomlKey([
             TomlUnquotedKey('parent'),
             TomlUnquotedKey('table'),
@@ -420,7 +483,7 @@ void main() {
         },
       );
       test('cannot open inline table', () {
-        var builder = TomlMapBuilder();
+        var builder = TomlAccessorBuilder();
         builder.visitKeyValuePair(TomlKeyValuePair(
           TomlKey([TomlUnquotedKey('table')]),
           TomlInlineTable([]),
@@ -435,7 +498,7 @@ void main() {
         );
       });
       test('cannot create child of inline table', () {
-        var builder = TomlMapBuilder();
+        var builder = TomlAccessorBuilder();
         builder.visitKeyValuePair(TomlKeyValuePair(
           TomlKey([TomlUnquotedKey('table')]),
           TomlInlineTable([]),
@@ -453,7 +516,7 @@ void main() {
         );
       });
       test('cannot redefine table defined with standard table header', () {
-        var builder = TomlMapBuilder();
+        var builder = TomlAccessorBuilder();
         builder.visitStandardTable(TomlStandardTable(
           TomlKey([
             TomlUnquotedKey('a'),
@@ -492,22 +555,24 @@ void main() {
       test(
         'standalone array table headers create one elementry arrays of tables',
         () {
-          var builder = TomlMapBuilder();
+          var builder = TomlAccessorBuilder();
           builder.visitArrayTable(TomlArrayTable(
             TomlKey([TomlUnquotedKey('array')]),
           ));
           expect(
-            builder.build(),
-            equals({
-              'array': [{}]
-            }),
+            builder.topLevel,
+            equalsAccessor(TomlDocumentAccessor({
+              'array': TomlArrayAccessor([
+                TomlTableAccessor(),
+              ])
+            })),
           );
         },
       );
       test(
         'additional array table headers add items to array of tables',
         () {
-          var builder = TomlMapBuilder();
+          var builder = TomlAccessorBuilder();
           builder.visitArrayTable(TomlArrayTable(
             TomlKey([TomlUnquotedKey('array')]),
           ));
@@ -515,17 +580,20 @@ void main() {
             TomlKey([TomlUnquotedKey('array')]),
           ));
           expect(
-            builder.build(),
-            equals({
-              'array': [{}, {}]
-            }),
+            builder.topLevel,
+            equalsAccessor(TomlDocumentAccessor({
+              'array': TomlArrayAccessor([
+                TomlTableAccessor(),
+                TomlTableAccessor(),
+              ])
+            })),
           );
         },
       );
       test(
         'key/value-pairs are inserted into last item of array of tables',
         () {
-          var builder = TomlMapBuilder();
+          var builder = TomlAccessorBuilder();
           builder.visitArrayTable(TomlArrayTable(
             TomlKey([TomlUnquotedKey('array')]),
           ));
@@ -541,20 +609,24 @@ void main() {
             TomlInteger.dec(BigInt.from(2)),
           ));
           expect(
-            builder.build(),
-            equals({
-              'array': [
-                {'key1': 1},
-                {'key2': 2}
-              ]
-            }),
+            builder.topLevel,
+            equalsAccessor(TomlDocumentAccessor({
+              'array': TomlArrayAccessor([
+                TomlTableAccessor({
+                  'key1': TomlValueAccessor(TomlInteger.dec(BigInt.from(1)))
+                }),
+                TomlTableAccessor({
+                  'key2': TomlValueAccessor(TomlInteger.dec(BigInt.from(2)))
+                })
+              ])
+            })),
           );
         },
       );
       test(
         'throws an exception if there is a standard table with the same name',
         () {
-          var builder = TomlMapBuilder();
+          var builder = TomlAccessorBuilder();
           builder.visitStandardTable(TomlStandardTable(
             TomlKey([TomlUnquotedKey('foo')]),
           ));
@@ -569,7 +641,7 @@ void main() {
         },
       );
       test('throws an exception if a parent is not a table', () {
-        var builder = TomlMapBuilder();
+        var builder = TomlAccessorBuilder();
         builder.visitKeyValuePair(TomlKeyValuePair(
           TomlKey([TomlUnquotedKey('key')]),
           TomlLiteralString('value'),
@@ -586,7 +658,7 @@ void main() {
         );
       });
       test('can add child table to array of table entry', () {
-        var builder = TomlMapBuilder();
+        var builder = TomlAccessorBuilder();
         builder.visitArrayTable(TomlArrayTable(
           TomlKey([TomlUnquotedKey('array')]),
         ));
@@ -594,16 +666,18 @@ void main() {
           TomlKey([TomlUnquotedKey('array'), TomlUnquotedKey('table')]),
         ));
         expect(
-          builder.build(),
-          equals({
-            'array': [
-              {'table': {}}
-            ]
-          }),
+          builder.topLevel,
+          equalsAccessor(TomlDocumentAccessor({
+            'array': TomlArrayAccessor([
+              TomlTableAccessor({
+                'table': TomlTableAccessor(),
+              })
+            ])
+          })),
         );
       });
       test('cannot insert into static array', () {
-        var builder = TomlMapBuilder();
+        var builder = TomlAccessorBuilder();
         builder.visitKeyValuePair(TomlKeyValuePair(
           TomlKey([TomlUnquotedKey('array')]),
           TomlArray([]),
@@ -618,7 +692,7 @@ void main() {
         );
       });
       test('cannot create child of inline table', () {
-        var builder = TomlMapBuilder();
+        var builder = TomlAccessorBuilder();
         builder.visitKeyValuePair(TomlKeyValuePair(
           TomlKey([TomlUnquotedKey('table')]),
           TomlInlineTable([]),
@@ -638,7 +712,7 @@ void main() {
       test(
         'cannot add key to last entry of array of tables using dotted keys',
         () {
-          var builder = TomlMapBuilder();
+          var builder = TomlAccessorBuilder();
           builder.visitArrayTable(TomlArrayTable(
             TomlKey([TomlUnquotedKey('table'), TomlUnquotedKey('array')]),
           ));
@@ -665,7 +739,7 @@ void main() {
         'cannot add sub-table to last entry of array of tables using '
         'dotted keys',
         () {
-          var builder = TomlMapBuilder();
+          var builder = TomlAccessorBuilder();
           builder.visitArrayTable(TomlArrayTable(
             TomlKey([TomlUnquotedKey('table'), TomlUnquotedKey('array')]),
           ));

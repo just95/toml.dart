@@ -54,13 +54,6 @@ class TomlDocument extends TomlNode {
   /// Creates a TOML document from the given map.
   factory TomlDocument.fromMap(Map map) => TomlAstBuilder().buildDocument(map);
 
-  /// Converts this document to a map from keys to values.
-  Map<String, dynamic> toMap() {
-    var builder = TomlMapBuilder();
-    expressions.forEach(builder.visitExpression);
-    return builder.build();
-  }
-
   @override
   T acceptVisitor<T>(TomlVisitor<T> visitor) => visitor.visitDocument(this);
 
