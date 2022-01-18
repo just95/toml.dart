@@ -1278,6 +1278,30 @@ void main() {
             ))),
           );
         });
+        test('does not allow windows newlines', () {
+          var input = '"Line 1\r\n'
+              'Line 2"';
+          expect(
+            () => TomlValue.parse(input),
+            throwsA(equals(TomlParserException(
+              message: "closing '\"' expected",
+              source: input,
+              offset: 7,
+            ))),
+          );
+        });
+        test('does not allow standalone carriage returns', () {
+          var input = '"Line 1\r'
+              'Line 2"';
+          expect(
+            () => TomlValue.parse(input),
+            throwsA(equals(TomlParserException(
+              message: "closing '\"' expected",
+              source: input,
+              offset: 7,
+            ))),
+          );
+        });
         test('allows raw tabs', () {
           expect(
             TomlValue.parse(
@@ -1385,11 +1409,25 @@ void main() {
         test('allows Windows newlines', () {
           expect(
             TomlValue.parse(
-              '"""Roses are red\r\nViolets are blue"""',
+              '"""Roses are red\r\n'
+              'Violets are blue"""',
             ),
             equals(TomlMultilineBasicString(
-              'Roses are red\r\nViolets are blue',
+              'Roses are red\r\n'
+              'Violets are blue',
             )),
+          );
+        });
+        test('does not allow standalone carriage returns', () {
+          var input = '"""Roses are red\r'
+              'Violets are blue"""';
+          expect(
+            () => TomlValue.parse(input),
+            throwsA(equals(TomlParserException(
+              message: "closing '\"\"\"' expected",
+              source: input,
+              offset: 16,
+            ))),
           );
         });
         test('trims first newline after opening delimiter', () {
@@ -1636,6 +1674,42 @@ void main() {
             equals(TomlLiteralString('Roses are red\tViolets are blue')),
           );
         });
+        test('does not allow newlines', () {
+          var input = "'Line 1\n"
+              "Line 2'";
+          expect(
+            () => TomlValue.parse(input),
+            throwsA(equals(TomlParserException(
+              message: 'closing "\'" expected',
+              source: input,
+              offset: 7,
+            ))),
+          );
+        });
+        test('does not allow windows newlines', () {
+          var input = "'Line 1\r\n"
+              "Line 2'";
+          expect(
+            () => TomlValue.parse(input),
+            throwsA(equals(TomlParserException(
+              message: 'closing "\'" expected',
+              source: input,
+              offset: 7,
+            ))),
+          );
+        });
+        test('does not allow standalone carriage returns', () {
+          var input = "'Line 1\r"
+              "Line 2'";
+          expect(
+            () => TomlValue.parse(input),
+            throwsA(equals(TomlParserException(
+              message: 'closing "\'" expected',
+              source: input,
+              offset: 7,
+            ))),
+          );
+        });
         test('does not allow unpaired UTF-16 surrogate code points', () {
           var input = "'High surrogate \uD83E without low surrogate'";
           expect(
@@ -1805,11 +1879,25 @@ void main() {
         test('allows Windows newlines', () {
           expect(
             TomlValue.parse(
-              "'''Roses are red\r\nViolets are blue'''",
+              "'''Roses are red\r\n"
+              "Violets are blue'''",
             ),
             equals(TomlMultilineLiteralString(
-              'Roses are red\r\nViolets are blue',
+              'Roses are red\r\n'
+              'Violets are blue',
             )),
+          );
+        });
+        test('does not allow standalone carriage returns', () {
+          var input = "'''Roses are red\r"
+              "Violets are blue'''";
+          expect(
+            () => TomlValue.parse(input),
+            throwsA(equals(TomlParserException(
+              message: 'closing "\'\'\'" expected',
+              source: input,
+              offset: 16,
+            ))),
           );
         });
         test('does not allow unpaired UTF-16 surrogate code points', () {

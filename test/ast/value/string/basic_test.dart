@@ -18,6 +18,9 @@ void main() {
       test('escapes windows newlines', () {
         expect(TomlBasicString.escape('\r\n'), equals(r'\r\n'));
       });
+      test('escapes standalone carriage return newlines', () {
+        expect(TomlBasicString.escape('\r'), equals(r'\r'));
+      });
       test('does not escape tabs', () {
         expect(TomlBasicString.escape('\t'), equals('\t'));
       });
