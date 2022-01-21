@@ -3,47 +3,7 @@ library toml.test.decoder.accessor_builder_test;
 import 'package:test/test.dart';
 import 'package:toml/toml.dart';
 
-/// A custom matcher that uses the custom 'TomlAccessorEquality' to compare
-/// accessors.
-///
-/// The [equals] matcher cannot be used because 'TomlAccessor' does not
-/// override `operator ==` since it is not immutable.
-class TomlAccessorMatcher extends Matcher {
-  /// The accessor that is expected by this matcher.
-  final TomlAccessor expected;
-
-  /// Creates a new matcher for the given expected accessor.
-  const TomlAccessorMatcher(this.expected);
-
-  @override
-  bool matches(dynamic item, Map matchState) {
-    if (item is! TomlAccessor) return false;
-    matchState['isAccessor'] = true;
-    return TomlAccessorEquality().equals(item, expected);
-  }
-
-  @override
-  Description describe(Description description) =>
-      description.add('Equals accessor').addDescriptionOf(expected);
-
-  @override
-  Description describeMismatch(
-    dynamic item,
-    Description mismatchDescription,
-    Map matchState,
-    bool verbose,
-  ) {
-    if (matchState['isAccessor'] == true) {
-      return mismatchDescription.add('is not an accessor');
-    }
-    return mismatchDescription.add('does not match');
-  }
-}
-
-/// Returns a matcher that matches if the value is equal to the given
-/// [accessor] according to [TomlAccessorEquality].
-TomlAccessorMatcher equalsAccessor(TomlAccessor accessor) =>
-    TomlAccessorMatcher(accessor);
+import '../accessor/matcher.dart';
 
 void main() {
   group('TomlAccessorBuilder', () {

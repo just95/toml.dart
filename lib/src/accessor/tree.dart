@@ -100,8 +100,10 @@ class TomlArrayAccessor extends TomlAccessor {
   /// Creates a new array accessor with the given [items].
   ///
   /// Creates an accessor for an empty array if no items are given.
-  TomlArrayAccessor([List<TomlAccessor> items = const []])
-      : _items = List.of(items);
+  TomlArrayAccessor([
+    List<TomlAccessor> items = const [],
+    this.definedBy,
+  ]) : _items = List.of(items);
 
   @override
   TomlAccessorType get type => TomlAccessorType.array;
@@ -162,8 +164,10 @@ class TomlTableAccessor extends TomlAccessor {
   /// Creates a new table accessor with the given [children].
   ///
   /// Creates an accessor for an empty table if no children are given.
-  TomlTableAccessor([Map<String, TomlAccessor> children = const {}])
-      : _children = Map.of(children);
+  TomlTableAccessor([
+    Map<String, TomlAccessor> children = const {},
+    this.definedBy,
+  ]) : _children = Map.of(children);
 
   @override
   TomlAccessorType get type => TomlAccessorType.table;

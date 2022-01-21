@@ -61,6 +61,13 @@ abstract class TomlAccessorKey {
     throw "TODO";
   }
 
+  /// Whether this is the [topLevel] key.
+  ///
+  /// In contrast to testing for equality with [topLevel] or whether this key
+  /// `is` a [TomlRootAccessorKey] this getter handles [TomlSettableAccessorKey]
+  /// correctly.
+  bool get isTopLevelKey;
+
   /// The parts of of this key.
   ///
   /// The root key does not consist of any parts.
@@ -119,6 +126,9 @@ class TomlRootAccessorKey extends TomlAccessorKey {
   TomlRootAccessorKey._();
 
   @override
+  bool get isTopLevelKey => true;
+
+  @override
   Iterable<dynamic> get parts => [];
 
   @override
@@ -154,6 +164,9 @@ class TomlNameAccessorKey extends TomlAccessorKey {
   }
 
   @override
+  bool get isTopLevelKey => false;
+
+  @override
   final TomlAccessorKey parentKey;
 
   /// The name of the child node identified by this key.
@@ -186,6 +199,9 @@ class TomlIndexAccessorKey extends TomlAccessorKey {
       .map((index) => index.value.toInt()));
 
   @override
+  bool get isTopLevelKey => false;
+
+  @override
   Iterable<dynamic> get parts sync* {
     yield* parentKey.parts;
     yield index;
@@ -213,7 +229,9 @@ class TomlIndexAccessorKey extends TomlAccessorKey {
 /// A key that has a mutable reference to another key and delegates all
 /// method calls to the other key.
 ///
-/// This is used as the node name of accessor nodes
+/// This is used as the node name of accessor nodes. The keys of the child nodes
+/// contain references to this key. Thus, the keys of the child nodes update
+/// automatically when the parent of a node changes.
 class TomlSettableAccessorKey extends TomlAccessorKey {
   /// Another key to delegate all method calls to.
   TomlAccessorKey delegate = TomlAccessorKey.topLevel;
@@ -221,6 +239,9 @@ class TomlSettableAccessorKey extends TomlAccessorKey {
   @override
   R acceptKeyVisitor<R>(TomlAccessorKeyVisitor<R> visitor) =>
       delegate.acceptKeyVisitor(visitor);
+
+  @override
+  bool get isTopLevelKey => delegate.isTopLevelKey;
 
   @override
   Iterable<dynamic> get parts => delegate.parts;
