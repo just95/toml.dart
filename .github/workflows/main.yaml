@@ -210,7 +210,7 @@ jobs:
       - name: Install coverage Package
         run: dart pub global activate coverage
       - name: Format Coverage
-        run: 'format_coverage --packages=.packages
+        run: 'format_coverage --packages=.dart_tool/package_config.json
                               --in coverage
                               --report-on lib
                               --lcov
