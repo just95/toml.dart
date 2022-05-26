@@ -46,9 +46,9 @@ class TomlBasicString extends TomlSinglelineString {
   ///  and `%x5C` which is the `escape` character `\`.
   static final Parser<String> unescapedParser = ChoiceParser([
     tomlWhitespaceChar,
-    char(0x21),
-    range(0x23, 0x5B),
-    range(0x5D, 0x7E),
+    char('\x21'),
+    range('\x23', '\x5B'),
+    range('\x5D', '\x7E'),
     tomlNonAscii
   ]).flatten('Basic string character expected');
 

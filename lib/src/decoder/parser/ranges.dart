@@ -24,7 +24,7 @@ Parser<String> tomlHexDigit([String message = 'hexadecimal digit expected']) =>
 ///
 ///     non-eol = %x09 / %x20-7E / non-ascii
 final Parser<String> tomlNonEol =
-    ChoiceParser([char(0x09), range(0x20, 0x7E), tomlNonAscii]);
+    ChoiceParser([char('\x09'), range('\x20', '\x7E'), tomlNonAscii]);
 
 /// Parser for non-ASCII characters that are allowed in TOML comments and
 /// literal strings.
@@ -35,8 +35,8 @@ final Parser<String> tomlNonEol =
 /// Since `petitparser` can only work with 16-Bit code units, we have to
 /// parse the surrogate pairs manually.
 final Parser<String> tomlNonAscii = ChoiceParser([
-  range(0x80, 0xD7FF),
-  range(0xE000, 0xFFFF),
+  range(String.fromCharCode(0x80), String.fromCharCode(0xD7FF)),
+  range(String.fromCharCode(0xE000), String.fromCharCode(0xFFFF)),
   _tomlSurrogatePair,
 ]);
 
@@ -47,7 +47,9 @@ final Parser<String> _tomlSurrogatePair =
     (_tomlHighSurrogate & _tomlLowSurrogate).flatten('Surrogate pair expected');
 
 /// Parser for high surrogates (`%xD800-DBFF`).
-final Parser<String> _tomlHighSurrogate = range(0xD800, 0xDBFF);
+final Parser<String> _tomlHighSurrogate =
+    range(String.fromCharCode(0xD800), String.fromCharCode(0xDBFF));
 
 /// Parser for low surrogates (`%xDC00-DFFF`).
-final Parser<String> _tomlLowSurrogate = range(0xDC00, 0xDFFF);
+final Parser<String> _tomlLowSurrogate =
+    range(String.fromCharCode(0xDC00), String.fromCharCode(0xDFFF));
