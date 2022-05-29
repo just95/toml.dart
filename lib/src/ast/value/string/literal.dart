@@ -36,8 +36,8 @@ class TomlLiteralString extends TomlSinglelineString {
   /// (i.e., `%x27`).
   static final Parser<String> charParser = ChoiceParser([
     char('\x09'),
-    range(0x20, 0x26),
-    range(0x28, 0x7E),
+    range('\x20', '\x26'),
+    range('\x28', '\x7E'),
     tomlNonAscii,
   ]).flatten('Literal string character expected');
 

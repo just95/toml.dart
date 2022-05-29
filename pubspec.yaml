@@ -6,7 +6,7 @@ environment:
   sdk: '>=2.14.0 <3.0.0'
 dependencies:
   meta: ^1.7.0
-  petitparser: ^4.2.0
+  petitparser: ^5.0.0
   collection: ^1.15.0
 dev_dependencies:
   lints: ^1.0.1
