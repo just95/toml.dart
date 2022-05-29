@@ -43,7 +43,7 @@ class TomlMapBuilder with TomlExpressionVisitorMixin<void> {
           throw TomlNotATableException(node.nodeName.child(part));
         }
       },
-      buildChild: (dottedTableName) => _TomlTreeMap(dottedTableName),
+      buildChild: _TomlTreeMap.new,
       onAfterGetChild: (node) {
         if (node is _TomlTreeMap) {
           if (node.isExplicitlyDefined && !node.isDefinedByDottedKey) {
@@ -66,7 +66,7 @@ class TomlMapBuilder with TomlExpressionVisitorMixin<void> {
     // Create the standard table.
     var parent = _topLevel.findOrAddChild(
           table.name.parentKey,
-          buildChild: (implicitTableName) => _TomlTreeMap(implicitTableName),
+          buildChild: _TomlTreeMap.new,
         ),
         child = parent.getOrAddChild(
           table.name.childKey,
@@ -91,7 +91,7 @@ class TomlMapBuilder with TomlExpressionVisitorMixin<void> {
   void visitArrayTable(TomlArrayTable table) {
     var parent = _topLevel.findOrAddChild(
           table.name.parentKey,
-          buildChild: (implicitTableName) => _TomlTreeMap(implicitTableName),
+          buildChild: _TomlTreeMap.new,
         ),
         child = parent.getOrAddChild(
           table.name.childKey,

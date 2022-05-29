@@ -60,7 +60,7 @@ class TomlStandardTable extends TomlTable {
   static final Parser<TomlStandardTable> parser = TomlKey.parser
       .surroundedBy(tomlWhitespace)
       .surroundedBy(char(openingDelimiter), char(closingDelimiter))
-      .map((key) => TomlStandardTable(key));
+      .map(TomlStandardTable.new);
 
   /// Creates a new TOML standard table.
   TomlStandardTable(TomlKey name) : super(name);
@@ -103,7 +103,7 @@ class TomlArrayTable extends TomlTable {
         string(openingDelimiter, '"$openingDelimiter" expected'),
         string(closingDelimiter, '"$closingDelimiter" expected'),
       )
-      .map((key) => TomlArrayTable(key));
+      .map(TomlArrayTable.new);
 
   /// Creates a new TOML array table.
   TomlArrayTable(TomlKey name) : super(name);

@@ -26,7 +26,7 @@ class TomlLiteralString extends TomlSinglelineString {
         char(delimiter, 'opening "$delimiter" expected'),
         char(delimiter, 'closing "$delimiter" expected'),
       )
-      .map((value) => TomlLiteralString._fromEncodable(value));
+      .map(TomlLiteralString._fromEncodable);
 
   /// Parser for a single character of a basic TOML string.
   ///

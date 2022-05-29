@@ -28,7 +28,7 @@ class TomlBasicString extends TomlSinglelineString {
         char(delimiter, "opening '$delimiter' expected"),
         char(delimiter, "closing '$delimiter' expected"),
       )
-      .map((value) => TomlBasicString._fromEncodable(value));
+      .map(TomlBasicString._fromEncodable);
 
   /// Parser for a single character of a basic TOML string.
   ///

@@ -29,7 +29,7 @@ class TomlKey extends TomlNode {
   /// Parser for a dotted TOML key.
   static final Parser<TomlKey> parser = TomlSimpleKey.parser
       .separatedWithout(tomlWhitespace & char(separator) & tomlWhitespace)
-      .map((parts) => TomlKey(parts));
+      .map(TomlKey.new);
 
   /// Parses the given TOML key.
   ///
@@ -126,7 +126,7 @@ abstract class TomlSimpleKey extends TomlNode {
 class TomlQuotedKey extends TomlSimpleKey {
   /// Parser for a quoted TOML key.
   static final Parser<TomlQuotedKey> parser =
-      TomlSinglelineString.parser.map((string) => TomlQuotedKey(string));
+      TomlSinglelineString.parser.map(TomlQuotedKey.new);
 
   /// The string literal that represents this key.
   final TomlSinglelineString string;
@@ -159,7 +159,7 @@ class TomlUnquotedKey extends TomlSimpleKey {
   static final Parser<TomlUnquotedKey> parser = pattern('A-Za-z0-9_-')
       .plus()
       .flatten('Unquoted key expected')
-      .map((name) => TomlUnquotedKey(name));
+      .map(TomlUnquotedKey.new);
 
   /// Tests whether the given key does not have to be quoted.
   static bool canEncode(String key) => parser.end().accept(key);

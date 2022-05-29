@@ -31,7 +31,7 @@ class TomlMultilineLiteralString extends TomlMultilineString {
         string(delimiter, 'opening "$delimiter" expected'),
         string(delimiter, 'closing "$delimiter" expected'),
       )
-      .map((body) => TomlMultilineLiteralString._fromEncodable(body));
+      .map(TomlMultilineLiteralString._fromEncodable);
 
   /// Parser fir the body of a multiline literal TOML string.
   ///

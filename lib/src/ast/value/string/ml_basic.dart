@@ -30,7 +30,7 @@ class TomlMultilineBasicString extends TomlMultilineString {
         string(delimiter, "opening '$delimiter' expected"),
         string(delimiter, "closing '$delimiter' expected"),
       )
-      .map((body) => TomlMultilineBasicString._fromEncodable(body));
+      .map(TomlMultilineBasicString._fromEncodable);
 
   /// Parser for the body of a multiline basic TOML string.
   ///

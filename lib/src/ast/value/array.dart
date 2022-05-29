@@ -40,7 +40,7 @@ class TomlArray extends TomlValue {
       .optionalWith(<TomlValue>[])
       .followedBy(tomlWhitespaceCommentNewline)
       .surroundedBy(char(openingDelimiter), char(closingDelimiter))
-      .map((items) => TomlArray(items));
+      .map(TomlArray.new);
 
   /// The array items.
   final List<TomlValue> items;
