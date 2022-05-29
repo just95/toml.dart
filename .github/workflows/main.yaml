@@ -31,7 +31,7 @@ jobs:
     name: Analyze Code
     runs-on: ubuntu-latest
     container:
-      image: google/dart:latest
+      image: dart:stable
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -49,7 +49,7 @@ jobs:
     name: Check Code Formatting
     runs-on: ubuntu-latest
     container:
-      image: google/dart:latest
+      image: dart:stable
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -76,7 +76,7 @@ jobs:
       image: google/dart:${{ matrix.dart-version }}
     strategy:
       matrix:
-        dart-version: ['2.14', latest]
+        dart-version: ['2.16', '2.17', latest]
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -101,7 +101,7 @@ jobs:
     name: Run Unit Tests in Node.js
     runs-on: ubuntu-latest
     container:
-      image: google/dart:latest
+      image: dart:stable
     strategy:
       matrix:
         node-version: [10, 12, 14, 15]
@@ -225,7 +225,7 @@ jobs:
     name: Build Documentation
     runs-on: ubuntu-latest
     container:
-      image: google/dart:latest
+      image: dart:stable
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -248,7 +248,7 @@ jobs:
     name: Compile `toml-test` Scripts
     runs-on: ubuntu-latest
     container:
-      image: google/dart:latest
+      image: dart:stable
     steps:
       - name: Checkout
         uses: actions/checkout@v2
