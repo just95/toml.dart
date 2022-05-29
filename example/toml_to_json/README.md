@@ -47,7 +47,7 @@ You can also run this example application using Docker.
 For example to convert a TOML document `input.toml` in the current working directory to JSON, type the following command.
 
 ```bash
-docker run -it -v $PWD:/pwd just95/toml-to-json /pwd/input.toml
+cat input.toml | docker run -i just95/toml-to-json
 ```
 
 ### Building Docker Image
