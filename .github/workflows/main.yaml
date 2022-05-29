@@ -73,7 +73,7 @@ jobs:
     name: Run Unit Tests in Dart VM
     runs-on: ubuntu-latest
     container:
-      image: google/dart:${{ matrix.dart-version }}
+      image: dart:${{ matrix.dart-version }}
     strategy:
       matrix:
         dart-version: ['2.16', '2.17', latest]
