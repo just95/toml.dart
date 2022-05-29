@@ -231,12 +231,10 @@ jobs:
         uses: actions/checkout@v2
       - name: Print Dart SDK Version
         run: dart --version
-      - name: Print `dartdoc` Version
-        run: dartdoc --version
       - name: Install Dependencies
         run: dart pub get
       - name: Build Documentation
-        run: dartdoc --no-show-progress
+        run: dart doc
       - name: Upload Documentation
         uses: actions/upload-artifact@v2
         with:
