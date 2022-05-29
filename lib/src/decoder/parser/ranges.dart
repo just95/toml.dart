@@ -35,8 +35,8 @@ final Parser<String> tomlNonEol =
 /// Since `petitparser` can only work with 16-Bit code units, we have to
 /// parse the surrogate pairs manually.
 final Parser<String> tomlNonAscii = ChoiceParser([
-  range(String.fromCharCode(0x80), String.fromCharCode(0xD7FF)),
-  range(String.fromCharCode(0xE000), String.fromCharCode(0xFFFF)),
+  range('\x80', '\uD7FF'),
+  range('\uE000', '\uFFFF'),
   _tomlSurrogatePair,
 ]);
 
@@ -47,9 +47,7 @@ final Parser<String> _tomlSurrogatePair =
     (_tomlHighSurrogate & _tomlLowSurrogate).flatten('Surrogate pair expected');
 
 /// Parser for high surrogates (`%xD800-DBFF`).
-final Parser<String> _tomlHighSurrogate =
-    range(String.fromCharCode(0xD800), String.fromCharCode(0xDBFF));
+final Parser<String> _tomlHighSurrogate = range('\uD800', '\uDBFF');
 
 /// Parser for low surrogates (`%xDC00-DFFF`).
-final Parser<String> _tomlLowSurrogate =
-    range(String.fromCharCode(0xDC00), String.fromCharCode(0xDFFF));
+final Parser<String> _tomlLowSurrogate = range('\uDC00', '\uDFFF');
