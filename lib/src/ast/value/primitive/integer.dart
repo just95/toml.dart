@@ -64,7 +64,7 @@ class TomlInteger extends TomlPrimitiveValue {
     format: TomlIntegerFormat.bin,
     digitParser: tomlBinDigit(),
     message: 'Binary integer expected',
-  ).map((n) => TomlInteger.bin(n));
+  ).map(TomlInteger.bin);
 
   /// Parser for a binary TOML integer value.
   ///
@@ -73,7 +73,7 @@ class TomlInteger extends TomlPrimitiveValue {
     format: TomlIntegerFormat.oct,
     digitParser: tomlOctDigit(),
     message: 'Octal integer expected',
-  ).map((n) => TomlInteger.oct(n));
+  ).map(TomlInteger.oct);
 
   /// Parser for a decimal TOML interger value.
   ///
@@ -100,10 +100,10 @@ class TomlInteger extends TomlPrimitiveValue {
   ///
   ///     hex-int = hex-prefix HEXDIG *( HEXDIG / underscore HEXDIG )
   static final Parser<TomlInteger> hexParser = TomlInteger._makeParser(
-          format: TomlIntegerFormat.hex,
-          digitParser: tomlHexDigit(),
-          message: 'Hexadecimal integer expected')
-      .map((n) => TomlInteger.hex(n));
+    format: TomlIntegerFormat.hex,
+    digitParser: tomlHexDigit(),
+    message: 'Hexadecimal integer expected',
+  ).map(TomlInteger.hex);
 
   /// Creates a parser for an decimal integer parser.
   ///

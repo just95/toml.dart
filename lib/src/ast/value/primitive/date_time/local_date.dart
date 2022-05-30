@@ -16,7 +16,7 @@ import 'local_date_time.dart';
 class TomlLocalDate extends TomlDateTime {
   /// Parser for a TOML local date value.
   static final Parser<TomlLocalDate> parser =
-      TomlFullDate.parser.map((date) => TomlLocalDate(date));
+      TomlFullDate.parser.map(TomlLocalDate.new);
 
   /// Parses the given string as a TOML local date.
   static TomlLocalDate parse(String input) =>

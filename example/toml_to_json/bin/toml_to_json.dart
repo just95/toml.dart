@@ -11,17 +11,26 @@ import 'package:toml/toml.dart';
 /// If multiple TOML documents are converted, the contents of the documents
 /// is [merge]d.
 Future main(List<String> args) async {
-  if (args.isEmpty || args.any((arg) => arg == '--help')) {
-    print('Usage: ${Platform.script.pathSegments.last} <INPUT-FILE...>');
-    print('');
-    print('Converts TOML documents to JSON. If multiple TOML documents are');
-    print('specified, the resulting hash maps are merged before they are');
-    print('copnverted to JSON.');
+  if (args.any((arg) => arg == '--help' || arg == '-h')) {
+    stderr
+      ..writeln('Usage: ${Platform.script.pathSegments.last} [INPUT-FILE...]')
+      ..writeln('')
+      ..writeln('Converts TOML documents to JSON. If multiple TOML documents')
+      ..writeln('are specified, the resulting hash maps are merged before they')
+      ..writeln('are copnverted to JSON.')
+      ..writeln('')
+      ..writeln('Reads from stdin when no input file is specified.');
     return;
   }
 
-  // Load every input file and merge the resulting hash maps.
+  // Convert TOML document on stdin if no file has been specified.
   var merged = <String, dynamic>{};
+  if (args.isEmpty) {
+    var input = await stdin.transform(utf8.decoder).join();
+    merged = TomlDocument.parse(input).toMap();
+  }
+
+  // Load every input file and merge the resulting hash maps.
   for (var file in args) {
     var document = await TomlDocument.load(file);
     merged = merge(merged, document.toMap());

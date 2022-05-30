@@ -1,8 +1,9 @@
 # Changelog
 
-## Unreleased
+## 0.13.0
 
- - Dart 2.14 is now required.
+ - Dart 2.17 is now required.
+ - Upgraded dependencies.
  - Removed dependency on `package:quiver` in favor of `package:collection` and Dart 2.14's `Object.hash` and `Object.hashAll` methods.
 
 ## 0.12.0

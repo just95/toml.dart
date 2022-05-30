@@ -43,7 +43,7 @@ class TomlInlineTable extends TomlCompoundValue {
       .optionalWith(<TomlKeyValuePair>[])
       .surroundedBy(tomlWhitespace)
       .surroundedBy(char(openingDelimiter), char(closingDelimiter))
-      .map((pairs) => TomlInlineTable(pairs));
+      .map(TomlInlineTable.new);
 
   /// The key/value pairs of the inline table.
   final List<TomlKeyValuePair> pairs;

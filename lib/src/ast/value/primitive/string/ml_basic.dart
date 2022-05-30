@@ -30,7 +30,7 @@ class TomlMultilineBasicString extends TomlMultilineString {
         string(delimiter, "opening '$delimiter' expected"),
         string(delimiter, "closing '$delimiter' expected"),
       )
-      .map((body) => TomlMultilineBasicString._fromEncodable(body));
+      .map(TomlMultilineBasicString._fromEncodable);
 
   /// Parser for the body of a multiline basic TOML string.
   ///
@@ -76,9 +76,9 @@ class TomlMultilineBasicString extends TomlMultilineString {
   ///  and `%x5C` which is the `escape` character `\`.
   static final Parser<String> unescapedParser = ChoiceParser([
     tomlWhitespaceChar,
-    char(0x21),
-    range(0x23, 0x5B),
-    range(0x5D, 0x7E),
+    char('\x21'),
+    range('\x23', '\x5B'),
+    range('\x5D', '\x7E'),
     tomlNonAscii
   ]).flatten('Unescaped multiline basic string character expected');
 
