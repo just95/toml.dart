@@ -31,11 +31,11 @@ jobs:
   analyze-examples:
     name: Analyze Code of Examples
     runs-on: ubuntu-latest
-    container:
-      image: dart:stable
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+      - name: Setup Dart SDK
+        uses: dart-lang/setup-dart@v0.4
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
@@ -55,11 +55,11 @@ jobs:
   format-examples:
     name: Check Code Formatting of Examples
     runs-on: ubuntu-latest
-    container:
-      image: dart:stable
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+      - name: Setup Dart SDK
+        uses: dart-lang/setup-dart@v0.4
       - name: Print Dart SDK Version
         run: dart --version
       - name: Install Dependencies of Examples
@@ -73,11 +73,11 @@ jobs:
   test-examples:
     name: Test Examples
     runs-on: ubuntu-latest
-    container:
-      image: dart:stable
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+      - name: Setup Dart SDK
+        uses: dart-lang/setup-dart@v0.4
       - name: Print Dart SDK Version
         run: dart --version
       - name: Install Dependencies of Examples
@@ -92,7 +92,7 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-      - name: Use Dart SDK
+      - name: Setup Dart SDK
         uses: dart-lang/setup-dart@v0.4
       - name: Print Dart SDK Version
         run: dart --version
