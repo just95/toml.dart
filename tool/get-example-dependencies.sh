@@ -23,10 +23,10 @@ for example in $(find "$examples_dir" -name pubspec.yaml); do
   example_dir=$(dirname "$example")
   example_name=$(basename "$example_dir")
 
-  # Skip Flutter example.
+  # Use Flutter SDK for Flutter example.
+  sdk=dart
   if [[ "$example_name" = "flutter_example" ]]; then
-    echo "Skipping Flutter example!"
-    continue
+    sdk=flutter
   fi
 
   # Change into the example's root directory.
@@ -34,7 +34,7 @@ for example in $(find "$examples_dir" -name pubspec.yaml); do
 
   # Install dependencies of the example with `pub get`.
   echo "Installing dependencies of '$example_name' example..."
-  if ! dart pub get 2>&1 | awk '{print " | " $0}'; then
+  if ! $sdk pub get 2>&1 | awk '{print " | " $0}'; then
     echo "------------------------------------------------------------------"
     echo "Error when installing dependencies for '$example_name' example!" >&2
     exit 1

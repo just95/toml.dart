@@ -25,9 +25,9 @@ on:
       - cron: "0 6 * * *"
 
 jobs:
-  # Analyzes the Dart code of the examples (i.e., all `.dart` files in the `lib`,
-  # `bin` and `test` sub-directories of the example packages in the `example`
-  # directory) with `dart analyze`.
+  # Analyzes the Dart code of the examples (i.e., all `.dart` files in the
+  # `lib`, `bin` and `test` sub-directories of the example packages in the
+  # `example` directory) with `dart analyze` or `flutter analyze`.
   analyze-examples:
     name: Analyze Code of Examples
     runs-on: ubuntu-latest
@@ -36,8 +36,14 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
       - name: Print Dart SDK Version
         run: dart --version
+      - name: Print Flutter SDK Version
+        run: flutter --version
       - name: Install Dependencies of Examples
         run: ./tool/get-example-dependencies.sh
       - name: Analyze Code of Examples
