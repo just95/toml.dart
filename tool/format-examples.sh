@@ -18,7 +18,7 @@ script_dir=$(dirname "$script")
 root_dir=$(dirname "$script_dir")
 cd "$root_dir"
 
-# Find all examples with a `pubspec.yaml` file.
+# Format code of all `*.dart` files in the `example` directory.
 echo "Checking formatting of all examples..."
 if ! dart format "$@" example 2>&1 | awk '{print " | " $0}'; then
   echo "------------------------------------------------------------------"
