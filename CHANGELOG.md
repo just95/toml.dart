@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.13.1
+
+ - Downgraded `meta` dependency from `^1.8.0` to `^1.7.0` for compatibility with Flutter `3.0.1`.
+
 ## 0.13.0
 
  - Dart 2.17 is now required.
