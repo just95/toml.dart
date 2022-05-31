@@ -29,6 +29,12 @@ for example in $(find "$examples_dir" -name pubspec.yaml); do
     sdk=flutter
   fi
 
+  # Skip Flutter examples if the Flutter SDK is not installed.
+  if ! which $sdk >/dev/null 2>&1; then
+    echo "Skipping '$example_name' because '$sdk' is not installed."
+    continue
+  fi
+
   # Change into the example's root directory.
   cd "$example_dir"
 
