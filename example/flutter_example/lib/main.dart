@@ -6,6 +6,7 @@ void main() {
   runApp(MyApp());
 }
 
+/// The main widget of the example application.
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -19,14 +20,11 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  MyHomePage({Key? key}) : super(key: key);
+/// The default route of [MyApp].
+class MyHomePage extends StatelessWidget {
+  /// Creates a [MyHomePage].
+  MyHomePage({super.key});
 
-  @override
-  _MyHomePageState createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
