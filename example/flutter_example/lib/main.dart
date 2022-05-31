@@ -8,6 +8,9 @@ void main() {
 
 /// The main widget of the example application.
 class MyApp extends StatelessWidget {
+  /// Creates a [MyApp].
+  const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -23,7 +26,7 @@ class MyApp extends StatelessWidget {
 /// The default route of [MyApp].
 class MyHomePage extends StatelessWidget {
   /// Creates a [MyHomePage].
-  MyHomePage({super.key});
+  const MyHomePage({super.key});
 
   @override
   Widget build(BuildContext context) {
