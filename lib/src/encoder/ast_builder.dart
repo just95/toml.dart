@@ -65,7 +65,7 @@ class TomlAstBuilder {
   /// contains no key/value pairs or arrays of tables.
   ///
   /// This method assumes that the tables are sorted such that parent tables
-  /// immediately preceed their child tables A table header can be removed
+  /// immediately precede their child tables A table header can be removed
   /// if the corresponding expression is followed by a a table header for
   /// a child table immediately.
   Iterable<TomlExpression> _removeRedundantHeaders(
@@ -101,7 +101,7 @@ class TomlAstBuilder {
   // Key/Value Pairs
   // --------------------------------------------------------------------------
 
-  /// Builds a key valie pair from the given map entry.
+  /// Builds a key value pair from the given map entry.
   TomlKeyValuePair buildKeyValuePair(MapEntry entry) => TomlKeyValuePair(
         TomlKey([buildSimpleKey(entry.key)]),
         buildValue(entry.value),

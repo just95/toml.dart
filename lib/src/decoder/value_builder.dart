@@ -3,7 +3,7 @@ library toml.src.ast.decoder.value_builder;
 import '../ast.dart';
 
 /// A visitor for [TomlValue]s that builds Dart values from their internal
-/// representatons.
+/// representations.
 class TomlValueBuilder
     with
         TomlPrimitiveValueVisitorMixin<dynamic>,

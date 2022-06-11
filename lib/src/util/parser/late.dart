@@ -12,7 +12,7 @@ import '../container/late.dart';
 /// parsers can refer to the [LateParser] instance before the underlying
 /// parser has been built.
 class LateParser<T> extends Parser<T> {
-  /// The lazily evaluared actual parser.
+  /// The lazily evaluated actual parser.
   Late<Parser<T>> _delegate;
 
   /// Creates a new parser that delegates to the parser built by the given

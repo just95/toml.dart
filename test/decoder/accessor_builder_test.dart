@@ -513,7 +513,7 @@ void main() {
 
     group('visitArrayTable', () {
       test(
-        'standalone array table headers create one elementry arrays of tables',
+        'standalone array table headers create singleton arrays of tables',
         () {
           var builder = TomlAccessorBuilder();
           builder.visitArrayTable(TomlArrayTable(

@@ -19,7 +19,7 @@ void main() {
       });
     });
     group('fromMap and toMap', () {
-      test('building a docment from its map yields original document', () {
+      test('building a document from its map yields original document', () {
         var document = TomlDocument([
           TomlStandardTable(TomlKey([TomlUnquotedKey('table')])),
           TomlKeyValuePair(

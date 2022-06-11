@@ -5,7 +5,7 @@ import 'package:toml/toml.dart';
 
 void main() {
   group('TomlFullDate', () {
-    group('contsrutcor', () {
+    group('constructor', () {
       test('cannot construct date with month greater than 12', () {
         expect(() => TomlFullDate(1995, 17, 7), throwsA(isA<ArgumentError>()));
       });
@@ -19,7 +19,7 @@ void main() {
         expect(() => TomlFullDate(1998, 1, 32), throwsA(isA<ArgumentError>()));
         expect(() => TomlFullDate(1998, 11, 31), throwsA(isA<ArgumentError>()));
       });
-      test('cannot construct date for feburary 29th in non leap years', () {
+      test('cannot construct date for february 29th in non leap years', () {
         expect(() => TomlFullDate(1996, 2, 29), returnsNormally);
         expect(() => TomlFullDate(1995, 2, 29), throwsA(isA<ArgumentError>()));
       });

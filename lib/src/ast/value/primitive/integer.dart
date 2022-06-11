@@ -75,7 +75,7 @@ class TomlInteger extends TomlPrimitiveValue {
     message: 'Octal integer expected',
   ).map(TomlInteger.oct);
 
-  /// Parser for a decimal TOML interger value.
+  /// Parser for a decimal TOML integer value.
   ///
   ///     dec-int = [ minus / plus ] unsigned-dec-int
   ///     minus = %x2D                       ; -

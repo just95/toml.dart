@@ -17,7 +17,7 @@ Future main(List<String> args) async {
       ..writeln('')
       ..writeln('Converts TOML documents to JSON. If multiple TOML documents')
       ..writeln('are specified, the resulting hash maps are merged before they')
-      ..writeln('are copnverted to JSON.')
+      ..writeln('are converted to JSON.')
       ..writeln('')
       ..writeln('Reads from stdin when no input file is specified.');
     return;

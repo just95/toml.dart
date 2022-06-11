@@ -8,7 +8,7 @@ abstract class Late<T> {
   /// The actual value.
   T get value;
 
-  /// Creates a new container for a lazily evaluted [value].
+  /// Creates a new container for a lazily evaluated [value].
   ///
   /// The given computation is suspended until the [value] is used for the
   /// first time. It is evaluated at most once.
@@ -26,7 +26,7 @@ class _Lazy<T> implements Late<T> {
   /// The suspended computation of the lazily evaluated value.
   final Thunk<T> _thunk;
 
-  /// Creates a new container for a lazily evaluted [value].
+  /// Creates a new container for a lazily evaluated [value].
   ///
   /// The given computation is suspended until the [value] is used for the
   /// first time. It is evaluated at most once.

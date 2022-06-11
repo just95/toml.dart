@@ -26,10 +26,10 @@ for example in $(find "$examples_dir" -maxdepth 2 -name analysis_options.yaml); 
   example_dir=$(dirname "$example")
   example_name=$(basename "$example_dir")
 
-  # Skip Flutter example.
+  # Use Flutter SDK for Flutter example.
+  sdk=dart
   if [[ "$example_name" = "flutter_example" ]]; then
-    echo "Skipping Flutter example!"
-    continue
+    sdk=flutter
   fi
 
   # Change into the example's root directory.
@@ -37,7 +37,7 @@ for example in $(find "$examples_dir" -maxdepth 2 -name analysis_options.yaml); 
 
   # Analyze the example's source code `dart analyze`.
   echo "Analyzing code of '$example_name' example..."
-  if ! dart analyze "$@" 2>&1 | awk '{print " | " $0}'; then
+  if ! $sdk analyze "$@" 2>&1 | awk '{print " | " $0}'; then
     echo "------------------------------------------------------------------"
     echo "Error when analyzing code of '$example_name' example!" >&2
     exit 1

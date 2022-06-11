@@ -31,7 +31,7 @@ for example in $(find "$examples_dir" -path \*/tool/test_web.dart); do
 
   echo "Running '$example_name' example..."
   # TODO update web examples to null-safety once dev dependencies are updated.
-  if ! dart --no-sound-null-safety ./tool/test_web.dart 2>&1 | awk '{print " | " $0}'; then
+  if ! dart ./tool/test_web.dart 2>&1 | awk '{print " | " $0}'; then
     echo "------------------------------------------------------------------"
     echo "Error when running web test for '$example_name' example!" >&2
     exit 1
