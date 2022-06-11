@@ -26,7 +26,7 @@ void main() {
         expect(result.isSuccess, isTrue);
         expect(result.value, equals(''));
       });
-      test('can join one elementry list', () {
+      test('can join singleton list', () {
         var parser = epsilonWith(['x']).join();
         var result = parser.parse('abc');
         expect(result.isSuccess, isTrue);

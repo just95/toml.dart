@@ -4,7 +4,7 @@ import '../ast.dart';
 import 'map_builder.dart';
 
 /// A visitor for [TomlValue]s that builds Dart values from their internal
-/// representatons.
+/// representations.
 class TomlValueBuilder
     with TomlValueVisitorMixin<dynamic>, TomlStringVisitorMixin<String> {
   /// A that identifies the currently converted value.

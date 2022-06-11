@@ -47,7 +47,7 @@ class TomlIntegerFormat {
 ///     integer = dec-int / hex-int / oct-int / bin-int
 @immutable
 class TomlInteger extends TomlValue {
-  /// Parser for a TOML interger value.
+  /// Parser for a TOML integer value.
   ///
   /// Decimal integers have to be parsed last such that the zero in the
   /// prefixes of non-decimal numbers is not consumed by the [decParser].
@@ -74,7 +74,7 @@ class TomlInteger extends TomlValue {
     message: 'Octal integer expected',
   ).map(TomlInteger.oct);
 
-  /// Parser for a decimal TOML interger value.
+  /// Parser for a decimal TOML integer value.
   ///
   ///     dec-int = [ minus / plus ] unsigned-dec-int
   ///     minus = %x2D                       ; -

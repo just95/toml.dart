@@ -108,7 +108,7 @@ class TomlMultilineBasicString extends TomlMultilineString {
     while (iterator.moveNext()) {
       final rune = iterator.current;
 
-      // If the current rune is a quotation mark and it is preceeded by less
+      // If the current rune is a quotation mark and it is preceded by less
       // than two quotation marks, it does not have to be escaped, because only
       // three or more quotation marks can be confused for a closing delimiter.
       if (rune == TomlBasicString.delimiter.runes.first && quotes < 2) {

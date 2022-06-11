@@ -63,7 +63,7 @@ void main() {
       });
     });
     group('isPrefixOf', () {
-      test('returns true for idential keys', () {
+      test('returns true for identical keys', () {
         var key = TomlKey([TomlUnquotedKey('key')]);
         expect(key.isPrefixOf(key), isTrue);
       });
@@ -102,7 +102,7 @@ void main() {
         ]);
         expect(prefix.isPrefixOf(key), isTrue);
       });
-      test('returns false for unreleated smaller keys', () {
+      test('returns false for unrelated smaller keys', () {
         var key = TomlKey([
           TomlUnquotedKey('a'),
           TomlUnquotedKey('b'),
@@ -114,7 +114,7 @@ void main() {
         ]);
         expect(key.isPrefixOf(smallerKey), isFalse);
       });
-      test('returns false for unreleated larger keys', () {
+      test('returns false for unrelated larger keys', () {
         var key = TomlKey([
           TomlUnquotedKey('a'),
           TomlUnquotedKey('b'),
@@ -144,7 +144,7 @@ void main() {
       test('returns top-level key for top-level key', () {
         expect(TomlKey.topLevel.parentKey, equals(TomlKey.topLevel));
       });
-      test('returns top-level key for one elementry key', () {
+      test('returns top-level key for singleton key', () {
         var key = TomlKey([TomlUnquotedKey('key')]);
         expect(key.parentKey, equals(TomlKey.topLevel));
       });
@@ -159,10 +159,10 @@ void main() {
       });
     });
     group('childKey', () {
-      test('throws an expection for the top-level key', () {
+      test('throws an exception for the top-level key', () {
         expect(() => TomlKey.topLevel.childKey, throwsA(isA<StateError>()));
       });
-      test('returns only part for one elementry key', () {
+      test('returns only part for singleton key', () {
         var part = TomlUnquotedKey('key');
         var key = TomlKey([part]);
         expect(key.childKey, equals(part));

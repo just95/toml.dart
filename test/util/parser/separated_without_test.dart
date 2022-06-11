@@ -13,13 +13,13 @@ void main() {
         var result = parser.parse('');
         expect(result.isFailure, isTrue);
       });
-      test('can parse one elementry list', () {
+      test('can parse singleton list', () {
         var parser = letter().separatedWithout(char(',')).end();
         var result = parser.parse('a');
         expect(result.isSuccess, isTrue);
         expect(result.value, equals(['a']));
       });
-      test('can parse multielementry list', () {
+      test('can parse list with multiple elements', () {
         var parser = letter().separatedWithout(char(',')).end();
         var result = parser.parse('a,b,c');
         expect(result.isSuccess, isTrue);

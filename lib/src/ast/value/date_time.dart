@@ -17,7 +17,7 @@ import 'date_time/local_date_time.dart';
 import 'date_time/local_time.dart';
 import 'date_time/offset_date_time.dart';
 
-/// Praser for four consecutive digits.
+/// Parser for four consecutive digits.
 Parser<int> _dddd =
     digit().times(4).flatten('Four digit number expected').map(int.parse);
 
@@ -245,7 +245,7 @@ class TomlTimeZoneOffset {
 
   /// Whether this offset identifies the UTC time-zone.
   ///
-  /// The UTC time zone offset is semanticvally equivalent to a numeric offset
+  /// The UTC time zone offset is semantically equivalent to a numeric offset
   /// of `+00:00`.
   final bool isUtc;
 

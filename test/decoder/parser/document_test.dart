@@ -579,7 +579,7 @@ void main() {
           ])),
         );
       });
-      test('rejects whitespace between backets', () {
+      test('rejects whitespace between brackets', () {
         var input = '[ [a.b.c] ]';
         expect(
           () => TomlDocument.parse(input),

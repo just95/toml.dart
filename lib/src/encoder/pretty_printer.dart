@@ -72,7 +72,7 @@ class TomlPrettyPrinter
       document.expressions,
       write: visitExpression,
       writeSeparator: (next) {
-        // All expresissions are are on a line by themselves but there is an
+        // All expressions are are on a line by themselves but there is an
         // additional blank line before every table header (except if it is
         // the very first expression of the document).
         if (next is TomlTable) _writeNewline();

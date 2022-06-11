@@ -51,13 +51,13 @@ class TomlParserException extends TomlException implements FormatException {
         offset: e.offset,
       );
 
-  /// Lazyly evaluated tuple of the [line] and [column].
+  /// Lazily evaluated tuple of the [line] and [column].
   late final List<int> _lineAndColumn = Token.lineAndColumnOf(source, offset);
 
   /// The line that contains the [offset] within the [source].
   int get line => _lineAndColumn[0];
 
-  /// The coulumn within the [line] that corresponds to the [offset] within
+  /// The column within the [line] that corresponds to the [offset] within
   /// the [source].
   int get column => _lineAndColumn[1];
 

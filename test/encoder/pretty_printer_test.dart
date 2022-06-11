@@ -12,7 +12,7 @@ void main() {
           prettyPrinter.visitArray(TomlArray([]));
           expect(prettyPrinter.toString(), equals('[]'));
         });
-        test('pretty prints one elementry array correctly', () {
+        test('pretty prints singleton array correctly', () {
           var prettyPrinter = TomlPrettyPrinter();
           prettyPrinter
               .visitArray(TomlArray([TomlInteger.dec(BigInt.from(1))]));

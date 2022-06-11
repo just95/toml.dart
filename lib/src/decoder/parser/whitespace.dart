@@ -11,7 +11,7 @@ import 'ranges.dart';
 final Parser<String> tomlWhitespace =
     tomlWhitespaceChar.star().join().orFailure('whitespace expected');
 
-/// Parser for a single TOML whitepsace character.
+/// Parser for a single TOML whitespace character.
 ///     wschar =  %x20  ; Space
 ///     wschar =/ %x09  ; Horizontal tab
 final Parser<String> tomlWhitespaceChar = ChoiceParser([char(' '), char('\t')])
