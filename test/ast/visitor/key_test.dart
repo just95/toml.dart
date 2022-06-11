@@ -4,7 +4,7 @@ import 'package:test/test.dart';
 import 'package:toml/src/ast.dart';
 
 /// A visitor that returns the name of its method that visited the node that
-/// acceted the visitor.
+/// accepted the visitor.
 class TomlSimpleKeyTestVisitor with TomlSimpleKeyVisitorMixin<String> {
   @override
   String visitQuotedKey(_) => 'visitQuotedKey';
