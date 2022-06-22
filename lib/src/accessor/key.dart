@@ -92,7 +92,7 @@ abstract class TomlAccessorKey {
   ///
   /// If the given argument is a string, a [TomlNameAccessorKey] is created.
   /// If the given argument is an integer, a [TomlIndexAccessorKey] is created.
-  /// Otherwiese, this method fails.
+  /// Otherwise, this method fails.
   TomlAccessorKey childKey(dynamic nameOrIndex) {
     if (nameOrIndex is String) return TomlNameAccessorKey(this, nameOrIndex);
     if (nameOrIndex is int) return TomlIndexAccessorKey(this, nameOrIndex);

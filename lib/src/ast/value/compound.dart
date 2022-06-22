@@ -4,7 +4,7 @@ import '../value.dart';
 import '../visitor/value.dart';
 import '../visitor/value/compound.dart';
 
-/// Base class for AST nodes that represet TOML values that consist of other
+/// Base class for AST nodes that represent TOML values that consist of other
 /// TOML values, i.e., arrays and inline tables.
 abstract class TomlCompoundValue extends TomlValue {
   @override

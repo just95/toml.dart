@@ -184,7 +184,7 @@ class TomlAccessorBuilder
     _addChildCallback = onAddChild;
   }
 
-  /// Invokes the last callback in the [_addChildStatck] with the given node.
+  /// Invokes the current [_addChildCallback] with the given node.
   ///
   /// Returns the added child.
   T _addChild<T extends TomlAccessor>(T child) {
@@ -264,7 +264,7 @@ class TomlAccessorBuilder
     return accessor.expectTable().getChild(name, orCreate: orCreate);
   }
 
-  /// Finds a decendant node of the given accessor by successive
+  /// Finds a descendant node of the given accessor by successive
   /// applications of [_getNode] on the parts of the given key.
   ///
   /// If a node on the path does not exist, it is created using the [orCreate]

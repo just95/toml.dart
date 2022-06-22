@@ -24,7 +24,7 @@ enum TomlAccessorType {
 ///
 /// This is a tree data structure where the inner nodes represent arrays
 /// and tables (including inline tables). Edges are labeled with keys or
-/// indicies and the leafs store non-composite values.
+/// indices and the leafs store non-composite values.
 abstract class TomlAccessor {
   /// A unique identifier of this accessor in the tree.
   ///
@@ -134,7 +134,7 @@ class TomlDocumentAccessor extends TomlTableAccessor {
 
 /// Data type for the different methods of defining a table accessor.
 enum TomlTableDefinitionMethod {
-  /// The table has been defined implicitly by a table header for a subtable.
+  /// The table has been defined implicitly by a table header for a sub-table.
   childTable,
 
   /// The table has been defined explicitly by a table header.
@@ -204,7 +204,7 @@ class TomlTableAccessor extends TomlAccessor {
 /// A leaf node of the [TomlAccessor] data structure that stores the value
 /// of a key/value pair.
 ///
-/// This node only represents non-coposite values. Array values and inline
+/// This node only represents non-composite values. Array values and inline
 /// tables are represented by [TomlArrayAccessor] and [TomlTableAccessor],
 /// respectively, instead.
 class TomlValueAccessor extends TomlAccessor {

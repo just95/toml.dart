@@ -89,7 +89,7 @@ class TomlAccessorTableKeysMismatch implements TomlAccessorMismatch {
   /// The keys that the table was not expected to have.
   final Set<String> unexpectedKeys;
 
-  /// Creates a new mismatch for two table accessors that habe different key
+  /// Creates a new mismatch for two table accessors that have different key
   /// sets.
   TomlAccessorTableKeysMismatch({
     required this.key,

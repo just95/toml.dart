@@ -48,7 +48,7 @@ class TomlIntegerFormat {
 ///     integer = dec-int / hex-int / oct-int / bin-int
 @immutable
 class TomlInteger extends TomlPrimitiveValue {
-  /// Parser for a TOML interger value.
+  /// Parser for a TOML integer value.
   ///
   /// Decimal integers have to be parsed last such that the zero in the
   /// prefixes of non-decimal numbers is not consumed by the [decParser].

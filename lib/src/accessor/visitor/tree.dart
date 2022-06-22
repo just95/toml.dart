@@ -4,7 +4,7 @@ import '../tree.dart';
 
 /// Interface for visitors of [TomlAccessor]s.
 abstract class TomlAccessorVisitor<R> {
-  /// Visitits the given array accessor.
+  /// Visits the given array accessor.
   R visitArrayAccessor(TomlArrayAccessor array);
 
   /// Visits the given table accessor.
