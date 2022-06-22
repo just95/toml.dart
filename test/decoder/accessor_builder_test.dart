@@ -724,5 +724,48 @@ void main() {
         },
       );
     });
+
+    group('visitArray', () {
+      test('maps empty array to empty list', () {
+        var builder = TomlAccessorBuilder();
+        var accessor = builder.visitArray(TomlArray([]));
+        expect(accessor.items, isEmpty);
+      });
+      test('maps non-empty array to list of same length', () {
+        var builder = TomlAccessorBuilder();
+        var accessor = builder.visitArray(TomlArray([
+          TomlInteger.dec(BigInt.zero),
+          TomlInteger.dec(BigInt.one),
+          TomlInteger.dec(BigInt.two),
+        ]));
+        expect(accessor.items, hasLength(3));
+      });
+    });
+
+    group('visitInlineTable', () {
+      test('maps empty inline table to empty map', () {
+        var builder = TomlAccessorBuilder();
+        var accessor = builder.visitInlineTable(TomlInlineTable([]));
+        expect(accessor.children, isEmpty);
+      });
+      test('maps non-empty inline table to non-empty map', () {
+        var builder = TomlAccessorBuilder();
+        var result = builder.visitInlineTable(TomlInlineTable([
+          TomlKeyValuePair(
+            TomlKey([TomlUnquotedKey('a')]),
+            TomlInteger.dec(BigInt.zero),
+          ),
+          TomlKeyValuePair(
+            TomlKey([TomlUnquotedKey('b')]),
+            TomlInteger.dec(BigInt.one),
+          ),
+          TomlKeyValuePair(
+            TomlKey([TomlUnquotedKey('c')]),
+            TomlInteger.dec(BigInt.two),
+          )
+        ]));
+        expect(result.children, hasLength(3));
+      });
+    });
   });
 }

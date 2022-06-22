@@ -24,11 +24,20 @@ extension TomlDocumentToAccessorExtension on TomlDocument {
 ///
 /// This visitor implements the semantics of the TOML document represented by
 /// the visited AST.
+///
+/// The `visit*` methods return the accessor for the created nodes.
+///
+///  - When a standard table header is visited, the accessor for the table
+///    is returned.
+///  - When an array table header is visited, the accessor for the table added
+///    to the array is returned.
+///  - When a key/value pair or a value visited, the accessor for the value is
+///    returned.
 class TomlAccessorBuilder
     with
-        TomlExpressionVisitorMixin<void>,
-        TomlValueVisitorMixin<void>,
-        TomlCompoundValueVisitorMixin<void> {
+        TomlExpressionVisitorMixin<TomlAccessor>,
+        TomlValueVisitorMixin<TomlAccessor>,
+        TomlCompoundValueVisitorMixin<TomlAccessor> {
   /// Accessor for the top-level table.
   final TomlDocumentAccessor topLevel;
 
@@ -60,7 +69,7 @@ class TomlAccessorBuilder
   }
 
   @override
-  void visitKeyValuePair(TomlKeyValuePair pair) => _context(() {
+  TomlAccessor visitKeyValuePair(TomlKeyValuePair pair) => _context(() {
         // Find the parent table of the dotted-key.
         var tableAccessor = _findNode(
           _current,
@@ -79,11 +88,11 @@ class TomlAccessorBuilder
         );
 
         // Visit the right-hand side of the key/value pair to add the value.
-        pair.value.acceptValueVisitor(this);
+        return pair.value.acceptValueVisitor(this);
       });
 
   @override
-  void visitStandardTable(TomlStandardTable table) {
+  TomlTableAccessor visitStandardTable(TomlStandardTable table) {
     // Find or create the accessor for the table and all parent accessors.
     var tableAccessor = _findNode(
       topLevel,
@@ -105,10 +114,11 @@ class TomlAccessorBuilder
     // Open the table and remember that it has been explicitly defined.
     tableAccessor.definedBy = TomlTableDefinitionMethod.tableHeader;
     _setCurrent(tableAccessor);
+    return tableAccessor;
   }
 
   @override
-  void visitArrayTable(TomlArrayTable table) {
+  TomlTableAccessor visitArrayTable(TomlArrayTable table) {
     // Find or create the accessors for the array's parents.
     var parentAccessor = _findNode(
       topLevel,
@@ -137,15 +147,15 @@ class TomlAccessorBuilder
     // Add the new table to the array and open the table.
     arrayAccessor.addItem(tableAccessor);
     _setCurrent(tableAccessor);
+    return tableAccessor;
   }
 
   @override
-  void visitPrimitiveValue(TomlPrimitiveValue value) {
-    _addChild(TomlValueAccessor(value));
-  }
+  TomlAccessor visitPrimitiveValue(TomlPrimitiveValue value) =>
+      _addChild(TomlValueAccessor(value));
 
   @override
-  void visitArray(TomlArray array) => _context(() {
+  TomlArrayAccessor visitArray(TomlArray array) => _context(() {
         // Create and open a new accessor for the array literal. If a child
         // is added in this context, it is added to the end of the array.
         var accessor = _addChild(TomlArrayAccessor());
@@ -156,10 +166,13 @@ class TomlAccessorBuilder
         for (var item in array.items) {
           item.acceptValueVisitor(this);
         }
+
+        return accessor;
       });
 
   @override
-  void visitInlineTable(TomlInlineTable inlineTable) => _context(() {
+  TomlTableAccessor visitInlineTable(TomlInlineTable inlineTable) =>
+      _context(() {
         // Create and open a new accessor for the inline table.
         var accessor = _addChild(TomlTableAccessor());
         accessor.definedBy = TomlTableDefinitionMethod.inlineTable;
@@ -170,6 +183,8 @@ class TomlAccessorBuilder
         for (var pair in inlineTable.pairs) {
           pair.acceptExpressionVisitor(this);
         }
+
+        return accessor;
       });
 
   /// Sets the [_current]ly open node.
@@ -185,6 +200,9 @@ class TomlAccessorBuilder
   }
 
   /// Invokes the current [_addChildCallback] with the given node.
+  ///
+  /// If [_addChildCallback] is `null`, a [TomlValue] must have been visited
+  /// directly, i.e., outside of a [_context].
   ///
   /// Returns the added child.
   T _addChild<T extends TomlAccessor>(T child) {
@@ -252,7 +270,7 @@ class TomlAccessorBuilder
   /// the child of the last entry in the array is returned instead.
   ///
   /// If the child node does not exist, the given [orCreate] function is used
-  /// to construct
+  /// to construct a new table.
   TomlAccessor _getNode(
     TomlAccessor accessor,
     String name, {

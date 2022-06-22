@@ -6,23 +6,6 @@ import 'package:toml/src/decoder/value_builder.dart';
 
 void main() {
   group('TomlValueBuilder', () {
-    // TODO convert to accessor builder test
-    /*group('visitArray', () {
-      test('maps empty array to empty list', () {
-        var builder = TomlValueBuilder();
-        var result = builder.visitArray(TomlArray([]));
-        expect(result, isEmpty);
-      });
-      test('maps non-empty array to list of same length', () {
-        var builder = TomlValueBuilder();
-        var result = builder.visitArray(TomlArray([
-          TomlInteger.dec(BigInt.zero),
-          TomlInteger.dec(BigInt.one),
-          TomlInteger.dec(BigInt.two),
-        ]));
-        expect(result, equals([0, 1, 2]));
-      });
-    });*/
     group('visitBoolean', () {
       test('maps true to true', () {
         var builder = TomlValueBuilder();
@@ -90,24 +73,6 @@ void main() {
         expect(result, equals(double.negativeInfinity));
       });
     });
-    // TODO convert to accessor builder test.
-    /*group('visitInlineTable', () {
-      test('maps empty inline table to empty map', () {
-        var builder = TomlValueBuilder();
-        var result = builder.visitInlineTable(TomlInlineTable([]));
-        expect(result, equals({}));
-      });
-      test('maps non-empty inline table to non-empty map', () {
-        var builder = TomlValueBuilder();
-        var result = builder.visitInlineTable(TomlInlineTable([
-          TomlKeyValuePair(
-            TomlKey([TomlUnquotedKey('key')]),
-            TomlLiteralString('value'),
-          )
-        ]));
-        expect(result, equals({'key': 'value'}));
-      });
-    });*/
     group('visitInteger', () {
       test('maps small binary integers to int', () {
         var builder = TomlValueBuilder();
