@@ -251,6 +251,7 @@ class TomlAccessorMatcher extends Matcher {
         actualValue: current.valueNode,
       );
     }
+    return null;
   }
 
   @override
