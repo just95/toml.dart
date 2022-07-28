@@ -109,7 +109,7 @@ void main() {
               TomlLiteralString('value'),
             )),
             throwsA(equals(
-              TomlTypeException(
+              TomlAccessorTypeException(
                 TomlAccessorKey.from(['a', 'b']),
                 expectedType: TomlAccessorType.table,
                 actualType: TomlAccessorType.value,
@@ -139,7 +139,7 @@ void main() {
               TomlLiteralString('value'),
             )),
             throwsA(equals(
-              TomlTypeException(
+              TomlAccessorTypeException(
                 TomlAccessorKey.from(['a']),
                 expectedType: TomlAccessorType.table,
                 actualType: TomlAccessorType.value,
@@ -347,7 +347,7 @@ void main() {
             TomlUnquotedKey('child1'),
             TomlUnquotedKey('child2'),
           ]))),
-          throwsA(equals(TomlTypeException(
+          throwsA(equals(TomlAccessorTypeException(
             TomlAccessorKey.from(['key']),
             expectedType: TomlAccessorType.table,
             actualType: TomlAccessorType.value,
@@ -610,7 +610,7 @@ void main() {
           () => builder.visitArrayTable(TomlArrayTable(
             TomlKey([TomlUnquotedKey('key'), TomlUnquotedKey('array')]),
           )),
-          throwsA(equals(TomlTypeException(
+          throwsA(equals(TomlAccessorTypeException(
             TomlAccessorKey.from(['key']),
             expectedType: TomlAccessorType.table,
             actualType: TomlAccessorType.value,
@@ -687,7 +687,7 @@ void main() {
               ]),
               TomlLiteralString('value'),
             )),
-            throwsA(equals(TomlTypeException(
+            throwsA(equals(TomlAccessorTypeException(
               TomlAccessorKey.from(['table', 'array']),
               expectedType: TomlAccessorType.table,
               actualType: TomlAccessorType.array,
@@ -715,7 +715,7 @@ void main() {
               ]),
               TomlLiteralString('value'),
             )),
-            throwsA(equals(TomlTypeException(
+            throwsA(equals(TomlAccessorTypeException(
               TomlAccessorKey.from(['table', 'array']),
               expectedType: TomlAccessorType.table,
               actualType: TomlAccessorType.array,

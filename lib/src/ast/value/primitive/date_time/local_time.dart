@@ -32,7 +32,7 @@ class TomlLocalTime extends TomlDateTime {
   TomlLocalDateTime atDate(TomlFullDate date) => TomlLocalDateTime(date, time);
 
   @override
-  TomlType get type => TomlType.localTime;
+  TomlValueType get type => TomlValueType.localTime;
 
   @override
   T acceptDateTimeVisitor<T>(TomlDateTimeVisitor<T> visitor) =>

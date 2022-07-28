@@ -66,7 +66,7 @@ class TomlFloat extends TomlPrimitiveValue {
   TomlFloat(this.value);
 
   @override
-  TomlType get type => TomlType.float;
+  TomlValueType get type => TomlValueType.float;
 
   @override
   T acceptPrimitiveValueVisitor<T>(TomlPrimitiveValueVisitor<T> visitor) =>

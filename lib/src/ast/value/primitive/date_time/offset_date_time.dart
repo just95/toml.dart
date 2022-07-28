@@ -76,7 +76,7 @@ class TomlOffsetDateTime extends TomlDateTime {
       ).subtract(offset.toDuration());
 
   @override
-  TomlType get type => TomlType.offsetDateTime;
+  TomlValueType get type => TomlValueType.offsetDateTime;
 
   @override
   T acceptDateTimeVisitor<T>(TomlDateTimeVisitor<T> visitor) =>

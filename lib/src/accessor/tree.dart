@@ -48,9 +48,14 @@ abstract class TomlAccessor {
   bool get isValue => type == TomlAccessorType.value;
 
   /// Ensures that this node is of the given type.
+  ///
+  /// Returns that this node or throws a [TomlAccessorTypeException] if the
+  /// runtime type don't match [T]. The [expectedType] is not used for the
+  /// comparison but only for the error message in case of a mismatch.
   T _expectType<T extends TomlAccessor>(TomlAccessorType expectedType) {
-    if (type == expectedType) return this as T;
-    throw TomlTypeException(
+    var self = this;
+    if (self is T) return self;
+    throw TomlAccessorTypeException(
       nodeName,
       expectedType: expectedType,
       actualType: type,

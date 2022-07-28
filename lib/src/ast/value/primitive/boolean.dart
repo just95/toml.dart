@@ -28,7 +28,7 @@ class TomlBoolean extends TomlPrimitiveValue {
   TomlBoolean(this.value);
 
   @override
-  TomlType get type => TomlType.boolean;
+  TomlValueType get type => TomlValueType.boolean;
 
   @override
   T acceptPrimitiveValueVisitor<T>(TomlPrimitiveValueVisitor<T> visitor) =>

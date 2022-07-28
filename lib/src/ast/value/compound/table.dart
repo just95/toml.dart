@@ -53,7 +53,7 @@ class TomlInlineTable extends TomlCompoundValue {
       : pairs = List.unmodifiable(pairs);
 
   @override
-  TomlType get type => TomlType.table;
+  TomlValueType get type => TomlValueType.table;
 
   @override
   T acceptCompoundValueVisitor<T>(TomlCompoundValueVisitor<T> visitor) =>

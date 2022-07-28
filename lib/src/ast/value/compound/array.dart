@@ -50,7 +50,7 @@ class TomlArray extends TomlCompoundValue {
   TomlArray(Iterable<TomlValue> items) : items = List.unmodifiable(items);
 
   @override
-  TomlType get type => TomlType.array;
+  TomlValueType get type => TomlValueType.array;
 
   @override
   T acceptCompoundValueVisitor<T>(TomlCompoundValueVisitor<T> visitor) =>

@@ -177,7 +177,7 @@ class TomlInteger extends TomlPrimitiveValue {
   }
 
   @override
-  TomlType get type => TomlType.integer;
+  TomlValueType get type => TomlValueType.integer;
 
   @override
   T acceptPrimitiveValueVisitor<T>(TomlPrimitiveValueVisitor<T> visitor) =>

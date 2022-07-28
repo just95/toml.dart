@@ -47,7 +47,7 @@ abstract class TomlString extends TomlPrimitiveValue {
   TomlStringType get stringType;
 
   @override
-  TomlType get type => TomlType.string;
+  TomlValueType get type => TomlValueType.string;
 
   @override
   T acceptPrimitiveValueVisitor<T>(TomlPrimitiveValueVisitor<T> visitor) =>

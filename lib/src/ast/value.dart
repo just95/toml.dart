@@ -17,7 +17,7 @@ import 'visitor/node.dart';
 import 'visitor/value.dart';
 
 /// The possible types of [TomlValue]s.
-enum TomlType {
+enum TomlValueType {
   /// The type of a TOML array.
   array,
 
@@ -97,7 +97,7 @@ abstract class TomlValue extends TomlNode {
   factory TomlValue.from(dynamic value) => TomlAstBuilder().buildValue(value);
 
   /// The type of the TOML value represented by this AST node.
-  TomlType get type;
+  TomlValueType get type;
 
   /// Invokes the correct `visit*` method for this value of the given
   /// visitor.

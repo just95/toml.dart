@@ -41,8 +41,20 @@ class TomlLocalDateTime extends TomlDateTime {
   TomlOffsetDateTime withOffset(TomlTimeZoneOffset offset) =>
       TomlOffsetDateTime(date, time, offset);
 
+  /// Converts this AST node to a [DateTime] object in the local time zone.
+  DateTime toLocalDateTime() => DateTime(
+        date.year,
+        date.month,
+        date.day,
+        time.hour,
+        time.minute,
+        time.second,
+        time.millisecond,
+        time.microsecond,
+      );
+
   @override
-  TomlType get type => TomlType.localDateTime;
+  TomlValueType get type => TomlValueType.localDateTime;
 
   @override
   T acceptDateTimeVisitor<T>(TomlDateTimeVisitor<T> visitor) =>

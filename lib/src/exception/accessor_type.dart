@@ -1,4 +1,4 @@
-library toml.src.exception.type;
+library toml.src.exception.accessor_type;
 
 import 'package:collection/collection.dart';
 import 'package:meta/meta.dart';
@@ -16,12 +16,12 @@ import 'base.dart';
 ///     [a.b.c]
 ///     d = 2
 ///
-/// throws a [TomlTypeException] because `a.b.c` fails to create a
+/// throws a [TomlAccessorTypeException] because `a.b.c` fails to create a
 /// sub-table of `a.b` which is an integer rather than a table. The
 /// [expectType] is [TomlAccessorType.table] in this case but the
 /// [actualType] is [TomlAccessorType.value].
 @immutable
-class TomlTypeException extends TomlException {
+class TomlAccessorTypeException extends TomlException {
   /// The name of the node which was expected to be of a different type.
   final TomlAccessorKey name;
 
@@ -32,7 +32,7 @@ class TomlTypeException extends TomlException {
   final TomlAccessorType actualType;
 
   /// Creates a new exception for a table with the given [name].
-  TomlTypeException(
+  TomlAccessorTypeException(
     this.name, {
     required this.expectedType,
     required this.actualType,
@@ -40,7 +40,7 @@ class TomlTypeException extends TomlException {
 
   @override
   bool operator ==(Object other) =>
-      other is TomlTypeException &&
+      other is TomlAccessorTypeException &&
       ListEquality().equals(name.parts.toList(), other.name.parts.toList()) &&
       expectedType == other.expectedType &&
       actualType == other.actualType;
