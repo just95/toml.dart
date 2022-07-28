@@ -9,6 +9,7 @@ import '../../../util/parser.dart';
 import '../../value.dart';
 import '../../visitor/value/compound.dart';
 import '../compound.dart';
+import '../type.dart';
 
 /// AST node that represents a TOML array value.
 ///

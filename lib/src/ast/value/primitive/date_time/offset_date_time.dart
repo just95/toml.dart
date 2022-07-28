@@ -5,8 +5,8 @@ import 'package:petitparser/petitparser.dart';
 
 import '../../../../exception.dart';
 import '../../../../util/parser.dart';
-import '../../../value.dart';
 import '../../../visitor/value/primitive/date_time.dart';
+import '../../type.dart';
 import '../date_time.dart';
 
 /// AST node that represents a TOML offset date-time value.

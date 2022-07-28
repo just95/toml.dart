@@ -3,9 +3,9 @@ library toml.src.ast.value.primitive.boolean;
 import 'package:meta/meta.dart';
 import 'package:petitparser/petitparser.dart';
 
-import '../../value.dart';
 import '../../visitor/value/primitive.dart';
 import '../primitive.dart';
+import '../type.dart';
 
 /// AST node that represents a boolean TOML value.
 ///

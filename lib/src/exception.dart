@@ -1,6 +1,5 @@
 library toml.src.exception;
 
-export 'exception/accessor_type.dart';
 export 'exception/base.dart';
 export 'exception/invalid_escape_sequence.dart';
 export 'exception/parser.dart';

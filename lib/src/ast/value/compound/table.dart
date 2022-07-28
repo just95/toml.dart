@@ -7,9 +7,9 @@ import 'package:petitparser/petitparser.dart';
 import '../../../decoder/parser/whitespace.dart';
 import '../../../util/parser.dart';
 import '../../expression/key_value_pair.dart';
-import '../../value.dart';
 import '../../visitor/value/compound.dart';
 import '../compound.dart';
+import '../type.dart';
 
 /// AST node that represents a TOML inline table.
 ///

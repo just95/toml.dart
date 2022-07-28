@@ -5,9 +5,9 @@ import 'package:petitparser/petitparser.dart';
 
 import '../../../decoder/parser/ranges.dart';
 import '../../../util/parser.dart';
-import '../../value.dart';
 import '../../visitor/value/primitive.dart';
 import '../primitive.dart';
+import '../type.dart';
 
 /// A TOML integer can be formatted with one of four bases.
 class TomlIntegerFormat {

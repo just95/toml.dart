@@ -109,10 +109,10 @@ void main() {
               TomlLiteralString('value'),
             )),
             throwsA(equals(
-              TomlAccessorTypeException(
+              TomlValueTypeException(
                 TomlAccessorKey.from(['a', 'b']),
-                expectedType: TomlAccessorType.table,
-                actualType: TomlAccessorType.value,
+                expectedTypes: {TomlValueType.table},
+                actualType: TomlValueType.string,
               ),
             )),
           );
@@ -139,10 +139,10 @@ void main() {
               TomlLiteralString('value'),
             )),
             throwsA(equals(
-              TomlAccessorTypeException(
+              TomlValueTypeException(
                 TomlAccessorKey.from(['a']),
-                expectedType: TomlAccessorType.table,
-                actualType: TomlAccessorType.value,
+                expectedTypes: {TomlValueType.table},
+                actualType: TomlValueType.string,
               ),
             )),
           );
@@ -347,10 +347,10 @@ void main() {
             TomlUnquotedKey('child1'),
             TomlUnquotedKey('child2'),
           ]))),
-          throwsA(equals(TomlAccessorTypeException(
+          throwsA(equals(TomlValueTypeException(
             TomlAccessorKey.from(['key']),
-            expectedType: TomlAccessorType.table,
-            actualType: TomlAccessorType.value,
+            expectedTypes: {TomlValueType.table},
+            actualType: TomlValueType.string,
           ))),
         );
       });
@@ -610,10 +610,10 @@ void main() {
           () => builder.visitArrayTable(TomlArrayTable(
             TomlKey([TomlUnquotedKey('key'), TomlUnquotedKey('array')]),
           )),
-          throwsA(equals(TomlAccessorTypeException(
+          throwsA(equals(TomlValueTypeException(
             TomlAccessorKey.from(['key']),
-            expectedType: TomlAccessorType.table,
-            actualType: TomlAccessorType.value,
+            expectedTypes: {TomlValueType.table},
+            actualType: TomlValueType.string,
           ))),
         );
       });
@@ -687,10 +687,10 @@ void main() {
               ]),
               TomlLiteralString('value'),
             )),
-            throwsA(equals(TomlAccessorTypeException(
+            throwsA(equals(TomlValueTypeException(
               TomlAccessorKey.from(['table', 'array']),
-              expectedType: TomlAccessorType.table,
-              actualType: TomlAccessorType.array,
+              expectedTypes: {TomlValueType.table},
+              actualType: TomlValueType.array,
             ))),
           );
         },
@@ -715,10 +715,10 @@ void main() {
               ]),
               TomlLiteralString('value'),
             )),
-            throwsA(equals(TomlAccessorTypeException(
+            throwsA(equals(TomlValueTypeException(
               TomlAccessorKey.from(['table', 'array']),
-              expectedType: TomlAccessorType.table,
-              actualType: TomlAccessorType.array,
+              expectedTypes: {TomlValueType.table},
+              actualType: TomlValueType.array,
             ))),
           );
         },

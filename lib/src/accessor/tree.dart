@@ -7,18 +7,6 @@ import '../exception.dart';
 import 'key.dart';
 import 'visitor/tree.dart';
 
-/// Data type for the different types of nodes of the accessor data structure.
-enum TomlAccessorType {
-  /// Type of array nodes.
-  array,
-
-  /// Type of table nodes.
-  table,
-
-  /// Type of value nodes.
-  value,
-}
-
 /// Base class for a data structure that models a TOML document semantically
 /// and provides (extension) methods to access the configuration values.
 ///
@@ -35,44 +23,44 @@ abstract class TomlAccessor {
   /// A settable version of [nodeName].
   final TomlSettableAccessorKey _nodeName = TomlSettableAccessorKey();
 
-  /// The node type of this node.
-  TomlAccessorType get type;
+  /// The type of the value represented by this node.
+  TomlValueType get type;
 
   /// Whether this node represents an array of tables or array value.
-  bool get isArray => type == TomlAccessorType.array;
+  bool get isArray => this is TomlArrayAccessor;
 
   /// Whether this node represents a table or inline table.
-  bool get isTable => type == TomlAccessorType.table;
+  bool get isTable => this is TomlTableAccessor;
 
   /// Whether this node represents a non-composite value.
-  bool get isValue => type == TomlAccessorType.value;
+  bool get isValue => this is TomlValueAccessor;
 
   /// Ensures that this node is of the given type.
   ///
-  /// Returns that this node or throws a [TomlAccessorTypeException] if the
-  /// runtime type don't match [T]. The [expectedType] is not used for the
-  /// comparison but only for the error message in case of a mismatch.
-  T _expectType<T extends TomlAccessor>(TomlAccessorType expectedType) {
+  /// Returns this node or throws a [TomlValueTypeException] if the runtime
+  /// type don't match [T]. The [expectedTypes] are not used for the comparison
+  /// but only for the error message in case of a mismatch.
+  T _expectType<T extends TomlAccessor>(Set<TomlValueType> expectedTypes) {
     var self = this;
     if (self is T) return self;
-    throw TomlAccessorTypeException(
+    throw TomlValueTypeException(
       nodeName,
-      expectedType: expectedType,
+      expectedTypes: expectedTypes,
       actualType: type,
     );
   }
 
   /// Ensures that this node is a [TomlArrayAccessor].
   TomlArrayAccessor expectArray() =>
-      _expectType<TomlArrayAccessor>(TomlAccessorType.array);
+      _expectType<TomlArrayAccessor>({TomlValueType.array});
 
   /// Ensures that this node is a [TomlTableAccessor].
   TomlTableAccessor expectTable() =>
-      _expectType<TomlTableAccessor>(TomlAccessorType.table);
+      _expectType<TomlTableAccessor>({TomlValueType.table});
 
   /// Ensures that this node is a [TomlValueAccessor].
   TomlValueAccessor expectValue() =>
-      _expectType<TomlValueAccessor>(TomlAccessorType.value);
+      _expectType<TomlValueAccessor>(TomlPrimitiveValue.types);
 
   /// Invokes the correct `visit*` method for this value of the given visitor.
   R acceptVisitor<R>(TomlAccessorVisitor<R> visitor);
@@ -111,7 +99,7 @@ class TomlArrayAccessor extends TomlAccessor {
   ]) : _items = List.of(items);
 
   @override
-  TomlAccessorType get type => TomlAccessorType.array;
+  TomlValueType get type => TomlValueType.array;
 
   /// Gets the child node with the given index from this array.
   TomlAccessor getItem(int index) => items[index];
@@ -175,7 +163,7 @@ class TomlTableAccessor extends TomlAccessor {
   ]) : _children = Map.of(children);
 
   @override
-  TomlAccessorType get type => TomlAccessorType.table;
+  TomlValueType get type => TomlValueType.table;
 
   /// Gets the child node with the given name.
   ///
@@ -220,7 +208,7 @@ class TomlValueAccessor extends TomlAccessor {
   TomlValueAccessor(this.valueNode);
 
   @override
-  TomlAccessorType get type => TomlAccessorType.value;
+  TomlValueType get type => valueNode.type;
 
   @override
   R acceptVisitor<R>(TomlAccessorVisitor<R> visitor) =>

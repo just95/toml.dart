@@ -24,6 +24,7 @@ export 'ast/value/primitive/string/basic.dart';
 export 'ast/value/primitive/string/literal.dart';
 export 'ast/value/primitive/string/ml_basic.dart';
 export 'ast/value/primitive/string/ml_literal.dart';
+export 'ast/value/type.dart';
 export 'ast/visitor/expression.dart';
 export 'ast/visitor/key.dart';
 export 'ast/visitor/node.dart';

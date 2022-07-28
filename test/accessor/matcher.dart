@@ -22,10 +22,10 @@ class TomlAccessorTypeMismatch implements TomlAccessorMismatch {
   final TomlAccessorKey key;
 
   /// The expected type of the accessor.
-  final TomlAccessorType expectedType;
+  final TomlValueType expectedType;
 
   /// The actual type of the accessor.
-  final TomlAccessorType actualType;
+  final TomlValueType actualType;
 
   /// Creates a new mismatch for accessors of different types.
   TomlAccessorTypeMismatch({
@@ -42,13 +42,13 @@ class TomlAccessorTypeMismatch implements TomlAccessorMismatch {
 
   /// Gets the string to use for the given type in the description of this
   /// mismatch.
-  String _typeToString(TomlAccessorType type) {
+  String _typeToString(TomlValueType type) {
     switch (type) {
-      case TomlAccessorType.array:
+      case TomlValueType.array:
         return 'an array';
-      case TomlAccessorType.table:
+      case TomlValueType.table:
         return 'a table';
-      case TomlAccessorType.value:
+      default:
         return 'a primitive value';
     }
   }

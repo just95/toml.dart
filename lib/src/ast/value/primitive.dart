@@ -1,5 +1,7 @@
 library toml.src.ast.value.primitive;
 
+import './compound.dart';
+import './type.dart';
 import '../value.dart';
 import '../visitor/value.dart';
 import '../visitor/value/primitive.dart';
@@ -8,6 +10,10 @@ import '../visitor/value/primitive.dart';
 /// values that do not consist of other TOML values like booleans, integers,
 /// floats, strings and date-times.
 abstract class TomlPrimitiveValue extends TomlValue {
+  /// Set of [TomlType]s that are allowed as the [type] of subclasses.
+  static Set<TomlValueType> types =
+      TomlValueType.values.toSet().difference(TomlCompoundValue.types);
+
   @override
   T acceptValueVisitor<T>(TomlValueVisitor<T> visitor) =>
       visitor.visitPrimitiveValue(this);

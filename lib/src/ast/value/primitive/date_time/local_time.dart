@@ -4,8 +4,8 @@ import 'package:meta/meta.dart';
 import 'package:petitparser/petitparser.dart';
 
 import '../../../../exception.dart';
-import '../../../value.dart';
 import '../../../visitor/value/primitive/date_time.dart';
+import '../../type.dart';
 import '../date_time.dart';
 import 'local_date_time.dart';
 

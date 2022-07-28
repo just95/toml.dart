@@ -3,10 +3,10 @@ library toml.src.ast.value.primitive.string;
 import 'package:petitparser/petitparser.dart';
 
 import '../../../util/parser.dart';
-import '../../value.dart';
 import '../../visitor/value/primitive.dart';
 import '../../visitor/value/primitive/string.dart';
 import '../primitive.dart';
+import '../type.dart';
 import 'string/basic.dart';
 import 'string/literal.dart';
 import 'string/ml_basic.dart';
