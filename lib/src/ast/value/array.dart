@@ -35,11 +35,14 @@ class TomlArray extends TomlValue {
 
   /// Parser for a TOML array value.
   static final Parser<TomlArray> parser = TomlValue.parser
-      .surroundedBy(tomlWhitespaceCommentNewline)
+      .skip(
+        before: tomlWhitespaceCommentNewline,
+        after: tomlWhitespaceCommentNewline,
+      )
       .separatedWithout(char(separator), optionalSeparatorAtEnd: true)
       .optionalWith(<TomlValue>[])
-      .followedBy(tomlWhitespaceCommentNewline)
-      .surroundedBy(char(openingDelimiter), char(closingDelimiter))
+      .skip(after: tomlWhitespaceCommentNewline)
+      .skip(before: char(openingDelimiter), after: char(closingDelimiter))
       .map(TomlArray.new);
 
   /// The array items.

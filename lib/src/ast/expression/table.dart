@@ -58,8 +58,8 @@ class TomlStandardTable extends TomlTable {
 
   /// Parser for a standard TOML table header.
   static final Parser<TomlStandardTable> parser = TomlKey.parser
-      .surroundedBy(tomlWhitespace)
-      .surroundedBy(char(openingDelimiter), char(closingDelimiter))
+      .trim(tomlWhitespaceChar)
+      .skip(before: char(openingDelimiter), after: char(closingDelimiter))
       .map(TomlStandardTable.new);
 
   /// Creates a new TOML standard table.
@@ -98,10 +98,10 @@ class TomlArrayTable extends TomlTable {
 
   /// Parser for a TOML array of tables header.
   static final Parser<TomlArrayTable> parser = TomlKey.parser
-      .surroundedBy(tomlWhitespace)
-      .surroundedBy(
-        string(openingDelimiter, '"$openingDelimiter" expected'),
-        string(closingDelimiter, '"$closingDelimiter" expected'),
+      .trim(tomlWhitespaceChar)
+      .skip(
+        before: string(openingDelimiter, '"$openingDelimiter" expected'),
+        after: string(closingDelimiter, '"$closingDelimiter" expected'),
       )
       .map(TomlArrayTable.new);
 

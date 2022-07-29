@@ -71,12 +71,10 @@ abstract class TomlSinglelineString extends TomlString {
   /// multiline strings that contain syntax errors and the unconsumed quotation
   /// mark would cause a less descriptive error message later.
   static final Parser<TomlSinglelineString> parser = ChoiceParser([
-    string(TomlMultilineBasicString.delimiter)
-        .not()
-        .before(TomlBasicString.parser),
-    string(TomlMultilineLiteralString.delimiter)
-        .not()
-        .before(TomlLiteralString.parser),
+    TomlBasicString.parser
+        .skip(before: string(TomlMultilineBasicString.delimiter).not()),
+    TomlLiteralString.parser
+        .skip(before: string(TomlMultilineLiteralString.delimiter).not()),
   ], failureJoiner: selectFarthestJoined);
 }
 

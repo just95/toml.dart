@@ -24,12 +24,11 @@ class TomlMultilineLiteralString extends TomlMultilineString {
   /// Parser for a multiline literal TOML string value.
   ///
   /// A newline immediately following the opening delimiter is trimmed.
-  static final Parser<TomlMultilineLiteralString> parser = tomlNewline
-      .optional()
-      .before(bodyParser)
-      .surroundedBy(
-        string(delimiter, 'opening "$delimiter" expected'),
-        string(delimiter, 'closing "$delimiter" expected'),
+  static final Parser<TomlMultilineLiteralString> parser = bodyParser
+      .skip(before: tomlNewline.optional())
+      .skip(
+        before: string(delimiter, 'opening "$delimiter" expected'),
+        after: string(delimiter, 'closing "$delimiter" expected'),
       )
       .map(TomlMultilineLiteralString._fromEncodable);
 

@@ -22,8 +22,8 @@ class TomlKeyValuePair extends TomlExpression {
 
   /// Parser for a TOML key/value pair.
   static final Parser<TomlKeyValuePair> parser = PairParser(
-    TomlKey.parser.followedBy(
-      tomlWhitespace & char(separator) & tomlWhitespace,
+    TomlKey.parser.skip(
+      after: tomlWhitespace & char(separator) & tomlWhitespace,
     ),
     TomlValue.parser,
   ).map((pair) => TomlKeyValuePair(pair.first, pair.second));

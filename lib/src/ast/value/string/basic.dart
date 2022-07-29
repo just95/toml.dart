@@ -24,9 +24,9 @@ class TomlBasicString extends TomlSinglelineString {
   static final Parser<TomlBasicString> parser = charParser
       .star()
       .join()
-      .surroundedBy(
-        char(delimiter, "opening '$delimiter' expected"),
-        char(delimiter, "closing '$delimiter' expected"),
+      .skip(
+        before: char(delimiter, "opening '$delimiter' expected"),
+        after: char(delimiter, "closing '$delimiter' expected"),
       )
       .map(TomlBasicString._fromEncodable);
 
