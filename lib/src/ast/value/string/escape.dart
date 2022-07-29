@@ -5,7 +5,6 @@ import 'package:petitparser/petitparser.dart';
 import '../../../decoder/exception/invalid_escape_sequence.dart';
 import '../../../decoder/parser/ranges.dart';
 import '../../../decoder/parser/whitespace.dart';
-import '../../../util/parser.dart';
 
 /// Collection of parsers for escape sequences.
 abstract class TomlEscapedChar {

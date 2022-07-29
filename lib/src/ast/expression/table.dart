@@ -4,7 +4,6 @@ import 'package:meta/meta.dart';
 import 'package:petitparser/petitparser.dart';
 
 import '../../decoder/parser/whitespace.dart';
-import '../../util/parser.dart';
 import '../expression.dart';
 import '../key.dart';
 import '../visitor/expression.dart';
