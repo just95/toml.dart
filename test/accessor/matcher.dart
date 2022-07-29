@@ -36,22 +36,9 @@ class TomlAccessorTypeMismatch implements TomlAccessorMismatch {
 
   @override
   Description describe(Description description) => description.add(
-        'expected ${_typeToString(expectedType)}, '
-        'but got ${_typeToString(actualType)}',
+        'expected ${expectedType.description}, '
+        'but got ${actualType.description}',
       );
-
-  /// Gets the string to use for the given type in the description of this
-  /// mismatch.
-  String _typeToString(TomlValueType type) {
-    switch (type) {
-      case TomlValueType.array:
-        return 'an array';
-      case TomlValueType.table:
-        return 'a table';
-      default:
-        return 'a primitive value';
-    }
-  }
 }
 
 /// A mismatch that indicates that two array accessors have a different number

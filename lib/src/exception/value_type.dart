@@ -51,33 +51,9 @@ class TomlValueTypeException extends TomlException {
       Object.hashAll([...expectedTypes, actualType, ...name.parts]);
 
   @override
-  String get message =>
-      'Expected `$name` to be ${expectedTypes.map(_typeToString).join(' or ')},'
-      ' but it is defined as ${_typeToString(actualType)}.';
-
-  /// Gets the string to use for the given type in the [message].
-  String _typeToString(TomlValueType type) {
-    switch (type) {
-      case TomlValueType.array:
-        return "an array";
-      case TomlValueType.boolean:
-        return "a boolean";
-      case TomlValueType.float:
-        return "a float";
-      case TomlValueType.integer:
-        return "an integer";
-      case TomlValueType.string:
-        return "a string";
-      case TomlValueType.table:
-        return "an inline table";
-      case TomlValueType.offsetDateTime:
-        return "an offset date-time";
-      case TomlValueType.localDateTime:
-        return "a local date-time";
-      case TomlValueType.localDate:
-        return "a local date";
-      case TomlValueType.localTime:
-        return "a local time";
-    }
+  String get message {
+    var expectedTypeDescriptions = expectedTypes.map((t) => t.description);
+    return 'Expected `$name` to be ${expectedTypeDescriptions.join(' or ')},'
+        ' but it is defined as ${actualType.description}.';
   }
 }
