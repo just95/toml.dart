@@ -4,7 +4,7 @@
 name: Example CI
 
 # Trigger the workflow whenever commits are pushed to the `main` branch or
-# development braches with the `-ci` postfix.
+# development branches with the `-ci` postfix.
 # The workflow also runs when it is modified itself or source files outside of
 # the `example` directory change because the examples depend on the `toml`
 # package. However, source files of the `toml` package for tests can be ignored.
@@ -13,16 +13,16 @@ name: Example CI
 on:
   push:
     branches:
-      - 'main'
-      - '*-ci'
+      - "main"
+      - "*-ci"
     paths:
-      - '.github/workflows/example.yaml'
-      - 'lib/**'
-      - 'tool/*example*.sh'
-      - 'example/**'
-      - '*.yaml'
+      - ".github/workflows/example.yaml"
+      - "lib/**"
+      - "tool/*example*.sh"
+      - "example/**"
+      - "*.yaml"
   schedule:
-      - cron: "0 6 * * *"
+    - cron: "0 6 * * *"
 
 jobs:
   # Analyzes the Dart code of the examples (i.e., all `.dart` files in the
@@ -39,7 +39,7 @@ jobs:
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
-          channel: 'stable'
+          channel: "stable"
       - name: Print Dart SDK Version
         run: dart --version
       - name: Print Flutter SDK Version
@@ -65,9 +65,9 @@ jobs:
       - name: Install Dependencies of Examples
         run: ./tool/get-example-dependencies.sh
       - name: Check Code Formatting of Examples
-        run: './tool/format-examples.sh --show all
-                                        --output none
-                                        --set-exit-if-changed'
+        run: "./tool/format-examples.sh --show all
+          --output none
+          --set-exit-if-changed"
 
   # Runs the `tool/test.sh` scripts of the `example`s.
   test-examples:
@@ -81,7 +81,7 @@ jobs:
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
-          channel: 'stable'
+          channel: "stable"
       - name: Print Dart SDK Version
         run: dart --version
       - name: Install Dependencies of Examples
