@@ -21,7 +21,7 @@ class TomlOffsetDateTime extends TomlDateTime {
   static final Parser<TomlOffsetDateTime> parser = PairParser(
       TomlFullDate.parser,
       PairParser(
-        anyOf('Tt ').before(TomlPartialTime.parser),
+        TomlPartialTime.parser.skip(before: anyOf('Tt ')),
         TomlTimeZoneOffset.parser,
       )).map((pair) => TomlOffsetDateTime(
         pair.first,

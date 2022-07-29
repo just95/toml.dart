@@ -4,7 +4,6 @@ import 'package:meta/meta.dart';
 import 'package:petitparser/petitparser.dart';
 
 import '../../decoder/parser/whitespace.dart';
-import '../../util/parser.dart';
 import '../expression.dart';
 import '../key.dart';
 import '../visitor/expression.dart';
@@ -58,8 +57,8 @@ class TomlStandardTable extends TomlTable {
 
   /// Parser for a standard TOML table header.
   static final Parser<TomlStandardTable> parser = TomlKey.parser
-      .surroundedBy(tomlWhitespace)
-      .surroundedBy(char(openingDelimiter), char(closingDelimiter))
+      .trim(tomlWhitespaceChar)
+      .skip(before: char(openingDelimiter), after: char(closingDelimiter))
       .map(TomlStandardTable.new);
 
   /// Creates a new TOML standard table.
@@ -98,10 +97,10 @@ class TomlArrayTable extends TomlTable {
 
   /// Parser for a TOML array of tables header.
   static final Parser<TomlArrayTable> parser = TomlKey.parser
-      .surroundedBy(tomlWhitespace)
-      .surroundedBy(
-        string(openingDelimiter, '"$openingDelimiter" expected'),
-        string(closingDelimiter, '"$closingDelimiter" expected'),
+      .trim(tomlWhitespaceChar)
+      .skip(
+        before: string(openingDelimiter, '"$openingDelimiter" expected'),
+        after: string(closingDelimiter, '"$closingDelimiter" expected'),
       )
       .map(TomlArrayTable.new);
 

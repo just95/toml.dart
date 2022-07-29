@@ -20,7 +20,7 @@ class TomlLocalDateTime extends TomlDateTime {
   /// Parser for a TOML local date-time value.
   static final Parser<TomlLocalDateTime> parser = PairParser(
     TomlFullDate.parser,
-    anyOf('Tt ').before(TomlPartialTime.parser),
+    TomlPartialTime.parser.skip(before: anyOf('Tt ')),
   ).map((pair) => TomlLocalDateTime(pair.first, pair.second));
 
   /// Parses the given string as a TOML local date-time.

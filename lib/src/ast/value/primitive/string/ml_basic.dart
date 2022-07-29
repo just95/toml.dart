@@ -23,12 +23,11 @@ class TomlMultilineBasicString extends TomlMultilineString {
   static final String delimiter = TomlBasicString.delimiter * 3;
 
   /// Parser for a multiline basic TOML string value.
-  static final Parser<TomlMultilineBasicString> parser = tomlNewline
-      .optional()
-      .before(bodyParser)
-      .surroundedBy(
-        string(delimiter, "opening '$delimiter' expected"),
-        string(delimiter, "closing '$delimiter' expected"),
+  static final Parser<TomlMultilineBasicString> parser = bodyParser
+      .skip(before: tomlNewline.optional())
+      .skip(
+        before: string(delimiter, "opening '$delimiter' expected"),
+        after: string(delimiter, "closing '$delimiter' expected"),
       )
       .map(TomlMultilineBasicString._fromEncodable);
 

@@ -5,7 +5,6 @@ import 'package:petitparser/petitparser.dart';
 import '../../../../decoder/parser/ranges.dart';
 import '../../../../decoder/parser/whitespace.dart';
 import '../../../../exception.dart';
-import '../../../../util/parser.dart';
 
 /// Collection of parsers for escape sequences.
 abstract class TomlEscapedChar {
@@ -53,10 +52,13 @@ abstract class TomlEscapedChar {
   /// Parser for escaped characters.
   ///
   ///     escaped = escape escape-seq-char
-  static final Parser<String> parser = char(escapeChar).before(ChoiceParser([
+  static final Parser<String> parser = _parser.skip(before: char(escapeChar));
+
+  /// Like [parser] but without the [escapeChar].
+  static final Parser<String> _parser = ChoiceParser([
     escapedUnicodeParser,
     escapedCharParser,
-  ], failureJoiner: selectFarthest));
+  ], failureJoiner: selectFarthest);
 
   /// Parser for escaped characters with shorthand notation.
   ///
@@ -84,12 +86,14 @@ abstract class TomlEscapedChar {
   ///     escape-seq-char =/ %x75 4HEXDIG ; uXXXX                U+XXXX
   ///     escape-seq-char =/ %x55 8HEXDIG ; UXXXXXXXX            U+XXXXXXXX
   static final Parser<String> escapedUnicodeParser = ChoiceParser([
-    char('u').before(
-      tomlHexDigit().times(4).flatten('Four hexadecimal digits expected'),
-    ),
-    char('U').before(
-      tomlHexDigit().times(8).flatten('Eight hexadecimal digits expected'),
-    )
+    tomlHexDigit()
+        .times(4)
+        .flatten('Four hexadecimal digits expected')
+        .skip(before: char('u')),
+    tomlHexDigit()
+        .times(8)
+        .flatten('Eight hexadecimal digits expected')
+        .skip(before: char('U'))
   ]).map((charCodeStr) {
     var charCode = int.parse(charCodeStr, radix: 16);
     if (isScalarUnicodeValue(charCode)) {

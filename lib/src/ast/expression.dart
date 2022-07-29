@@ -3,7 +3,6 @@ library toml.src.ast.expression;
 import 'package:petitparser/petitparser.dart';
 
 import '../decoder/parser/whitespace.dart';
-import '../util/parser.dart';
 import 'expression/key_value_pair.dart';
 import 'expression/table.dart';
 import 'node.dart';
@@ -28,21 +27,21 @@ abstract class TomlExpression extends TomlNode {
 
   /// Parser for a TOML key value pair with indentation and an optional comment.
   static final Parser<TomlExpression> _keyvalParser = TomlKeyValuePair.parser
-      .surroundedBy(tomlWhitespace)
-      .followedBy(tomlComment.optional())
-      .followedBy(_lookAheadParser);
+      .trim(tomlWhitespaceChar)
+      .skip(after: tomlComment.optional())
+      .skip(after: _lookAheadParser);
 
   /// Parser for TOML table header with indentation and an optional comment.
   static final Parser<TomlExpression> _tableParser = TomlTable.parser
-      .surroundedBy(tomlWhitespace)
-      .followedBy(tomlComment.optional())
-      .followedBy(_lookAheadParser);
+      .trim(tomlWhitespaceChar)
+      .skip(after: tomlComment.optional())
+      .skip(after: _lookAheadParser);
 
   /// Parser for blank line with optional comment.
   static final Parser<void> _blankParser = epsilonWith(null)
-      .followedBy(tomlWhitespace)
-      .followedBy(tomlComment.optional())
-      .followedBy(_lookAheadParser);
+      .skip(after: tomlWhitespace)
+      .skip(after: tomlComment.optional())
+      .skip(after: _lookAheadParser);
 
   /// A parser that looks ahead for a newline or end of input but does not
   /// consume anything.

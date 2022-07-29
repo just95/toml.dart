@@ -41,8 +41,8 @@ class TomlInlineTable extends TomlCompoundValue {
   static final Parser<TomlInlineTable> parser = TomlKeyValuePair.parser
       .separatedWithout(tomlWhitespace & char(separator) & tomlWhitespace)
       .optionalWith(<TomlKeyValuePair>[])
-      .surroundedBy(tomlWhitespace)
-      .surroundedBy(char(openingDelimiter), char(closingDelimiter))
+      .trim(tomlWhitespaceChar)
+      .skip(before: char(openingDelimiter), after: char(closingDelimiter))
       .map(TomlInlineTable.new);
 
   /// The key/value pairs of the inline table.

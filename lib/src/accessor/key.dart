@@ -34,11 +34,8 @@ abstract class TomlAccessorKey {
   ///
   /// A standard dotted key is also an accessor key. However, there is
   /// additional syntax for identifying array items.
-  static TomlAccessorKey parse(String input) => parser
-      .surroundedBy(tomlWhitespace)
-      .end()
-      .parse(input)
-      .valueOrTomlException;
+  static TomlAccessorKey parse(String input) =>
+      parser.trim(tomlWhitespaceChar).end().parse(input).valueOrTomlException;
 
   /// Constructs a new key from the given object.
   ///
@@ -153,9 +150,8 @@ class TomlNameAccessorKey extends TomlAccessorKey {
   /// Parser for a name key prefixed with a dot.
   ///
   ///     prefixed-name-accessor-key = dot-sep unprefixed-name-accessor-key
-  static final Parser<String> prefixedParser = char(TomlKey.separator)
-      .surroundedBy(tomlWhitespace)
-      .before(unprefixedParser);
+  static final Parser<String> prefixedParser = unprefixedParser.skip(
+      before: char(TomlKey.separator).trim(tomlWhitespaceChar));
 
   @override
   Iterable<dynamic> get parts sync* {
@@ -190,13 +186,14 @@ class TomlIndexAccessorKey extends TomlAccessorKey {
   /// Parser for an index key.
   ///
   ///     index-accessor-key = ws array-open ws integer ws array-close
-  static final Parser<int> parser = tomlWhitespace.before(TomlInteger.parser
-      .surroundedBy(tomlWhitespace)
-      .surroundedBy(
-        char(TomlArray.openingDelimiter),
-        char(TomlArray.closingDelimiter),
+  static final Parser<int> parser = TomlInteger.parser
+      .trim(tomlWhitespaceChar)
+      .skip(
+        before: char(TomlArray.openingDelimiter),
+        after: char(TomlArray.closingDelimiter),
       )
-      .map((index) => index.value.toInt()));
+      .skip(before: tomlWhitespace)
+      .map((index) => index.value.toInt());
 
   @override
   bool get isTopLevelKey => false;

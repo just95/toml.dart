@@ -44,8 +44,8 @@ Parser<int> _dd =
 class TomlFullDate {
   /// Parser for a full date.
   static final Parser<TomlFullDate> parser = SequenceParser([
-    _dddd.followedBy(char('-')),
-    _dd.followedBy(char('-')),
+    _dddd.skip(after: char('-')),
+    _dd.skip(after: char('-')),
     _dd,
   ]).map((xs) => TomlFullDate(xs[0], xs[1], xs[2]));
 
@@ -108,11 +108,11 @@ class TomlPartialTime {
   /// Parser for a partial time value with microsecond precision.
   static final Parser<TomlPartialTime> parser = PairParser(
           SequenceParser([
-            _dd.followedBy(char(':')),
-            _dd.followedBy(char(':')),
+            _dd.skip(after: char(':')),
+            _dd.skip(after: char(':')),
             _dd,
           ]),
-          char('.').before(_ddd.plus()).optionalWith(<int>[]))
+          _ddd.plus().skip(before: char('.')).optionalWith(<int>[]))
       .map((pair) => TomlPartialTime(
             pair.first[0],
             pair.first[1],
@@ -230,18 +230,18 @@ class TomlTimeZoneOffset {
       anyOf('zZ').map((_) => TomlTimeZoneOffset.utc());
 
   /// Parser for a positive time-zone offset.
-  static final Parser<TomlTimeZoneOffset> _positiveParser = char('+')
-      .before(_unsignedParser)
+  static final Parser<TomlTimeZoneOffset> _positiveParser = _unsignedParser
+      .skip(before: char('+'))
       .map((pair) => TomlTimeZoneOffset.positive(pair.first, pair.second));
 
   /// Parser for a negative time-zone offset.
-  static final Parser<TomlTimeZoneOffset> _negativeParser = char('-')
-      .before(_unsignedParser)
+  static final Parser<TomlTimeZoneOffset> _negativeParser = _unsignedParser
+      .skip(before: char('-'))
       .map((pair) => TomlTimeZoneOffset.negative(pair.first, pair.second));
 
   /// Parser for an unsigned time-zone offset.
   static final Parser<Pair<int, int>> _unsignedParser =
-      PairParser(_dd.followedBy(char(':')), _dd);
+      PairParser(_dd.skip(after: char(':')), _dd);
 
   /// Whether this offset identifies the UTC time-zone.
   ///

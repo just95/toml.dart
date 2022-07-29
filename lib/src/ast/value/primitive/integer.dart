@@ -131,7 +131,7 @@ class TomlInteger extends TomlPrimitiveValue {
             radix: format.base,
           ),
         );
-    return string(format.prefix).before(integerParser).orFailure(message);
+    return integerParser.skip(before: string(format.prefix)).orFailure(message);
   }
 
   /// The number represented by this node.
