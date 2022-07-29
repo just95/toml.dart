@@ -142,6 +142,12 @@ class TomlAccessorValueMismatch implements TomlAccessorMismatch {
 ///
 /// The [equals] matcher cannot be used because 'TomlAccessor' does not
 /// override `operator ==` since it is not immutable.
+///
+/// - Two [TomlAccessor]s of different [TomlAccessor.type]s do not match.
+/// - Two [TomlArrayAccessor]s of different lengths do not match.
+/// - Two [TomlTableAccessor]s with different key sets do not match.
+/// - Two [TomlValueAccessor]s only match if the [TomlValueAccessor.valueNode]s
+///   are equal according to their implementation of `operator ==`.
 class TomlAccessorMatcher extends Matcher {
   /// The accessor that is expected by this matcher.
   final TomlAccessor expected;
@@ -152,93 +158,10 @@ class TomlAccessorMatcher extends Matcher {
   @override
   bool matches(dynamic item, Map matchState) {
     if (item is! TomlAccessor) return false;
-    var mismatch = _matchAccessors(item, expected);
+    var matcher = _TomlAccessorMatcher(expected);
+    var mismatch = item.acceptVisitor(matcher);
     matchState['mismatch'] = mismatch;
     return mismatch == null;
-  }
-
-  /// Matches the given two accessors.
-  TomlAccessorMismatch? _matchAccessors(
-    TomlAccessor current,
-    TomlAccessor other,
-  ) {
-    // Ensure that both nodes are of the same node type.
-    if (current.type != other.type) {
-      return TomlAccessorTypeMismatch(
-        key: current.nodeName,
-        expectedType: other.type,
-        actualType: current.type,
-      );
-    }
-
-    // Invoke the match method corresponding to the node type.
-    return current.match(
-      array: (array) => _matchArrayAccessors(array, other.expectArray()),
-      table: (table) => _matchTableAccessors(table, other.expectTable()),
-      value: (value) => _matchValueAccessors(value, other.expectValue()),
-    );
-  }
-
-  /// Compares two array accessors.
-  TomlAccessorMismatch? _matchArrayAccessors(
-    TomlArrayAccessor current,
-    TomlArrayAccessor other,
-  ) {
-    // Test whether both arrays have the same number of items.
-    if (current.items.length != other.items.length) {
-      return TomlAccessorArrayLengthMismatch(
-        key: current.nodeName,
-        expectedLength: other.items.length,
-        actualLength: current.items.length,
-      );
-    }
-
-    // Test whether the items match.
-    return Iterable<int>.generate(current.items.length)
-        .map((i) => _matchAccessors(current.items[i], other.items[i]))
-        .whereNotNull()
-        .firstOrNull;
-  }
-
-  /// Compares two table accessors.
-  TomlAccessorMismatch? _matchTableAccessors(
-    TomlTableAccessor current,
-    TomlTableAccessor other,
-  ) {
-    // Test whether the tables have the same key set.
-    var currentKeys = current.children.keys.toSet();
-    var otherKeys = other.children.keys.toSet();
-    if (!SetEquality().equals(currentKeys, otherKeys)) {
-      return TomlAccessorTableKeysMismatch(
-        key: current.nodeName,
-        missingKeys: otherKeys.difference(currentKeys),
-        unexpectedKeys: currentKeys.difference(otherKeys),
-      );
-    }
-
-    // Test whether the values with the same key match.
-    return currentKeys
-        .map((key) => _matchAccessors(
-              current.children[key]!,
-              other.children[key]!,
-            ))
-        .whereNotNull()
-        .firstOrNull;
-  }
-
-  /// Compares two value accessors.
-  TomlAccessorMismatch? _matchValueAccessors(
-    TomlValueAccessor current,
-    TomlValueAccessor other,
-  ) {
-    if (current.valueNode != other.valueNode) {
-      return TomlAccessorValueMismatch(
-        key: current.nodeName,
-        expectedValue: other.valueNode,
-        actualValue: current.valueNode,
-      );
-    }
-    return null;
   }
 
   @override
@@ -264,7 +187,101 @@ class TomlAccessorMatcher extends Matcher {
   }
 }
 
+/// A visitor that matches two accessors.
+class _TomlAccessorMatcher
+    with TomlAccessorVisitorMixin<TomlAccessorMismatch?> {
+  /// The accessor that visited accessor are expected to match.
+  final TomlAccessor expected;
+
+  /// Creates a new matcher that compares accessors to the given [expected]
+  /// accessor.
+  _TomlAccessorMatcher(this.expected);
+
+  @override
+  TomlAccessorMismatch? visitAccessor(TomlAccessor accessor) {
+    // Ensure that both nodes are of the same node type.
+    if (accessor.type != expected.type) {
+      return TomlAccessorTypeMismatch(
+        key: accessor.nodeName,
+        expectedType: expected.type,
+        actualType: accessor.type,
+      );
+    }
+
+    // Invoke the match method corresponding to the node type.
+    return super.visitAccessor(accessor);
+  }
+
+  @override
+  TomlAccessorMismatch? visitArrayAccessor(TomlArrayAccessor actualArray) {
+    var expectedArray = expected.expectArray();
+
+    // Test whether both arrays have the same number of items.
+    if (actualArray.items.length != expectedArray.items.length) {
+      return TomlAccessorArrayLengthMismatch(
+        key: actualArray.nodeName,
+        expectedLength: expectedArray.items.length,
+        actualLength: actualArray.items.length,
+      );
+    }
+
+    // Test whether the items match.
+    return Iterable<int>.generate(actualArray.items.length)
+        .map((i) {
+          var actualItem = actualArray.items[i];
+          var expectedItem = expectedArray.items[i];
+          var matcher = _TomlAccessorMatcher(expectedItem);
+          return matcher.visitAccessor(actualItem);
+        })
+        .whereNotNull()
+        .firstOrNull;
+  }
+
+  @override
+  TomlAccessorMismatch? visitTableAccessor(TomlTableAccessor actualTable) {
+    var expectedTable = expected.expectTable();
+
+    // Test whether the tables have the same key set.
+    var currentKeys = actualTable.children.keys.toSet();
+    var otherKeys = expectedTable.children.keys.toSet();
+    if (!SetEquality().equals(currentKeys, otherKeys)) {
+      return TomlAccessorTableKeysMismatch(
+        key: actualTable.nodeName,
+        missingKeys: otherKeys.difference(currentKeys),
+        unexpectedKeys: currentKeys.difference(otherKeys),
+      );
+    }
+
+    // Test whether the values with the same key match.
+    return currentKeys
+        .map((key) {
+          // Since the key sets are the same, the lookups always succeed.
+          var actualChild = actualTable.children[key]!;
+          var expectedChild = expectedTable.children[key]!;
+          var matcher = _TomlAccessorMatcher(expectedChild);
+          return matcher.visitAccessor(actualChild);
+        })
+        .whereNotNull()
+        .firstOrNull;
+  }
+
+  @override
+  TomlAccessorMismatch? visitValueAccessor(TomlValueAccessor actualValue) {
+    var expectedValue = expected.expectValue();
+
+    if (actualValue.valueNode != expectedValue.valueNode) {
+      return TomlAccessorValueMismatch(
+        key: actualValue.nodeName,
+        expectedValue: expectedValue.valueNode,
+        actualValue: actualValue.valueNode,
+      );
+    }
+
+    return null;
+  }
+}
+
 /// Returns a matcher that matches if the value is equal to the given
-/// [accessor] according to [TomlAccessorEquality].
+/// [accessor] according to [TomlAccessorMatcher].
 TomlAccessorMatcher equalsAccessor(TomlAccessor accessor) =>
     TomlAccessorMatcher(accessor);
