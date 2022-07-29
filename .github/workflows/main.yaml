@@ -4,7 +4,7 @@
 name: Dart CI
 
 # Trigger the workflow whenever commits are pushed to the `main` branch or
-# development braches with the `-ci` postfix that modify source files, tests or
+# development branches with the `-ci` postfix that modify source files, tests or
 # configuration files. There is a separate workflow that checks the example
 # source code. The workflow also runs when it is modified itself.
 #
@@ -12,16 +12,16 @@ name: Dart CI
 on:
   push:
     branches:
-      - 'main'
-      - '*-ci'
+      - "main"
+      - "*-ci"
     paths:
-      - '.github/workflows/main.yaml'
-      - 'bin/**'
-      - 'lib/**'
-      - 'test/**'
-      - '*.yaml'
+      - ".github/workflows/main.yaml"
+      - "bin/**"
+      - "lib/**"
+      - "test/**"
+      - "*.yaml"
   schedule:
-      - cron: "0 6 * * *"
+    - cron: "0 6 * * *"
 
 jobs:
   # Analyzes the Dart code of the package (i.e., all `.dart` files in the `lib`,
@@ -58,10 +58,10 @@ jobs:
       - name: Install Dependencies
         run: dart pub get
       - name: Check Code Formatting
-        run: 'dart format --show all
-                          --output none
-                          --set-exit-if-changed
-                          bin lib test'
+        run: "dart format --show all
+          --output none
+          --set-exit-if-changed
+          bin lib test"
 
   # Runs the unit tests of the package with `dart test` in the Dart VM.
   #
@@ -76,7 +76,7 @@ jobs:
       image: dart:${{ matrix.dart-version }}
     strategy:
       matrix:
-        dart-version: ['2.17', latest]
+        dart-version: ["2.17", latest]
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -85,9 +85,9 @@ jobs:
       - name: Install Dependencies
         run: dart pub get
       - name: Run Unit Tests
-        run: 'dart -DSILENT_OBSERVATORY=true test
-                   test --reporter expanded
-                        --coverage=./coverage/vm/$dart_version'
+        run: "dart -DSILENT_OBSERVATORY=true test
+          test --reporter expanded
+          --coverage=./coverage/vm/$dart_version"
         env:
           dart_version: ${{ matrix.dart-version }}
       - name: Upload Test Coverage
@@ -119,9 +119,9 @@ jobs:
       - name: Install Dependencies
         run: dart pub get
       - name: Run Unit Tests
-        run: 'dart test --reporter expanded
-                        --platform node
-                        --coverage=./coverage/node/$node_version'
+        run: "dart test --reporter expanded
+          --platform node
+          --coverage=./coverage/node/$node_version"
         env:
           node_version: ${{ matrix.node-version }}
       - name: Upload Test Coverage
@@ -146,9 +146,9 @@ jobs:
       - name: Run Headless Unit Tests
         uses: GabrielBB/xvfb-action@v1
         with:
-          run: 'dart test --reporter expanded
-                          --platform firefox
-                          --coverage=./coverage/firefox'
+          run: "dart test --reporter expanded
+            --platform firefox
+            --coverage=./coverage/firefox"
       - name: Upload Test Coverage
         uses: actions/upload-artifact@v2
         with:
@@ -174,9 +174,10 @@ jobs:
       - name: Run Headless Unit Tests
         uses: GabrielBB/xvfb-action@v1
         with:
-          run: 'dart test --reporter expanded
-                          --platform chrome'
-                          # --coverage=./coverage/chrome
+          run:
+            "dart test --reporter expanded
+            --platform chrome"
+            # --coverage=./coverage/chrome
       - name: Upload Test Coverage
         uses: actions/upload-artifact@v2
         with:
@@ -212,17 +213,18 @@ jobs:
       - name: Install coverage Package
         run: dart pub global activate coverage
       - name: Format Coverage
-        run: 'format_coverage --packages=.dart_tool/package_config.json
-                              --in coverage
-                              --report-on lib
-                              --lcov
-                              --out coverage/lcov.info'
+        run: "format_coverage --packages=.dart_tool/package_config.json
+          --in coverage
+          --report-on lib
+          --lcov
+          --out coverage/lcov.info"
       - name: Upload Coverage to coveralls.io
         uses: coverallsapp/github-action@v1.1.2
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           path-to-lcov: coverage/lcov.info
 
+  # Generates the API documentation from doc comments.
   build-docs:
     name: Build Documentation
     runs-on: ubuntu-latest

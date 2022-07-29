@@ -6,20 +6,20 @@
 name: Dependencies
 
 # Trigger the workflow whenever commits are pushed to the `main` branch or
-# development braches with the `-ci` postfix that modify a `pubspec.yaml`
+# development branches with the `-ci` postfix that modify a `pubspec.yaml`
 # file or the workflow file itself.
 #
 # Additionally, the workflow runs once every day at 6am on the `main` branch.
 on:
   push:
     branches:
-      - 'main'
-      - '*-ci'
+      - "main"
+      - "*-ci"
     paths:
-      - '.github/workflows/check-dependencies.yaml'
-      - '**/pubspec.yaml'
+      - ".github/workflows/check-dependencies.yaml"
+      - "**/pubspec.yaml"
   schedule:
-      - cron: "0 6 * * *"
+    - cron: "0 6 * * *"
 
 jobs:
   # This job runs the `dart pub outdated` command and uploads the JSON output
@@ -63,7 +63,8 @@ jobs:
         with:
           name: outdated
       - name: Find Outdated Packages
-        run: 'jq -e "[.packages
-                     | .[]
-                     | .current.version == .resolvable.version
-                     ] | all" outdated.json'
+        run: 'jq -e "
+          [.packages
+          | .[]
+          | .current.version == .resolvable.version
+          ] | all" outdated.json'
