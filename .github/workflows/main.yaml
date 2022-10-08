@@ -138,7 +138,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       - name: Use Dart SDK
-        uses: dart-lang/setup-dart@v0.4
+        uses: dart-lang/setup-dart@v1.3
       - name: Print Dart SDK Version
         run: dart --version
       - name: Install Dependencies
@@ -166,7 +166,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       - name: Use Dart SDK
-        uses: dart-lang/setup-dart@v0.4
+        uses: dart-lang/setup-dart@v1.3
       - name: Print Dart SDK Version
         run: dart --version
       - name: Install Dependencies
@@ -203,7 +203,7 @@ jobs:
           name: coverage
           path: coverage/
       - name: Use Dart SDK
-        uses: dart-lang/setup-dart@v0.4
+        uses: dart-lang/setup-dart@v1.3
       - name: Print Dart SDK Version
         run: dart --version
       - name: Add Executables Installed by Pub to PATH
