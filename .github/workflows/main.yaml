@@ -91,7 +91,7 @@ jobs:
         env:
           dart_version: ${{ matrix.dart-version }}
       - name: Upload Test Coverage
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: coverage
           path: coverage/
@@ -125,7 +125,7 @@ jobs:
         env:
           node_version: ${{ matrix.node-version }}
       - name: Upload Test Coverage
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: coverage
           path: coverage/
@@ -150,7 +150,7 @@ jobs:
             --platform firefox
             --coverage=./coverage/firefox"
       - name: Upload Test Coverage
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: coverage
           path: coverage/
@@ -179,7 +179,7 @@ jobs:
             --platform chrome"
             # --coverage=./coverage/chrome
       - name: Upload Test Coverage
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: coverage
           path: coverage/
@@ -240,7 +240,7 @@ jobs:
       - name: Build Documentation
         run: dart doc
       - name: Upload Documentation
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: api-documentation
           path: doc/api
@@ -264,7 +264,7 @@ jobs:
           dart compile exe -o build/bin/decoder bin/decoder.dart
           dart compile exe -o build/bin/encoder bin/encoder.dart
       - name: Upload Decoder Executable
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: toml-test
           path: |

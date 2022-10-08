@@ -39,7 +39,7 @@ jobs:
       - name: Find Outdated Packages
         run: dart pub outdated --json > outdated.json
       - name: Upload Output of `dart pub outdated`
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: outdated
           path: outdated.json
