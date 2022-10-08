@@ -198,7 +198,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       - name: Download Coverage
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
         with:
           name: coverage
           path: coverage/
@@ -285,7 +285,7 @@ jobs:
       - name: Install `toml-test`
         run: go install github.com/BurntSushi/toml-test/cmd/toml-test@v1.0.0
       - name: Download Decoder Executable
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
         with:
           name: toml-test
           path: build/bin
