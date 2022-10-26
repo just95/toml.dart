@@ -31,9 +31,9 @@ class TomlFloat extends TomlValue {
   static final Parser<TomlFloat> finalFloatParser = (() {
     var floatIntPart = ChoiceParser([
       char('0'),
-      digit().plus().separatedBy(char('_')),
+      digit().plus().plusSeparated(char('_')),
     ]);
-    var zeroPrefixableInt = digit().plus().separatedBy(char('_'));
+    var zeroPrefixableInt = digit().plus().plusSeparated(char('_'));
     var decimal = anyOf('+-').optional() & floatIntPart;
     var exp = anyOf('eE') & anyOf('+-').optional() & zeroPrefixableInt;
     var frac = char('.') & zeroPrefixableInt;

@@ -10,6 +10,7 @@ import '../decoder/exception/parser.dart';
 import '../decoder/parser/whitespace.dart';
 import '../encoder.dart';
 import '../util/parser.dart';
+import '../util/separated_list.dart';
 import 'node.dart';
 import 'value/string.dart';
 import 'visitor/key.dart';
@@ -28,7 +29,8 @@ class TomlKey extends TomlNode {
 
   /// Parser for a dotted TOML key.
   static final Parser<TomlKey> parser = TomlSimpleKey.parser
-      .separatedWithout(tomlWhitespace & char(separator) & tomlWhitespace)
+      .plusSeparated(tomlWhitespace & char(separator) & tomlWhitespace)
+      .map(discardSeparators)
       .map(TomlKey.new);
 
   /// Parses the given TOML key.

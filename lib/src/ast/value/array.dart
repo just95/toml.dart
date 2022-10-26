@@ -6,6 +6,7 @@ import 'package:petitparser/petitparser.dart';
 
 import '../../decoder/parser/whitespace.dart';
 import '../../util/parser.dart';
+import '../../util/separated_list.dart';
 import '../value.dart';
 import '../visitor/value.dart';
 
@@ -39,7 +40,9 @@ class TomlArray extends TomlValue {
         before: tomlWhitespaceCommentNewline,
         after: tomlWhitespaceCommentNewline,
       )
-      .separatedWithout(char(separator), optionalSeparatorAtEnd: true)
+      .plusSeparated(char(separator))
+      .skip(after: char(separator).optional())
+      .map(discardSeparators)
       .optionalWith(<TomlValue>[])
       .skip(after: tomlWhitespaceCommentNewline)
       .skip(before: char(openingDelimiter), after: char(closingDelimiter))

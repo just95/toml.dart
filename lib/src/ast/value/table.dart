@@ -6,6 +6,7 @@ import 'package:petitparser/petitparser.dart';
 
 import '../../decoder/parser/whitespace.dart';
 import '../../util/parser.dart';
+import '../../util/separated_list.dart';
 import '../expression/key_value_pair.dart';
 import '../value.dart';
 import '../visitor/value.dart';
@@ -38,10 +39,10 @@ class TomlInlineTable extends TomlValue {
   /// Trailing commas are currently not allowed.
   /// See https://github.com/toml-lang/toml/pull/235#issuecomment-73578529
   static final Parser<TomlInlineTable> parser = TomlKeyValuePair.parser
-      .separatedWithout(tomlWhitespace & char(separator) & tomlWhitespace)
-      .optionalWith(<TomlKeyValuePair>[])
+      .starSeparated(tomlWhitespace & char(separator) & tomlWhitespace)
       .trim(tomlWhitespaceChar)
       .skip(before: char(openingDelimiter), after: char(closingDelimiter))
+      .map(discardSeparators)
       .map(TomlInlineTable.new);
 
   /// The key/value pairs of the inline table.
