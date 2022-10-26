@@ -1,73 +1,78 @@
 # Changelog
 
+## unreleased
+
+- Dart 2.18 is now required.
+- Upgraded dependencies.
+
 ## 0.13.1
 
- - Downgraded `meta` dependency from `^1.8.0` to `^1.7.0` for compatibility with Flutter `3.0.1`.
+- Downgraded `meta` dependency from `^1.8.0` to `^1.7.0` for compatibility with Flutter `3.0.1`.
 
 ## 0.13.0
 
- - Dart 2.17 is now required.
- - Upgraded dependencies.
- - Removed dependency on `package:quiver` in favor of `package:collection` and Dart 2.14's `Object.hash` and `Object.hashAll` methods.
+- Dart 2.17 is now required.
+- Upgraded dependencies.
+- Removed dependency on `package:quiver` in favor of `package:collection` and Dart 2.14's `Object.hash` and `Object.hashAll` methods.
 
 ## 0.12.0
 
- - Dart 2.13 is now required.
- - Upgraded dependencies.
- - Added support for 1.0.0 compliant version of `toml-test` test suite.
- - Fixed parsing of multi-line literal and multi-line basic strings with up to two (unescaped) double quotes or single quotes before the closing delimiter.
- - Fixed immutability of AST.
-   The AST is intended to be immutable, but `List` properties of the AST were only ungrowable not unmodifiable.
+- Dart 2.13 is now required.
+- Upgraded dependencies.
+- Added support for 1.0.0 compliant version of `toml-test` test suite.
+- Fixed parsing of multi-line literal and multi-line basic strings with up to two (unescaped) double quotes or single quotes before the closing delimiter.
+- Fixed immutability of AST.
+  The AST is intended to be immutable, but `List` properties of the AST were only ungrowable not unmodifiable.
 
 ## 0.11.0
 
- - Disallowed non-scalar Unicode values when encoding (multiline) basic strings.
-   + Added `TomlBasicString.canEncode` and `TomlMultilineBasicString.canEncode`.
-   + The constructors of `TomlBasicString` and `TomlMultilineBasicString` methods throw an `ArgumentError` if a string cannot be encoded.
-   + The `TomlBasicString.escape` and `TomlMultilineBasicString.escape` methods throw a `TomlInvalidEscapeSequenceException` if a string cannot be encoded.
- - Fixed `hashCode` and `operator ==` of some AST nodes.
-   + Two `TomlDocument`s with equal expressions now have the same hash codes.
-   + Two `TomlPartialTime`s with equal fractional seconds now have the same hash code.
-   + Two `TomlFloat`s that both represent a `nan` value are now considered equal.
- - Added `TomlSimpleKey.from` factory method.
- - Allowed leading and trailing whitespace in `TomlKey.parse`.
- - Fixed `TomlKey.parentKey` for `TomlKey.topLevel`.
- - Removed unused getter `TomlArray.itemTypes`.
- - Removed redundant `TomlKeyVisitor` interface.
- - Improved error messages.
- - Upgraded dependencies.
+- Disallowed non-scalar Unicode values when encoding (multiline) basic strings.
+  - Added `TomlBasicString.canEncode` and `TomlMultilineBasicString.canEncode`.
+  - The constructors of `TomlBasicString` and `TomlMultilineBasicString` methods throw an `ArgumentError` if a string cannot be encoded.
+  - The `TomlBasicString.escape` and `TomlMultilineBasicString.escape` methods throw a `TomlInvalidEscapeSequenceException` if a string cannot be encoded.
+- Fixed `hashCode` and `operator ==` of some AST nodes.
+  - Two `TomlDocument`s with equal expressions now have the same hash codes.
+  - Two `TomlPartialTime`s with equal fractional seconds now have the same hash code.
+  - Two `TomlFloat`s that both represent a `nan` value are now considered equal.
+- Added `TomlSimpleKey.from` factory method.
+- Allowed leading and trailing whitespace in `TomlKey.parse`.
+- Fixed `TomlKey.parentKey` for `TomlKey.topLevel`.
+- Removed unused getter `TomlArray.itemTypes`.
+- Removed redundant `TomlKeyVisitor` interface.
+- Improved error messages.
+- Upgraded dependencies.
 
 ## 0.10.0
 
- - Added support for null-safety.
-   + Dart 2.12 is now required.
+- Added support for null-safety.
+  - Dart 2.12 is now required.
 
 ## 0.9.1
 
- - Fixed pretty-printing of Windows line endings in multiline basic strings.
-   The `\r` in a `\r\n` sequence is not escaped anymore.
-   A carriage return that is not followed by a line feed is still escaped.
- - Fixed parsing of multiline basic strings with Windows newlines.
-   A `\r\n` sequence caused a runtime type error in previous releases because it was represented as a `List` instead of a `String` internally.
+- Fixed pretty-printing of Windows line endings in multiline basic strings.
+  The `\r` in a `\r\n` sequence is not escaped anymore.
+  A carriage return that is not followed by a line feed is still escaped.
+- Fixed parsing of multiline basic strings with Windows newlines.
+  A `\r\n` sequence caused a runtime type error in previous releases because it was represented as a `List` instead of a `String` internally.
 
 ## 0.9.0
 
- - Updated to [v1.0.0][toml-spec/v1.0.0] of the TOML specification.
-   + Allowed leading zeros in exponent part.
-   + Allowed heterogeneous arrays.
-   + Disallowed tables created by dotted key/value pairs to be redefined in `[table]` form and vice versa.
+- Updated to [v1.0.0][toml-spec/v1.0.0] of the TOML specification.
+  - Allowed leading zeros in exponent part.
+  - Allowed heterogeneous arrays.
+  - Disallowed tables created by dotted key/value pairs to be redefined in `[table]` form and vice versa.
 
 ## 0.8.0
 
- - Updated to [v0.5.0][toml-spec/v0.5.0] of the TOML specification.
-   + Added binary, octal and hexadecimal integer notation.
-   + Added special floating point values `inf` and `nan`.
-   + Added offset date-times, local date-times, local dates and local times.
-     - The decoder produces `TomlOffsetDateTime`, `TomlLocalDateTime`, `TomlLocalDate` or `TomlLocalTime` values.
-       There are methods to map `TomlOffsetDateTime` to a `DateTime`.
-       To convert the other values to `DateTime`s, missing information such as date, time or offset has to be provided by the application.
-     - UTC and local `DateTime`s are now encoded as offset date-times.
- - Added support for `BigInt`s.
+- Updated to [v0.5.0][toml-spec/v0.5.0] of the TOML specification.
+  - Added binary, octal and hexadecimal integer notation.
+  - Added special floating point values `inf` and `nan`.
+  - Added offset date-times, local date-times, local dates and local times.
+    - The decoder produces `TomlOffsetDateTime`, `TomlLocalDateTime`, `TomlLocalDate` or `TomlLocalTime` values.
+      There are methods to map `TomlOffsetDateTime` to a `DateTime`.
+      To convert the other values to `DateTime`s, missing information such as date, time or offset has to be provided by the application.
+    - UTC and local `DateTime`s are now encoded as offset date-times.
+- Added support for `BigInt`s.
 
 ## 0.7.0
 
@@ -136,19 +141,8 @@ This is a major update that does not only bring along many changes to the intern
 
 - Initial version, implements [v0.3.1][toml-spec/v0.3.1] of the TOML specification.
 
-[toml-spec/v0.3.1]:
-  https://toml.io/en/v0.3.1
-  "TOML: English v0.3.1"
-[toml-spec/v0.4.0]:
-  https://toml.io/en/v0.4.0
-  "TOML: English v0.4.0"
-[toml-spec/v0.5.0]:
-  https://toml.io/en/v0.5.0
-  "TOML: English v0.5.0"
-[toml-spec/v1.0.0]:
-  https://toml.io/en/v1.0.0
-  "TOML: English v1.0.0"
-
-[toml-test]:
-  https://github.com/BurntSushi/toml-test
-  "A language agnostic test suite for TOML parsers."
+[toml-spec/v0.3.1]: https://toml.io/en/v0.3.1 "TOML: English v0.3.1"
+[toml-spec/v0.4.0]: https://toml.io/en/v0.4.0 "TOML: English v0.4.0"
+[toml-spec/v0.5.0]: https://toml.io/en/v0.5.0 "TOML: English v0.5.0"
+[toml-spec/v1.0.0]: https://toml.io/en/v1.0.0 "TOML: English v1.0.0"
+[toml-test]: https://github.com/BurntSushi/toml-test "A language agnostic test suite for TOML parsers."
