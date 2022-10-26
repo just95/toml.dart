@@ -5,7 +5,6 @@ import 'package:meta/meta.dart';
 import 'package:petitparser/petitparser.dart';
 
 import '../../decoder/parser/whitespace.dart';
-import '../../util/parser.dart';
 import '../../util/separated_list.dart';
 import '../expression/key_value_pair.dart';
 import '../value.dart';
