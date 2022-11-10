@@ -144,12 +144,10 @@ jobs:
       - name: Install Dependencies
         run: dart pub get
       - name: Run Headless Unit Tests
-        uses: GabrielBB/xvfb-action@v1
-        with:
-          run:
-            "dart test --reporter expanded
-            --platform chrome
-            --coverage=./coverage/chrome"
+        run:
+          "dart test --reporter expanded
+          --platform chrome
+          --coverage=./coverage/chrome"
       - name: Upload Test Coverage
         uses: actions/upload-artifact@v3
         with:
