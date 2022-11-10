@@ -130,31 +130,6 @@ jobs:
           name: coverage
           path: coverage/
 
-  # Runs the unit tests of the package with `dart test` in Firefox.
-  firefox-test:
-    name: Run Unit Tests in Firefox
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3.1.0
-      - name: Use Dart SDK
-        uses: dart-lang/setup-dart@v1.3
-      - name: Print Dart SDK Version
-        run: dart --version
-      - name: Install Dependencies
-        run: dart pub get
-      - name: Run Headless Unit Tests
-        uses: GabrielBB/xvfb-action@v1
-        with:
-          run: "dart test --reporter expanded
-            --platform firefox
-            --coverage=./coverage/firefox"
-      - name: Upload Test Coverage
-        uses: actions/upload-artifact@v3
-        with:
-          name: coverage
-          path: coverage/
-
   # Runs the unit tests of the package with `dart test` in Chrome.
   #
   # The collection of test coverage information had to be disabled in Chrome
