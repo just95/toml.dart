@@ -31,7 +31,7 @@ jobs:
       image: dart:stable
     steps:
       - name: Checkout
-        uses: actions/checkout@v3.2.0
+        uses: actions/checkout@v3.3.0
       - name: Print Dart SDK Version
         run: dart --version
       - name: Install Dependencies
@@ -57,7 +57,7 @@ jobs:
       - find-outdated-packages
     steps:
       - name: Checkout
-        uses: actions/checkout@v3.2.0
+        uses: actions/checkout@v3.3.0
       - name: Download Output of `dart pub outdated`
         uses: actions/download-artifact@v3
         with:
