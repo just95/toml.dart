@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:shelf/shelf.dart' as shelf;
 import 'package:shelf/shelf_io.dart' as shelf_io;
 import 'package:shelf_static/shelf_static.dart' as shelf_static;
-import 'package:webdriver/io.dart';
+import 'package:webdriver/async_io.dart';
 
 /// The output that is expected to be written to the element with id `text`.
 const expectedOutput = 'Hello, World!';
