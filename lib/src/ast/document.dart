@@ -44,6 +44,15 @@ class TomlDocument extends TomlNode {
   static Future<TomlDocument> load(String filename) async =>
       parse(await loadFile(filename));
 
+  /// Synchronously loads the file with the given name and [parse]s the
+  /// contents as a TOML document.
+  ///
+  /// Throws a [ParserException] if there is a syntax error.
+  ///
+  /// This method is not supported on the web.
+  static TomlDocument loadSync(String filename) =>
+      parse(loadFileSync(filename));
+
   /// The table headers and key/value pairs of the TOML document.
   final List<TomlExpression> expressions;
 

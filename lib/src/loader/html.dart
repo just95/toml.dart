@@ -17,3 +17,10 @@ Future<String> loadFile(String filename) =>
       var response = xhr.response as ByteBuffer;
       return utf8.decode(response.asUint8List());
     });
+
+/// Throws an [UnsupportedError] because loading configuration files
+/// synchronously via HTTP is not supported using `dart:html`.
+String loadFileSync(String filename) => throw UnsupportedError(
+      'Cannot load file "$filename" synchronously: Configuration files cannot '
+      'be loaded synchronously on the web.',
+    );
