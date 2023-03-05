@@ -3,7 +3,7 @@
 [![Dart CI](https://github.com/just95/toml.dart/workflows/Dart%20CI/badge.svg?branch=main)][toml-dart/actions/main]
 [![Coverage Status](https://coveralls.io/repos/github/just95/toml.dart/badge.svg?branch=main)][coveralls/toml-dart]
 [![Pub Package](https://img.shields.io/pub/v/toml.svg)][pub/toml]
-[![GitHub License](https://img.shields.io/badge/license-MIT-blue.svg)][toml-dart/LICENSE]
+[![GitHub License](https://img.shields.io/badge/license-MIT-blue.svg)][toml-dart/license]
 
 This package provides an implementation of a [TOML][toml-spec/website] parser and encoder for Dart.
 
@@ -11,25 +11,25 @@ It currently supports version [1.0.0][toml-spec/v1.0.0] of the TOML specificatio
 
 ## Table of Contents
 
- 1. [Installation](#installation)
- 2. [Usage](#usage)
-    1. [Loading TOML](#loading-toml)
-    3. [Parsing TOML](#parsing-toml)
-    4. [Decoding TOML](#decoding-toml)
-    5. [Encoding TOML](#encoding-toml)
- 3. [Data Structure](#data-structure)
-    1. [Table and Inline Table](#table-and-inline-table)
-    2. [Array and Array of Tables](#array-and-array-of-tables)
-    3. [String](#string)
-    4. [Integer](#integer)
-    5. [Float](#float)
-    6. [Boolean](#boolean)
-    7. [Offset Date-Time](#offset-date-time)
-    8. [Local Date-Time](#local-date-time)
-    9. [Local Date](#local-date)
-    10. [Local Time](#local-time)
- 4. [Testing](#testing)
- 5. [License](#license)
+1. [Installation](#installation)
+2. [Usage](#usage)
+   1. [Loading TOML](#loading-toml)
+   2. [Parsing TOML](#parsing-toml)
+   3. [Decoding TOML](#decoding-toml)
+   4. [Encoding TOML](#encoding-toml)
+3. [Data Structure](#data-structure)
+   1. [Table and Inline Table](#table-and-inline-table)
+   2. [Array and Array of Tables](#array-and-array-of-tables)
+   3. [String](#string)
+   4. [Integer](#integer)
+   5. [Float](#float)
+   6. [Boolean](#boolean)
+   7. [Offset Date-Time](#offset-date-time)
+   8. [Local Date-Time](#local-date-time)
+   9. [Local Date](#local-date)
+   10. [Local Time](#local-time)
+4. [Testing](#testing)
+5. [License](#license)
 
 ## Installation
 
@@ -345,45 +345,17 @@ toml-test -encoder build/bin/encoder
 ## License
 
 `toml.dart` is licensed under the MIT license agreement.
-See the [LICENSE][toml-dart/LICENSE] file for details.
+See the [LICENSE][toml-dart/license] file for details.
 
-[coveralls/toml-dart]:
-  https://coveralls.io/github/just95/toml.dart?branch=main
-  "just95/toml.dart | Coveralls - Test Coverage History & Statistics"
-
-[pub/toml]:
-  https://pub.dev/packages/toml
-  "toml | Dart Package"
-
-[toml-dart/actions/main]:
-  https://github.com/just95/toml.dart/actions?query=workflow%3A%22Dart+CI%22
-  "toml.dart CI Pipeline"
-[toml-dart/example]:
-  https://github.com/just95/toml.dart/tree/main/example
-  "toml.dart Examples"
-[toml-dart/example/filesystem_config_loader]:
-  https://github.com/just95/toml.dart/tree/main/example/filesystem_config_loader
-  "dart:io Example | toml.dart"
-[toml-dart/example/http_config_loader]:
-  https://github.com/just95/toml.dart/tree/main/example/http_config_loader
-  "HTTP Example | toml.dart"
-[toml-dart/example/toml_parser]:
-  https://github.com/just95/toml.dart/tree/main/example/toml_parser
-  "TOML Parser Example | toml.dart"
-[toml-dart/example/toml_encoder]:
-  https://github.com/just95/toml.dart/tree/main/example/toml_encoder
-  "TOML Encoder Example | toml.dart"
-[toml-dart/LICENSE]:
-  https://github.com/just95/toml.dart/blob/main/LICENSE
-  "MIT License | toml.dart"
-
-[toml-spec/v1.0.0]:
-  https://toml.io/en/v1.0.0
-  "TOML: English v1.0.0"
-[toml-spec/website]:
-  https://toml.io/en/
-  "TOML: Tom's Obvious, Minimal Language"
-
-[toml-test]:
-  https://github.com/BurntSushi/toml-test
-  "A language agnostic test suite for TOML encoders and decoders."
+[coveralls/toml-dart]: https://coveralls.io/github/just95/toml.dart?branch=main "just95/toml.dart | Coveralls - Test Coverage History & Statistics"
+[pub/toml]: https://pub.dev/packages/toml "toml | Dart Package"
+[toml-dart/actions/main]: https://github.com/just95/toml.dart/actions?query=workflow%3A%22Dart+CI%22 "toml.dart CI Pipeline"
+[toml-dart/example]: https://github.com/just95/toml.dart/tree/main/example "toml.dart Examples"
+[toml-dart/example/filesystem_config_loader]: https://github.com/just95/toml.dart/tree/main/example/filesystem_config_loader "dart:io Example | toml.dart"
+[toml-dart/example/http_config_loader]: https://github.com/just95/toml.dart/tree/main/example/http_config_loader "HTTP Example | toml.dart"
+[toml-dart/example/toml_parser]: https://github.com/just95/toml.dart/tree/main/example/toml_parser "TOML Parser Example | toml.dart"
+[toml-dart/example/toml_encoder]: https://github.com/just95/toml.dart/tree/main/example/toml_encoder "TOML Encoder Example | toml.dart"
+[toml-dart/license]: https://github.com/just95/toml.dart/blob/main/LICENSE "MIT License | toml.dart"
+[toml-spec/v1.0.0]: https://toml.io/en/v1.0.0 "TOML: English v1.0.0"
+[toml-spec/website]: https://toml.io/en/ "TOML: Tom's Obvious, Minimal Language"
+[toml-test]: https://github.com/BurntSushi/toml-test "A language agnostic test suite for TOML encoders and decoders."

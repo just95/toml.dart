@@ -38,6 +38,4 @@ Now open a browser and navigate to <http://localhost:8080>.
 You should see a simple web page that displays `Loading...` until the `./web/config.toml` file has been loaded and decoded.
 Once the configuration file has been loaded successfully, the text should change to `Hello, World!`.
 
-[dart/webdev]:
-  https://dart.dev/tools/webdev
-  "webdev | Dart"
+[dart/webdev]: https://dart.dev/tools/webdev "webdev | Dart"

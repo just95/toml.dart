@@ -38,6 +38,4 @@ Or given a device name from `flutter devices`.
 flutter run -d <device-name>
 ```
 
-[flutter-sdk]:
-  https://flutter.dev/docs/get-started/install
-  "Install - Flutter"
+[flutter-sdk]: https://flutter.dev/docs/get-started/install "Install - Flutter"
