@@ -10,6 +10,12 @@ void main() {
       test('can load test document in browser', () {
         expect(TomlDocument.load('../../asset/test.toml'), completes);
       });
+      test('cannot load test document in browser synchronously', () {
+        expect(
+          () => TomlDocument.loadSync('test/asset/test.toml'),
+          throwsUnsupportedError,
+        );
+      });
     });
   });
 }
