@@ -1,9 +1,11 @@
 # Changelog
 
-## unreleased
+## 0.14.0
 
 - Dart 2.18 is now required.
 - Upgraded dependencies.
+- Added `TomlDocument.loadSync` to load TOML documents synchronously.
+  This new method is not supported on the web.
 
 ## 0.13.1
 
