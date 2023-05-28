@@ -81,7 +81,8 @@ class TomlKey extends TomlNode {
 
   @override
   bool operator ==(Object other) =>
-      other is TomlKey && ListEquality().equals(parts, other.parts);
+      other is TomlKey &&
+      ListEquality<TomlSimpleKey>().equals(parts, other.parts);
 
   @override
   T acceptVisitor<T>(TomlVisitor<T> visitor) => visitor.visitKey(this);

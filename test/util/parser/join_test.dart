@@ -21,7 +21,7 @@ void main() {
         expect(result.value, equals('a-b-c'));
       });
       test('can join empty list', () {
-        var parser = epsilonWith([]).join();
+        var parser = epsilonWith(<dynamic>[]).join();
         var result = parser.parse('abc');
         expect(result.isSuccess, isTrue);
         expect(result.value, equals(''));

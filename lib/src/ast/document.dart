@@ -76,7 +76,7 @@ class TomlDocument extends TomlNode {
   @override
   bool operator ==(Object other) =>
       other is TomlDocument &&
-      ListEquality().equals(expressions, other.expressions);
+      ListEquality<TomlExpression>().equals(expressions, other.expressions);
 
   @override
   int get hashCode => Object.hashAll(expressions);

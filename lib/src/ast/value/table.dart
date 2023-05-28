@@ -60,7 +60,8 @@ class TomlInlineTable extends TomlValue {
 
   @override
   bool operator ==(Object other) =>
-      other is TomlInlineTable && ListEquality().equals(pairs, other.pairs);
+      other is TomlInlineTable &&
+      ListEquality<TomlKeyValuePair>().equals(pairs, other.pairs);
 
   @override
   int get hashCode => Object.hashAll([type, ...pairs]);

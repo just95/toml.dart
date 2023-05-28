@@ -62,7 +62,8 @@ class TomlArray extends TomlValue {
 
   @override
   bool operator ==(Object other) =>
-      other is TomlArray && ListEquality().equals(items, other.items);
+      other is TomlArray &&
+      ListEquality<TomlValue>().equals(items, other.items);
 
   @override
   int get hashCode => Object.hashAll([type, ...items]);

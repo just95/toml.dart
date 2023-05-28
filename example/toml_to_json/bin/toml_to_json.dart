@@ -62,7 +62,7 @@ Map<String, dynamic> merge(
         merged[key] = merge(val1, val2);
       } else if (val1 is Iterable<dynamic> && val2 is Iterable<dynamic>) {
         // Arrays and arrays of tables are merged by adding items to the array.
-        merged[key] = List.from(val1)..addAll(val2);
+        merged[key] = List<dynamic>.from(val1)..addAll(val2);
       } else {
         // All other values overwrite existing entries.
         merged[key] = val2;
