@@ -193,7 +193,7 @@ class TomlPartialTime {
       hour == other.hour &&
       minute == other.minute &&
       second == other.second &&
-      ListEquality().equals(secondFractions, other.secondFractions);
+      ListEquality<int>().equals(secondFractions, other.secondFractions);
 
   @override
   int get hashCode => Object.hashAll([

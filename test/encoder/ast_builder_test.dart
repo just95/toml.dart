@@ -158,7 +158,7 @@ void main() {
         expect(TomlValue.from(str), equals(str));
       });
       test('builds empty array from empty List', () {
-        expect(TomlValue.from([]), equals(TomlArray([])));
+        expect(TomlValue.from(<dynamic>[]), equals(TomlArray([])));
       });
       test('builds empty array from empty Iterable', () {
         expect(
@@ -187,7 +187,7 @@ void main() {
       });
       test('builds empty inline table from empty Map', () {
         expect(
-          TomlValue.from({}),
+          TomlValue.from(<String, dynamic>{}),
           equals(TomlInlineTable([])),
         );
       });
@@ -319,7 +319,7 @@ void main() {
     group('buildDocument', () {
       test('builds a standard table header for an empty Map', () {
         expect(
-          TomlDocument.fromMap({'table': {}}),
+          TomlDocument.fromMap({'table': <String, dynamic>{}}),
           equals(TomlDocument([
             TomlStandardTable(TomlKey([TomlUnquotedKey('table')]))
           ])),
@@ -328,7 +328,7 @@ void main() {
       test('omits redundant headers of parent tables', () {
         expect(
           TomlDocument.fromMap({
-            'parent': {'table': {}}
+            'parent': {'table': <String, dynamic>{}}
           }),
           equals(TomlDocument([
             TomlStandardTable(TomlKey([
@@ -357,7 +357,11 @@ void main() {
         () {
           expect(
             TomlDocument.fromMap({
-              'array': [{}, {}, {}]
+              'array': [
+                <String, dynamic>{},
+                <String, dynamic>{},
+                <String, dynamic>{},
+              ]
             }),
             equals(TomlDocument([
               TomlArrayTable(TomlKey([TomlUnquotedKey('array')])),

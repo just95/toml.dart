@@ -10,12 +10,11 @@ dependencies:
 dev_dependencies:
   # Dependencies for `webdev`.
   # See also https://dart.dev/tools/webdev#depending-on-build_-packages.
-  build_runner: ^2.3.3
-  build_web_compilers: ^3.2.7
+  build_runner: ^2.4.4
+  build_web_compilers: ^4.0.3
   # Dependencies for `dartanalyzer`.
   lints: ^2.0.0
-  analyzer: any
   # Dependencies for continuous integration.
   webdriver: ^3.0.2
-  shelf: ^1.4.0
-  shelf_static: ^1.1.1
+  shelf: ^1.4.1
+  shelf_static: ^1.1.2

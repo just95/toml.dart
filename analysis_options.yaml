@@ -5,8 +5,10 @@ analyzer:
     # Examples are excluded from analysis since they have their own analysis
     # options files.
     - "example/**"
-  strong-mode:
-    implicit-casts: false
+  language:
+    strict-casts: true
+    strict-inference: true
+    strict-raw-types: false
 
 # Enable additional analysis options for Effective Dart.
 linter:

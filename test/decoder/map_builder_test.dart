@@ -169,7 +169,7 @@ void main() {
         ));
         expect(
           builder.build(),
-          equals({'table': {}}),
+          equals({'table': <String, dynamic>{}}),
         );
       });
       test('key/value pairs are relative to current standard table', () {
@@ -198,7 +198,10 @@ void main() {
         ));
         expect(
           builder.build(),
-          equals({'table1': {}, 'table2': {}}),
+          equals({
+            'table1': <String, dynamic>{},
+            'table2': <String, dynamic>{},
+          }),
         );
       });
       test('standard table headers create parent table implicitly', () {
@@ -511,7 +514,7 @@ void main() {
           expect(
             builder.build(),
             equals({
-              'array': [{}]
+              'array': [<String, dynamic>{}]
             }),
           );
         },
@@ -529,7 +532,10 @@ void main() {
           expect(
             builder.build(),
             equals({
-              'array': [{}, {}]
+              'array': [
+                <String, dynamic>{},
+                <String, dynamic>{},
+              ]
             }),
           );
         },
@@ -607,7 +613,7 @@ void main() {
           builder.build(),
           equals({
             'array': [
-              {'table': {}}
+              {'table': <String, dynamic>{}}
             ]
           }),
         );
