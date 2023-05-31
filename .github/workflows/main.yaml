@@ -191,7 +191,7 @@ jobs:
         uses: coverallsapp/github-action@v2.1.2
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          path-to-lcov: coverage/lcov.info
+          file: coverage/lcov.info
 
   # Generates the API documentation from doc comments.
   build-docs:
