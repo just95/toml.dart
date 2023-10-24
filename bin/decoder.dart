@@ -63,6 +63,13 @@ String serializeValue(dynamic value) {
 
 Future main() async {
   var input = await stdin.transform(utf8.decoder).join();
-  var document = TomlDocument.parse(input).toMap();
+  var document;
+
+  try {
+    document = TomlDocument.parse(input).toMap();
+  } on Exception catch (e) {
+    print('$e');
+    exit(1);
+  }
   print(json.encode(encodeTable(document)));
 }
