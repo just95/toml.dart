@@ -62,7 +62,7 @@ class TomlStandardTable extends TomlTable {
       .map(TomlStandardTable.new);
 
   /// Creates a new TOML standard table.
-  TomlStandardTable(TomlKey name) : super(name);
+  TomlStandardTable(super.name);
 
   @override
   TomlTableType get type => TomlTableType.standardTable;
@@ -105,7 +105,7 @@ class TomlArrayTable extends TomlTable {
       .map(TomlArrayTable.new);
 
   /// Creates a new TOML array table.
-  TomlArrayTable(TomlKey name) : super(name);
+  TomlArrayTable(super.name);
 
   @override
   TomlTableType get type => TomlTableType.arrayTable;

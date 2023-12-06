@@ -171,7 +171,7 @@ class _TomlTreeLeaf<V> extends _TomlTree<V> {
   final V value;
 
   /// Creates a new leaf node that stores the given value of the given type.
-  _TomlTreeLeaf(TomlKey nodeName, this.value) : super(nodeName);
+  _TomlTreeLeaf(super.nodeName, this.value);
 
   @override
   _TomlTree getOrAddChild(TomlSimpleKey key, _TomlTree Function() buildChild) {
@@ -207,11 +207,10 @@ class _TomlTreeMap extends _TomlTree<Map<String, dynamic>> {
   bool isDefinedByDottedKey;
 
   /// Creates a new node for a standard table.
-  _TomlTreeMap(TomlKey nodeName)
+  _TomlTreeMap(super.nodeName)
       : children = {},
         isExplicitlyDefined = false,
-        isDefinedByDottedKey = false,
-        super(nodeName);
+        isDefinedByDottedKey = false;
 
   @override
   Map<String, dynamic> get value =>
@@ -238,9 +237,7 @@ class _TomlTreeList extends _TomlTree<List<Map<String, dynamic>>> {
   final List<_TomlTreeMap> elements;
 
   /// Creates a new node for an array of tables.
-  _TomlTreeList(TomlKey nodeName)
-      : elements = [],
-        super(nodeName);
+  _TomlTreeList(super.nodeName) : elements = [];
 
   @override
   List<Map<String, dynamic>> get value => elements.map((v) => v.value).toList();
