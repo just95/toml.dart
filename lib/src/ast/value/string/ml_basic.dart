@@ -90,7 +90,7 @@ class TomlMultilineBasicString extends TomlMultilineString {
               tomlNewline &
               ChoiceParser(
                 [tomlWhitespaceChar, tomlNewline],
-                failureJoiner: selectFarthestJoined<dynamic>,
+                failureJoiner: selectFarthestJoined,
               ).star())
           .map((_) => '');
 
@@ -100,7 +100,7 @@ class TomlMultilineBasicString extends TomlMultilineString {
     var buffer = StringBuffer();
     var unescapedOrNewline = ChoiceParser(
       [unescapedParser, tomlNewline],
-      failureJoiner: selectFarthestJoined<dynamic>,
+      failureJoiner: selectFarthestJoined,
     );
     var quotes = 0;
     var iterator = value.runes.iterator;
