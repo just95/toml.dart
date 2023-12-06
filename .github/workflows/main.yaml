@@ -76,7 +76,7 @@ jobs:
       image: dart:${{ matrix.dart-version }}
     strategy:
       matrix:
-        dart-version: ["2.18", latest]
+        dart-version: ["3.2", latest]
     steps:
       - name: Checkout
         uses: actions/checkout@v4.1.1
@@ -144,8 +144,7 @@ jobs:
       - name: Install Dependencies
         run: dart pub get
       - name: Run Headless Unit Tests
-        run:
-          "dart test --reporter expanded
+        run: "dart test --reporter expanded
           --platform chrome
           --coverage=./coverage/chrome"
       - name: Upload Test Coverage
