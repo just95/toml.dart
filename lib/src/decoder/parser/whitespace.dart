@@ -9,7 +9,7 @@ import 'ranges.dart';
 ///
 ///     ws = *wschar
 final Parser<String> tomlWhitespace =
-    tomlWhitespaceChar.star().join().orFailure('whitespace expected');
+    tomlWhitespaceChar.starString().orFailure('whitespace expected');
 
 /// Parser for a single TOML whitespace character.
 ///     wschar =  %x20  ; Space

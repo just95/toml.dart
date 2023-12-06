@@ -4,7 +4,6 @@ import 'package:meta/meta.dart';
 import 'package:petitparser/petitparser.dart';
 
 import '../../../decoder/parser/ranges.dart';
-import '../../../util/parser.dart';
 import '../../visitor/value/string.dart';
 import '../string.dart';
 
@@ -20,8 +19,7 @@ class TomlLiteralString extends TomlSinglelineString {
 
   /// Parser for a literal TOML string value.
   static final Parser<TomlLiteralString> parser = charParser
-      .star()
-      .join()
+      .starString()
       .skip(
         before: char(delimiter, 'opening "$delimiter" expected'),
         after: char(delimiter, 'closing "$delimiter" expected'),
