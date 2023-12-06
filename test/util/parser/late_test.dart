@@ -10,7 +10,7 @@ void main() {
     test('can build circular parser', () {
       var parser = LateParser.fix((parser) => letter() & parser.optional());
       var result = parser.parse('abc');
-      expect(result.isSuccess, isTrue);
+      expect(result, isA<Success>());
       expect(
         result.value,
         equals([

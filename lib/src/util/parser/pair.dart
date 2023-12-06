@@ -34,12 +34,12 @@ class PairParser<F, S> extends Parser<Pair<F, S>> {
   @override
   Result<Pair<F, S>> parseOn(Context context) {
     final firstResult = firstParser.parseOn(context);
-    if (firstResult.isFailure) {
+    if (firstResult is Failure) {
       return firstResult.failure(firstResult.message);
     }
 
     final secondResult = secondParser.parseOn(firstResult);
-    if (secondResult.isFailure) {
+    if (secondResult is Failure) {
       return secondResult.failure(secondResult.message);
     }
 

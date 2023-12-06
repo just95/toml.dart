@@ -11,19 +11,19 @@ void main() {
     test('succeeds when both parsers match', () {
       var parser = PairParser(char('a'), char('b'));
       var result = parser.parse('ab');
-      expect(result.isSuccess, isTrue);
+      expect(result, isA<Success>());
       expect(result.value, equals(Pair('a', 'b')));
     });
     test('fails when first parser does not match', () {
       var parser = PairParser(char('a'), char('b'));
       var result = parser.parse('cb');
-      expect(result.isFailure, isTrue);
+      expect(result, isA<Failure>());
       expect(result.position, equals(0));
     });
     test('fails when second parser does not match', () {
       var parser = PairParser(char('a'), char('b'));
       var result = parser.parse('ac');
-      expect(result.isFailure, isTrue);
+      expect(result, isA<Failure>());
       expect(result.position, equals(1));
     });
     test('succeeds in fast mode when both parsers match', () {
