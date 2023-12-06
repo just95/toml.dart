@@ -4,7 +4,6 @@ import 'package:meta/meta.dart';
 import 'package:petitparser/petitparser.dart';
 
 import '../../decoder/parser/whitespace.dart';
-import '../../util/parser.dart';
 import '../expression.dart';
 import '../key.dart';
 import '../value.dart';
@@ -21,12 +20,12 @@ class TomlKeyValuePair extends TomlExpression {
   static final String separator = '=';
 
   /// Parser for a TOML key/value pair.
-  static final Parser<TomlKeyValuePair> parser = PairParser(
+  static final Parser<TomlKeyValuePair> parser = (
     TomlKey.parser.skip(
       after: tomlWhitespace & char(separator) & tomlWhitespace,
     ),
     TomlValue.parser,
-  ).map((pair) => TomlKeyValuePair(pair.first, pair.second));
+  ).toSequenceParser().map((pair) => TomlKeyValuePair(pair.$1, pair.$2));
 
   /// The AST node that represents the key of the key/value pair.
   final TomlKey key;

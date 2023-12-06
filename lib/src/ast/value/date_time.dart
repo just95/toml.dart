@@ -6,9 +6,7 @@ import 'package:petitparser/petitparser.dart';
 
 import '../../decoder.dart';
 import '../../encoder.dart';
-import '../../util/container.dart';
 import '../../util/date.dart';
-import '../../util/parser.dart';
 import '../value.dart';
 import '../visitor/value.dart';
 import '../visitor/value/date_time.dart';
@@ -106,19 +104,17 @@ class TomlFullDate {
 @immutable
 class TomlPartialTime {
   /// Parser for a partial time value with microsecond precision.
-  static final Parser<TomlPartialTime> parser = PairParser(
-          SequenceParser([
-            _dd.skip(after: char(':')),
-            _dd.skip(after: char(':')),
-            _dd,
-          ]),
-          _ddd.plus().skip(before: char('.')).optionalWith(<int>[]))
-      .map((pair) => TomlPartialTime(
-            pair.first[0],
-            pair.first[1],
-            pair.first[2],
-            pair.second,
-          ));
+  static final Parser<TomlPartialTime> parser = (
+    _dd.skip(after: char(':')),
+    _dd.skip(after: char(':')),
+    _dd,
+    _ddd.plus().skip(before: char('.')).optionalWith(<int>[])
+  ).toSequenceParser().map((tuple) => TomlPartialTime(
+        tuple.$1,
+        tuple.$2,
+        tuple.$3,
+        tuple.$4,
+      ));
 
   /// The hour of the day, expressed as in a 24-hour clock (as a number from
   /// `0` to `23`).
@@ -232,16 +228,16 @@ class TomlTimeZoneOffset {
   /// Parser for a positive time-zone offset.
   static final Parser<TomlTimeZoneOffset> _positiveParser = _unsignedParser
       .skip(before: char('+'))
-      .map((pair) => TomlTimeZoneOffset.positive(pair.first, pair.second));
+      .map((pair) => TomlTimeZoneOffset.positive(pair.$1, pair.$2));
 
   /// Parser for a negative time-zone offset.
   static final Parser<TomlTimeZoneOffset> _negativeParser = _unsignedParser
       .skip(before: char('-'))
-      .map((pair) => TomlTimeZoneOffset.negative(pair.first, pair.second));
+      .map((pair) => TomlTimeZoneOffset.negative(pair.$1, pair.$2));
 
   /// Parser for an unsigned time-zone offset.
-  static final Parser<Pair<int, int>> _unsignedParser =
-      PairParser(_dd.skip(after: char(':')), _dd);
+  static final Parser<(int, int)> _unsignedParser =
+      (_dd.skip(after: char(':')), _dd).toSequenceParser();
 
   /// Whether this offset identifies the UTC time-zone.
   ///

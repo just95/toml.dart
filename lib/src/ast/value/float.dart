@@ -3,7 +3,6 @@ library toml.src.ast.value.float;
 import 'package:meta/meta.dart';
 import 'package:petitparser/petitparser.dart';
 
-import '../../util/parser.dart';
 import '../value.dart';
 import '../visitor/value.dart';
 
@@ -54,8 +53,9 @@ class TomlFloat extends TomlValue {
     var sign = ChoiceParser([plus, minus]).optionalWith(1.0);
     var inf = string('inf').map((_) => double.infinity);
     var nan = string('nan').map((_) => double.nan);
-    return PairParser(sign, ChoiceParser([inf, nan]))
-        .map((pair) => TomlFloat(pair.first * pair.second));
+    return (sign, ChoiceParser([inf, nan]))
+        .toSequenceParser()
+        .map((pair) => TomlFloat(pair.$1 * pair.$2));
   })();
 
   /// The number represented by this node.
