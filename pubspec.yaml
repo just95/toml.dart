@@ -3,11 +3,11 @@ version: 0.14.0
 description: Parser and encoder for TOML v1.0.0 (Tom's Obvious, Minimal Language) configuration files.
 repository: https://github.com/just95/toml.dart
 environment:
-  sdk: ">=2.18.0 <3.0.0"
+  sdk: ">=2.18.0 <4.0.0"
 dependencies:
   meta: ^1.7.0
-  petitparser: ^5.1.0
+  petitparser: ^6.0.2
   collection: ^1.16.0
 dev_dependencies:
-  lints: ^2.0.0
+  lints: ^3.0.0
   test: ^1.21.6
