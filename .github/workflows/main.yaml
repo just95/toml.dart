@@ -242,7 +242,7 @@ jobs:
     name: Run `toml-test` Test Suite
     runs-on: ubuntu-latest
     container:
-      image: golang:1.17
+      image: golang:1.18
     needs: compile-toml-test
     steps:
       - name: Checkout
