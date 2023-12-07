@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.15.0
+
+- Dart 3.2 is now required.
+- Upgraded dependencies.
+
 ## 0.14.0
 
 - Dart 2.18 is now required.
