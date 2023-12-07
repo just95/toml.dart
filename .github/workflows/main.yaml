@@ -251,7 +251,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4.1.1
       - name: Install `toml-test`
-        run: go install github.com/BurntSushi/toml-test/cmd/toml-test@v1.0.0
+        run: go install github.com/toml-lang/toml-test/cmd/toml-test@latest
       - name: Download Decoder Executable
         uses: actions/download-artifact@v3
         with:
