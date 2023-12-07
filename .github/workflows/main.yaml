@@ -3,17 +3,14 @@
 
 name: Dart CI
 
-# Trigger the workflow whenever commits are pushed to the `main` branch or
-# development branches with the `-ci` postfix that modify source files, tests or
-# configuration files. There is a separate workflow that checks the example
-# source code. The workflow also runs when it is modified itself.
+# Trigger the workflow whenever commits are pushed to any branch and modify
+# source files, tests or configuration files. There is a separate workflow that
+# checks the example source code. The workflow also runs when it is modified
+# itself.
 #
 # Additionally, the workflow runs once every day at 6am on the `main` branch.
 on:
   push:
-    branches:
-      - "main"
-      - "*-ci"
     paths:
       - ".github/workflows/main.yaml"
       - "bin/**"
