@@ -3,8 +3,8 @@
 
 name: Example CI
 
-# Trigger the workflow whenever commits are pushed to the `main` branch or
-# development branches with the `-ci` postfix.
+# Trigger the workflow whenever commits are pushed to any branch and modify
+# source files, tests or configuration files.
 # The workflow also runs when it is modified itself or source files outside of
 # the `example` directory change because the examples depend on the `toml`
 # package. However, source files of the `toml` package for tests can be ignored.
@@ -12,9 +12,6 @@ name: Example CI
 # Additionally, the workflow runs once every day at 6am on the `main` branch.
 on:
   push:
-    branches:
-      - "main"
-      - "*-ci"
     paths:
       - ".github/workflows/example.yaml"
       - "lib/**"
