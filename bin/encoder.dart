@@ -38,7 +38,8 @@ dynamic decodeValue(dynamic value) {
         case 'integer':
           return int.parse(value['value'] as String);
         case 'float':
-          switch (value['value']) {
+          var stringValue = value['value'] as String;
+          switch (stringValue.toLowerCase()) {
             case 'nan':
               return double.nan;
             case 'inf':
@@ -47,7 +48,7 @@ dynamic decodeValue(dynamic value) {
             case '-inf':
               return double.negativeInfinity;
             default:
-              return double.parse(value['value'] as String);
+              return double.parse(stringValue);
           }
         case 'datetime':
           return TomlOffsetDateTime.parse(value['value'] as String);
