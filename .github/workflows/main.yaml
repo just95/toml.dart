@@ -228,7 +228,7 @@ jobs:
           mkdir -p build/bin
           dart compile exe -o build/bin/decoder bin/decoder.dart
           dart compile exe -o build/bin/encoder bin/encoder.dart
-      - name: Upload Decoder Executable
+      - name: Upload Decoder and Encoder Executables
         uses: actions/upload-artifact@v3
         with:
           name: toml-test
@@ -248,8 +248,8 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4.1.1
       - name: Install `toml-test`
-        run: go install github.com/toml-lang/toml-test/cmd/toml-test@latest
-      - name: Download Decoder Executable
+        run: go install github.com/toml-lang/toml-test/cmd/toml-test@master
+      - name: Download Decoder and Encoder Executable
         uses: actions/download-artifact@v3
         with:
           name: toml-test
