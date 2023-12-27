@@ -93,7 +93,7 @@ jobs:
       - name: Upload Test Coverage
         uses: actions/upload-artifact@v4
         with:
-          name: coverage-vm-test-${ matrix.dart-version }
+          name: coverage-vm-test-${{ matrix.dart-version }}
           path: coverage/
 
   # Runs the unit tests of the package with `dart test` in Node.js.
@@ -127,7 +127,7 @@ jobs:
       - name: Upload Test Coverage
         uses: actions/upload-artifact@v4
         with:
-          name: coverage-js-test-${ matrix.node-version }
+          name: coverage-js-test-${{ matrix.node-version }}
           path: coverage/
 
   # Runs the unit tests of the package with `dart test` in Chrome.
