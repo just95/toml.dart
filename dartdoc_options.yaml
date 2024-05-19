@@ -14,7 +14,7 @@ dartdoc:
     - ambiguous-reexport
     - broken-link
     - category-order-gives-missing-package-name
-    - deprecated
+    # - deprecated
     - ignored-canonical-for
     - missing-from-search-index
     - no-canonical-found
