@@ -31,7 +31,7 @@ jobs:
       image: dart:stable
     steps:
       - name: Checkout
-        uses: actions/checkout@v4.1.1
+        uses: actions/checkout@v4.1.5
       - name: Print Dart SDK Version
         run: dart --version
       - name: Install Dependencies
@@ -49,7 +49,7 @@ jobs:
       image: dart:stable
     steps:
       - name: Checkout
-        uses: actions/checkout@v4.1.1
+        uses: actions/checkout@v4.1.5
       - name: Print Dart SDK Version
         run: dart --version
       - name: Install Dependencies
@@ -76,7 +76,7 @@ jobs:
         dart-version: ["3.2", latest]
     steps:
       - name: Checkout
-        uses: actions/checkout@v4.1.1
+        uses: actions/checkout@v4.1.5
       - name: Print Dart SDK Version
         run: dart --version
       - name: Install Dependencies
@@ -88,9 +88,9 @@ jobs:
         env:
           dart_version: ${{ matrix.dart-version }}
       - name: Upload Test Coverage
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
-          name: coverage
+          name: coverage-vm-test-${{ matrix.dart-version }}
           path: coverage/
 
   # Runs the unit tests of the package with `dart test` in Node.js.
@@ -104,7 +104,7 @@ jobs:
         node-version: [16]
     steps:
       - name: Checkout
-        uses: actions/checkout@v4.1.1
+        uses: actions/checkout@v4.1.5
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v4
         with:
@@ -122,9 +122,9 @@ jobs:
         env:
           node_version: ${{ matrix.node-version }}
       - name: Upload Test Coverage
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
-          name: coverage
+          name: coverage-js-test-${{ matrix.node-version }}
           path: coverage/
 
   # Runs the unit tests of the package with `dart test` in Chrome.
@@ -133,7 +133,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4.1.1
+        uses: actions/checkout@v4.1.5
       - name: Use Dart SDK
         uses: dart-lang/setup-dart@v1.4
       - name: Print Dart SDK Version
@@ -145,9 +145,9 @@ jobs:
           --platform chrome
           --coverage=./coverage/chrome"
       - name: Upload Test Coverage
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
-          name: coverage
+          name: coverage-chrome-test
           path: coverage/
 
   # Combines the test coverage information of all other jobs into a `lcov.info`
@@ -161,12 +161,13 @@ jobs:
       - chrome-test
     steps:
       - name: Checkout
-        uses: actions/checkout@v4.1.1
+        uses: actions/checkout@v4.1.5
       - name: Download Coverage
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
-          name: coverage
+          pattern: coverage-*
           path: coverage/
+          merge-multiple: true
       - name: Use Dart SDK
         uses: dart-lang/setup-dart@v1.4
       - name: Print Dart SDK Version
@@ -184,7 +185,7 @@ jobs:
           --lcov
           --out coverage/lcov.info"
       - name: Upload Coverage to coveralls.io
-        uses: coverallsapp/github-action@v2.2.3
+        uses: coverallsapp/github-action@v2.3.0
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           file: coverage/lcov.info
@@ -197,7 +198,7 @@ jobs:
       image: dart:stable
     steps:
       - name: Checkout
-        uses: actions/checkout@v4.1.1
+        uses: actions/checkout@v4.1.5
       - name: Print Dart SDK Version
         run: dart --version
       - name: Install Dependencies
@@ -205,7 +206,7 @@ jobs:
       - name: Build Documentation
         run: dart doc
       - name: Upload Documentation
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: api-documentation
           path: doc/api
@@ -218,7 +219,7 @@ jobs:
       image: dart:stable
     steps:
       - name: Checkout
-        uses: actions/checkout@v4.1.1
+        uses: actions/checkout@v4.1.5
       - name: Print Dart SDK Version
         run: dart --version
       - name: Install Dependencies
@@ -228,8 +229,8 @@ jobs:
           mkdir -p build/bin
           dart compile exe -o build/bin/decoder bin/decoder.dart
           dart compile exe -o build/bin/encoder bin/encoder.dart
-      - name: Upload Decoder and Encoder Executables
-        uses: actions/upload-artifact@v3
+      - name: Upload Decoder Executable
+        uses: actions/upload-artifact@v4
         with:
           name: toml-test
           path: |
@@ -246,11 +247,11 @@ jobs:
     needs: compile-toml-test
     steps:
       - name: Checkout
-        uses: actions/checkout@v4.1.1
+        uses: actions/checkout@v4.1.5
       - name: Install `toml-test`
         run: go install github.com/toml-lang/toml-test/cmd/toml-test@master
-      - name: Download Decoder and Encoder Executable
-        uses: actions/download-artifact@v3
+      - name: Download Decoder Executable
+        uses: actions/download-artifact@v4
         with:
           name: toml-test
           path: build/bin
