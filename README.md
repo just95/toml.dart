@@ -1,6 +1,6 @@
 # toml.dart
 
-[![Dart CI](https://github.com/just95/toml.dart/workflows/Dart%20CI/badge.svg?branch=main)][toml-dart/actions/main]
+[![Dart CI](https://github.com/just95/toml.dart/actions/workflows/main.yaml/badge.svg?branch=main)][toml-dart/actions/main]
 [![Coverage Status](https://coveralls.io/repos/github/just95/toml.dart/badge.svg?branch=main)][coveralls/toml-dart]
 [![Pub Package](https://img.shields.io/pub/v/toml.svg)][pub/toml]
 [![GitHub License](https://img.shields.io/badge/license-MIT-blue.svg)][toml-dart/license]
@@ -349,7 +349,7 @@ See the [LICENSE][toml-dart/license] file for details.
 
 [coveralls/toml-dart]: https://coveralls.io/github/just95/toml.dart?branch=main "just95/toml.dart | Coveralls - Test Coverage History & Statistics"
 [pub/toml]: https://pub.dev/packages/toml "toml | Dart Package"
-[toml-dart/actions/main]: https://github.com/just95/toml.dart/actions?query=workflow%3A%22Dart+CI%22 "toml.dart CI Pipeline"
+[toml-dart/actions/main]: https://github.com/just95/toml.dart/actions/workflows/main.yaml "toml.dart CI Pipeline"
 [toml-dart/example]: https://github.com/just95/toml.dart/tree/main/example "toml.dart Examples"
 [toml-dart/example/filesystem_config_loader]: https://github.com/just95/toml.dart/tree/main/example/filesystem_config_loader "dart:io Example | toml.dart"
 [toml-dart/example/http_config_loader]: https://github.com/just95/toml.dart/tree/main/example/http_config_loader "HTTP Example | toml.dart"
