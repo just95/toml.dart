@@ -25,18 +25,23 @@ Map<String, dynamic> decodeTable(Map<String, dynamic> table) {
 /// * All other `Maps` are decoded as a table. See [decodeTable].
 dynamic decodeValue(dynamic value) {
   if (value is Iterable) {
-    value = <String, dynamic>{'type': 'array', 'value': value};
+    return decodeArray(value);
   }
   if (value is Map<String, dynamic>) {
     if (value.length == 2 &&
         value.containsKey('type') &&
         value.containsKey('value')) {
-      var type = value['type'] as String;
+      final type = value['type'] as String;
+      if (type == 'array') {
+        return decodeArray(value['value'] as Iterable);
+      }
+
+      final stringValue = value['value'] as String;
       switch (type) {
         case 'string':
-          return value['value'] as String;
+          return stringValue;
         case 'integer':
-          return int.parse(value['value'] as String);
+          return int.parse(stringValue);
         case 'float':
           switch (value['value']) {
             case 'nan':
@@ -46,21 +51,19 @@ dynamic decodeValue(dynamic value) {
               return double.infinity;
             case '-inf':
               return double.negativeInfinity;
-            default:
-              return double.parse(value['value'] as String);
+            case String stringValue:
+              return double.parse(stringValue);
           }
         case 'datetime':
-          return TomlOffsetDateTime.parse(value['value'] as String);
+          return TomlOffsetDateTime.parse(stringValue);
         case 'datetime-local':
-          return TomlLocalDateTime.parse(value['value'] as String);
+          return TomlLocalDateTime.parse(stringValue);
         case 'date-local':
-          return TomlLocalDate.parse(value['value'] as String);
+          return TomlLocalDate.parse(stringValue);
         case 'time-local':
-          return TomlLocalTime.parse(value['value'] as String);
+          return TomlLocalTime.parse(stringValue);
         case 'bool':
-          return value['value'] == 'true';
-        case 'array':
-          return value['value'].map(decodeValue).toList();
+          return stringValue == 'true';
         default:
           throw UnsupportedError('Unsupported value type: $type');
       }
@@ -69,6 +72,9 @@ dynamic decodeValue(dynamic value) {
   }
   throw UnsupportedError('Unsupported value: $value');
 }
+
+/// Decodes a JSON encoded TOML array or array of tables.
+dynamic decodeArray(Iterable items) => items.map(decodeValue).toList();
 
 Future main() async {
   var input = await stdin.transform(utf8.decoder).join();

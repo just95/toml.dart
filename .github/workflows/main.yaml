@@ -3,17 +3,14 @@
 
 name: Dart CI
 
-# Trigger the workflow whenever commits are pushed to the `main` branch or
-# development branches with the `-ci` postfix that modify source files, tests or
-# configuration files. There is a separate workflow that checks the example
-# source code. The workflow also runs when it is modified itself.
+# Trigger the workflow whenever commits are pushed to any branch and modify
+# source files, tests or configuration files. There is a separate workflow that
+# checks the example source code. The workflow also runs when it is modified
+# itself.
 #
 # Additionally, the workflow runs once every day at 6am on the `main` branch.
 on:
   push:
-    branches:
-      - "main"
-      - "*-ci"
     paths:
       - ".github/workflows/main.yaml"
       - "bin/**"
@@ -246,13 +243,13 @@ jobs:
     name: Run `toml-test` Test Suite
     runs-on: ubuntu-latest
     container:
-      image: golang:1.17
+      image: golang:1.18
     needs: compile-toml-test
     steps:
       - name: Checkout
         uses: actions/checkout@v4.1.7
       - name: Install `toml-test`
-        run: go install github.com/BurntSushi/toml-test/cmd/toml-test@v1.0.0
+        run: go install github.com/toml-lang/toml-test/cmd/toml-test@master
       - name: Download Decoder Executable
         uses: actions/download-artifact@v4
         with:

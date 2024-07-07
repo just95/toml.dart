@@ -61,9 +61,18 @@ String serializeValue(dynamic value) {
   return value.toString();
 }
 
+Future<String> readInput() async {
+  try {
+    return await stdin.transform(utf8.decoder).join();
+  } on FormatException catch (e) {
+    print('Error reading input: $e');
+    exit(1);
+  }
+}
+
 Future main() async {
   try {
-    var input = await stdin.transform(utf8.decoder).join();
+    var input = await readInput();
     var document = TomlDocument.parse(input).toMap();
     print(json.encode(encodeTable(document)));
   } on TomlException catch (e) {

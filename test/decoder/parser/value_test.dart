@@ -408,13 +408,13 @@ void main() {
       test('rejects offset date-times with invalid hours', () {
         expect(
           () => TomlValue.parse('1989-11-09 18:53:00+24:00'),
-          throwsA(isA<ArgumentError>()),
+          throwsA(isA<TomlInvalidDateTimeException>()),
         );
       });
       test('rejects offset date-times with invalid minutes', () {
         expect(
           () => TomlValue.parse('1989-11-09 18:53:00+01:60'),
-          throwsA(isA<ArgumentError>()),
+          throwsA(isA<TomlInvalidDateTimeException>()),
         );
       });
     });
@@ -457,13 +457,13 @@ void main() {
       test('rejects dates with invalid months', () {
         expect(
           () => TomlValue.parse('1989-13-09'),
-          throwsA(isA<ArgumentError>()),
+          throwsA(isA<TomlInvalidDateTimeException>()),
         );
       });
       test('rejects dates with invalid day', () {
         expect(
           () => TomlValue.parse('1989-11-31'),
-          throwsA(isA<ArgumentError>()),
+          throwsA(isA<TomlInvalidDateTimeException>()),
         );
       });
       test('accepts leap day of leap-year', () {
@@ -475,7 +475,7 @@ void main() {
       test('rejects leap day of non-leap-year', () {
         expect(
           () => TomlValue.parse('2021-02-29'),
-          throwsA(isA<ArgumentError>()),
+          throwsA(isA<TomlInvalidDateTimeException>()),
         );
       });
     });

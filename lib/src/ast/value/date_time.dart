@@ -59,16 +59,18 @@ class TomlFullDate {
 
   /// Creates a full date.
   ///
-  /// Throws an [ArgumentError] when the given date is invalid.
+  /// Throws an [TomlInvalidDateTimeException] when the given date is invalid.
   TomlFullDate(this.year, this.month, this.day) {
     if (month < 1 || month > 12) {
       var mm = month.toString().padLeft(2, '0');
-      throw ArgumentError('Invalid month: $mm');
+      throw TomlInvalidDateTimeException('Invalid month: $mm');
     }
     if (day < 1 || day > year.daysOfMonth(month)) {
       var yyyy = year.toString().padLeft(4, '0');
       var mm = month.toString().padLeft(2, '0');
-      throw ArgumentError('Invalid day of month $yyyy-$mm: $day');
+      throw TomlInvalidDateTimeException(
+        'Invalid day of month $yyyy-$mm: $day',
+      );
     }
   }
 
@@ -143,29 +145,33 @@ class TomlPartialTime {
 
   /// Creates a partial time.
   ///
-  /// Throws an [ArgumentError] when any of the given values is invalid.
-  /// When no exception is thrown, the time is not necessarily valid on
-  /// every date and in every time-zone.
+  /// Throws an [TomlInvalidDateTimeException] when any of the given values is
+  /// invalid. When no exception is thrown, the time is not necessarily valid
+  /// on every date and in every time-zone.
   TomlPartialTime(
     this.hour,
     this.minute,
     this.second, [
     List<int> secondFractions = const [],
   ]) : secondFractions = List.unmodifiable(secondFractions) {
-    if (hour < 0 || hour > 23) throw ArgumentError('Invalid hour: $hour');
+    if (hour < 0 || hour > 23) {
+      throw TomlInvalidDateTimeException('Invalid hour: $hour');
+    }
     if (minute < 0 || minute > 59) {
-      throw ArgumentError('Invalid minute: $minute');
+      throw TomlInvalidDateTimeException('Invalid minute: $minute');
     }
 
     // Due to leap seconds, the second is allowed to count up to be `60` and
     // not just `59`.
     if (second < 0 || second > 60) {
-      throw ArgumentError('Invalid second: $second');
+      throw TomlInvalidDateTimeException('Invalid second: $second');
     }
 
     for (var secondFraction in secondFractions) {
       if (secondFraction < 0 || secondFraction > 999) {
-        throw ArgumentError('Invalid fraction of a second: $secondFraction');
+        throw TomlInvalidDateTimeException(
+          'Invalid fraction of a second: $secondFraction',
+        );
       }
     }
   }
@@ -265,10 +271,14 @@ class TomlTimeZoneOffset {
     required this.minutes,
   }) {
     if (hours < 0 || hours > 23) {
-      throw ArgumentError('Invalid hours of time-zone offset: $hours');
+      throw TomlInvalidDateTimeException(
+        'Invalid hours of time-zone offset: $hours',
+      );
     }
     if (minutes < 0 || minutes > 59) {
-      throw ArgumentError('Invalid minutes of time-zone offset: $minutes');
+      throw TomlInvalidDateTimeException(
+        'Invalid minutes of time-zone offset: $minutes',
+      );
     }
   }
 
@@ -282,8 +292,8 @@ class TomlTimeZoneOffset {
 
   /// Creates a time-zone offset from the given duration.
   ///
-  /// Throws an [ArgumentError] when the given duration does not correspond to
-  /// a valid time zone offset.
+  /// Throws an [TomlInvalidDateTimeException] when the given duration does not
+  /// correspond to a valid time zone offset.
   factory TomlTimeZoneOffset.fromDuration(Duration offset) =>
       TomlTimeZoneOffset._(
         isUtc: false,

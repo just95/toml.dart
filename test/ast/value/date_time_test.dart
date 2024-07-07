@@ -7,21 +7,27 @@ void main() {
   group('TomlFullDate', () {
     group('constructor', () {
       test('cannot construct date with month greater than 12', () {
-        expect(() => TomlFullDate(1995, 17, 7), throwsA(isA<ArgumentError>()));
+        expect(() => TomlFullDate(1995, 17, 7),
+            throwsA(isA<TomlInvalidDateTimeException>()));
       });
       test('cannot construct date with month less than 1', () {
-        expect(() => TomlFullDate(1998, 0, 9), throwsA(isA<ArgumentError>()));
+        expect(() => TomlFullDate(1998, 0, 9),
+            throwsA(isA<TomlInvalidDateTimeException>()));
       });
       test('cannot construct date with day less than 1', () {
-        expect(() => TomlFullDate(1995, 17, 0), throwsA(isA<ArgumentError>()));
+        expect(() => TomlFullDate(1995, 17, 0),
+            throwsA(isA<TomlInvalidDateTimeException>()));
       });
       test('cannot construct date with day after last day of the month', () {
-        expect(() => TomlFullDate(1998, 1, 32), throwsA(isA<ArgumentError>()));
-        expect(() => TomlFullDate(1998, 11, 31), throwsA(isA<ArgumentError>()));
+        expect(() => TomlFullDate(1998, 1, 32),
+            throwsA(isA<TomlInvalidDateTimeException>()));
+        expect(() => TomlFullDate(1998, 11, 31),
+            throwsA(isA<TomlInvalidDateTimeException>()));
       });
       test('cannot construct date for february 29th in non leap years', () {
         expect(() => TomlFullDate(1996, 2, 29), returnsNormally);
-        expect(() => TomlFullDate(1995, 2, 29), throwsA(isA<ArgumentError>()));
+        expect(() => TomlFullDate(1995, 2, 29),
+            throwsA(isA<TomlInvalidDateTimeException>()));
       });
     });
     group('toString', () {
@@ -35,37 +41,37 @@ void main() {
       test('cannot construct time with negative hour', () {
         expect(
           () => TomlPartialTime(-1, 23, 45),
-          throwsA(isA<ArgumentError>()),
+          throwsA(isA<TomlInvalidDateTimeException>()),
         );
       });
       test('cannot construct time with hour greater than 23', () {
         expect(
           () => TomlPartialTime(24, 23, 45),
-          throwsA(isA<ArgumentError>()),
+          throwsA(isA<TomlInvalidDateTimeException>()),
         );
       });
       test('cannot construct time with negative minute', () {
         expect(
           () => TomlPartialTime(1, -23, 45),
-          throwsA(isA<ArgumentError>()),
+          throwsA(isA<TomlInvalidDateTimeException>()),
         );
       });
       test('cannot construct time with minute greater than 59', () {
         expect(
           () => TomlPartialTime(1, 60, 45),
-          throwsA(isA<ArgumentError>()),
+          throwsA(isA<TomlInvalidDateTimeException>()),
         );
       });
       test('cannot construct time with negative second', () {
         expect(
           () => TomlPartialTime(1, 23, -45),
-          throwsA(isA<ArgumentError>()),
+          throwsA(isA<TomlInvalidDateTimeException>()),
         );
       });
       test('cannot construct time with second greater than 60', () {
         expect(
           () => TomlPartialTime(1, 23, 61),
-          throwsA(isA<ArgumentError>()),
+          throwsA(isA<TomlInvalidDateTimeException>()),
         );
       });
       test('can construct time for leap second', () {
@@ -89,13 +95,13 @@ void main() {
       test('cannot construct time with negative fractional second', () {
         expect(
           () => TomlPartialTime(1, 23, 45, [-679]),
-          throwsA(isA<ArgumentError>()),
+          throwsA(isA<TomlInvalidDateTimeException>()),
         );
       });
       test('cannot construct time with fractional second greater than 999', () {
         expect(
           () => TomlPartialTime(1, 23, 45, [1000]),
-          throwsA(isA<ArgumentError>()),
+          throwsA(isA<TomlInvalidDateTimeException>()),
         );
       });
       test('can construct time with more than nanosecond precision', () {
@@ -164,25 +170,25 @@ void main() {
       test('cannot construct offset with negative hours', () {
         expect(
           () => TomlTimeZoneOffset.positive(-1, 0),
-          throwsA(isA<ArgumentError>()),
+          throwsA(isA<TomlInvalidDateTimeException>()),
         );
       });
       test('cannot construct offset with hours greater than 23', () {
         expect(
           () => TomlTimeZoneOffset.positive(24, 0),
-          throwsA(isA<ArgumentError>()),
+          throwsA(isA<TomlInvalidDateTimeException>()),
         );
       });
       test('cannot construct offset with negative minutes', () {
         expect(
           () => TomlTimeZoneOffset.positive(0, -1),
-          throwsA(isA<ArgumentError>()),
+          throwsA(isA<TomlInvalidDateTimeException>()),
         );
       });
       test('cannot construct offset with minutes greater than 59', () {
         expect(
           () => TomlTimeZoneOffset.positive(0, 60),
-          throwsA(isA<ArgumentError>()),
+          throwsA(isA<TomlInvalidDateTimeException>()),
         );
       });
     });
@@ -190,25 +196,25 @@ void main() {
       test('cannot construct offset with negative hours', () {
         expect(
           () => TomlTimeZoneOffset.negative(-1, 0),
-          throwsA(isA<ArgumentError>()),
+          throwsA(isA<TomlInvalidDateTimeException>()),
         );
       });
       test('cannot construct offset with hours greater than 23', () {
         expect(
           () => TomlTimeZoneOffset.negative(24, 0),
-          throwsA(isA<ArgumentError>()),
+          throwsA(isA<TomlInvalidDateTimeException>()),
         );
       });
       test('cannot construct offset with negative minutes', () {
         expect(
           () => TomlTimeZoneOffset.negative(0, -1),
-          throwsA(isA<ArgumentError>()),
+          throwsA(isA<TomlInvalidDateTimeException>()),
         );
       });
       test('cannot construct offset with minutes greater than 59', () {
         expect(
           () => TomlTimeZoneOffset.negative(0, 60),
-          throwsA(isA<ArgumentError>()),
+          throwsA(isA<TomlInvalidDateTimeException>()),
         );
       });
     });
