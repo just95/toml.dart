@@ -152,4 +152,4 @@ This is a major update that does not only bring along many changes to the intern
 [toml-spec/v0.4.0]: https://toml.io/en/v0.4.0 "TOML: English v0.4.0"
 [toml-spec/v0.5.0]: https://toml.io/en/v0.5.0 "TOML: English v0.5.0"
 [toml-spec/v1.0.0]: https://toml.io/en/v1.0.0 "TOML: English v1.0.0"
-[toml-test]: https://github.com/BurntSushi/toml-test "A language agnostic test suite for TOML parsers."
+[toml-test]: https://github.com/toml-lang/toml-test "A language agnostic test suite for TOML parsers."

@@ -358,4 +358,4 @@ See the [LICENSE][toml-dart/license] file for details.
 [toml-dart/license]: https://github.com/just95/toml.dart/blob/main/LICENSE "MIT License | toml.dart"
 [toml-spec/v1.0.0]: https://toml.io/en/v1.0.0 "TOML: English v1.0.0"
 [toml-spec/website]: https://toml.io/en/ "TOML: Tom's Obvious, Minimal Language"
-[toml-test]: https://github.com/BurntSushi/toml-test "A language agnostic test suite for TOML encoders and decoders."
+[toml-test]: https://github.com/toml-lang/toml-test "A language agnostic test suite for TOML encoders and decoders."
