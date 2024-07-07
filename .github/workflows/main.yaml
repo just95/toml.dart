@@ -73,7 +73,7 @@ jobs:
       image: dart:${{ matrix.dart-version }}
     strategy:
       matrix:
-        dart-version: ["3.2", latest]
+        dart-version: ["3.2", "3.3", latest]
     steps:
       - name: Checkout
         uses: actions/checkout@v4.1.7

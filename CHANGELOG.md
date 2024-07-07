@@ -3,6 +3,7 @@
 ## Unreleased
 
 - Parsing an invalid local date, local time, local date-time or offset date-time now throws a `TomlInvalidDateTimeException` instead of an `ArgumentError`.
+- Upgraded dependencies.
 
 ## 0.15.0
 

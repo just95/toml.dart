@@ -8,6 +8,6 @@ dependencies:
   toml:
     path: ../../
 dev_dependencies:
-  lints: ^2.0.0
+  lints: ^4.0.0
 executables:
   toml-to-json: toml_to_json
