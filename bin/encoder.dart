@@ -39,7 +39,7 @@ dynamic decodeValue(dynamic value) {
           return int.parse(value['value'] as String);
         case 'float':
           var stringValue = value['value'] as String;
-          switch (stringValue.toLowerCase()) {
+          switch (stringValue) {
             case 'nan':
               return double.nan;
             case 'inf':
