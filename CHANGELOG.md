@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+- Parsing an invalid local date, local time, local date-time or offset date-time now throws a `TomlInvalidDateTimeException` instead of an `ArgumentError`.
+
 ## 0.15.0
 
 - Dart 3.2 is now required.
