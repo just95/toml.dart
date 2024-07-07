@@ -25,7 +25,7 @@ class TomlDocument extends TomlNode {
   static final Parser<TomlDocument> parser = TomlExpression.parser
       .plusSeparated(tomlNewline)
       .map(discardSeparators)
-      .map((expressions) => TomlDocument(expressions.whereNotNull()));
+      .map((expressions) => TomlDocument(expressions.nonNulls));
 
   /// Parses the given TOML document.
   ///
