@@ -1,5 +1,12 @@
 # Changelog
 
+## Unreleased
+
+- `TomlEncodableValue` and `TomlEncodableKey` are now `interface class`es and must not be extended anymore.
+  - If you have previously extended `TomlEncodableValue`, you must now use the `implements` keyword instead of `extends`.
+  - If you have previously extended `TomlEncodableKey` and overwrote the `toTomlKey` method, you must now use the `implements` keyword instead of `extends`.
+  - If you have previously extended `TomlEncodableKey` and used the default implementation of the `toTomlKey` method, you must now mixin `TomlEncodableKeyMixin` instead of extending `TomlEncodableKey`.
+
 ## 0.16.0
 
 - Parsing an invalid local date, local time, local date-time or offset date-time now throws a `TomlInvalidDateTimeException` instead of an `ArgumentError`.

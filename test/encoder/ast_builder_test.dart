@@ -5,7 +5,7 @@ import 'package:toml/toml.dart';
 
 /// A class that is used to test encoding of [TomlEncodableKey] and
 /// [TomlEncodableValue] objects.
-class TomlEncodableWrapper extends TomlEncodableKey {
+class TomlEncodableWrapper with TomlEncodableKeyMixin {
   /// The wrapped value.
   final dynamic value;
 
@@ -13,7 +13,7 @@ class TomlEncodableWrapper extends TomlEncodableKey {
   final dynamic key;
 
   /// Creates a new wrapper for the given value.
-  TomlEncodableWrapper(this.value, [this.key]);
+  const TomlEncodableWrapper(this.value, [this.key]);
 
   @override
   dynamic toTomlValue() => value;
