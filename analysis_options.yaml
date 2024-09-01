@@ -31,7 +31,7 @@ linter:
 
     # DESIGN
     - use_to_and_as_if_applicable
-    - one_member_abstracts
+    # - one_member_abstracts # Disabled because there are interfaces with only one method.
     #- avoid_classes_with_only_static_members # Disabled because there are super classes with only a `parser` for example.
     - prefer_mixin
     - use_setters_to_change_properties
