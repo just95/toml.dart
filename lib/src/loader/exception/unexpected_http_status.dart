@@ -26,7 +26,7 @@ class TomlUnexpectedHttpStatusException extends TomlException {
   bool operator ==(Object other) =>
       other is TomlUnexpectedHttpStatusException &&
       other.status == status &&
-      other.statusText != statusText;
+      other.statusText == statusText;
 
   @override
   int get hashCode => status ^ statusText.hashCode;

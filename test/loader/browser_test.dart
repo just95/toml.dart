@@ -4,12 +4,19 @@ library toml.test.loader.browser_test;
 import 'package:test/test.dart';
 
 import 'package:toml/src/loader.dart';
+import 'package:toml/src/loader/exception/unexpected_http_status.dart';
 
 void main() {
   group('Loader', () {
     group('Browser', () {
       test('can load test file', () {
         expect(loadFile('../asset/test.txt'), completion(equals('Test\n')));
+      });
+      test('throws exception if file does not exist', () {
+        expect(
+          () => loadFile('../no/such/file.txt'),
+          throwsA(equals(TomlUnexpectedHttpStatusException(404, "Not Found"))),
+        );
       });
       test('can load test file with UTF-8 BOM', () {
         // When a file with BOM is loaded in the browser, the Byte Order Mark
