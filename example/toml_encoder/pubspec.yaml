@@ -3,7 +3,7 @@ description: An example that demonstrates how to encode a TOML document.
 repository: https://github.com/just95/toml.dart/tree/main/example/toml_parser
 publish_to: none
 environment:
-  sdk: ">=3.2.0 <4.0.0"
+  sdk: ">=3.7.0 <4.0.0"
 dependencies:
   toml:
     path: ../../
