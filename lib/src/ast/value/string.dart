@@ -22,7 +22,7 @@ enum TomlStringType {
   multilineBasic,
 
   /// Type of a [TomlMultilineLiteralString].
-  multilineLiteral
+  multilineLiteral,
 }
 
 /// Base class for AST nodes that represent a TOML strings.
@@ -70,10 +70,12 @@ abstract class TomlSinglelineString extends TomlString {
   /// multiline strings that contain syntax errors and the unconsumed quotation
   /// mark would cause a less descriptive error message later.
   static final Parser<TomlSinglelineString> parser = ChoiceParser([
-    TomlBasicString.parser
-        .skip(before: string(TomlMultilineBasicString.delimiter).not()),
-    TomlLiteralString.parser
-        .skip(before: string(TomlMultilineLiteralString.delimiter).not()),
+    TomlBasicString.parser.skip(
+      before: string(TomlMultilineBasicString.delimiter).not(),
+    ),
+    TomlLiteralString.parser.skip(
+      before: string(TomlMultilineLiteralString.delimiter).not(),
+    ),
   ], failureJoiner: selectFarthestJoined);
 }
 

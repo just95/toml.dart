@@ -14,11 +14,13 @@ void main() {
       });
       test('maps non-empty array to list of same length', () {
         var builder = TomlValueBuilder(TomlKey.topLevel);
-        var result = builder.visitArray(TomlArray([
-          TomlInteger.dec(BigInt.zero),
-          TomlInteger.dec(BigInt.one),
-          TomlInteger.dec(BigInt.two),
-        ]));
+        var result = builder.visitArray(
+          TomlArray([
+            TomlInteger.dec(BigInt.zero),
+            TomlInteger.dec(BigInt.one),
+            TomlInteger.dec(BigInt.two),
+          ]),
+        );
         expect(result, equals([0, 1, 2]));
       });
     });
@@ -97,12 +99,14 @@ void main() {
       });
       test('maps non-empty inline table to non-empty map', () {
         var builder = TomlValueBuilder(TomlKey.topLevel);
-        var result = builder.visitInlineTable(TomlInlineTable([
-          TomlKeyValuePair(
-            TomlKey([TomlUnquotedKey('key')]),
-            TomlLiteralString('value'),
-          )
-        ]));
+        var result = builder.visitInlineTable(
+          TomlInlineTable([
+            TomlKeyValuePair(
+              TomlKey([TomlUnquotedKey('key')]),
+              TomlLiteralString('value'),
+            ),
+          ]),
+        );
         expect(result, equals({'key': 'value'}));
       });
     });

@@ -17,7 +17,7 @@ class TomlBoolean extends TomlValue {
   /// Parser for a boolean TOML value.
   static final Parser<TomlBoolean> parser = ChoiceParser([
     string('true').map((_) => TomlBoolean(true)),
-    string('false').map((_) => TomlBoolean(false))
+    string('false').map((_) => TomlBoolean(false)),
   ], failureJoiner: selectFarthestJoined);
 
   /// The boolean value represented by this node.

@@ -20,10 +20,11 @@ abstract class TomlExpression extends TomlNode {
   /// Parser for TOML expressions.
   ///
   /// Returns `null` if the expression is just a blank line or comment.
-  static final Parser<TomlExpression?> parser = ChoiceParser(
-    [_keyvalParser, _tableParser, _blankParser.cast<TomlExpression?>()],
-    failureJoiner: selectFarthestJoined,
-  );
+  static final Parser<TomlExpression?> parser = ChoiceParser([
+    _keyvalParser,
+    _tableParser,
+    _blankParser.cast<TomlExpression?>(),
+  ], failureJoiner: selectFarthestJoined);
 
   /// Parser for a TOML key value pair with indentation and an optional comment.
   static final Parser<TomlExpression> _keyvalParser = TomlKeyValuePair.parser
@@ -50,10 +51,11 @@ abstract class TomlExpression extends TomlNode {
   /// are multiple expressions on the same line. Without this parser syntax
   /// errors in expressions would not be reported either since [_blankParser]
   /// would always match.
-  static final Parser _lookAheadParser = ChoiceParser([
-    tomlNewline,
-    endOfInput('newline or end of input expected'),
-  ]).and();
+  static final Parser _lookAheadParser =
+      ChoiceParser([
+        tomlNewline,
+        endOfInput('newline or end of input expected'),
+      ]).and();
 
   /// Invokes the correct `visit*` method for this expression of the given
   /// visitor.

@@ -21,26 +21,28 @@ void main() {
     final visitor = TomlExpressionTestVisitor();
     test('visitKeyValuePair', () {
       expect(
-        visitor.visitExpression(TomlKeyValuePair(
-          TomlKey([TomlUnquotedKey('key')]),
-          TomlLiteralString('value'),
-        )),
+        visitor.visitExpression(
+          TomlKeyValuePair(
+            TomlKey([TomlUnquotedKey('key')]),
+            TomlLiteralString('value'),
+          ),
+        ),
         equals('visitKeyValuePair'),
       );
     });
     test('visitArrayTable', () {
       expect(
-        visitor.visitExpression(TomlArrayTable(
-          TomlKey([TomlUnquotedKey('key')]),
-        )),
+        visitor.visitExpression(
+          TomlArrayTable(TomlKey([TomlUnquotedKey('key')])),
+        ),
         equals('visitArrayTable'),
       );
     });
     test('visitStandardTable', () {
       expect(
-        visitor.visitExpression(TomlStandardTable(
-          TomlKey([TomlUnquotedKey('key')]),
-        )),
+        visitor.visitExpression(
+          TomlStandardTable(TomlKey([TomlUnquotedKey('key')])),
+        ),
         equals('visitStandardTable'),
       );
     });

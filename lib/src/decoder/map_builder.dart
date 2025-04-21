@@ -147,10 +147,12 @@ abstract class _TomlTree<V> {
   /// key/value pairs to ensure that dotted keys cannot be used to insert
   /// values into arrays of tables and to mark each table in the dotted
   /// key as explicitly defined.
-  _TomlTree findOrAddChild(TomlKey key,
-      {void Function(_TomlTree node, TomlSimpleKey part)? onBeforeGetChild,
-      required _TomlTree Function(TomlKey childNodeName) buildChild,
-      void Function(_TomlTree node)? onAfterGetChild}) {
+  _TomlTree findOrAddChild(
+    TomlKey key, {
+    void Function(_TomlTree node, TomlSimpleKey part)? onBeforeGetChild,
+    required _TomlTree Function(TomlKey childNodeName) buildChild,
+    void Function(_TomlTree node)? onAfterGetChild,
+  }) {
     _TomlTree current = this;
     for (var part in key.parts) {
       if (onBeforeGetChild != null) onBeforeGetChild(current, part);
@@ -208,9 +210,9 @@ class _TomlTreeMap extends _TomlTree<Map<String, dynamic>> {
 
   /// Creates a new node for a standard table.
   _TomlTreeMap(super.nodeName)
-      : children = {},
-        isExplicitlyDefined = false,
-        isDefinedByDottedKey = false;
+    : children = {},
+      isExplicitlyDefined = false,
+      isDefinedByDottedKey = false;
 
   @override
   Map<String, dynamic> get value =>

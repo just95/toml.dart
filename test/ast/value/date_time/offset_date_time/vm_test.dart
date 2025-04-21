@@ -13,26 +13,32 @@ void main() {
             TomlOffsetDateTime.fromDateTime(
               DateTime.utc(1989, 11, 9, 17, 53, 0, 123, 456),
             ),
-            equals(TomlOffsetDateTime(
-              TomlFullDate(1989, 11, 9),
-              TomlPartialTime(17, 53, 0, [123, 456]),
-              TomlTimeZoneOffset.utc(),
-            )),
-          );
-        });
-        test('converts date-times with micro- but no milliseconds correctly',
-            () {
-          expect(
-            TomlOffsetDateTime.fromDateTime(
-              DateTime.utc(1989, 11, 9, 17, 53, 0, 0, 123),
+            equals(
+              TomlOffsetDateTime(
+                TomlFullDate(1989, 11, 9),
+                TomlPartialTime(17, 53, 0, [123, 456]),
+                TomlTimeZoneOffset.utc(),
+              ),
             ),
-            equals(TomlOffsetDateTime(
-              TomlFullDate(1989, 11, 9),
-              TomlPartialTime(17, 53, 0, [0, 123]),
-              TomlTimeZoneOffset.utc(),
-            )),
           );
         });
+        test(
+          'converts date-times with micro- but no milliseconds correctly',
+          () {
+            expect(
+              TomlOffsetDateTime.fromDateTime(
+                DateTime.utc(1989, 11, 9, 17, 53, 0, 0, 123),
+              ),
+              equals(
+                TomlOffsetDateTime(
+                  TomlFullDate(1989, 11, 9),
+                  TomlPartialTime(17, 53, 0, [0, 123]),
+                  TomlTimeZoneOffset.utc(),
+                ),
+              ),
+            );
+          },
+        );
       });
     });
   });

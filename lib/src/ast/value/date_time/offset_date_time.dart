@@ -21,11 +21,9 @@ class TomlOffsetDateTime extends TomlDateTime {
     TomlFullDate.parser,
     TomlPartialTime.parser.skip(before: anyOf('Tt ')),
     TomlTimeZoneOffset.parser,
-  ).toSequenceParser().map((tuple) => TomlOffsetDateTime(
-        tuple.$1,
-        tuple.$2,
-        tuple.$3,
-      ));
+  ).toSequenceParser().map(
+    (tuple) => TomlOffsetDateTime(tuple.$1, tuple.$2, tuple.$3),
+  );
 
   /// Parses the given string as a TOML offset date-time.
   static TomlOffsetDateTime parse(String input) =>
@@ -45,33 +43,34 @@ class TomlOffsetDateTime extends TomlDateTime {
 
   /// Converts a [DateTime] to a TOML offset date-time value.
   TomlOffsetDateTime.fromDateTime(DateTime dateTime)
-      : this(
-            TomlFullDate(dateTime.year, dateTime.month, dateTime.day),
-            TomlPartialTime(
-              dateTime.hour,
-              dateTime.minute,
-              dateTime.second,
-              dateTime.microsecond > 0
-                  ? [dateTime.millisecond, dateTime.microsecond]
-                  : dateTime.millisecond > 0
-                      ? [dateTime.millisecond]
-                      : [],
-            ),
-            dateTime.isUtc
-                ? TomlTimeZoneOffset.utc()
-                : TomlTimeZoneOffset.fromDuration(dateTime.timeZoneOffset));
+    : this(
+        TomlFullDate(dateTime.year, dateTime.month, dateTime.day),
+        TomlPartialTime(
+          dateTime.hour,
+          dateTime.minute,
+          dateTime.second,
+          dateTime.microsecond > 0
+              ? [dateTime.millisecond, dateTime.microsecond]
+              : dateTime.millisecond > 0
+              ? [dateTime.millisecond]
+              : [],
+        ),
+        dateTime.isUtc
+            ? TomlTimeZoneOffset.utc()
+            : TomlTimeZoneOffset.fromDuration(dateTime.timeZoneOffset),
+      );
 
   /// Converts this AST node to an UTC [DateTime] object.
   DateTime toUtcDateTime() => DateTime.utc(
-        date.year,
-        date.month,
-        date.day,
-        time.hour,
-        time.minute,
-        time.second,
-        time.millisecond,
-        time.microsecond,
-      ).subtract(offset.toDuration());
+    date.year,
+    date.month,
+    date.day,
+    time.hour,
+    time.minute,
+    time.second,
+    time.millisecond,
+    time.microsecond,
+  ).subtract(offset.toDuration());
 
   @override
   TomlType get type => TomlType.offsetDateTime;

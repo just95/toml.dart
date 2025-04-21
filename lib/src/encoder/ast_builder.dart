@@ -104,9 +104,9 @@ class TomlAstBuilder {
 
   /// Builds a key value pair from the given map entry.
   TomlKeyValuePair buildKeyValuePair(MapEntry entry) => TomlKeyValuePair(
-        TomlKey([buildSimpleKey(entry.key)]),
-        buildValue(entry.value),
-      );
+    TomlKey([buildSimpleKey(entry.key)]),
+    buildValue(entry.value),
+  );
 
   // --------------------------------------------------------------------------
   // Keys

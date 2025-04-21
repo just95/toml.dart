@@ -26,10 +26,7 @@ void main() {
   group('TomlAstBuilder', () {
     group('buildValue', () {
       test('builds integer from int', () {
-        expect(
-          TomlValue.from(42),
-          equals(TomlInteger.dec(BigInt.from(42))),
-        );
+        expect(TomlValue.from(42), equals(TomlInteger.dec(BigInt.from(42))));
       });
       test('builds integer from BigInt', () {
         expect(
@@ -39,31 +36,19 @@ void main() {
       });
       test('preserves binary TOML integer values', () {
         var integer = TomlInteger.bin(BigInt.from(42));
-        expect(
-          TomlValue.from(integer),
-          equals(integer),
-        );
+        expect(TomlValue.from(integer), equals(integer));
       });
       test('preserves octal TOML integer values', () {
         var integer = TomlInteger.oct(BigInt.from(42));
-        expect(
-          TomlValue.from(integer),
-          equals(integer),
-        );
+        expect(TomlValue.from(integer), equals(integer));
       });
       test('preserves decimal TOML integer values', () {
         var integer = TomlInteger.dec(BigInt.from(42));
-        expect(
-          TomlValue.from(integer),
-          equals(integer),
-        );
+        expect(TomlValue.from(integer), equals(integer));
       });
       test('preserves hexadecimal TOML integer values', () {
         var integer = TomlInteger.hex(BigInt.from(42));
-        expect(
-          TomlValue.from(integer),
-          equals(integer),
-        );
+        expect(TomlValue.from(integer), equals(integer));
       });
       test('builds float from double', () {
         expect(TomlValue.from(13.37), equals(TomlFloat(13.37)));
@@ -75,22 +60,28 @@ void main() {
       test('builds offset date-time from UTC DateTime', () {
         var date = DateTime.utc(1969, 7, 20, 20, 17);
         expect(
-            TomlValue.from(date),
-            equals(TomlOffsetDateTime(
+          TomlValue.from(date),
+          equals(
+            TomlOffsetDateTime(
               TomlFullDate(1969, 7, 20),
               TomlPartialTime(20, 17, 0),
               TomlTimeZoneOffset.utc(),
-            )));
+            ),
+          ),
+        );
       });
       test('builds offset date-time from local DateTime', () {
         var date = DateTime(1969, 7, 20, 20, 17);
         expect(
-            TomlValue.from(date),
-            equals(TomlOffsetDateTime(
+          TomlValue.from(date),
+          equals(
+            TomlOffsetDateTime(
               TomlFullDate(1969, 7, 20),
               TomlPartialTime(20, 17, 0),
               TomlTimeZoneOffset.localAtInstant(date),
-            )));
+            ),
+          ),
+        );
       });
       test('preserves TOML offset date-time values', () {
         var date = TomlOffsetDateTime(
@@ -108,15 +99,11 @@ void main() {
         expect(TomlValue.from(date), equals(date));
       });
       test('preserves TOML local date values', () {
-        var date = TomlLocalDate(
-          TomlFullDate(1969, 7, 20),
-        );
+        var date = TomlLocalDate(TomlFullDate(1969, 7, 20));
         expect(TomlValue.from(date), equals(date));
       });
       test('preserves TOML local time values', () {
-        var time = TomlLocalTime(
-          TomlPartialTime(20, 17, 0),
-        );
+        var time = TomlLocalTime(TomlPartialTime(20, 17, 0));
         expect(TomlValue.from(time), equals(time));
       });
       test('builds literal string from String by default', () {
@@ -126,21 +113,15 @@ void main() {
         expect(TomlValue.from("'"), equals(TomlBasicString("'")));
       });
       test('builds multiline literal string from String with newlines', () {
+        expect(TomlValue.from('\n'), equals(TomlMultilineLiteralString('\n')));
+      });
+      test('builds multiline basic string from String with newlines and '
+          'three apostrophes', () {
         expect(
-          TomlValue.from('\n'),
-          equals(TomlMultilineLiteralString('\n')),
+          TomlValue.from("'''\n"),
+          equals(TomlMultilineBasicString("'''\n")),
         );
       });
-      test(
-        'builds multiline basic string from String with newlines and '
-        'three apostrophes',
-        () {
-          expect(
-            TomlValue.from("'''\n"),
-            equals(TomlMultilineBasicString("'''\n")),
-          );
-        },
-      );
       test('preserves TOML basic string values', () {
         var str = TomlBasicString('test');
         expect(TomlValue.from(str), equals(str));
@@ -169,20 +150,24 @@ void main() {
       test('builds array from Iterable', () {
         expect(
           TomlValue.from([0, 1, 2, 3].where((n) => n.isEven)),
-          equals(TomlArray([
-            TomlInteger.dec(BigInt.from(0)),
-            TomlInteger.dec(BigInt.from(2))
-          ])),
+          equals(
+            TomlArray([
+              TomlInteger.dec(BigInt.from(0)),
+              TomlInteger.dec(BigInt.from(2)),
+            ]),
+          ),
         );
       });
       test('can build heterogeneous array', () {
         expect(
           TomlValue.from([1, true, 3.141]),
-          equals(TomlArray([
-            TomlInteger.dec(BigInt.from(1)),
-            TomlBoolean(true),
-            TomlFloat(3.141),
-          ])),
+          equals(
+            TomlArray([
+              TomlInteger.dec(BigInt.from(1)),
+              TomlBoolean(true),
+              TomlFloat(3.141),
+            ]),
+          ),
         );
       });
       test('builds empty inline table from empty Map', () {
@@ -194,23 +179,27 @@ void main() {
       test('builds inline table from Map with non-dynamic value type', () {
         expect(
           TomlValue.from({'foo': 42}),
-          equals(TomlInlineTable([
-            TomlKeyValuePair(
-              TomlKey([TomlUnquotedKey('foo')]),
-              TomlInteger.dec(BigInt.from(42)),
-            ),
-          ])),
+          equals(
+            TomlInlineTable([
+              TomlKeyValuePair(
+                TomlKey([TomlUnquotedKey('foo')]),
+                TomlInteger.dec(BigInt.from(42)),
+              ),
+            ]),
+          ),
         );
       });
       test('unwraps TomlEncodableKey objects', () {
         expect(
           TomlValue.from({TomlEncodableWrapper('foo'): 42}),
-          equals(TomlInlineTable([
-            TomlKeyValuePair(
-              TomlKey([TomlUnquotedKey('foo')]),
-              TomlInteger.dec(BigInt.from(42)),
-            ),
-          ])),
+          equals(
+            TomlInlineTable([
+              TomlKeyValuePair(
+                TomlKey([TomlUnquotedKey('foo')]),
+                TomlInteger.dec(BigInt.from(42)),
+              ),
+            ]),
+          ),
         );
       });
       test('unwraps TomlEncodableKey objects recursively', () {
@@ -218,26 +207,32 @@ void main() {
           TomlValue.from({
             TomlEncodableWrapper(TomlEncodableWrapper('foo')): 42,
           }),
-          equals(TomlInlineTable([
-            TomlKeyValuePair(
-              TomlKey([TomlUnquotedKey('foo')]),
-              TomlInteger.dec(BigInt.from(42)),
-            ),
-          ])),
+          equals(
+            TomlInlineTable([
+              TomlKeyValuePair(
+                TomlKey([TomlUnquotedKey('foo')]),
+                TomlInteger.dec(BigInt.from(42)),
+              ),
+            ]),
+          ),
         );
       });
       test('uses toTomlKey to unwrap TomlEncodableKey objects', () {
         expect(
           TomlValue.from({
-            TomlEncodableWrapper('foo', 'bar'):
-                TomlEncodableWrapper('foo', 'bar')
-          }),
-          equals(TomlInlineTable([
-            TomlKeyValuePair(
-              TomlKey([TomlUnquotedKey('bar')]),
-              TomlLiteralString('foo'),
+            TomlEncodableWrapper('foo', 'bar'): TomlEncodableWrapper(
+              'foo',
+              'bar',
             ),
-          ])),
+          }),
+          equals(
+            TomlInlineTable([
+              TomlKeyValuePair(
+                TomlKey([TomlUnquotedKey('bar')]),
+                TomlLiteralString('foo'),
+              ),
+            ]),
+          ),
         );
       });
       test('unwraps TomlEncodableValue objects', () {
@@ -267,25 +262,19 @@ void main() {
       });
     });
     group('buildSimpleKey', () {
-      test(
-        'builds unquoted key if key contains ASCII letters, ASCII digits, '
-        'underscores, and dashes only',
-        () {
-          expect(
-            TomlSimpleKey.from('A-Z_a-z_0-9'),
-            equals(TomlUnquotedKey('A-Z_a-z_0-9')),
-          );
-        },
-      );
-      test(
-        'builds literal quoted key if there are non-ASCII letters',
-        () {
-          expect(
-            TomlSimpleKey.from('ʎǝʞ'),
-            equals(TomlQuotedKey(TomlLiteralString('ʎǝʞ'))),
-          );
-        },
-      );
+      test('builds unquoted key if key contains ASCII letters, ASCII digits, '
+          'underscores, and dashes only', () {
+        expect(
+          TomlSimpleKey.from('A-Z_a-z_0-9'),
+          equals(TomlUnquotedKey('A-Z_a-z_0-9')),
+        );
+      });
+      test('builds literal quoted key if there are non-ASCII letters', () {
+        expect(
+          TomlSimpleKey.from('ʎǝʞ'),
+          equals(TomlQuotedKey(TomlLiteralString('ʎǝʞ'))),
+        );
+      });
       test(
         'builds basic quoted key if there are non-ASCII letters that have to '
         'be escaped',
@@ -320,38 +309,40 @@ void main() {
       test('builds a standard table header for an empty Map', () {
         expect(
           TomlDocument.fromMap({'table': <String, dynamic>{}}),
-          equals(TomlDocument([
-            TomlStandardTable(TomlKey([TomlUnquotedKey('table')]))
-          ])),
+          equals(
+            TomlDocument([
+              TomlStandardTable(TomlKey([TomlUnquotedKey('table')])),
+            ]),
+          ),
         );
       });
       test('omits redundant headers of parent tables', () {
         expect(
           TomlDocument.fromMap({
-            'parent': {'table': <String, dynamic>{}}
+            'parent': {'table': <String, dynamic>{}},
           }),
-          equals(TomlDocument([
-            TomlStandardTable(TomlKey([
-              TomlUnquotedKey('parent'),
-              TomlUnquotedKey('table'),
-            ]))
-          ])),
+          equals(
+            TomlDocument([
+              TomlStandardTable(
+                TomlKey([TomlUnquotedKey('parent'), TomlUnquotedKey('table')]),
+              ),
+            ]),
+          ),
         );
       });
-      test(
-        'builds a key/value pair if an array of tables is empty',
-        () {
-          expect(
-            TomlDocument.fromMap({'array': <Map>[]}),
-            equals(TomlDocument([
+      test('builds a key/value pair if an array of tables is empty', () {
+        expect(
+          TomlDocument.fromMap({'array': <Map>[]}),
+          equals(
+            TomlDocument([
               TomlKeyValuePair(
                 TomlKey([TomlUnquotedKey('array')]),
                 TomlArray([]),
               ),
-            ])),
-          );
-        },
-      );
+            ]),
+          ),
+        );
+      });
       test(
         'builds a standard array of tables header for every Map in a List',
         () {
@@ -361,13 +352,15 @@ void main() {
                 <String, dynamic>{},
                 <String, dynamic>{},
                 <String, dynamic>{},
-              ]
+              ],
             }),
-            equals(TomlDocument([
-              TomlArrayTable(TomlKey([TomlUnquotedKey('array')])),
-              TomlArrayTable(TomlKey([TomlUnquotedKey('array')])),
-              TomlArrayTable(TomlKey([TomlUnquotedKey('array')])),
-            ])),
+            equals(
+              TomlDocument([
+                TomlArrayTable(TomlKey([TomlUnquotedKey('array')])),
+                TomlArrayTable(TomlKey([TomlUnquotedKey('array')])),
+                TomlArrayTable(TomlKey([TomlUnquotedKey('array')])),
+              ]),
+            ),
           );
         },
       );

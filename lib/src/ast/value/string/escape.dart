@@ -42,12 +42,14 @@ abstract class TomlEscapedChar {
     'f': formFeed,
     'r': carriageReturn,
     '"': doubleQuote,
-    r'\': backslash
+    r'\': backslash,
   };
 
   /// The inverse mapping to [escapableChars].
-  static final Map<int, String> escapableCharsInverse =
-      Map.fromIterables(escapableChars.values, escapableChars.keys);
+  static final Map<int, String> escapableCharsInverse = Map.fromIterables(
+    escapableChars.values,
+    escapableChars.keys,
+  );
 
   /// Parser for escaped characters.
   ///
@@ -73,8 +75,10 @@ abstract class TomlEscapedChar {
   /// This parser accepts any non-whitespace and non-newline character and
   /// throws a [TomlInvalidEscapeSequenceException] if the parsed character
   /// is not escapable.
-  static final Parser<String> escapedCharParser =
-      ChoiceParser([tomlNewline, tomlWhitespaceChar]).neg().map((shortcut) {
+  static final Parser<String> escapedCharParser = ChoiceParser([
+    tomlNewline,
+    tomlWhitespaceChar,
+  ]).neg().map((shortcut) {
     if (!escapableChars.containsKey(shortcut)) {
       throw TomlInvalidEscapeSequenceException('\\$shortcut');
     }
@@ -93,7 +97,7 @@ abstract class TomlEscapedChar {
     tomlHexDigit()
         .times(8)
         .flatten('Eight hexadecimal digits expected')
-        .skip(before: char('U'))
+        .skip(before: char('U')),
   ]).map((charCodeStr) {
     var charCode = int.parse(charCodeStr, radix: 16);
     if (isScalarUnicodeValue(charCode)) {

@@ -7,27 +7,39 @@ void main() {
   group('TomlFullDate', () {
     group('constructor', () {
       test('cannot construct date with month greater than 12', () {
-        expect(() => TomlFullDate(1995, 17, 7),
-            throwsA(isA<TomlInvalidDateTimeException>()));
+        expect(
+          () => TomlFullDate(1995, 17, 7),
+          throwsA(isA<TomlInvalidDateTimeException>()),
+        );
       });
       test('cannot construct date with month less than 1', () {
-        expect(() => TomlFullDate(1998, 0, 9),
-            throwsA(isA<TomlInvalidDateTimeException>()));
+        expect(
+          () => TomlFullDate(1998, 0, 9),
+          throwsA(isA<TomlInvalidDateTimeException>()),
+        );
       });
       test('cannot construct date with day less than 1', () {
-        expect(() => TomlFullDate(1995, 17, 0),
-            throwsA(isA<TomlInvalidDateTimeException>()));
+        expect(
+          () => TomlFullDate(1995, 17, 0),
+          throwsA(isA<TomlInvalidDateTimeException>()),
+        );
       });
       test('cannot construct date with day after last day of the month', () {
-        expect(() => TomlFullDate(1998, 1, 32),
-            throwsA(isA<TomlInvalidDateTimeException>()));
-        expect(() => TomlFullDate(1998, 11, 31),
-            throwsA(isA<TomlInvalidDateTimeException>()));
+        expect(
+          () => TomlFullDate(1998, 1, 32),
+          throwsA(isA<TomlInvalidDateTimeException>()),
+        );
+        expect(
+          () => TomlFullDate(1998, 11, 31),
+          throwsA(isA<TomlInvalidDateTimeException>()),
+        );
       });
       test('cannot construct date for february 29th in non leap years', () {
         expect(() => TomlFullDate(1996, 2, 29), returnsNormally);
-        expect(() => TomlFullDate(1995, 2, 29),
-            throwsA(isA<TomlInvalidDateTimeException>()));
+        expect(
+          () => TomlFullDate(1995, 2, 29),
+          throwsA(isA<TomlInvalidDateTimeException>()),
+        );
       });
     });
     group('toString', () {
@@ -87,10 +99,7 @@ void main() {
         );
       });
       test('can construct time with zero fractional seconds', () {
-        expect(
-          TomlPartialTime(1, 23, 45, [0]).secondFractions,
-          equals([0]),
-        );
+        expect(TomlPartialTime(1, 23, 45, [0]).secondFractions, equals([0]));
       });
       test('cannot construct time with negative fractional second', () {
         expect(
@@ -146,10 +155,7 @@ void main() {
     });
     group('toString', () {
       test('can convert time without second fractions to a string', () {
-        expect(
-          TomlPartialTime(1, 23, 45).toString(),
-          equals('01:23:45'),
-        );
+        expect(TomlPartialTime(1, 23, 45).toString(), equals('01:23:45'));
       });
       test('can convert time with milliseconds to a string', () {
         expect(
@@ -246,10 +252,7 @@ void main() {
     });
     group('local', () {
       test('creates a non-UTC time zone offset', () {
-        expect(
-          TomlTimeZoneOffset.local().isUtc,
-          isFalse,
-        );
+        expect(TomlTimeZoneOffset.local().isUtc, isFalse);
       });
     });
     group('localAtInstant', () {

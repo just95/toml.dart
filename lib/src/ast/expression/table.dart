@@ -15,7 +15,7 @@ enum TomlTableType {
   standardTable,
 
   /// The type of a table header that declares an array of tables.
-  arrayTable
+  arrayTable,
 }
 
 /// Base class of all TOML table header expressions.

@@ -26,37 +26,27 @@ void main() {
   group('TomlVisitor', () {
     final visitor = TomlTestVisitor();
     test('visitDocument', () {
-      expect(
-        visitor.visit(TomlDocument([])),
-        equals('visitDocument'),
-      );
+      expect(visitor.visit(TomlDocument([])), equals('visitDocument'));
     });
     test('visitExpression', () {
       expect(
-        visitor.visit(TomlKeyValuePair(
-          TomlKey([TomlUnquotedKey('key')]),
-          TomlLiteralString('value'),
-        )),
+        visitor.visit(
+          TomlKeyValuePair(
+            TomlKey([TomlUnquotedKey('key')]),
+            TomlLiteralString('value'),
+          ),
+        ),
         equals('visitExpression'),
       );
     });
     test('visitKey', () {
-      expect(
-        visitor.visit(TomlKey.topLevel),
-        equals('visitKey'),
-      );
+      expect(visitor.visit(TomlKey.topLevel), equals('visitKey'));
     });
     test('visitSimpleKey', () {
-      expect(
-        visitor.visit(TomlUnquotedKey('key')),
-        equals('visitSimpleKey'),
-      );
+      expect(visitor.visit(TomlUnquotedKey('key')), equals('visitSimpleKey'));
     });
     test('visitValue', () {
-      expect(
-        visitor.visit(TomlLiteralString('value')),
-        equals('visitValue'),
-      );
+      expect(visitor.visit(TomlLiteralString('value')), equals('visitValue'));
     });
   });
 }

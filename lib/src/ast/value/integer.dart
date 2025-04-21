@@ -13,24 +13,32 @@ class TomlIntegerFormat {
   /// Format of a binary (base `2`) integer.
   ///
   ///     bin-prefix = %x30.62               ; 0b
-  static const TomlIntegerFormat bin =
-      TomlIntegerFormat._(base: 2, prefix: '0b');
+  static const TomlIntegerFormat bin = TomlIntegerFormat._(
+    base: 2,
+    prefix: '0b',
+  );
 
   /// Format of an octal (base `8`) integer.
   ///
   ///     oct-prefix = %x30.6f               ; 0o
-  static const TomlIntegerFormat oct =
-      TomlIntegerFormat._(base: 8, prefix: '0o');
+  static const TomlIntegerFormat oct = TomlIntegerFormat._(
+    base: 8,
+    prefix: '0o',
+  );
 
   /// Format of a decimal (base `10`) integer.
-  static const TomlIntegerFormat dec =
-      TomlIntegerFormat._(base: 10, prefix: '');
+  static const TomlIntegerFormat dec = TomlIntegerFormat._(
+    base: 10,
+    prefix: '',
+  );
 
   /// Format of a hexadecimal (base `16`) integer.
   ///
   ///     hex-prefix = %x30.78               ; 0x
-  static const TomlIntegerFormat hex =
-      TomlIntegerFormat._(base: 16, prefix: '0x');
+  static const TomlIntegerFormat hex = TomlIntegerFormat._(
+    base: 16,
+    prefix: '0x',
+  );
 
   /// The base of an integer of this format.
   final int base;
@@ -51,10 +59,12 @@ class TomlInteger extends TomlValue {
   ///
   /// Decimal integers have to be parsed last such that the zero in the
   /// prefixes of non-decimal numbers is not consumed by the [decParser].
-  static final Parser<TomlInteger> parser = ChoiceParser(
-    [binParser, octParser, hexParser, decParser],
-    failureJoiner: selectFarthest,
-  );
+  static final Parser<TomlInteger> parser = ChoiceParser([
+    binParser,
+    octParser,
+    hexParser,
+    decParser,
+  ], failureJoiner: selectFarthest);
 
   /// Parser for a binary TOML integer value.
   ///
@@ -84,16 +94,22 @@ class TomlInteger extends TomlValue {
   ///     underscore = %x5F                  ; _
   ///     digit1-9 = %x31-39                 ; 1-9
   ///     DIGIT = %x30-39 ; 0-9
-  static final Parser<TomlInteger> decParser = (() {
-    var digits = digit().plus().plusSeparated(char('_'));
-    var decimal = anyOf('+-').optional() & ChoiceParser([char('0'), digits]);
-    return decimal.flatten('Decimal integer expected').map(
-          (str) => TomlInteger.dec(BigInt.parse(
-            str.replaceAll('_', ''),
-            radix: TomlIntegerFormat.dec.base,
-          )),
-        );
-  })();
+  static final Parser<TomlInteger> decParser =
+      (() {
+        var digits = digit().plus().plusSeparated(char('_'));
+        var decimal =
+            anyOf('+-').optional() & ChoiceParser([char('0'), digits]);
+        return decimal
+            .flatten('Decimal integer expected')
+            .map(
+              (str) => TomlInteger.dec(
+                BigInt.parse(
+                  str.replaceAll('_', ''),
+                  radix: TomlIntegerFormat.dec.base,
+                ),
+              ),
+            );
+      })();
 
   /// Parser for a binary TOML integer value.
   ///
@@ -124,11 +140,10 @@ class TomlInteger extends TomlValue {
     required String message,
   }) {
     var digitsParser = digitParser.plus().plusSeparated(char('_'));
-    var integerParser = digitsParser.flatten(message).map(
-          (str) => BigInt.parse(
-            str.replaceAll('_', ''),
-            radix: format.base,
-          ),
+    var integerParser = digitsParser
+        .flatten(message)
+        .map(
+          (str) => BigInt.parse(str.replaceAll('_', ''), radix: format.base),
         );
     return integerParser.skip(before: string(format.prefix)).orFailure(message);
   }

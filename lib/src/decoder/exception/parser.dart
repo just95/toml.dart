@@ -46,10 +46,10 @@ class TomlParserException extends TomlException implements FormatException {
   /// Converts a [ParserException] from `petitparser` to a
   /// [TomlParserException].
   factory TomlParserException.from(ParserException e) => TomlParserException(
-        message: e.message,
-        source: e.source,
-        offset: e.offset,
-      );
+    message: e.message,
+    source: e.source,
+    offset: e.offset,
+  );
 
   /// Lazily evaluated tuple of the [line] and [column].
   late final List<int> _lineAndColumn = Token.lineAndColumnOf(source, offset);

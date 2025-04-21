@@ -11,10 +11,7 @@ void main() {
   group('Loader', () {
     group('VM', () {
       test('load test file', () {
-        expect(
-          loadFile('test/asset/test.txt'),
-          completion(equals('Test\n')),
-        );
+        expect(loadFile('test/asset/test.txt'), completion(equals('Test\n')));
       });
       test('load test file with UTF-8 BOM', () {
         // When a file with BOM is loaded in the VM, the Byte Order Mark
@@ -22,9 +19,9 @@ void main() {
         // take the BOM into account.
         expect(
           loadFile('test/asset/bom.txt'),
-          completion(equals(
-            'This file starts with a UTF-8 Byte Order Mark (BOM).\n',
-          )),
+          completion(
+            equals('This file starts with a UTF-8 Byte Order Mark (BOM).\n'),
+          ),
         );
       });
       test('rejects test file with malformed UTF-8 octet sequence', () {

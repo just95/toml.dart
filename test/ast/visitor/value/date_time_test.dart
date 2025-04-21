@@ -24,20 +24,24 @@ void main() {
     final visitor = TomlDateTimeStringVisitor();
     test('visitOffsetDateTime', () {
       expect(
-        visitor.visitDateTime(TomlOffsetDateTime(
-          TomlFullDate(1989, 11, 9),
-          TomlPartialTime(17, 53, 0),
-          TomlTimeZoneOffset.utc(),
-        )),
+        visitor.visitDateTime(
+          TomlOffsetDateTime(
+            TomlFullDate(1989, 11, 9),
+            TomlPartialTime(17, 53, 0),
+            TomlTimeZoneOffset.utc(),
+          ),
+        ),
         equals('visitOffsetDateTime'),
       );
     });
     test('visitLocalDateTime', () {
       expect(
-        visitor.visitDateTime(TomlLocalDateTime(
-          TomlFullDate(1989, 11, 9),
-          TomlPartialTime(17, 53, 0),
-        )),
+        visitor.visitDateTime(
+          TomlLocalDateTime(
+            TomlFullDate(1989, 11, 9),
+            TomlPartialTime(17, 53, 0),
+          ),
+        ),
         equals('visitLocalDateTime'),
       );
     });

@@ -24,41 +24,49 @@ void main() {
       test('can parse dotted key', () {
         expect(
           TomlKey.parse('unquoted.\'literal\'."basic"'),
-          equals(TomlKey([
-            TomlUnquotedKey('unquoted'),
-            TomlQuotedKey(TomlLiteralString('literal')),
-            TomlQuotedKey(TomlBasicString('basic')),
-          ])),
+          equals(
+            TomlKey([
+              TomlUnquotedKey('unquoted'),
+              TomlQuotedKey(TomlLiteralString('literal')),
+              TomlQuotedKey(TomlBasicString('basic')),
+            ]),
+          ),
         );
       });
       test('ignores whitespace around dots', () {
         expect(
           TomlKey.parse('unquoted . \'literal\' . "basic"'),
-          equals(TomlKey([
-            TomlUnquotedKey('unquoted'),
-            TomlQuotedKey(TomlLiteralString('literal')),
-            TomlQuotedKey(TomlBasicString('basic')),
-          ])),
+          equals(
+            TomlKey([
+              TomlUnquotedKey('unquoted'),
+              TomlQuotedKey(TomlLiteralString('literal')),
+              TomlQuotedKey(TomlBasicString('basic')),
+            ]),
+          ),
         );
       });
       test('ignores leading and trailing whitespace', () {
         expect(
           TomlKey.parse(' unquoted.\'literal\'."basic" '),
-          equals(TomlKey([
-            TomlUnquotedKey('unquoted'),
-            TomlQuotedKey(TomlLiteralString('literal')),
-            TomlQuotedKey(TomlBasicString('basic')),
-          ])),
+          equals(
+            TomlKey([
+              TomlUnquotedKey('unquoted'),
+              TomlQuotedKey(TomlLiteralString('literal')),
+              TomlQuotedKey(TomlBasicString('basic')),
+            ]),
+          ),
         );
       });
       test('preserves whitespace in quoted strings', () {
         expect(
           TomlKey.parse('unquoted.\' l i t e r a l \'." b a s i c "'),
-          equals(TomlKey([
-            TomlUnquotedKey('unquoted'),
-            TomlQuotedKey(TomlLiteralString(' l i t e r a l ')),
-            TomlQuotedKey(TomlBasicString(' b a s i c ')),
-          ])),
+          equals(
+            TomlKey([
+              TomlUnquotedKey('unquoted'),
+              TomlQuotedKey(TomlLiteralString(' l i t e r a l ')),
+              TomlQuotedKey(TomlBasicString(' b a s i c ')),
+            ]),
+          ),
         );
       });
     });
@@ -84,10 +92,7 @@ void main() {
           TomlUnquotedKey('b'),
           TomlUnquotedKey('c'),
         ]);
-        var prefix = TomlKey([
-          TomlUnquotedKey('a'),
-          TomlUnquotedKey('b'),
-        ]);
+        var prefix = TomlKey([TomlUnquotedKey('a'), TomlUnquotedKey('b')]);
         expect(key.isPrefixOf(prefix), isFalse);
       });
       test('returns true if the argument is a prefix', () {
@@ -96,10 +101,7 @@ void main() {
           TomlUnquotedKey('b'),
           TomlUnquotedKey('c'),
         ]);
-        var prefix = TomlKey([
-          TomlUnquotedKey('a'),
-          TomlUnquotedKey('b'),
-        ]);
+        var prefix = TomlKey([TomlUnquotedKey('a'), TomlUnquotedKey('b')]);
         expect(prefix.isPrefixOf(key), isTrue);
       });
       test('returns false for unrelated smaller keys', () {
@@ -108,17 +110,11 @@ void main() {
           TomlUnquotedKey('b'),
           TomlUnquotedKey('c'),
         ]);
-        var smallerKey = TomlKey([
-          TomlUnquotedKey('d'),
-          TomlUnquotedKey('e'),
-        ]);
+        var smallerKey = TomlKey([TomlUnquotedKey('d'), TomlUnquotedKey('e')]);
         expect(key.isPrefixOf(smallerKey), isFalse);
       });
       test('returns false for unrelated larger keys', () {
-        var key = TomlKey([
-          TomlUnquotedKey('a'),
-          TomlUnquotedKey('b'),
-        ]);
+        var key = TomlKey([TomlUnquotedKey('a'), TomlUnquotedKey('b')]);
         var largerKey = TomlKey([
           TomlUnquotedKey('c'),
           TomlUnquotedKey('d'),

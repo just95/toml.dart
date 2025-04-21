@@ -98,8 +98,7 @@ abstract class TomlSimpleKey extends TomlNode {
   static final Parser<TomlSimpleKey> parser = ChoiceParser<TomlSimpleKey>([
     TomlQuotedKey.parser,
     TomlUnquotedKey.parser,
-  ], failureJoiner: selectFarthestJoined)
-      .orFailure('key expected');
+  ], failureJoiner: selectFarthestJoined).orFailure('key expected');
 
   /// Converts the given [key] to an AST node.
   ///
@@ -125,8 +124,9 @@ abstract class TomlSimpleKey extends TomlNode {
 @immutable
 class TomlQuotedKey extends TomlSimpleKey {
   /// Parser for a quoted TOML key.
-  static final Parser<TomlQuotedKey> parser =
-      TomlSinglelineString.parser.map(TomlQuotedKey.new);
+  static final Parser<TomlQuotedKey> parser = TomlSinglelineString.parser.map(
+    TomlQuotedKey.new,
+  );
 
   /// The string literal that represents this key.
   final TomlSinglelineString string;
@@ -156,10 +156,9 @@ class TomlQuotedKey extends TomlSimpleKey {
 @immutable
 class TomlUnquotedKey extends TomlSimpleKey {
   /// Parser for an unquoted TOML key.
-  static final Parser<TomlUnquotedKey> parser = pattern('A-Za-z0-9_-')
-      .plus()
-      .flatten('Unquoted key expected')
-      .map(TomlUnquotedKey.new);
+  static final Parser<TomlUnquotedKey> parser = pattern(
+    'A-Za-z0-9_-',
+  ).plus().flatten('Unquoted key expected').map(TomlUnquotedKey.new);
 
   /// Tests whether the given key does not have to be quoted.
   static bool canEncode(String key) => parser.end().accept(key);

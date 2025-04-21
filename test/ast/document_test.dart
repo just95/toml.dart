@@ -12,7 +12,7 @@ void main() {
           TomlKeyValuePair(
             TomlKey([TomlUnquotedKey('key')]),
             TomlLiteralString('value'),
-          )
+          ),
         ]);
         expect(TomlDocument.parse(document.toString()), equals(document));
       });
@@ -24,7 +24,7 @@ void main() {
           TomlKeyValuePair(
             TomlKey([TomlUnquotedKey('key')]),
             TomlLiteralString('value'),
-          )
+          ),
         ]);
         expect(TomlDocument.fromMap(document.toMap()), equals(document));
       });
@@ -36,14 +36,14 @@ void main() {
           TomlKeyValuePair(
             TomlKey([TomlUnquotedKey('key')]),
             TomlLiteralString('value'),
-          )
+          ),
         ]);
         var d2 = TomlDocument([
           TomlStandardTable(TomlKey([TomlUnquotedKey('table')])),
           TomlKeyValuePair(
             TomlKey([TomlUnquotedKey('key')]),
             TomlLiteralString('value'),
-          )
+          ),
         ]);
         expect(d1.hashCode, equals(d2.hashCode));
       });
@@ -53,14 +53,14 @@ void main() {
           TomlKeyValuePair(
             TomlKey([TomlUnquotedKey('key1')]),
             TomlLiteralString('value'),
-          )
+          ),
         ]);
         var d2 = TomlDocument([
           TomlStandardTable(TomlKey([TomlUnquotedKey('table')])),
           TomlKeyValuePair(
             TomlKey([TomlUnquotedKey('key2')]),
             TomlLiteralString('value'),
-          )
+          ),
         ]);
         expect(d1.hashCode, isNot(equals(d2.hashCode)));
       });

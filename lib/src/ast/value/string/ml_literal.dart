@@ -36,11 +36,12 @@ class TomlMultilineLiteralString extends TomlMultilineString {
   ///
   ///     ml-literal-body =
   ///         *mll-content *( mll-quotes 1*mll-content ) [ mll-quotes ]
-  static final Parser<String> bodyParser = SequenceParser([
-    contentParser.starString(),
-    (quotesParser & contentParser.plusString()).join().starString(),
-    quotesParser.optionalWith('')
-  ]).join();
+  static final Parser<String> bodyParser =
+      SequenceParser([
+        contentParser.starString(),
+        (quotesParser & contentParser.plusString()).join().starString(),
+        quotesParser.optionalWith(''),
+      ]).join();
 
   /// Parser for one or two apostrophes.
   ///
@@ -48,13 +49,15 @@ class TomlMultilineLiteralString extends TomlMultilineString {
   /// since they do not form a valid [delimiter].
   ///
   ///     mll-quotes = 1*2apostrophe
-  static final Parser<String> quotesParser = char(TomlLiteralString.delimiter)
-      .repeatLazy(
-        string(delimiter).optional() & char(TomlLiteralString.delimiter).not(),
-        1,
-        2,
-      )
-      .join();
+  static final Parser<String> quotesParser =
+      char(TomlLiteralString.delimiter)
+          .repeatLazy(
+            string(delimiter).optional() &
+                char(TomlLiteralString.delimiter).not(),
+            1,
+            2,
+          )
+          .join();
 
   /// Parser for a single character of a multiline literal TOML string.
   ///

@@ -80,9 +80,11 @@ Future main() async {
   var input = await stdin.transform(utf8.decoder).join();
   var document = json.decode(input);
   if (document is Map<String, dynamic>) {
-    print(TomlDocument.fromMap(decodeTable(document))
-        .toString()
-        .replaceAll('.000', ''));
+    print(
+      TomlDocument.fromMap(
+        decodeTable(document),
+      ).toString().replaceAll('.000', ''),
+    );
   } else {
     throw FormatException('Expected object at top-level of JSON document.');
   }

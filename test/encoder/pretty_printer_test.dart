@@ -14,17 +14,20 @@ void main() {
         });
         test('pretty prints singleton array correctly', () {
           var prettyPrinter = TomlPrettyPrinter();
-          prettyPrinter
-              .visitArray(TomlArray([TomlInteger.dec(BigInt.from(1))]));
+          prettyPrinter.visitArray(
+            TomlArray([TomlInteger.dec(BigInt.from(1))]),
+          );
           expect(prettyPrinter.toString(), equals('[1]'));
         });
         test('pretty prints array with multiple items correctly', () {
           var prettyPrinter = TomlPrettyPrinter();
-          prettyPrinter.visitArray(TomlArray([
-            TomlInteger.dec(BigInt.from(1)),
-            TomlInteger.dec(BigInt.from(2)),
-            TomlInteger.dec(BigInt.from(3)),
-          ]));
+          prettyPrinter.visitArray(
+            TomlArray([
+              TomlInteger.dec(BigInt.from(1)),
+              TomlInteger.dec(BigInt.from(2)),
+              TomlInteger.dec(BigInt.from(3)),
+            ]),
+          );
           expect(prettyPrinter.toString(), equals('[1, 2, 3]'));
         });
       });
@@ -44,20 +47,24 @@ void main() {
         group('visitOffsetDateTime', () {
           test('pretty prints UTC date-time correctly', () {
             var prettyPrinter = TomlPrettyPrinter();
-            prettyPrinter.visitOffsetDateTime(TomlOffsetDateTime(
-              TomlFullDate(1969, 7, 20),
-              TomlPartialTime(20, 17, 0),
-              TomlTimeZoneOffset.utc(),
-            ));
+            prettyPrinter.visitOffsetDateTime(
+              TomlOffsetDateTime(
+                TomlFullDate(1969, 7, 20),
+                TomlPartialTime(20, 17, 0),
+                TomlTimeZoneOffset.utc(),
+              ),
+            );
             expect(prettyPrinter.toString(), equals('1969-07-20 20:17:00Z'));
           });
           test('pretty prints non-UTC date-time correctly', () {
             var prettyPrinter = TomlPrettyPrinter();
-            prettyPrinter.visitOffsetDateTime(TomlOffsetDateTime(
-              TomlFullDate(1969, 7, 20),
-              TomlPartialTime(20, 17, 0),
-              TomlTimeZoneOffset.positive(1, 0),
-            ));
+            prettyPrinter.visitOffsetDateTime(
+              TomlOffsetDateTime(
+                TomlFullDate(1969, 7, 20),
+                TomlPartialTime(20, 17, 0),
+                TomlTimeZoneOffset.positive(1, 0),
+              ),
+            );
             expect(
               prettyPrinter.toString(),
               equals('1969-07-20 20:17:00+01:00'),
@@ -65,37 +72,42 @@ void main() {
           });
           test('pretty prints UTC date-time with milliseconds correctly', () {
             var prettyPrinter = TomlPrettyPrinter();
-            prettyPrinter.visitOffsetDateTime(TomlOffsetDateTime(
-              TomlFullDate(1969, 7, 20),
-              TomlPartialTime(20, 17, 0, [123]),
-              TomlTimeZoneOffset.utc(),
-            ));
+            prettyPrinter.visitOffsetDateTime(
+              TomlOffsetDateTime(
+                TomlFullDate(1969, 7, 20),
+                TomlPartialTime(20, 17, 0, [123]),
+                TomlTimeZoneOffset.utc(),
+              ),
+            );
             expect(
-                prettyPrinter.toString(), equals('1969-07-20 20:17:00.123Z'));
+              prettyPrinter.toString(),
+              equals('1969-07-20 20:17:00.123Z'),
+            );
           });
-          test(
-            'pretty prints UTC date-time with milli- and microseconds '
-            'correctly',
-            () {
-              var prettyPrinter = TomlPrettyPrinter();
-              prettyPrinter.visitOffsetDateTime(TomlOffsetDateTime(
+          test('pretty prints UTC date-time with milli- and microseconds '
+              'correctly', () {
+            var prettyPrinter = TomlPrettyPrinter();
+            prettyPrinter.visitOffsetDateTime(
+              TomlOffsetDateTime(
                 TomlFullDate(1969, 7, 20),
                 TomlPartialTime(20, 17, 0, [123, 456]),
                 TomlTimeZoneOffset.utc(),
-              ));
-              expect(
-                prettyPrinter.toString(),
-                equals('1969-07-20 20:17:00.123456Z'),
-              );
-            },
-          );
+              ),
+            );
+            expect(
+              prettyPrinter.toString(),
+              equals('1969-07-20 20:17:00.123456Z'),
+            );
+          });
           test('pretty prints UTC date-time with microseconds correctly', () {
             var prettyPrinter = TomlPrettyPrinter();
-            prettyPrinter.visitOffsetDateTime(TomlOffsetDateTime(
-              TomlFullDate(1969, 7, 20),
-              TomlPartialTime(20, 17, 0, [0, 456]),
-              TomlTimeZoneOffset.utc(),
-            ));
+            prettyPrinter.visitOffsetDateTime(
+              TomlOffsetDateTime(
+                TomlFullDate(1969, 7, 20),
+                TomlPartialTime(20, 17, 0, [0, 456]),
+                TomlTimeZoneOffset.utc(),
+              ),
+            );
             expect(
               prettyPrinter.toString(),
               equals('1969-07-20 20:17:00.000456Z'),
@@ -105,39 +117,46 @@ void main() {
         group('visitLocalDateTime', () {
           test('pretty prints local date-time correctly', () {
             var prettyPrinter = TomlPrettyPrinter();
-            prettyPrinter.visitLocalDateTime(TomlLocalDateTime(
-              TomlFullDate(1969, 7, 20),
-              TomlPartialTime(20, 17, 0),
-            ));
+            prettyPrinter.visitLocalDateTime(
+              TomlLocalDateTime(
+                TomlFullDate(1969, 7, 20),
+                TomlPartialTime(20, 17, 0),
+              ),
+            );
             expect(prettyPrinter.toString(), equals('1969-07-20 20:17:00'));
           });
           test('pretty prints local date-time with milliseconds correctly', () {
             var prettyPrinter = TomlPrettyPrinter();
-            prettyPrinter.visitLocalDateTime(TomlLocalDateTime(
-              TomlFullDate(1969, 7, 20),
-              TomlPartialTime(20, 17, 0, [123]),
-            ));
+            prettyPrinter.visitLocalDateTime(
+              TomlLocalDateTime(
+                TomlFullDate(1969, 7, 20),
+                TomlPartialTime(20, 17, 0, [123]),
+              ),
+            );
             expect(prettyPrinter.toString(), equals('1969-07-20 20:17:00.123'));
           });
-          test(
-            'pretty prints local date-time with milli- and microseconds '
-            'correctly',
-            () {
-              var prettyPrinter = TomlPrettyPrinter();
-              prettyPrinter.visitLocalDateTime(TomlLocalDateTime(
+          test('pretty prints local date-time with milli- and microseconds '
+              'correctly', () {
+            var prettyPrinter = TomlPrettyPrinter();
+            prettyPrinter.visitLocalDateTime(
+              TomlLocalDateTime(
                 TomlFullDate(1969, 7, 20),
                 TomlPartialTime(20, 17, 0, [123, 456]),
-              ));
-              expect(prettyPrinter.toString(),
-                  equals('1969-07-20 20:17:00.123456'));
-            },
-          );
+              ),
+            );
+            expect(
+              prettyPrinter.toString(),
+              equals('1969-07-20 20:17:00.123456'),
+            );
+          });
           test('pretty prints local date-time with microseconds correctly', () {
             var prettyPrinter = TomlPrettyPrinter();
-            prettyPrinter.visitLocalDateTime(TomlLocalDateTime(
-              TomlFullDate(1969, 7, 20),
-              TomlPartialTime(20, 17, 0, [0, 456]),
-            ));
+            prettyPrinter.visitLocalDateTime(
+              TomlLocalDateTime(
+                TomlFullDate(1969, 7, 20),
+                TomlPartialTime(20, 17, 0, [0, 456]),
+              ),
+            );
             expect(
               prettyPrinter.toString(),
               equals('1969-07-20 20:17:00.000456'),
@@ -147,46 +166,40 @@ void main() {
         group('visitLocalDate', () {
           test('pretty prints date correctly', () {
             var prettyPrinter = TomlPrettyPrinter();
-            prettyPrinter.visitLocalDate(TomlLocalDate(
-              TomlFullDate(1969, 7, 20),
-            ));
+            prettyPrinter.visitLocalDate(
+              TomlLocalDate(TomlFullDate(1969, 7, 20)),
+            );
             expect(prettyPrinter.toString(), equals('1969-07-20'));
           });
         });
         group('visitLocalTime', () {
           test('pretty prints time correctly', () {
             var prettyPrinter = TomlPrettyPrinter();
-            prettyPrinter.visitLocalTime(TomlLocalTime(
-              TomlPartialTime(20, 17, 0),
-            ));
+            prettyPrinter.visitLocalTime(
+              TomlLocalTime(TomlPartialTime(20, 17, 0)),
+            );
             expect(prettyPrinter.toString(), equals('20:17:00'));
           });
           test('pretty prints time with milliseconds correctly', () {
             var prettyPrinter = TomlPrettyPrinter();
-            prettyPrinter.visitLocalTime(TomlLocalTime(
-              TomlPartialTime(20, 17, 0, [123]),
-            ));
+            prettyPrinter.visitLocalTime(
+              TomlLocalTime(TomlPartialTime(20, 17, 0, [123])),
+            );
             expect(prettyPrinter.toString(), equals('20:17:00.123'));
           });
-          test(
-            'pretty prints time with milli- and microseconds correctly',
-            () {
-              var prettyPrinter = TomlPrettyPrinter();
-              prettyPrinter.visitLocalTime(TomlLocalTime(
-                TomlPartialTime(20, 17, 0, [123, 456]),
-              ));
-              expect(prettyPrinter.toString(), equals('20:17:00.123456'));
-            },
-          );
+          test('pretty prints time with milli- and microseconds correctly', () {
+            var prettyPrinter = TomlPrettyPrinter();
+            prettyPrinter.visitLocalTime(
+              TomlLocalTime(TomlPartialTime(20, 17, 0, [123, 456])),
+            );
+            expect(prettyPrinter.toString(), equals('20:17:00.123456'));
+          });
           test('pretty prints time with microseconds correctly', () {
             var prettyPrinter = TomlPrettyPrinter();
-            prettyPrinter.visitLocalTime(TomlLocalTime(
-              TomlPartialTime(20, 17, 0, [0, 456]),
-            ));
-            expect(
-              prettyPrinter.toString(),
-              equals('20:17:00.000456'),
+            prettyPrinter.visitLocalTime(
+              TomlLocalTime(TomlPartialTime(20, 17, 0, [0, 456])),
             );
+            expect(prettyPrinter.toString(), equals('20:17:00.000456'));
           });
         });
       });
@@ -228,35 +241,41 @@ void main() {
           prettyPrinter.visitInlineTable(TomlInlineTable([]));
           expect(prettyPrinter.toString(), equals('{}'));
         });
-        test('pretty prints inline table with one key/value pair correctly',
-            () {
-          var prettyPrinter = TomlPrettyPrinter();
-          prettyPrinter.visitInlineTable(TomlInlineTable([
-            TomlKeyValuePair(
-              TomlKey([TomlUnquotedKey('foo')]),
-              TomlInteger.dec(BigInt.from(0)),
-            ),
-          ]));
-          expect(prettyPrinter.toString(), equals('{ foo = 0 }'));
-        });
+        test(
+          'pretty prints inline table with one key/value pair correctly',
+          () {
+            var prettyPrinter = TomlPrettyPrinter();
+            prettyPrinter.visitInlineTable(
+              TomlInlineTable([
+                TomlKeyValuePair(
+                  TomlKey([TomlUnquotedKey('foo')]),
+                  TomlInteger.dec(BigInt.from(0)),
+                ),
+              ]),
+            );
+            expect(prettyPrinter.toString(), equals('{ foo = 0 }'));
+          },
+        );
         test(
           'pretty prints inline table with multiple key/value pairs correctly',
           () {
             var prettyPrinter = TomlPrettyPrinter();
-            prettyPrinter.visitInlineTable(TomlInlineTable([
-              TomlKeyValuePair(
-                TomlKey([TomlUnquotedKey('foo')]),
-                TomlInteger.dec(BigInt.from(0)),
-              ),
-              TomlKeyValuePair(
-                TomlKey([TomlUnquotedKey('bar')]),
-                TomlInteger.dec(BigInt.from(1)),
-              ),
-              TomlKeyValuePair(
-                TomlKey([TomlUnquotedKey('baz')]),
-                TomlInteger.dec(BigInt.from(2)),
-              ),
-            ]));
+            prettyPrinter.visitInlineTable(
+              TomlInlineTable([
+                TomlKeyValuePair(
+                  TomlKey([TomlUnquotedKey('foo')]),
+                  TomlInteger.dec(BigInt.from(0)),
+                ),
+                TomlKeyValuePair(
+                  TomlKey([TomlUnquotedKey('bar')]),
+                  TomlInteger.dec(BigInt.from(1)),
+                ),
+                TomlKeyValuePair(
+                  TomlKey([TomlUnquotedKey('baz')]),
+                  TomlInteger.dec(BigInt.from(2)),
+                ),
+              ]),
+            );
             expect(
               prettyPrinter.toString(),
               equals('{ foo = 0, bar = 1, baz = 2 }'),
@@ -356,10 +375,7 @@ void main() {
             prettyPrinter.visitBasicString(
               TomlBasicString('line 1\rstill line 1'),
             );
-            expect(
-              prettyPrinter.toString(),
-              equals(r'"line 1\rstill line 1"'),
-            );
+            expect(prettyPrinter.toString(), equals(r'"line 1\rstill line 1"'));
           });
         });
         group('visitLiteralString', () {
@@ -526,7 +542,7 @@ void main() {
           TomlKey([
             TomlUnquotedKey('parent'),
             TomlUnquotedKey('table'),
-            TomlUnquotedKey('child')
+            TomlUnquotedKey('child'),
           ]),
         );
         expect(prettyPrinter.toString(), equals('parent.table.child'));
@@ -586,32 +602,36 @@ void main() {
       });
       test('separates key/value pairs by newlines', () {
         var prettyPrinter = TomlPrettyPrinter();
-        prettyPrinter.visitDocument(TomlDocument([
-          TomlKeyValuePair(
-            TomlKey([TomlUnquotedKey('key1')]),
-            TomlInteger.dec(BigInt.from(1)),
-          ),
-          TomlKeyValuePair(
-            TomlKey([TomlUnquotedKey('key2')]),
-            TomlInteger.dec(BigInt.from(2)),
-          ),
-        ]));
+        prettyPrinter.visitDocument(
+          TomlDocument([
+            TomlKeyValuePair(
+              TomlKey([TomlUnquotedKey('key1')]),
+              TomlInteger.dec(BigInt.from(1)),
+            ),
+            TomlKeyValuePair(
+              TomlKey([TomlUnquotedKey('key2')]),
+              TomlInteger.dec(BigInt.from(2)),
+            ),
+          ]),
+        );
         expect(prettyPrinter.toString(), equals('key1 = 1\nkey2 = 2\n'));
       });
       test('inserts blank line before standard table headers', () {
         var prettyPrinter = TomlPrettyPrinter();
-        prettyPrinter.visitDocument(TomlDocument([
-          TomlStandardTable(TomlKey([TomlUnquotedKey('table1')])),
-          TomlKeyValuePair(
-            TomlKey([TomlUnquotedKey('key1')]),
-            TomlInteger.dec(BigInt.from(1)),
-          ),
-          TomlStandardTable(TomlKey([TomlUnquotedKey('table2')])),
-          TomlKeyValuePair(
-            TomlKey([TomlUnquotedKey('key2')]),
-            TomlInteger.dec(BigInt.from(2)),
-          ),
-        ]));
+        prettyPrinter.visitDocument(
+          TomlDocument([
+            TomlStandardTable(TomlKey([TomlUnquotedKey('table1')])),
+            TomlKeyValuePair(
+              TomlKey([TomlUnquotedKey('key1')]),
+              TomlInteger.dec(BigInt.from(1)),
+            ),
+            TomlStandardTable(TomlKey([TomlUnquotedKey('table2')])),
+            TomlKeyValuePair(
+              TomlKey([TomlUnquotedKey('key2')]),
+              TomlInteger.dec(BigInt.from(2)),
+            ),
+          ]),
+        );
         expect(
           prettyPrinter.toString(),
           equals('[table1]\nkey1 = 1\n\n[table2]\nkey2 = 2\n'),
@@ -619,18 +639,20 @@ void main() {
       });
       test('inserts blank line before array table headers', () {
         var prettyPrinter = TomlPrettyPrinter();
-        prettyPrinter.visitDocument(TomlDocument([
-          TomlArrayTable(TomlKey([TomlUnquotedKey('array1')])),
-          TomlKeyValuePair(
-            TomlKey([TomlUnquotedKey('key1')]),
-            TomlInteger.dec(BigInt.from(1)),
-          ),
-          TomlArrayTable(TomlKey([TomlUnquotedKey('array2')])),
-          TomlKeyValuePair(
-            TomlKey([TomlUnquotedKey('key2')]),
-            TomlInteger.dec(BigInt.from(2)),
-          ),
-        ]));
+        prettyPrinter.visitDocument(
+          TomlDocument([
+            TomlArrayTable(TomlKey([TomlUnquotedKey('array1')])),
+            TomlKeyValuePair(
+              TomlKey([TomlUnquotedKey('key1')]),
+              TomlInteger.dec(BigInt.from(1)),
+            ),
+            TomlArrayTable(TomlKey([TomlUnquotedKey('array2')])),
+            TomlKeyValuePair(
+              TomlKey([TomlUnquotedKey('key2')]),
+              TomlInteger.dec(BigInt.from(2)),
+            ),
+          ]),
+        );
         expect(
           prettyPrinter.toString(),
           equals('[[array1]]\nkey1 = 1\n\n[[array2]]\nkey2 = 2\n'),

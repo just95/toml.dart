@@ -51,40 +51,34 @@ void main() {
           expect(d1.hashCode, isNot(equals(d2.hashCode)));
         },
       );
-      test(
-        'offset date-times with utc and positive offsets have different '
-        'hash codes',
-        () {
-          var d1 = TomlOffsetDateTime(
-            TomlFullDate(1989, 11, 9),
-            TomlPartialTime(17, 53, 0),
-            TomlTimeZoneOffset.utc(),
-          );
-          var d2 = TomlOffsetDateTime(
-            TomlFullDate(1989, 11, 9),
-            TomlPartialTime(17, 53, 0),
-            TomlTimeZoneOffset.positive(1, 0),
-          );
-          expect(d1.hashCode, isNot(equals(d2.hashCode)));
-        },
-      );
-      test(
-        'offset date-times with utc and negative offsets have different '
-        'hash codes',
-        () {
-          var d1 = TomlOffsetDateTime(
-            TomlFullDate(1989, 11, 9),
-            TomlPartialTime(17, 53, 0),
-            TomlTimeZoneOffset.utc(),
-          );
-          var d2 = TomlOffsetDateTime(
-            TomlFullDate(1989, 11, 9),
-            TomlPartialTime(17, 53, 0),
-            TomlTimeZoneOffset.negative(1, 0),
-          );
-          expect(d1.hashCode, isNot(equals(d2.hashCode)));
-        },
-      );
+      test('offset date-times with utc and positive offsets have different '
+          'hash codes', () {
+        var d1 = TomlOffsetDateTime(
+          TomlFullDate(1989, 11, 9),
+          TomlPartialTime(17, 53, 0),
+          TomlTimeZoneOffset.utc(),
+        );
+        var d2 = TomlOffsetDateTime(
+          TomlFullDate(1989, 11, 9),
+          TomlPartialTime(17, 53, 0),
+          TomlTimeZoneOffset.positive(1, 0),
+        );
+        expect(d1.hashCode, isNot(equals(d2.hashCode)));
+      });
+      test('offset date-times with utc and negative offsets have different '
+          'hash codes', () {
+        var d1 = TomlOffsetDateTime(
+          TomlFullDate(1989, 11, 9),
+          TomlPartialTime(17, 53, 0),
+          TomlTimeZoneOffset.utc(),
+        );
+        var d2 = TomlOffsetDateTime(
+          TomlFullDate(1989, 11, 9),
+          TomlPartialTime(17, 53, 0),
+          TomlTimeZoneOffset.negative(1, 0),
+        );
+        expect(d1.hashCode, isNot(equals(d2.hashCode)));
+      });
       test(
         'offset date-times with positive and negative offsets have different '
         'hash codes',
@@ -124,14 +118,14 @@ void main() {
     group('fromDateTime', () {
       test('converts date-times with second precision correctly', () {
         expect(
-          TomlOffsetDateTime.fromDateTime(
-            DateTime.utc(1989, 11, 9, 17, 53),
+          TomlOffsetDateTime.fromDateTime(DateTime.utc(1989, 11, 9, 17, 53)),
+          equals(
+            TomlOffsetDateTime(
+              TomlFullDate(1989, 11, 9),
+              TomlPartialTime(17, 53, 0),
+              TomlTimeZoneOffset.utc(),
+            ),
           ),
-          equals(TomlOffsetDateTime(
-            TomlFullDate(1989, 11, 9),
-            TomlPartialTime(17, 53, 0),
-            TomlTimeZoneOffset.utc(),
-          )),
         );
       });
       test('converts date-times with millisecond precision correctly', () {
@@ -139,11 +133,13 @@ void main() {
           TomlOffsetDateTime.fromDateTime(
             DateTime.utc(1989, 11, 9, 17, 53, 0, 123),
           ),
-          equals(TomlOffsetDateTime(
-            TomlFullDate(1989, 11, 9),
-            TomlPartialTime(17, 53, 0, [123]),
-            TomlTimeZoneOffset.utc(),
-          )),
+          equals(
+            TomlOffsetDateTime(
+              TomlFullDate(1989, 11, 9),
+              TomlPartialTime(17, 53, 0, [123]),
+              TomlTimeZoneOffset.utc(),
+            ),
+          ),
         );
       });
       test(
@@ -152,11 +148,13 @@ void main() {
           var dateTime = DateTime(1989, 11, 9, 17, 53);
           expect(
             TomlOffsetDateTime.fromDateTime(dateTime),
-            equals(TomlOffsetDateTime(
-              TomlFullDate(1989, 11, 9),
-              TomlPartialTime(17, 53, 0),
-              TomlTimeZoneOffset.localAtInstant(dateTime),
-            )),
+            equals(
+              TomlOffsetDateTime(
+                TomlFullDate(1989, 11, 9),
+                TomlPartialTime(17, 53, 0),
+                TomlTimeZoneOffset.localAtInstant(dateTime),
+              ),
+            ),
           );
         },
       );

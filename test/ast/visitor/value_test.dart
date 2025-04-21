@@ -32,16 +32,10 @@ void main() {
   group('TomlValueVisitor', () {
     final visitor = TomlValueTestVisitor();
     test('visitArray', () {
-      expect(
-        visitor.visitValue(TomlArray([])),
-        equals('visitArray'),
-      );
+      expect(visitor.visitValue(TomlArray([])), equals('visitArray'));
     });
     test('visitBoolean', () {
-      expect(
-        visitor.visitValue(TomlBoolean(true)),
-        equals('visitBoolean'),
-      );
+      expect(visitor.visitValue(TomlBoolean(true)), equals('visitBoolean'));
     });
     test('visitDateTime', () {
       expect(
@@ -50,10 +44,7 @@ void main() {
       );
     });
     test('visitFloat', () {
-      expect(
-        visitor.visitValue(TomlFloat(13.37)),
-        equals('visitFloat'),
-      );
+      expect(visitor.visitValue(TomlFloat(13.37)), equals('visitFloat'));
     });
     test('visitInteger', () {
       expect(

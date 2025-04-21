@@ -49,7 +49,7 @@ class TomlBasicString extends TomlSinglelineString {
     char('\x21'),
     range('\x23', '\x5B'),
     range('\x5D', '\x7E'),
-    tomlNonAscii
+    tomlNonAscii,
   ]).flatten('Basic string character expected');
 
   /// Escapes all characters of the given string that are not allowed to

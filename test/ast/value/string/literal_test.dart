@@ -58,12 +58,14 @@ void main() {
         var s2 = TomlMultilineBasicString('value');
         expect(s1.hashCode, isNot(equals(s2.hashCode)));
       });
-      test('literal and multiline literal strings have different hash codes',
-          () {
-        var s1 = TomlLiteralString('value');
-        var s2 = TomlMultilineLiteralString('value');
-        expect(s1.hashCode, isNot(equals(s2.hashCode)));
-      });
+      test(
+        'literal and multiline literal strings have different hash codes',
+        () {
+          var s1 = TomlLiteralString('value');
+          var s2 = TomlMultilineLiteralString('value');
+          expect(s1.hashCode, isNot(equals(s2.hashCode)));
+        },
+      );
     });
   });
 }

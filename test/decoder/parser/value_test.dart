@@ -7,106 +7,120 @@ void main() {
   group('TomlValue.parse', () {
     group('Array', () {
       test('can parse empty array', () {
-        expect(
-          TomlValue.parse('[]'),
-          equals(TomlArray([])),
-        );
+        expect(TomlValue.parse('[]'), equals(TomlArray([])));
       });
       test('can parse empty array with whitespace', () {
-        expect(
-          TomlValue.parse('[ ]'),
-          equals(TomlArray([])),
-        );
+        expect(TomlValue.parse('[ ]'), equals(TomlArray([])));
       });
       test('can parse array of integers', () {
         expect(
           TomlValue.parse('[1, 2, 3]'),
-          equals(TomlArray([
-            TomlInteger.dec(BigInt.from(1)),
-            TomlInteger.dec(BigInt.from(2)),
-            TomlInteger.dec(BigInt.from(3))
-          ])),
+          equals(
+            TomlArray([
+              TomlInteger.dec(BigInt.from(1)),
+              TomlInteger.dec(BigInt.from(2)),
+              TomlInteger.dec(BigInt.from(3)),
+            ]),
+          ),
         );
       });
       test('can parse heterogeneous arrays', () {
         expect(
           TomlValue.parse('[1, true, 3.0]'),
-          equals(TomlArray([
-            TomlInteger.dec(BigInt.from(1)),
-            TomlBoolean(true),
-            TomlFloat(3.0),
-          ])),
+          equals(
+            TomlArray([
+              TomlInteger.dec(BigInt.from(1)),
+              TomlBoolean(true),
+              TomlFloat(3.0),
+            ]),
+          ),
         );
       });
       test('can parse array with trailing comma', () {
         expect(
           TomlValue.parse('[1, 2, 3,]'),
-          equals(TomlArray([
-            TomlInteger.dec(BigInt.from(1)),
-            TomlInteger.dec(BigInt.from(2)),
-            TomlInteger.dec(BigInt.from(3))
-          ])),
+          equals(
+            TomlArray([
+              TomlInteger.dec(BigInt.from(1)),
+              TomlInteger.dec(BigInt.from(2)),
+              TomlInteger.dec(BigInt.from(3)),
+            ]),
+          ),
         );
       });
       test('cannot parse array with comma only', () {
         var input = '[,]';
         expect(
           () => TomlValue.parse(input),
-          throwsA(equals(TomlParserException(
-            message: '"]" expected',
-            source: input,
-            offset: 1,
-          ))),
+          throwsA(
+            equals(
+              TomlParserException(
+                message: '"]" expected',
+                source: input,
+                offset: 1,
+              ),
+            ),
+          ),
         );
       });
       test('can parse array with whitespace after the opening bracket', () {
         expect(
           TomlValue.parse('[ 1, 2, 3]'),
-          equals(TomlArray([
-            TomlInteger.dec(BigInt.from(1)),
-            TomlInteger.dec(BigInt.from(2)),
-            TomlInteger.dec(BigInt.from(3))
-          ])),
+          equals(
+            TomlArray([
+              TomlInteger.dec(BigInt.from(1)),
+              TomlInteger.dec(BigInt.from(2)),
+              TomlInteger.dec(BigInt.from(3)),
+            ]),
+          ),
         );
       });
       test('can parse array with whitespace before the closing bracket', () {
         expect(
           TomlValue.parse('[1, 2, 3 ]'),
-          equals(TomlArray([
-            TomlInteger.dec(BigInt.from(1)),
-            TomlInteger.dec(BigInt.from(2)),
-            TomlInteger.dec(BigInt.from(3))
-          ])),
+          equals(
+            TomlArray([
+              TomlInteger.dec(BigInt.from(1)),
+              TomlInteger.dec(BigInt.from(2)),
+              TomlInteger.dec(BigInt.from(3)),
+            ]),
+          ),
         );
       });
       test('can parse array with whitespace before commas', () {
         expect(
           TomlValue.parse('[1 , 2 , 3]'),
-          equals(TomlArray([
-            TomlInteger.dec(BigInt.from(1)),
-            TomlInteger.dec(BigInt.from(2)),
-            TomlInteger.dec(BigInt.from(3))
-          ])),
+          equals(
+            TomlArray([
+              TomlInteger.dec(BigInt.from(1)),
+              TomlInteger.dec(BigInt.from(2)),
+              TomlInteger.dec(BigInt.from(3)),
+            ]),
+          ),
         );
       });
       test('can parse array with newlines after the opening bracket', () {
         expect(
           TomlValue.parse('[\n1, 2, 3]'),
-          equals(TomlArray([
-            TomlInteger.dec(BigInt.from(1)),
-            TomlInteger.dec(BigInt.from(2)),
-            TomlInteger.dec(BigInt.from(3))
-          ])),
+          equals(
+            TomlArray([
+              TomlInteger.dec(BigInt.from(1)),
+              TomlInteger.dec(BigInt.from(2)),
+              TomlInteger.dec(BigInt.from(3)),
+            ]),
+          ),
         );
       });
       test('can parse array with newlines before the closing bracket', () {
         expect(
           TomlValue.parse('[1, 2, 3\n]'),
-          equals(TomlArray([
-            TomlInteger.dec(BigInt.from(1)),
-            TomlInteger.dec(BigInt.from(2)),
-            TomlInteger.dec(BigInt.from(3))
-          ])),
+          equals(
+            TomlArray([
+              TomlInteger.dec(BigInt.from(1)),
+              TomlInteger.dec(BigInt.from(2)),
+              TomlInteger.dec(BigInt.from(3)),
+            ]),
+          ),
         );
       });
       test('can parse array with newlines after commas', () {
@@ -116,11 +130,13 @@ void main() {
             ' 2,\n'
             ' 3]',
           ),
-          equals(TomlArray([
-            TomlInteger.dec(BigInt.from(1)),
-            TomlInteger.dec(BigInt.from(2)),
-            TomlInteger.dec(BigInt.from(3))
-          ])),
+          equals(
+            TomlArray([
+              TomlInteger.dec(BigInt.from(1)),
+              TomlInteger.dec(BigInt.from(2)),
+              TomlInteger.dec(BigInt.from(3)),
+            ]),
+          ),
         );
       });
       test('can parse array with newlines before commas', () {
@@ -130,11 +146,13 @@ void main() {
             ', 2\n'
             ', 3]',
           ),
-          equals(TomlArray([
-            TomlInteger.dec(BigInt.from(1)),
-            TomlInteger.dec(BigInt.from(2)),
-            TomlInteger.dec(BigInt.from(3))
-          ])),
+          equals(
+            TomlArray([
+              TomlInteger.dec(BigInt.from(1)),
+              TomlInteger.dec(BigInt.from(2)),
+              TomlInteger.dec(BigInt.from(3)),
+            ]),
+          ),
         );
       });
       test('can parse array with indentation before commas', () {
@@ -145,11 +163,13 @@ void main() {
             '  , 3\n'
             ']',
           ),
-          equals(TomlArray([
-            TomlInteger.dec(BigInt.from(1)),
-            TomlInteger.dec(BigInt.from(2)),
-            TomlInteger.dec(BigInt.from(3))
-          ])),
+          equals(
+            TomlArray([
+              TomlInteger.dec(BigInt.from(1)),
+              TomlInteger.dec(BigInt.from(2)),
+              TomlInteger.dec(BigInt.from(3)),
+            ]),
+          ),
         );
       });
       test('can parse array with indentation before closing bracket', () {
@@ -158,11 +178,13 @@ void main() {
             '[ 1, 2, 3\n'
             '  ]',
           ),
-          equals(TomlArray([
-            TomlInteger.dec(BigInt.from(1)),
-            TomlInteger.dec(BigInt.from(2)),
-            TomlInteger.dec(BigInt.from(3))
-          ])),
+          equals(
+            TomlArray([
+              TomlInteger.dec(BigInt.from(1)),
+              TomlInteger.dec(BigInt.from(2)),
+              TomlInteger.dec(BigInt.from(3)),
+            ]),
+          ),
         );
       });
       test('can parse array with comment after opening bracket', () {
@@ -171,11 +193,13 @@ void main() {
             '[ # Comment\n'
             '  1, 2, 3 ]',
           ),
-          equals(TomlArray([
-            TomlInteger.dec(BigInt.from(1)),
-            TomlInteger.dec(BigInt.from(2)),
-            TomlInteger.dec(BigInt.from(3))
-          ])),
+          equals(
+            TomlArray([
+              TomlInteger.dec(BigInt.from(1)),
+              TomlInteger.dec(BigInt.from(2)),
+              TomlInteger.dec(BigInt.from(3)),
+            ]),
+          ),
         );
       });
       test('can parse array with multiline comment after opening bracket', () {
@@ -185,11 +209,13 @@ void main() {
             '  # Line 2\n'
             '  1, 2, 3 ]',
           ),
-          equals(TomlArray([
-            TomlInteger.dec(BigInt.from(1)),
-            TomlInteger.dec(BigInt.from(2)),
-            TomlInteger.dec(BigInt.from(3))
-          ])),
+          equals(
+            TomlArray([
+              TomlInteger.dec(BigInt.from(1)),
+              TomlInteger.dec(BigInt.from(2)),
+              TomlInteger.dec(BigInt.from(3)),
+            ]),
+          ),
         );
       });
       test('can parse array with comment before closing bracket', () {
@@ -198,11 +224,13 @@ void main() {
             '[ 1, 2, 3 # Comment\n'
             ']',
           ),
-          equals(TomlArray([
-            TomlInteger.dec(BigInt.from(1)),
-            TomlInteger.dec(BigInt.from(2)),
-            TomlInteger.dec(BigInt.from(3))
-          ])),
+          equals(
+            TomlArray([
+              TomlInteger.dec(BigInt.from(1)),
+              TomlInteger.dec(BigInt.from(2)),
+              TomlInteger.dec(BigInt.from(3)),
+            ]),
+          ),
         );
       });
       test('can parse array with multiline comment before closing bracket', () {
@@ -212,11 +240,13 @@ void main() {
             '          # Line 2\n'
             ']',
           ),
-          equals(TomlArray([
-            TomlInteger.dec(BigInt.from(1)),
-            TomlInteger.dec(BigInt.from(2)),
-            TomlInteger.dec(BigInt.from(3))
-          ])),
+          equals(
+            TomlArray([
+              TomlInteger.dec(BigInt.from(1)),
+              TomlInteger.dec(BigInt.from(2)),
+              TomlInteger.dec(BigInt.from(3)),
+            ]),
+          ),
         );
       });
       test('can parse array with comment after comma', () {
@@ -225,11 +255,13 @@ void main() {
             '[ 1, # Comment\n'
             '  2, 3 ]',
           ),
-          equals(TomlArray([
-            TomlInteger.dec(BigInt.from(1)),
-            TomlInteger.dec(BigInt.from(2)),
-            TomlInteger.dec(BigInt.from(3))
-          ])),
+          equals(
+            TomlArray([
+              TomlInteger.dec(BigInt.from(1)),
+              TomlInteger.dec(BigInt.from(2)),
+              TomlInteger.dec(BigInt.from(3)),
+            ]),
+          ),
         );
       });
       test('can parse array with multiline comment after comma', () {
@@ -239,11 +271,13 @@ void main() {
             '     # Line 2\n'
             '  2, 3 ]',
           ),
-          equals(TomlArray([
-            TomlInteger.dec(BigInt.from(1)),
-            TomlInteger.dec(BigInt.from(2)),
-            TomlInteger.dec(BigInt.from(3))
-          ])),
+          equals(
+            TomlArray([
+              TomlInteger.dec(BigInt.from(1)),
+              TomlInteger.dec(BigInt.from(2)),
+              TomlInteger.dec(BigInt.from(3)),
+            ]),
+          ),
         );
       });
       test('can parse array with comment before comma', () {
@@ -252,11 +286,13 @@ void main() {
             '[ 1 # Comment\n'
             ', 2, 3 ]',
           ),
-          equals(TomlArray([
-            TomlInteger.dec(BigInt.from(1)),
-            TomlInteger.dec(BigInt.from(2)),
-            TomlInteger.dec(BigInt.from(3))
-          ])),
+          equals(
+            TomlArray([
+              TomlInteger.dec(BigInt.from(1)),
+              TomlInteger.dec(BigInt.from(2)),
+              TomlInteger.dec(BigInt.from(3)),
+            ]),
+          ),
         );
       });
       test('can parse array with multiline comment before comma', () {
@@ -266,11 +302,13 @@ void main() {
             '    # Line 2\n'
             ', 2, 3 ]',
           ),
-          equals(TomlArray([
-            TomlInteger.dec(BigInt.from(1)),
-            TomlInteger.dec(BigInt.from(2)),
-            TomlInteger.dec(BigInt.from(3))
-          ])),
+          equals(
+            TomlArray([
+              TomlInteger.dec(BigInt.from(1)),
+              TomlInteger.dec(BigInt.from(2)),
+              TomlInteger.dec(BigInt.from(3)),
+            ]),
+          ),
         );
       });
       test('can parse array with comment after trailing comma', () {
@@ -279,11 +317,13 @@ void main() {
             '[ 1, 2, 3, # Comment\n'
             ']',
           ),
-          equals(TomlArray([
-            TomlInteger.dec(BigInt.from(1)),
-            TomlInteger.dec(BigInt.from(2)),
-            TomlInteger.dec(BigInt.from(3))
-          ])),
+          equals(
+            TomlArray([
+              TomlInteger.dec(BigInt.from(1)),
+              TomlInteger.dec(BigInt.from(2)),
+              TomlInteger.dec(BigInt.from(3)),
+            ]),
+          ),
         );
       });
       test('can parse array with multiline comment after trailing comma', () {
@@ -293,11 +333,13 @@ void main() {
             '           # Line 2\n'
             ']',
           ),
-          equals(TomlArray([
-            TomlInteger.dec(BigInt.from(1)),
-            TomlInteger.dec(BigInt.from(2)),
-            TomlInteger.dec(BigInt.from(3))
-          ])),
+          equals(
+            TomlArray([
+              TomlInteger.dec(BigInt.from(1)),
+              TomlInteger.dec(BigInt.from(2)),
+              TomlInteger.dec(BigInt.from(3)),
+            ]),
+          ),
         );
       });
       test('can parse array with comment before trailing comma', () {
@@ -306,11 +348,13 @@ void main() {
             '[ 1, 2, 3 # Comment\n'
             ', ]',
           ),
-          equals(TomlArray([
-            TomlInteger.dec(BigInt.from(1)),
-            TomlInteger.dec(BigInt.from(2)),
-            TomlInteger.dec(BigInt.from(3))
-          ])),
+          equals(
+            TomlArray([
+              TomlInteger.dec(BigInt.from(1)),
+              TomlInteger.dec(BigInt.from(2)),
+              TomlInteger.dec(BigInt.from(3)),
+            ]),
+          ),
         );
       });
       test('can parse array with multiline comment before trailing comma', () {
@@ -320,89 +364,101 @@ void main() {
             '          # Line 2\n'
             ', ]',
           ),
-          equals(TomlArray([
-            TomlInteger.dec(BigInt.from(1)),
-            TomlInteger.dec(BigInt.from(2)),
-            TomlInteger.dec(BigInt.from(3))
-          ])),
+          equals(
+            TomlArray([
+              TomlInteger.dec(BigInt.from(1)),
+              TomlInteger.dec(BigInt.from(2)),
+              TomlInteger.dec(BigInt.from(3)),
+            ]),
+          ),
         );
       });
       test('cannot parse array with missing closing bracket', () {
         var input = '[ 1, 2, 3';
         expect(
           () => TomlValue.parse(input),
-          throwsA(equals(TomlParserException(
-            message: '"]" expected',
-            source: input,
-            offset: 9,
-          ))),
+          throwsA(
+            equals(
+              TomlParserException(
+                message: '"]" expected',
+                source: input,
+                offset: 9,
+              ),
+            ),
+          ),
         );
       });
       test('cannot parse array with missing value', () {
         var input = '[ 1, , 3 ]';
         expect(
           () => TomlValue.parse(input),
-          throwsA(equals(TomlParserException(
-            message: '"]" expected',
-            source: input,
-            offset: 5,
-          ))),
+          throwsA(
+            equals(
+              TomlParserException(
+                message: '"]" expected',
+                source: input,
+                offset: 5,
+              ),
+            ),
+          ),
         );
       });
     });
     group('Boolean', () {
       test('can parse true', () {
-        expect(
-          TomlValue.parse('true'),
-          equals(TomlBoolean(true)),
-        );
+        expect(TomlValue.parse('true'), equals(TomlBoolean(true)));
       });
       test('can parse false', () {
-        expect(
-          TomlValue.parse('false'),
-          equals(TomlBoolean(false)),
-        );
+        expect(TomlValue.parse('false'), equals(TomlBoolean(false)));
       });
     });
     group('Offset Date-Time', () {
       test('can parse UTC date-times', () {
         expect(
           TomlValue.parse('1989-11-09 17:53:00Z'),
-          equals(TomlOffsetDateTime(
-            TomlFullDate(1989, 11, 9),
-            TomlPartialTime(17, 53, 0),
-            TomlTimeZoneOffset.utc(),
-          )),
+          equals(
+            TomlOffsetDateTime(
+              TomlFullDate(1989, 11, 9),
+              TomlPartialTime(17, 53, 0),
+              TomlTimeZoneOffset.utc(),
+            ),
+          ),
         );
       });
       test('allows \'T\' as a separator between date and time', () {
         expect(
           TomlValue.parse('1989-11-09T17:53:00Z'),
-          equals(TomlOffsetDateTime(
-            TomlFullDate(1989, 11, 9),
-            TomlPartialTime(17, 53, 0),
-            TomlTimeZoneOffset.utc(),
-          )),
+          equals(
+            TomlOffsetDateTime(
+              TomlFullDate(1989, 11, 9),
+              TomlPartialTime(17, 53, 0),
+              TomlTimeZoneOffset.utc(),
+            ),
+          ),
         );
       });
       test('can parse date-times with numeric time zone offset', () {
         expect(
           TomlValue.parse('1989-11-09 18:53:00+01:00'),
-          equals(TomlOffsetDateTime(
-            TomlFullDate(1989, 11, 9),
-            TomlPartialTime(18, 53, 0),
-            TomlTimeZoneOffset.positive(1, 0),
-          )),
+          equals(
+            TomlOffsetDateTime(
+              TomlFullDate(1989, 11, 9),
+              TomlPartialTime(18, 53, 0),
+              TomlTimeZoneOffset.positive(1, 0),
+            ),
+          ),
         );
       });
       test('can parse date-times with fractions of a second', () {
         expect(
           TomlValue.parse('1989-11-09 18:53:00.0099999+01:00'),
-          equals(TomlOffsetDateTime(
-            TomlFullDate(1989, 11, 9),
-            TomlPartialTime(18, 53, 0, [009, 999, 900]),
-            TomlTimeZoneOffset.positive(1, 0),
-          )),
+          equals(
+            TomlOffsetDateTime(
+              TomlFullDate(1989, 11, 9),
+              TomlPartialTime(18, 53, 0, [009, 999, 900]),
+              TomlTimeZoneOffset.positive(1, 0),
+            ),
+          ),
         );
       });
       test('rejects offset date-times with invalid hours', () {
@@ -422,28 +478,34 @@ void main() {
       test('can parse date-times without time-zone offset', () {
         expect(
           TomlValue.parse('1989-11-09 17:53:00'),
-          equals(TomlLocalDateTime(
-            TomlFullDate(1989, 11, 9),
-            TomlPartialTime(17, 53, 0),
-          )),
+          equals(
+            TomlLocalDateTime(
+              TomlFullDate(1989, 11, 9),
+              TomlPartialTime(17, 53, 0),
+            ),
+          ),
         );
       });
       test('allows \'T\' as a separator between date and time', () {
         expect(
           TomlValue.parse('1989-11-09T17:53:00'),
-          equals(TomlLocalDateTime(
-            TomlFullDate(1989, 11, 9),
-            TomlPartialTime(17, 53, 0),
-          )),
+          equals(
+            TomlLocalDateTime(
+              TomlFullDate(1989, 11, 9),
+              TomlPartialTime(17, 53, 0),
+            ),
+          ),
         );
       });
       test('can parse date-times with fractions of a second', () {
         expect(
           TomlValue.parse('1989-11-09 18:53:00.0099999'),
-          equals(TomlLocalDateTime(
-            TomlFullDate(1989, 11, 9),
-            TomlPartialTime(18, 53, 0, [009, 999, 900]),
-          )),
+          equals(
+            TomlLocalDateTime(
+              TomlFullDate(1989, 11, 9),
+              TomlPartialTime(18, 53, 0, [009, 999, 900]),
+            ),
+          ),
         );
       });
     });
@@ -495,10 +557,7 @@ void main() {
     });
     group('Float', () {
       test('can parse zero without sign', () {
-        expect(
-          TomlValue.parse('0.0'),
-          equals(TomlFloat(0.0)),
-        );
+        expect(TomlValue.parse('0.0'), equals(TomlFloat(0.0)));
       });
       test('can parse zero with plus sign', () {
         var node = TomlValue.parse('+0.0');
@@ -517,235 +576,242 @@ void main() {
         }
       });
       test('can parse positive float with plus sign', () {
-        expect(
-          TomlValue.parse('+1.0'),
-          equals(TomlFloat(1.0)),
-        );
+        expect(TomlValue.parse('+1.0'), equals(TomlFloat(1.0)));
       });
       test('can parse positive float without plus sign', () {
-        expect(
-          TomlValue.parse('3.1415'),
-          equals(TomlFloat(3.1415)),
-        );
+        expect(TomlValue.parse('3.1415'), equals(TomlFloat(3.1415)));
       });
       test('can parse negative float', () {
-        expect(
-          TomlValue.parse('-0.01'),
-          equals(TomlFloat(-0.01)),
-        );
+        expect(TomlValue.parse('-0.01'), equals(TomlFloat(-0.01)));
       });
       test('can parse float with zero in exponent', () {
-        expect(
-          TomlValue.parse('1e0'),
-          equals(TomlFloat(1)),
-        );
+        expect(TomlValue.parse('1e0'), equals(TomlFloat(1)));
       });
       test('can parse float without fractional part but with exponent', () {
-        expect(
-          TomlValue.parse('1e6'),
-          equals(TomlFloat(1e6)),
-        );
+        expect(TomlValue.parse('1e6'), equals(TomlFloat(1e6)));
       });
       test('can parse float with plus sign in exponent', () {
-        expect(
-          TomlValue.parse('1e+6'),
-          equals(TomlFloat(1e6)),
-        );
+        expect(TomlValue.parse('1e+6'), equals(TomlFloat(1e6)));
       });
       test('can parse float with minus sign in exponent', () {
-        expect(
-          TomlValue.parse('1e-6'),
-          equals(TomlFloat(1e-6)),
-        );
+        expect(TomlValue.parse('1e-6'), equals(TomlFloat(1e-6)));
       });
       test('can parse float with fractional and exponent part', () {
-        expect(
-          TomlValue.parse('6.626e-34'),
-          equals(TomlFloat(6.626e-34)),
-        );
+        expect(TomlValue.parse('6.626e-34'), equals(TomlFloat(6.626e-34)));
       });
       test('rejects float with decimal dot but integer part', () {
         var input = '.1415';
         expect(
           () => TomlValue.parse(input),
-          throwsA(equals(TomlParserException(
-            message: 'value expected',
-            source: input,
-            offset: 0,
-          ))),
+          throwsA(
+            equals(
+              TomlParserException(
+                message: 'value expected',
+                source: input,
+                offset: 0,
+              ),
+            ),
+          ),
         );
       });
       test('rejects float with decimal dot but no fractional digits', () {
         var input = '3.';
         expect(
           () => TomlValue.parse(input),
-          throwsA(equals(TomlParserException(
-            message: 'end of input expected',
-            source: input,
-            offset: 1,
-          ))),
+          throwsA(
+            equals(
+              TomlParserException(
+                message: 'end of input expected',
+                source: input,
+                offset: 1,
+              ),
+            ),
+          ),
         );
       });
-      test(
-        'rejects float with decimal dot and exponent part but no '
-        'fractional digits',
-        () {
-          var input = '3.e+20';
-          expect(
-            () => TomlValue.parse(input),
-            throwsA(equals(TomlParserException(
-              message: 'end of input expected',
-              source: input,
-              offset: 1,
-            ))),
-          );
-        },
-      );
+      test('rejects float with decimal dot and exponent part but no '
+          'fractional digits', () {
+        var input = '3.e+20';
+        expect(
+          () => TomlValue.parse(input),
+          throwsA(
+            equals(
+              TomlParserException(
+                message: 'end of input expected',
+                source: input,
+                offset: 1,
+              ),
+            ),
+          ),
+        );
+      });
       test('requires the fractional part to precede the exponent part', () {
         var input = '6e-34.626';
         expect(
           () => TomlValue.parse(input),
-          throwsA(equals(TomlParserException(
-            message: 'end of input expected',
-            source: input,
-            offset: 5,
-          ))),
+          throwsA(
+            equals(
+              TomlParserException(
+                message: 'end of input expected',
+                source: input,
+                offset: 5,
+              ),
+            ),
+          ),
         );
       });
       test('allows underscores in integer part', () {
-        expect(
-          TomlValue.parse('1_2.34e57'),
-          equals(TomlFloat(12.34e57)),
-        );
+        expect(TomlValue.parse('1_2.34e57'), equals(TomlFloat(12.34e57)));
       });
       test('allows underscores in fraction part', () {
-        expect(
-          TomlValue.parse('12.3_4e57'),
-          equals(TomlFloat(12.34e57)),
-        );
+        expect(TomlValue.parse('12.3_4e57'), equals(TomlFloat(12.34e57)));
       });
       test('allows underscores in exponent', () {
-        expect(
-          TomlValue.parse('12.34e5_7'),
-          equals(TomlFloat(12.34e57)),
-        );
+        expect(TomlValue.parse('12.34e5_7'), equals(TomlFloat(12.34e57)));
       });
       test('does not allow leading underscores in integer part', () {
         var input = '_12.34e57';
         expect(
           () => TomlValue.parse(input),
-          throwsA(equals(TomlParserException(
-            message: 'value expected',
-            source: input,
-            offset: 0,
-          ))),
+          throwsA(
+            equals(
+              TomlParserException(
+                message: 'value expected',
+                source: input,
+                offset: 0,
+              ),
+            ),
+          ),
         );
       });
       test('does not allow leading underscores in fractional part', () {
         var input = '12._34e57';
         expect(
           () => TomlValue.parse(input),
-          throwsA(equals(TomlParserException(
-            message: 'end of input expected',
-            source: input,
-            offset: 2,
-          ))),
+          throwsA(
+            equals(
+              TomlParserException(
+                message: 'end of input expected',
+                source: input,
+                offset: 2,
+              ),
+            ),
+          ),
         );
       });
       test('does not allow leading underscores in exponent', () {
         var input = '12.34e_57';
         expect(
           () => TomlValue.parse(input),
-          throwsA(equals(TomlParserException(
-            message: 'end of input expected',
-            source: input,
-            offset: 5,
-          ))),
+          throwsA(
+            equals(
+              TomlParserException(
+                message: 'end of input expected',
+                source: input,
+                offset: 5,
+              ),
+            ),
+          ),
         );
       });
       test('does not allow trailing underscores in integer part', () {
         var input = '12_.34e57';
         expect(
           () => TomlValue.parse(input),
-          throwsA(equals(TomlParserException(
-            message: 'end of input expected',
-            source: input,
-            offset: 2,
-          ))),
+          throwsA(
+            equals(
+              TomlParserException(
+                message: 'end of input expected',
+                source: input,
+                offset: 2,
+              ),
+            ),
+          ),
         );
       });
       test('does not allow trailing underscores in fractional part', () {
         var input = '12.34_e57';
         expect(
           () => TomlValue.parse(input),
-          throwsA(equals(TomlParserException(
-            message: 'end of input expected',
-            source: input,
-            offset: 5,
-          ))),
+          throwsA(
+            equals(
+              TomlParserException(
+                message: 'end of input expected',
+                source: input,
+                offset: 5,
+              ),
+            ),
+          ),
         );
       });
       test('does not allow trailing underscores in exponent', () {
         var input = '12.34e57_';
         expect(
           () => TomlValue.parse(input),
-          throwsA(equals(TomlParserException(
-            message: 'end of input expected',
-            source: input,
-            offset: 8,
-          ))),
+          throwsA(
+            equals(
+              TomlParserException(
+                message: 'end of input expected',
+                source: input,
+                offset: 8,
+              ),
+            ),
+          ),
         );
       });
       test('does not allow consecutive underscores in integer part', () {
         var input = '1__2.34e57';
         expect(
           () => TomlValue.parse(input),
-          throwsA(equals(TomlParserException(
-            message: 'end of input expected',
-            source: input,
-            offset: 1,
-          ))),
+          throwsA(
+            equals(
+              TomlParserException(
+                message: 'end of input expected',
+                source: input,
+                offset: 1,
+              ),
+            ),
+          ),
         );
       });
       test('does not allow consecutive underscores in fractional part', () {
         var input = '12.3__4e57';
         expect(
           () => TomlValue.parse(input),
-          throwsA(equals(TomlParserException(
-            message: 'end of input expected',
-            source: input,
-            offset: 4,
-          ))),
+          throwsA(
+            equals(
+              TomlParserException(
+                message: 'end of input expected',
+                source: input,
+                offset: 4,
+              ),
+            ),
+          ),
         );
       });
       test('does not allow consecutive underscores in exponent', () {
         var input = '12.34e5__7';
         expect(
           () => TomlValue.parse(input),
-          throwsA(equals(TomlParserException(
-            message: 'end of input expected',
-            source: input,
-            offset: 7,
-          ))),
+          throwsA(
+            equals(
+              TomlParserException(
+                message: 'end of input expected',
+                source: input,
+                offset: 7,
+              ),
+            ),
+          ),
         );
       });
       test('allows leading zeros in exponent part', () {
-        expect(
-          TomlValue.parse('12.34e+009'),
-          equals(TomlFloat(12.34e9)),
-        );
+        expect(TomlValue.parse('12.34e+009'), equals(TomlFloat(12.34e9)));
       });
       test('can parse positive infinity without plus sign', () {
-        expect(
-          TomlValue.parse('inf'),
-          equals(TomlFloat(double.infinity)),
-        );
+        expect(TomlValue.parse('inf'), equals(TomlFloat(double.infinity)));
       });
       test('can parse positive infinity with plus sign', () {
-        expect(
-          TomlValue.parse('+inf'),
-          equals(TomlFloat(double.infinity)),
-        );
+        expect(TomlValue.parse('+inf'), equals(TomlFloat(double.infinity)));
       });
       test('can parse negative infinity', () {
         expect(
@@ -787,55 +853,75 @@ void main() {
           var input = '0b_101010';
           expect(
             () => TomlValue.parse(input),
-            throwsA(equals(TomlParserException(
-              message: 'end of input expected',
-              source: input,
-              offset: 1,
-            ))),
+            throwsA(
+              equals(
+                TomlParserException(
+                  message: 'end of input expected',
+                  source: input,
+                  offset: 1,
+                ),
+              ),
+            ),
           );
         });
         test('cannot parse binary integer with trailing underscores', () {
           var input = '0b101010_';
           expect(
             () => TomlValue.parse(input),
-            throwsA(equals(TomlParserException(
-              message: 'end of input expected',
-              source: input,
-              offset: 8,
-            ))),
+            throwsA(
+              equals(
+                TomlParserException(
+                  message: 'end of input expected',
+                  source: input,
+                  offset: 8,
+                ),
+              ),
+            ),
           );
         });
         test('cannot parse binary integer with consecutive underscores', () {
           var input = '0b10__1010';
           expect(
             () => TomlValue.parse(input),
-            throwsA(equals(TomlParserException(
-              message: 'end of input expected',
-              source: input,
-              offset: 4,
-            ))),
+            throwsA(
+              equals(
+                TomlParserException(
+                  message: 'end of input expected',
+                  source: input,
+                  offset: 4,
+                ),
+              ),
+            ),
           );
         });
         test('cannot parse binary integer without digits', () {
           var input = '0b';
           expect(
             () => TomlValue.parse(input),
-            throwsA(equals(TomlParserException(
-              message: 'end of input expected',
-              source: input,
-              offset: 1,
-            ))),
+            throwsA(
+              equals(
+                TomlParserException(
+                  message: 'end of input expected',
+                  source: input,
+                  offset: 1,
+                ),
+              ),
+            ),
           );
         });
         test('cannot parse binary integer with non-binary digits', () {
           var input = '0b123';
           expect(
             () => TomlValue.parse(input),
-            throwsA(equals(TomlParserException(
-              message: 'end of input expected',
-              source: input,
-              offset: 3,
-            ))),
+            throwsA(
+              equals(
+                TomlParserException(
+                  message: 'end of input expected',
+                  source: input,
+                  offset: 3,
+                ),
+              ),
+            ),
           );
         });
       });
@@ -862,64 +948,81 @@ void main() {
           var input = '0o_755';
           expect(
             () => TomlValue.parse(input),
-            throwsA(equals(TomlParserException(
-              message: 'end of input expected',
-              source: input,
-              offset: 1,
-            ))),
+            throwsA(
+              equals(
+                TomlParserException(
+                  message: 'end of input expected',
+                  source: input,
+                  offset: 1,
+                ),
+              ),
+            ),
           );
         });
         test('cannot parse octal integer with trailing underscores', () {
           var input = '0o755_';
           expect(
             () => TomlValue.parse(input),
-            throwsA(equals(TomlParserException(
-              message: 'end of input expected',
-              source: input,
-              offset: 5,
-            ))),
+            throwsA(
+              equals(
+                TomlParserException(
+                  message: 'end of input expected',
+                  source: input,
+                  offset: 5,
+                ),
+              ),
+            ),
           );
         });
         test('cannot parse octal integer with consecutive underscores', () {
           var input = '0o7__55';
           expect(
             () => TomlValue.parse(input),
-            throwsA(equals(TomlParserException(
-              message: 'end of input expected',
-              source: input,
-              offset: 3,
-            ))),
+            throwsA(
+              equals(
+                TomlParserException(
+                  message: 'end of input expected',
+                  source: input,
+                  offset: 3,
+                ),
+              ),
+            ),
           );
         });
         test('cannot parse octal integer without digits', () {
           var input = '0o';
           expect(
             () => TomlValue.parse(input),
-            throwsA(equals(TomlParserException(
-              message: 'end of input expected',
-              source: input,
-              offset: 1,
-            ))),
+            throwsA(
+              equals(
+                TomlParserException(
+                  message: 'end of input expected',
+                  source: input,
+                  offset: 1,
+                ),
+              ),
+            ),
           );
         });
         test('cannot parse octal integer with non-octal digits', () {
           var input = '0o888';
           expect(
             () => TomlValue.parse(input),
-            throwsA(equals(TomlParserException(
-              message: 'end of input expected',
-              source: input,
-              offset: 1,
-            ))),
+            throwsA(
+              equals(
+                TomlParserException(
+                  message: 'end of input expected',
+                  source: input,
+                  offset: 1,
+                ),
+              ),
+            ),
           );
         });
       });
       group('Decimal', () {
         test('can parse zero without sign', () {
-          expect(
-            TomlValue.parse('0'),
-            equals(TomlInteger.dec(BigInt.from(0))),
-          );
+          expect(TomlValue.parse('0'), equals(TomlInteger.dec(BigInt.from(0))));
         });
         test('can parse zero with plus sign', () {
           expect(
@@ -955,11 +1058,15 @@ void main() {
           var input = '0777';
           expect(
             () => TomlValue.parse(input),
-            throwsA(equals(TomlParserException(
-              message: 'end of input expected',
-              source: input,
-              offset: 1,
-            ))),
+            throwsA(
+              equals(
+                TomlParserException(
+                  message: 'end of input expected',
+                  source: input,
+                  offset: 1,
+                ),
+              ),
+            ),
           );
         });
         test('allows underscores to be used as separators', () {
@@ -978,33 +1085,45 @@ void main() {
           var input = '_1000';
           expect(
             () => TomlValue.parse(input),
-            throwsA(equals(TomlParserException(
-              message: 'value expected',
-              source: input,
-              offset: 0,
-            ))),
+            throwsA(
+              equals(
+                TomlParserException(
+                  message: 'value expected',
+                  source: input,
+                  offset: 0,
+                ),
+              ),
+            ),
           );
         });
         test('does not allow trailing underscores', () {
           var input = '1000_';
           expect(
             () => TomlValue.parse(input),
-            throwsA(equals(TomlParserException(
-              message: 'end of input expected',
-              source: input,
-              offset: 4,
-            ))),
+            throwsA(
+              equals(
+                TomlParserException(
+                  message: 'end of input expected',
+                  source: input,
+                  offset: 4,
+                ),
+              ),
+            ),
           );
         });
         test('does not allow consecutive underscores', () {
           var input = '1__000';
           expect(
             () => TomlValue.parse(input),
-            throwsA(equals(TomlParserException(
-              message: 'end of input expected',
-              source: input,
-              offset: 1,
-            ))),
+            throwsA(
+              equals(
+                TomlParserException(
+                  message: 'end of input expected',
+                  source: input,
+                  offset: 1,
+                ),
+              ),
+            ),
           );
         });
       });
@@ -1043,111 +1162,133 @@ void main() {
           var input = '0x_badc0ded';
           expect(
             () => TomlValue.parse(input),
-            throwsA(equals(TomlParserException(
-              message: 'end of input expected',
-              source: input,
-              offset: 1,
-            ))),
+            throwsA(
+              equals(
+                TomlParserException(
+                  message: 'end of input expected',
+                  source: input,
+                  offset: 1,
+                ),
+              ),
+            ),
           );
         });
         test('cannot parse octal integer with trailing underscores', () {
           var input = '0xbadc0ded_';
           expect(
             () => TomlValue.parse(input),
-            throwsA(equals(TomlParserException(
-              message: 'end of input expected',
-              source: input,
-              offset: 10,
-            ))),
+            throwsA(
+              equals(
+                TomlParserException(
+                  message: 'end of input expected',
+                  source: input,
+                  offset: 10,
+                ),
+              ),
+            ),
           );
         });
         test('cannot parse octal integer with consecutive underscores', () {
           var input = '0xbad__c0ded';
           expect(
             () => TomlValue.parse(input),
-            throwsA(equals(TomlParserException(
-              message: 'end of input expected',
-              source: input,
-              offset: 5,
-            ))),
+            throwsA(
+              equals(
+                TomlParserException(
+                  message: 'end of input expected',
+                  source: input,
+                  offset: 5,
+                ),
+              ),
+            ),
           );
         });
         test('cannot parse octal integer without digits', () {
           var input = '0x';
           expect(
             () => TomlValue.parse(input),
-            throwsA(equals(TomlParserException(
-              message: 'end of input expected',
-              source: input,
-              offset: 1,
-            ))),
+            throwsA(
+              equals(
+                TomlParserException(
+                  message: 'end of input expected',
+                  source: input,
+                  offset: 1,
+                ),
+              ),
+            ),
           );
         });
         test('cannot parse octal integer with non-octal digits', () {
           var input = '0xZZZ';
           expect(
             () => TomlValue.parse(input),
-            throwsA(equals(TomlParserException(
-              message: 'end of input expected',
-              source: input,
-              offset: 1,
-            ))),
+            throwsA(
+              equals(
+                TomlParserException(
+                  message: 'end of input expected',
+                  source: input,
+                  offset: 1,
+                ),
+              ),
+            ),
           );
         });
       });
     });
     group('Inline Table', () {
       test('can parse empty inline table', () {
-        expect(
-          TomlValue.parse('{}'),
-          equals(TomlInlineTable([])),
-        );
+        expect(TomlValue.parse('{}'), equals(TomlInlineTable([])));
       });
       test('can parse empty inline table with whitespace', () {
-        expect(
-          TomlValue.parse('{ }'),
-          equals(TomlInlineTable([])),
-        );
+        expect(TomlValue.parse('{ }'), equals(TomlInlineTable([])));
       });
       test('can parse empty inline table with single key/value pair', () {
         expect(
           TomlValue.parse('{ key = "value" }'),
-          equals(TomlInlineTable([
-            TomlKeyValuePair(
-              TomlKey([TomlUnquotedKey('key')]),
-              TomlBasicString('value'),
-            )
-          ])),
+          equals(
+            TomlInlineTable([
+              TomlKeyValuePair(
+                TomlKey([TomlUnquotedKey('key')]),
+                TomlBasicString('value'),
+              ),
+            ]),
+          ),
         );
       });
       test('can parse empty inline table with multiple key/value pairs', () {
         expect(
           TomlValue.parse('{ x = 1, y = 2, z = 3 }'),
-          equals(TomlInlineTable([
-            TomlKeyValuePair(
-              TomlKey([TomlUnquotedKey('x')]),
-              TomlInteger.dec(BigInt.from(1)),
-            ),
-            TomlKeyValuePair(
-              TomlKey([TomlUnquotedKey('y')]),
-              TomlInteger.dec(BigInt.from(2)),
-            ),
-            TomlKeyValuePair(
-              TomlKey([TomlUnquotedKey('z')]),
-              TomlInteger.dec(BigInt.from(3)),
-            ),
-          ])),
+          equals(
+            TomlInlineTable([
+              TomlKeyValuePair(
+                TomlKey([TomlUnquotedKey('x')]),
+                TomlInteger.dec(BigInt.from(1)),
+              ),
+              TomlKeyValuePair(
+                TomlKey([TomlUnquotedKey('y')]),
+                TomlInteger.dec(BigInt.from(2)),
+              ),
+              TomlKeyValuePair(
+                TomlKey([TomlUnquotedKey('z')]),
+                TomlInteger.dec(BigInt.from(3)),
+              ),
+            ]),
+          ),
         );
       });
       test('does not allow trailing comma in inline table', () {
         var input = '{ x = 1, y = 2, z = 3, }';
         expect(
           () => TomlValue.parse(input),
-          throwsA(equals(TomlParserException(
-            message: '"}" expected',
-            source: input,
-            offset: 21,
-          ))),
+          throwsA(
+            equals(
+              TomlParserException(
+                message: '"}" expected',
+                source: input,
+                offset: 21,
+              ),
+            ),
+          ),
         );
       });
       test('allows multiline values in inline table', () {
@@ -1156,83 +1297,106 @@ void main() {
             '{ key = """\n'
             '""" }',
           ),
-          equals(TomlInlineTable([
-            TomlKeyValuePair(
-              TomlKey([TomlUnquotedKey('key')]),
-              TomlMultilineBasicString(''),
-            ),
-          ])),
+          equals(
+            TomlInlineTable([
+              TomlKeyValuePair(
+                TomlKey([TomlUnquotedKey('key')]),
+                TomlMultilineBasicString(''),
+              ),
+            ]),
+          ),
         );
       });
       test('does not allow newline after opening brace of inline table', () {
-        var input = '{\n'
+        var input =
+            '{\n'
             '  x = 1, y = 2, z = 3 }';
         expect(
           () => TomlValue.parse(input),
-          throwsA(equals(TomlParserException(
-            message: '"}" expected',
-            source: input,
-            offset: 1,
-          ))),
+          throwsA(
+            equals(
+              TomlParserException(
+                message: '"}" expected',
+                source: input,
+                offset: 1,
+              ),
+            ),
+          ),
         );
       });
       test('does not allow newline before closing brace of inline table', () {
-        var input = '{ x = 1, y = 2, z = 3 \n'
+        var input =
+            '{ x = 1, y = 2, z = 3 \n'
             '}';
         expect(
           () => TomlValue.parse(input),
-          throwsA(equals(TomlParserException(
-            message: '"}" expected',
-            source: input,
-            offset: 22,
-          ))),
+          throwsA(
+            equals(
+              TomlParserException(
+                message: '"}" expected',
+                source: input,
+                offset: 22,
+              ),
+            ),
+          ),
         );
       });
       test('does not allow newline before commas in inline table', () {
-        var input = '{ x = 1\n'
+        var input =
+            '{ x = 1\n'
             ', y = 2\n'
             ', z = 3 }';
         expect(
           () => TomlValue.parse(input),
-          throwsA(equals(TomlParserException(
-            message: '"}" expected',
-            source: input,
-            offset: 7,
-          ))),
+          throwsA(
+            equals(
+              TomlParserException(
+                message: '"}" expected',
+                source: input,
+                offset: 7,
+              ),
+            ),
+          ),
         );
       });
       test('does not allow newline after commas in inline table', () {
-        var input = '{ x = 1,\n'
+        var input =
+            '{ x = 1,\n'
             '  y = 2,\n'
             '  z = 3 }';
         expect(
           () => TomlValue.parse(input),
-          throwsA(equals(TomlParserException(
-            message: '"}" expected',
-            source: input,
-            offset: 7,
-          ))),
+          throwsA(
+            equals(
+              TomlParserException(
+                message: '"}" expected',
+                source: input,
+                offset: 7,
+              ),
+            ),
+          ),
         );
       });
       test('cannot parse inline table with missing closing brace', () {
         var input = '{ x = 1, y = 2, z = 3';
         expect(
           () => TomlValue.parse(input),
-          throwsA(equals(TomlParserException(
-            message: '"}" expected',
-            source: input,
-            offset: 21,
-          ))),
+          throwsA(
+            equals(
+              TomlParserException(
+                message: '"}" expected',
+                source: input,
+                offset: 21,
+              ),
+            ),
+          ),
         );
       });
     });
     group('String', () {
       group('Basic', () {
         test('can parse empty basic string', () {
-          expect(
-            TomlValue.parse('""'),
-            equals(TomlBasicString('')),
-          );
+          expect(TomlValue.parse('""'), equals(TomlBasicString('')));
         });
         test('can parse basic string with escape sequences', () {
           expect(
@@ -1241,11 +1405,13 @@ void main() {
               r'\"You can quote me\". '
               r'Name\tJos\u00E9\nLocation\tSF."',
             ),
-            equals(TomlBasicString(
-              "I'm a string. "
-              '"You can quote me". '
-              'Name\tJos\u00E9\nLocation\tSF.',
-            )),
+            equals(
+              TomlBasicString(
+                "I'm a string. "
+                '"You can quote me". '
+                'Name\tJos\u00E9\nLocation\tSF.',
+              ),
+            ),
           );
         });
         test('can parse basic string with long Unicode escape sequences', () {
@@ -1267,46 +1433,59 @@ void main() {
           );
         });
         test('does not allow newlines', () {
-          var input = '"Line 1\n'
+          var input =
+              '"Line 1\n'
               'Line 2"';
           expect(
             () => TomlValue.parse(input),
-            throwsA(equals(TomlParserException(
-              message: "closing '\"' expected",
-              source: input,
-              offset: 7,
-            ))),
+            throwsA(
+              equals(
+                TomlParserException(
+                  message: "closing '\"' expected",
+                  source: input,
+                  offset: 7,
+                ),
+              ),
+            ),
           );
         });
         test('does not allow windows newlines', () {
-          var input = '"Line 1\r\n'
+          var input =
+              '"Line 1\r\n'
               'Line 2"';
           expect(
             () => TomlValue.parse(input),
-            throwsA(equals(TomlParserException(
-              message: "closing '\"' expected",
-              source: input,
-              offset: 7,
-            ))),
+            throwsA(
+              equals(
+                TomlParserException(
+                  message: "closing '\"' expected",
+                  source: input,
+                  offset: 7,
+                ),
+              ),
+            ),
           );
         });
         test('does not allow standalone carriage returns', () {
-          var input = '"Line 1\r'
+          var input =
+              '"Line 1\r'
               'Line 2"';
           expect(
             () => TomlValue.parse(input),
-            throwsA(equals(TomlParserException(
-              message: "closing '\"' expected",
-              source: input,
-              offset: 7,
-            ))),
+            throwsA(
+              equals(
+                TomlParserException(
+                  message: "closing '\"' expected",
+                  source: input,
+                  offset: 7,
+                ),
+              ),
+            ),
           );
         });
         test('allows raw tabs', () {
           expect(
-            TomlValue.parse(
-              '"Column 1\tColumn 2"',
-            ),
+            TomlValue.parse('"Column 1\tColumn 2"'),
             equals(TomlBasicString('Column 1\tColumn 2')),
           );
         });
@@ -1314,32 +1493,38 @@ void main() {
           var input = '"\u0000"';
           expect(
             () => TomlValue.parse(input),
-            throwsA(equals(TomlParserException(
-              message: "closing '\"' expected",
-              source: input,
-              offset: 1,
-            ))),
+            throwsA(
+              equals(
+                TomlParserException(
+                  message: "closing '\"' expected",
+                  source: input,
+                  offset: 1,
+                ),
+              ),
+            ),
           );
         });
         test('does not allow unpaired UTF-16 surrogate code points', () {
           var input = '"High surrogate \uD83E without low surrogate"';
           expect(
             () => TomlValue.parse(input),
-            throwsA(equals(TomlParserException(
-              message: "closing '\"' expected",
-              source: input,
-              offset: 16,
-            ))),
+            throwsA(
+              equals(
+                TomlParserException(
+                  message: "closing '\"' expected",
+                  source: input,
+                  offset: 16,
+                ),
+              ),
+            ),
           );
         });
         test('allows UTF-16 surrogate pairs', () {
           expect(
-            TomlValue.parse(
-              '"High and low surrogate \uD83E\uDDA6 as a pair"',
+            TomlValue.parse('"High and low surrogate \uD83E\uDDA6 as a pair"'),
+            equals(
+              TomlBasicString('High and low surrogate \uD83E\uDDA6 as a pair'),
             ),
-            equals(TomlBasicString(
-              'High and low surrogate \uD83E\uDDA6 as a pair',
-            )),
           );
         });
         test(
@@ -1367,31 +1552,29 @@ void main() {
           var input = '"Hello, World!';
           expect(
             () => TomlValue.parse(input),
-            throwsA(equals(TomlParserException(
-              message: "closing '\"' expected",
-              source: input,
-              offset: 14,
-            ))),
+            throwsA(
+              equals(
+                TomlParserException(
+                  message: "closing '\"' expected",
+                  source: input,
+                  offset: 14,
+                ),
+              ),
+            ),
           );
         });
       });
       group('Multiline Basic', () {
         test('can parse empty multiline basic strings', () {
           expect(
-            TomlValue.parse(
-              '""""""',
-            ),
+            TomlValue.parse('""""""'),
             equals(TomlMultilineBasicString('')),
           );
         });
         test('can parse multiline basic string without newlines', () {
           expect(
-            TomlValue.parse(
-              '"""Roses are red, Violets are blue"""',
-            ),
-            equals(TomlMultilineBasicString(
-              'Roses are red, Violets are blue',
-            )),
+            TomlValue.parse('"""Roses are red, Violets are blue"""'),
+            equals(TomlMultilineBasicString('Roses are red, Violets are blue')),
           );
         });
         test('can parse multiline basic string with newlines', () {
@@ -1400,10 +1583,12 @@ void main() {
               '"""Roses are red\n'
               'Violets are blue"""',
             ),
-            equals(TomlMultilineBasicString(
-              'Roses are red\n'
-              'Violets are blue',
-            )),
+            equals(
+              TomlMultilineBasicString(
+                'Roses are red\n'
+                'Violets are blue',
+              ),
+            ),
           );
         });
         test('allows Windows newlines', () {
@@ -1412,22 +1597,29 @@ void main() {
               '"""Roses are red\r\n'
               'Violets are blue"""',
             ),
-            equals(TomlMultilineBasicString(
-              'Roses are red\r\n'
-              'Violets are blue',
-            )),
+            equals(
+              TomlMultilineBasicString(
+                'Roses are red\r\n'
+                'Violets are blue',
+              ),
+            ),
           );
         });
         test('does not allow standalone carriage returns', () {
-          var input = '"""Roses are red\r'
+          var input =
+              '"""Roses are red\r'
               'Violets are blue"""';
           expect(
             () => TomlValue.parse(input),
-            throwsA(equals(TomlParserException(
-              message: "closing '\"\"\"' expected",
-              source: input,
-              offset: 16,
-            ))),
+            throwsA(
+              equals(
+                TomlParserException(
+                  message: "closing '\"\"\"' expected",
+                  source: input,
+                  offset: 16,
+                ),
+              ),
+            ),
           );
         });
         test('trims first newline after opening delimiter', () {
@@ -1437,10 +1629,12 @@ void main() {
               'Roses are red\n'
               'Violets are blue"""',
             ),
-            equals(TomlMultilineBasicString(
-              'Roses are red\n'
-              'Violets are blue',
-            )),
+            equals(
+              TomlMultilineBasicString(
+                'Roses are red\n'
+                'Violets are blue',
+              ),
+            ),
           );
         });
         test('does not trim final newline before closing delimiter', () {
@@ -1450,10 +1644,12 @@ void main() {
               'Violets are blue\n'
               '"""',
             ),
-            equals(TomlMultilineBasicString(
-              'Roses are red\n'
-              'Violets are blue\n',
-            )),
+            equals(
+              TomlMultilineBasicString(
+                'Roses are red\n'
+                'Violets are blue\n',
+              ),
+            ),
           );
         });
         test('allows trailing newlines and whitespace to be escaped', () {
@@ -1465,9 +1661,11 @@ void main() {
               '\t\tthe lazy dog.\\    \n'
               '"""',
             ),
-            equals(TomlMultilineBasicString(
-              'The quick brown fox jumps over the lazy dog.',
-            )),
+            equals(
+              TomlMultilineBasicString(
+                'The quick brown fox jumps over the lazy dog.',
+              ),
+            ),
           );
         });
         test('requires line-ending backslashes to be unescaped', () {
@@ -1477,111 +1675,103 @@ void main() {
               'Violets are blue\n'
               '"""',
             ),
-            equals(TomlMultilineBasicString(
-              'Roses are red \\\n'
-              'Violets are blue\n',
-            )),
+            equals(
+              TomlMultilineBasicString(
+                'Roses are red \\\n'
+                'Violets are blue\n',
+              ),
+            ),
           );
         });
         test('allows two consecutive double quotes without escaping', () {
           expect(
             TomlValue.parse('"""Foo ""Bar"" Baz"""'),
-            equals(TomlMultilineBasicString(
-              'Foo ""Bar"" Baz',
-            )),
+            equals(TomlMultilineBasicString('Foo ""Bar"" Baz')),
           );
         });
         test('requires the third consecutive double quote to be escaped', () {
           var input = '"""Foo """Bar""" Baz"""';
           expect(
             () => TomlValue.parse(input),
-            throwsA(equals(TomlParserException(
-              message: 'end of input expected',
-              source: input,
-              offset: 10,
-            ))),
+            throwsA(
+              equals(
+                TomlParserException(
+                  message: 'end of input expected',
+                  source: input,
+                  offset: 10,
+                ),
+              ),
+            ),
           );
           expect(
             TomlValue.parse(r'"""Foo ""\"Bar""\" Baz"""'),
-            equals(TomlMultilineBasicString(
-              'Foo """Bar""" Baz',
-            )),
+            equals(TomlMultilineBasicString('Foo """Bar""" Baz')),
           );
         });
         test('allows double quote after opening delimiter', () {
           expect(
             TomlValue.parse('""""Foo"""'),
-            equals(TomlMultilineBasicString(
-              '"Foo',
-            )),
+            equals(TomlMultilineBasicString('"Foo')),
           );
         });
         test('allows two double quotes after opening delimiter', () {
           expect(
             TomlValue.parse('"""""Foo"""'),
-            equals(TomlMultilineBasicString(
-              '""Foo',
-            )),
+            equals(TomlMultilineBasicString('""Foo')),
           );
         });
-        test(
-          'requires the third double quote after opening delimiter to be '
-          'escaped',
-          () {
-            var input = '""""""Foo"""';
-            expect(
-              () => TomlValue.parse(input),
-              throwsA(equals(TomlParserException(
-                message: 'end of input expected',
-                source: input,
-                offset: 6,
-              ))),
-            );
-            expect(
-              TomlValue.parse(r'"""""\"Foo"""'),
-              equals(TomlMultilineBasicString(
-                '"""Foo',
-              )),
-            );
-          },
-        );
+        test('requires the third double quote after opening delimiter to be '
+            'escaped', () {
+          var input = '""""""Foo"""';
+          expect(
+            () => TomlValue.parse(input),
+            throwsA(
+              equals(
+                TomlParserException(
+                  message: 'end of input expected',
+                  source: input,
+                  offset: 6,
+                ),
+              ),
+            ),
+          );
+          expect(
+            TomlValue.parse(r'"""""\"Foo"""'),
+            equals(TomlMultilineBasicString('"""Foo')),
+          );
+        });
         test('allows double quote before closing delimiter', () {
           expect(
             TomlValue.parse('"""Foo""""'),
-            equals(TomlMultilineBasicString(
-              'Foo"',
-            )),
+            equals(TomlMultilineBasicString('Foo"')),
           );
         });
         test('allows two double quotes before closing delimiter', () {
           expect(
             TomlValue.parse('"""Foo"""""'),
-            equals(TomlMultilineBasicString(
-              'Foo""',
-            )),
+            equals(TomlMultilineBasicString('Foo""')),
           );
         });
-        test(
-          'requires the third double quote before closing delimiter to be '
-          'escaped',
-          () {
-            var input = '"""Foo""""""';
-            expect(
-              () => TomlValue.parse(input),
-              throwsA(equals(TomlParserException(
-                message: 'end of input expected',
-                source: input,
-                offset: 9,
-              ))),
-            );
-            expect(
-              TomlValue.parse(r'"""Foo""\""""'),
-              equals(TomlMultilineBasicString(
-                'Foo"""',
-              )),
-            );
-          },
-        );
+        test('requires the third double quote before closing delimiter to be '
+            'escaped', () {
+          var input = '"""Foo""""""';
+          expect(
+            () => TomlValue.parse(input),
+            throwsA(
+              equals(
+                TomlParserException(
+                  message: 'end of input expected',
+                  source: input,
+                  offset: 9,
+                ),
+              ),
+            ),
+          );
+          expect(
+            TomlValue.parse(r'"""Foo""\""""'),
+            equals(TomlMultilineBasicString('Foo"""')),
+          );
+        });
         test(
           'rejects more than three double quotes before closing delimiter',
           () {
@@ -1589,20 +1779,22 @@ void main() {
               var input = '"""Foo${'"' * i}"""';
               expect(
                 () => TomlValue.parse(input),
-                throwsA(equals(TomlParserException(
-                  message: 'end of input expected',
-                  source: input,
-                  offset: 9,
-                ))),
+                throwsA(
+                  equals(
+                    TomlParserException(
+                      message: 'end of input expected',
+                      source: input,
+                      offset: 9,
+                    ),
+                  ),
+                ),
               );
             }
           },
         );
         test('allows raw tabs', () {
           expect(
-            TomlValue.parse(
-              '"""Roses are red\tViolets are blue"""',
-            ),
+            TomlValue.parse('"""Roses are red\tViolets are blue"""'),
             equals(TomlMultilineBasicString('Roses are red\tViolets are blue')),
           );
         });
@@ -1610,22 +1802,30 @@ void main() {
           var input = '"""\u0000"""';
           expect(
             () => TomlValue.parse(input),
-            throwsA(equals(TomlParserException(
-              message: "closing '\"\"\"' expected",
-              source: input,
-              offset: 3,
-            ))),
+            throwsA(
+              equals(
+                TomlParserException(
+                  message: "closing '\"\"\"' expected",
+                  source: input,
+                  offset: 3,
+                ),
+              ),
+            ),
           );
         });
         test('does not allow unpaired UTF-16 surrogate code points', () {
           var input = '"""High surrogate \uD83E without low surrogate"""';
           expect(
             () => TomlValue.parse(input),
-            throwsA(equals(TomlParserException(
-              message: "closing '\"\"\"' expected",
-              source: input,
-              offset: 18,
-            ))),
+            throwsA(
+              equals(
+                TomlParserException(
+                  message: "closing '\"\"\"' expected",
+                  source: input,
+                  offset: 18,
+                ),
+              ),
+            ),
           );
         });
         test('allows UTF-16 surrogate pairs', () {
@@ -1633,9 +1833,11 @@ void main() {
             TomlValue.parse(
               '"""High and low surrogate \uD83E\uDDA6 as a pair"""',
             ),
-            equals(TomlMultilineBasicString(
-              'High and low surrogate \uD83E\uDDA6 as a pair',
-            )),
+            equals(
+              TomlMultilineBasicString(
+                'High and low surrogate \uD83E\uDDA6 as a pair',
+              ),
+            ),
           );
         });
         test(
@@ -1644,21 +1846,22 @@ void main() {
             var input = '"""Hello, World!';
             expect(
               () => TomlValue.parse(input),
-              throwsA(equals(TomlParserException(
-                message: "closing '\"\"\"' expected",
-                source: input,
-                offset: 16,
-              ))),
+              throwsA(
+                equals(
+                  TomlParserException(
+                    message: "closing '\"\"\"' expected",
+                    source: input,
+                    offset: 16,
+                  ),
+                ),
+              ),
             );
           },
         );
       });
       group('Literal', () {
         test('can parse empty literal strings', () {
-          expect(
-            TomlValue.parse("''"),
-            equals(TomlLiteralString('')),
-          );
+          expect(TomlValue.parse("''"), equals(TomlLiteralString('')));
         });
         test('ignores escape sequences in literal strings', () {
           expect(
@@ -1668,78 +1871,99 @@ void main() {
         });
         test('allows raw tabs', () {
           expect(
-            TomlValue.parse(
-              "'Roses are red\tViolets are blue'",
-            ),
+            TomlValue.parse("'Roses are red\tViolets are blue'"),
             equals(TomlLiteralString('Roses are red\tViolets are blue')),
           );
         });
         test('does not allow newlines', () {
-          var input = "'Line 1\n"
+          var input =
+              "'Line 1\n"
               "Line 2'";
           expect(
             () => TomlValue.parse(input),
-            throwsA(equals(TomlParserException(
-              message: 'closing "\'" expected',
-              source: input,
-              offset: 7,
-            ))),
+            throwsA(
+              equals(
+                TomlParserException(
+                  message: 'closing "\'" expected',
+                  source: input,
+                  offset: 7,
+                ),
+              ),
+            ),
           );
         });
         test('does not allow windows newlines', () {
-          var input = "'Line 1\r\n"
+          var input =
+              "'Line 1\r\n"
               "Line 2'";
           expect(
             () => TomlValue.parse(input),
-            throwsA(equals(TomlParserException(
-              message: 'closing "\'" expected',
-              source: input,
-              offset: 7,
-            ))),
+            throwsA(
+              equals(
+                TomlParserException(
+                  message: 'closing "\'" expected',
+                  source: input,
+                  offset: 7,
+                ),
+              ),
+            ),
           );
         });
         test('does not allow standalone carriage returns', () {
-          var input = "'Line 1\r"
+          var input =
+              "'Line 1\r"
               "Line 2'";
           expect(
             () => TomlValue.parse(input),
-            throwsA(equals(TomlParserException(
-              message: 'closing "\'" expected',
-              source: input,
-              offset: 7,
-            ))),
+            throwsA(
+              equals(
+                TomlParserException(
+                  message: 'closing "\'" expected',
+                  source: input,
+                  offset: 7,
+                ),
+              ),
+            ),
           );
         });
         test('does not allow unpaired UTF-16 surrogate code points', () {
           var input = "'High surrogate \uD83E without low surrogate'";
           expect(
             () => TomlValue.parse(input),
-            throwsA(equals(TomlParserException(
-              message: 'closing "\'" expected',
-              source: input,
-              offset: 16,
-            ))),
+            throwsA(
+              equals(
+                TomlParserException(
+                  message: 'closing "\'" expected',
+                  source: input,
+                  offset: 16,
+                ),
+              ),
+            ),
           );
         });
         test('allows UTF-16 surrogate pairs', () {
           expect(
-            TomlValue.parse(
-              "'High and low surrogate \uD83E\uDDA6 as a pair'",
+            TomlValue.parse("'High and low surrogate \uD83E\uDDA6 as a pair'"),
+            equals(
+              TomlLiteralString(
+                'High and low surrogate \uD83E\uDDA6 as a pair',
+              ),
             ),
-            equals(TomlLiteralString(
-              'High and low surrogate \uD83E\uDDA6 as a pair',
-            )),
           );
         });
         test('cannot parse literal string without closing delimiter', () {
           var input = "'Hello, World!";
           expect(
             () => TomlValue.parse(input),
-            throwsA(equals(TomlParserException(
-              message: 'closing "\'" expected',
-              source: input,
-              offset: 14,
-            ))),
+            throwsA(
+              equals(
+                TomlParserException(
+                  message: 'closing "\'" expected',
+                  source: input,
+                  offset: 14,
+                ),
+              ),
+            ),
           );
         });
       });
@@ -1758,10 +1982,12 @@ void main() {
               'Violets are blue'
               "'''",
             ),
-            equals(TomlMultilineLiteralString(
-              'Roses are red\n'
-              'Violets are blue',
-            )),
+            equals(
+              TomlMultilineLiteralString(
+                'Roses are red\n'
+                'Violets are blue',
+              ),
+            ),
           );
         });
         test('does not trim final newline before closing delimiter', () {
@@ -1771,83 +1997,87 @@ void main() {
               'Violets are blue\n'
               "'''",
             ),
-            equals(TomlMultilineLiteralString(
-              'Roses are red\n'
-              'Violets are blue\n',
-            )),
+            equals(
+              TomlMultilineLiteralString(
+                'Roses are red\n'
+                'Violets are blue\n',
+              ),
+            ),
           );
         });
         test('allows two consecutive single quotes', () {
           expect(
             TomlValue.parse("'''Foo ''Bar'' Baz'''"),
-            equals(TomlMultilineLiteralString(
-              "Foo ''Bar'' Baz",
-            )),
+            equals(TomlMultilineLiteralString("Foo ''Bar'' Baz")),
           );
         });
         test('rejects three consecutive single quotes', () {
           var input = "'''Foo '''Bar''' Baz'''";
           expect(
             () => TomlValue.parse(input),
-            throwsA(equals(TomlParserException(
-              message: 'end of input expected',
-              source: input,
-              offset: 10,
-            ))),
+            throwsA(
+              equals(
+                TomlParserException(
+                  message: 'end of input expected',
+                  source: input,
+                  offset: 10,
+                ),
+              ),
+            ),
           );
         });
         test('allows single quote after opening delimiter', () {
           expect(
             TomlValue.parse("''''Foo'''"),
-            equals(TomlMultilineLiteralString(
-              "'Foo",
-            )),
+            equals(TomlMultilineLiteralString("'Foo")),
           );
         });
         test('allows two single quotes after opening delimiter', () {
           expect(
             TomlValue.parse("'''''Foo'''"),
-            equals(TomlMultilineLiteralString(
-              "''Foo",
-            )),
+            equals(TomlMultilineLiteralString("''Foo")),
           );
         });
         test('rejects three single quotes after opening delimiter', () {
           var input = "''''''Foo'''";
           expect(
             () => TomlValue.parse(input),
-            throwsA(equals(TomlParserException(
-              message: 'end of input expected',
-              source: input,
-              offset: 6,
-            ))),
+            throwsA(
+              equals(
+                TomlParserException(
+                  message: 'end of input expected',
+                  source: input,
+                  offset: 6,
+                ),
+              ),
+            ),
           );
         });
         test('allows single quote before closing delimiter', () {
           expect(
             TomlValue.parse("'''Foo''''"),
-            equals(TomlMultilineLiteralString(
-              "Foo'",
-            )),
+            equals(TomlMultilineLiteralString("Foo'")),
           );
         });
         test('allows two single quotes before closing delimiter', () {
           expect(
             TomlValue.parse("'''Foo'''''"),
-            equals(TomlMultilineLiteralString(
-              "Foo''",
-            )),
+            equals(TomlMultilineLiteralString("Foo''")),
           );
         });
         test('rejects three single quotes before closing delimiter', () {
           var input = "'''Foo''''''";
           expect(
             () => TomlValue.parse(input),
-            throwsA(equals(TomlParserException(
-              message: 'end of input expected',
-              source: input,
-              offset: 9,
-            ))),
+            throwsA(
+              equals(
+                TomlParserException(
+                  message: 'end of input expected',
+                  source: input,
+                  offset: 9,
+                ),
+              ),
+            ),
           );
         });
         test(
@@ -1857,23 +2087,25 @@ void main() {
               var input = "'''Foo${"'" * i}'''";
               expect(
                 () => TomlValue.parse(input),
-                throwsA(equals(TomlParserException(
-                  message: 'end of input expected',
-                  source: input,
-                  offset: 9,
-                ))),
+                throwsA(
+                  equals(
+                    TomlParserException(
+                      message: 'end of input expected',
+                      source: input,
+                      offset: 9,
+                    ),
+                  ),
+                ),
               );
             }
           },
         );
         test('allows raw tabs', () {
           expect(
-            TomlValue.parse(
-              "'''Roses are red\tViolets are blue'''",
+            TomlValue.parse("'''Roses are red\tViolets are blue'''"),
+            equals(
+              TomlMultilineLiteralString('Roses are red\tViolets are blue'),
             ),
-            equals(TomlMultilineLiteralString(
-              'Roses are red\tViolets are blue',
-            )),
           );
         });
         test('allows Windows newlines', () {
@@ -1882,33 +2114,44 @@ void main() {
               "'''Roses are red\r\n"
               "Violets are blue'''",
             ),
-            equals(TomlMultilineLiteralString(
-              'Roses are red\r\n'
-              'Violets are blue',
-            )),
+            equals(
+              TomlMultilineLiteralString(
+                'Roses are red\r\n'
+                'Violets are blue',
+              ),
+            ),
           );
         });
         test('does not allow standalone carriage returns', () {
-          var input = "'''Roses are red\r"
+          var input =
+              "'''Roses are red\r"
               "Violets are blue'''";
           expect(
             () => TomlValue.parse(input),
-            throwsA(equals(TomlParserException(
-              message: 'closing "\'\'\'" expected',
-              source: input,
-              offset: 16,
-            ))),
+            throwsA(
+              equals(
+                TomlParserException(
+                  message: 'closing "\'\'\'" expected',
+                  source: input,
+                  offset: 16,
+                ),
+              ),
+            ),
           );
         });
         test('does not allow unpaired UTF-16 surrogate code points', () {
           var input = "'''High surrogate \uD83E without low surrogate'''";
           expect(
             () => TomlValue.parse(input),
-            throwsA(equals(TomlParserException(
-              message: 'closing "\'\'\'" expected',
-              source: input,
-              offset: 18,
-            ))),
+            throwsA(
+              equals(
+                TomlParserException(
+                  message: 'closing "\'\'\'" expected',
+                  source: input,
+                  offset: 18,
+                ),
+              ),
+            ),
           );
         });
         test('allows UTF-16 surrogate pairs', () {
@@ -1916,9 +2159,11 @@ void main() {
             TomlValue.parse(
               "'''High and low surrogate \uD83E\uDDA6 as a pair'''",
             ),
-            equals(TomlMultilineLiteralString(
-              'High and low surrogate \uD83E\uDDA6 as a pair',
-            )),
+            equals(
+              TomlMultilineLiteralString(
+                'High and low surrogate \uD83E\uDDA6 as a pair',
+              ),
+            ),
           );
         });
         test(
@@ -1927,11 +2172,15 @@ void main() {
             var input = "'''Hello, World!";
             expect(
               () => TomlValue.parse(input),
-              throwsA(equals(TomlParserException(
-                message: 'closing "\'\'\'" expected',
-                source: input,
-                offset: 16,
-              ))),
+              throwsA(
+                equals(
+                  TomlParserException(
+                    message: 'closing "\'\'\'" expected',
+                    source: input,
+                    offset: 16,
+                  ),
+                ),
+              ),
             );
           },
         );

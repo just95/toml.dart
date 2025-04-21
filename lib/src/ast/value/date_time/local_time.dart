@@ -15,8 +15,9 @@ import 'local_date_time.dart';
 @immutable
 class TomlLocalTime extends TomlDateTime {
   /// Parser for a TOML local time value.
-  static final Parser<TomlLocalTime> parser =
-      TomlPartialTime.parser.map(TomlLocalTime.new);
+  static final Parser<TomlLocalTime> parser = TomlPartialTime.parser.map(
+    TomlLocalTime.new,
+  );
 
   /// Parses the given string as a TOML local time.
   static TomlLocalTime parse(String input) =>

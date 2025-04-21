@@ -49,7 +49,7 @@ class TomlInlineTable extends TomlValue {
 
   /// Creates a new inline table.
   TomlInlineTable(Iterable<TomlKeyValuePair> pairs)
-      : pairs = List.unmodifiable(pairs);
+    : pairs = List.unmodifiable(pairs);
 
   @override
   TomlType get type => TomlType.table;

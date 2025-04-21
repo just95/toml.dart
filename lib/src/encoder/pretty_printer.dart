@@ -141,8 +141,8 @@ class TomlPrettyPrinter
     _separatedBy(
       array.items,
       write: visitValue,
-      writeSeparator: (dynamic _) =>
-          _writeToken(TomlInlineTable.separator, after: true),
+      writeSeparator:
+          (dynamic _) => _writeToken(TomlInlineTable.separator, after: true),
     );
     _writeToken(TomlArray.closingDelimiter);
   }
@@ -176,8 +176,8 @@ class TomlPrettyPrinter
     _separatedBy(
       inlineTable.pairs,
       write: visitKeyValuePair,
-      writeSeparator: (dynamic _) =>
-          _writeToken(TomlInlineTable.separator, after: true),
+      writeSeparator:
+          (dynamic _) => _writeToken(TomlInlineTable.separator, after: true),
     );
     _writeToken(
       TomlInlineTable.closingDelimiter,
