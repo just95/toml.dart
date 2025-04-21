@@ -1,5 +1,3 @@
-library toml.src.ast.node;
-
 import '../encoder.dart';
 import 'visitor/node.dart';
 

@@ -1,5 +1,3 @@
-library toml.test.encoder.pretty_printer_test;
-
 import 'package:test/test.dart';
 import 'package:toml/toml.dart';
 

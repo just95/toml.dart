@@ -1,5 +1,3 @@
-library toml.test.decoder.value_builder_test;
-
 import 'package:test/test.dart';
 import 'package:toml/src/ast.dart';
 import 'package:toml/src/decoder/value_builder.dart';

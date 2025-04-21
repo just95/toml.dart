@@ -1,5 +1,3 @@
-library toml.src.decoder.parser.whitespace;
-
 import 'package:petitparser/petitparser.dart';
 
 import '../../util/parser.dart';

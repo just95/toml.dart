@@ -1,5 +1,3 @@
-library toml.src.ast.decoder.value_builder;
-
 import '../ast.dart';
 import 'map_builder.dart';
 

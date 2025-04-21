@@ -1,5 +1,3 @@
-library toml.src.ast.expression.key_value_pair;
-
 import 'package:meta/meta.dart';
 import 'package:petitparser/petitparser.dart';
 

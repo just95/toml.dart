@@ -1,5 +1,3 @@
-library toml.src.util.container.late;
-
 /// A suspended computation for a value of type `T`.
 typedef Thunk<T> = T Function();
 

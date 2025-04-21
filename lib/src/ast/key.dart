@@ -1,5 +1,3 @@
-library toml.src.ast.key;
-
 import 'dart:math';
 
 import 'package:collection/collection.dart';

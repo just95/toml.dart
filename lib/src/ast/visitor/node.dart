@@ -1,5 +1,3 @@
-library toml.src.ast.visitor.node;
-
 import '../document.dart';
 import '../expression.dart';
 import '../key.dart';

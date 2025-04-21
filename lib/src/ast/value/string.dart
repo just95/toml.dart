@@ -1,5 +1,3 @@
-library toml.src.ast.value.string;
-
 import 'package:petitparser/petitparser.dart';
 
 import '../value.dart';

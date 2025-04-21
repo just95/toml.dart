@@ -1,5 +1,3 @@
-library toml.src.util.parser.late;
-
 import 'package:petitparser/petitparser.dart';
 
 import '../container/late.dart';

@@ -1,5 +1,3 @@
-library toml.test.ast.date_time.local_date_test;
-
 import 'package:test/test.dart';
 import 'package:toml/toml.dart';
 

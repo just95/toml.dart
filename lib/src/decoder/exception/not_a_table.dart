@@ -1,5 +1,3 @@
-library toml.src.decoder.exception.not_a_table;
-
 import 'package:meta/meta.dart';
 
 import '../../ast.dart';

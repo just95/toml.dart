@@ -1,5 +1,3 @@
-library toml.test.ast.visitor.value.string_test;
-
 import 'package:test/test.dart';
 import 'package:toml/src/ast.dart';
 

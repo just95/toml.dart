@@ -1,5 +1,3 @@
-library toml.test.ast.expression.key_value_pair_test;
-
 import 'package:test/test.dart';
 import 'package:toml/src/ast.dart';
 

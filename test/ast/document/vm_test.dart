@@ -1,5 +1,5 @@
 @TestOn('vm')
-library toml.test.ast.document.vm_test;
+library;
 
 import 'package:test/test.dart';
 import 'package:toml/src/ast/document.dart';

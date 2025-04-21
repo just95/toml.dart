@@ -1,5 +1,3 @@
-library toml.src.decoder.exception.invalid_date_time;
-
 import 'package:meta/meta.dart';
 
 import '../../exception.dart';

@@ -1,5 +1,5 @@
 /// This library exports the entire public interface of the `toml.dart` package.
-library toml;
+library;
 
 export 'src/ast.dart';
 export 'src/decoder.dart';

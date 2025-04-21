@@ -1,5 +1,3 @@
-library toml.src.loader.web;
-
 import 'dart:async';
 import 'dart:convert';
 import 'dart:js_interop';

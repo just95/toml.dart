@@ -1,5 +1,3 @@
-library toml.test.ast.visitor.node_test;
-
 import 'package:test/test.dart';
 import 'package:toml/src/ast.dart';
 

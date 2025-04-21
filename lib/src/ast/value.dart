@@ -1,5 +1,3 @@
-library toml.src.ast.value;
-
 import 'package:petitparser/petitparser.dart';
 
 import '../decoder/exception/parser.dart';

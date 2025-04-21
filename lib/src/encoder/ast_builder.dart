@@ -1,5 +1,3 @@
-library toml.src.encoder.ast_builder;
-
 import '../ast.dart';
 import '../decoder/parser/whitespace.dart';
 import 'encodable.dart';

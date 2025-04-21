@@ -1,5 +1,3 @@
-library toml.src.util.parser.or_failure;
-
 import 'package:petitparser/petitparser.dart';
 
 /// Extension that adds a type safe method for reporting custom error messages

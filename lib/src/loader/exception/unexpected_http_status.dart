@@ -1,5 +1,3 @@
-library toml.src.loader.exception.unexpected_http_status;
-
 import 'package:meta/meta.dart';
 
 import '../../exception.dart';

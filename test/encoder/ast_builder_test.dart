@@ -1,5 +1,3 @@
-library toml.test.encoder.ast_builder_test;
-
 import 'package:test/test.dart';
 import 'package:toml/toml.dart';
 

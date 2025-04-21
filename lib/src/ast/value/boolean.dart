@@ -1,5 +1,3 @@
-library toml.src.ast.value.boolean;
-
 import 'package:meta/meta.dart';
 import 'package:petitparser/petitparser.dart';
 

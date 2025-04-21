@@ -1,5 +1,3 @@
-library toml.src.ast.visitor.value;
-
 import '../value.dart';
 import '../value/array.dart';
 import '../value/boolean.dart';

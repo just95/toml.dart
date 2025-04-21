@@ -1,5 +1,3 @@
-library toml.src.ast.value.float;
-
 import 'package:meta/meta.dart';
 import 'package:petitparser/petitparser.dart';
 

@@ -1,5 +1,3 @@
-library toml.src.ast.value.table;
-
 import 'package:collection/collection.dart';
 import 'package:meta/meta.dart';
 import 'package:petitparser/petitparser.dart';

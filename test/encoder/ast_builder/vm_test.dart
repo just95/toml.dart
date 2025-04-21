@@ -1,5 +1,5 @@
 @TestOn('vm')
-library toml.test.encoder.ast_builder.vm_test;
+library;
 
 import 'package:test/test.dart';
 import 'package:toml/toml.dart';

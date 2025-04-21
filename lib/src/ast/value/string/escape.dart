@@ -1,5 +1,3 @@
-library toml.src.ast.value.string.escape;
-
 import 'package:petitparser/petitparser.dart';
 
 import '../../../decoder/exception/invalid_escape_sequence.dart';

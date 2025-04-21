@@ -1,5 +1,3 @@
-library toml.test.ast.value.table_test;
-
 import 'package:test/test.dart';
 import 'package:toml/toml.dart';
 

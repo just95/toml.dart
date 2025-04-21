@@ -1,5 +1,3 @@
-library toml.src.ast.visitor.expression;
-
 import '../expression.dart';
 import '../expression/key_value_pair.dart';
 import '../expression/table.dart';

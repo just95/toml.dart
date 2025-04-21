@@ -1,5 +1,3 @@
-library toml.src.util.parser.join;
-
 import 'package:petitparser/petitparser.dart';
 
 /// An extension for parsers that adds an operation for concatenating the

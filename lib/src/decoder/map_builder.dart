@@ -1,5 +1,3 @@
-library toml.src.ast.decoder.map_builder;
-
 import '../ast.dart';
 import 'exception/not_a_table.dart';
 import 'exception/redefinition.dart';

@@ -1,5 +1,3 @@
-library toml.src.loader.stub;
-
 import 'dart:async';
 
 /// Implementation stub for configuration file loaders.

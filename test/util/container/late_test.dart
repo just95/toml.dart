@@ -1,5 +1,3 @@
-library toml.test.util.container.late_test;
-
 import 'package:test/test.dart';
 
 import 'package:toml/src/util/container/late.dart';

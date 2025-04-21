@@ -1,5 +1,3 @@
-library toml.src.encoder.encodable;
-
 /// Interface for an object which can be encoded as a TOML value or table.
 abstract interface class TomlEncodableValue {
   /// Converts this object to an object which can natively be represented as

@@ -1,5 +1,3 @@
-library toml.src.ast.value.date_time;
-
 import 'package:collection/collection.dart';
 import 'package:meta/meta.dart';
 import 'package:petitparser/petitparser.dart';

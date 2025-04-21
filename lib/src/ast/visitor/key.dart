@@ -1,5 +1,3 @@
-library toml.src.ast.visitor.key;
-
 import '../key.dart';
 
 /// Interface for visitors of [TomlSimpleKey]s.

@@ -1,5 +1,3 @@
-library toml.src.util.date;
-
 /// An extension on integers that represent years.
 extension YearExtension on int {
   /// Tests whether this year is a leap year.

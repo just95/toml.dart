@@ -1,5 +1,5 @@
 @TestOn('js')
-library toml.test.decoder.parser.value.js_test;
+library;
 
 import 'package:test/test.dart';
 import 'package:toml/toml.dart';

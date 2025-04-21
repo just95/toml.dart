@@ -1,5 +1,3 @@
-library toml.src.decoder.exception.redefinition;
-
 import 'package:meta/meta.dart';
 
 import '../../ast.dart';

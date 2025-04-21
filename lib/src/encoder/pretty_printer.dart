@@ -1,5 +1,3 @@
-library toml.src.encoder.pretty_printer;
-
 import '../ast.dart';
 
 /// A visitor for TOML AST nodes that converts them to a TOML formatted string.

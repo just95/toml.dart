@@ -1,5 +1,3 @@
-library toml.src.encoder.exception.unknown_value_type;
-
 import 'package:meta/meta.dart';
 
 import '../../exception.dart';

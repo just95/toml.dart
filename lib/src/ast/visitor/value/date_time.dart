@@ -1,5 +1,3 @@
-library toml.src.ast.visitor.value.date_time;
-
 import '../../value/date_time.dart';
 import '../../value/date_time/local_date.dart';
 import '../../value/date_time/local_date_time.dart';

@@ -1,5 +1,5 @@
 @TestOn('vm')
-library toml.test.loader.vm_test;
+library;
 
 import 'dart:io';
 

@@ -1,5 +1,3 @@
-library toml.src.ast;
-
 export 'ast/document.dart';
 export 'ast/expression.dart';
 export 'ast/expression/key_value_pair.dart';

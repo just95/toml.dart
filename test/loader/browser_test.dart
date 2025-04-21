@@ -1,5 +1,5 @@
 @TestOn('browser')
-library toml.test.loader.browser_test;
+library;
 
 import 'package:test/test.dart';
 

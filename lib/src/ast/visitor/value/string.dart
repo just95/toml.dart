@@ -1,5 +1,3 @@
-library toml.src.ast.visitor.value.string;
-
 import '../../value/string.dart';
 import '../../value/string/basic.dart';
 import '../../value/string/literal.dart';

@@ -1,5 +1,3 @@
-library toml.src.decoder.parser.ranges;
-
 import 'package:petitparser/petitparser.dart';
 
 /// Parser for a binary digits.

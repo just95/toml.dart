@@ -1,5 +1,3 @@
-library toml.test.util.parser.join_test;
-
 import 'package:petitparser/petitparser.dart';
 import 'package:test/test.dart';
 
