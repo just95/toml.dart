@@ -33,8 +33,7 @@ It currently supports version [1.0.0][toml-spec/v1.0.0] of the TOML specificatio
 
 ## Installation
 
-To get started add `toml` as a dependency to your `pubspec.yaml` and run the
-`dart pub get` or `flutter pub get` command.
+To get started add `toml` as a dependency to your `pubspec.yaml` and run the `dart pub get` or `flutter pub get` command.
 
 ```yaml
 dependencies:
@@ -65,9 +64,8 @@ void main() async {
 }
 ```
 
-When the code is running in the browser, HTTP is used to fetch the configuration file.
-When the code is running on the Dart VM or natively, the file is loaded from
-the local file system.
+When the code is running in the browser, `package:web` is used to fetch the configuration file via HTTP.
+When the code is running on the Dart VM or natively, the file is loaded from the local file system.
 
 If the loaded TOML file contains a syntax error, a `TomlParserException` is thrown.
 

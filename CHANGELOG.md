@@ -3,9 +3,14 @@
 ## Unreleased
 
 - `TomlEncodableValue` and `TomlEncodableKey` are now `interface class`es and must not be extended anymore.
+
   - If you have previously extended `TomlEncodableValue`, you must now use the `implements` keyword instead of `extends`.
   - If you have previously extended `TomlEncodableKey` and overwrote the `toTomlKey` method, you must now use the `implements` keyword instead of `extends`.
   - If you have previously extended `TomlEncodableKey` and used the default implementation of the `toTomlKey` method, you must now mixin `TomlEncodableKeyMixin` instead of extending `TomlEncodableKey`.
+
+- On the web `TomlDocument.load` now uses `package:web` instead of `dart:html`.
+  - If you handled exceptions from ` dart:html` in your code you now have to handle the corresponding exceptions from `package:web` instead.
+  - If the web server responds with an HTTP status code that is not in the range of 200-299, `TomlDocument.load` now throws a `TomlUnexpectedHttpStatusException`.
 
 ## 0.16.0
 
