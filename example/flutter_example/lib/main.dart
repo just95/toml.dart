@@ -31,22 +31,16 @@ class MyHomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('TOML example'),
-      ),
+      appBar: AppBar(title: Text('TOML example')),
       body: FutureBuilder<String>(
         future: rootBundle.loadString('assets/example.toml'),
         builder: (context, snapshot) {
           final text = snapshot.data;
           if (text == null) {
-            return Center(
-              child: CircularProgressIndicator(),
-            );
+            return Center(child: CircularProgressIndicator());
           }
           final toml = TomlDocument.parse(text).toMap();
-          return Center(
-            child: Text(toml['str'] as String),
-          );
+          return Center(child: Text(toml['str'] as String));
         },
       ),
     );

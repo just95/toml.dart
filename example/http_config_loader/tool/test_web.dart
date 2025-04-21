@@ -19,10 +19,9 @@ const maxTries = 5;
 Future main() async {
   // Serve previously compiled `build` directory.
   final pipeline = const shelf.Pipeline().addMiddleware(shelf.logRequests());
-  final handler = pipeline.addHandler(shelf_static.createStaticHandler(
-    './build',
-    defaultDocument: 'index.html',
-  ));
+  final handler = pipeline.addHandler(
+    shelf_static.createStaticHandler('./build', defaultDocument: 'index.html'),
+  );
   final server = await shelf_io.serve(
     handler,
     InternetAddress.loopbackIPv4,
@@ -36,12 +35,14 @@ Future main() async {
 
   // Load the example web site.
   print('Loading example web site...');
-  await driver.get(Uri(
-    scheme: 'http',
-    host: server.address.host,
-    port: server.port,
-    path: 'index.html',
-  ));
+  await driver.get(
+    Uri(
+      scheme: 'http',
+      host: server.address.host,
+      port: server.port,
+      path: 'index.html',
+    ),
+  );
 
   // Wait for the configuration file to be loaded.
   var success = false;
