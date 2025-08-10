@@ -98,7 +98,7 @@ class TomlFullDate {
 /// representation of TOML time and date-time values.
 ///
 ///     partial-time   =
-///         time-hour ":" time-minute ":" time-second [ time-secfrac ]
+///         time-hour ":" time-minute [ ":" time-second [ time-secfrac ] ]
 ///
 ///     time-hour      = 2DIGIT     ; 00-23
 ///     time-minute    = 2DIGIT     ; 00-59
@@ -109,12 +109,14 @@ class TomlFullDate {
 class TomlPartialTime {
   /// Parser for a partial time value with microsecond precision.
   static final Parser<TomlPartialTime> parser = (
-    _dd.skip(after: char(':')),
-    _dd.skip(after: char(':')),
     _dd,
-    _ddd.plus().skip(before: char('.')).optionalWith(<int>[]),
+    _dd.skip(before: char(':')),
+    (
+      _dd.skip(before: char(':')),
+      _ddd.plus().skip(before: char('.')).optionalWith(<int>[]),
+    ).toSequenceParser().optionalWith((0, <int>[])),
   ).toSequenceParser().map(
-    (tuple) => TomlPartialTime(tuple.$1, tuple.$2, tuple.$3, tuple.$4),
+    (tuple) => TomlPartialTime(tuple.$1, tuple.$2, tuple.$3.$1, tuple.$3.$2),
   );
 
   /// The hour of the day, expressed as in a 24-hour clock (as a number from
@@ -130,7 +132,7 @@ class TomlPartialTime {
 
   /// The fractions of the second as numbers from `0` to `999`.
   ///
-  /// The first entry are is the [millisecond], the second entry is the
+  /// The first entry is the [millisecond], the second entry is the
   /// [microsecond], the third entry is the [nanosecond] and so on. There
   /// are no getters for more than [nanosecond] precision but a
   /// [TomlPartialTime] can represent fractions of a second of arbitrary

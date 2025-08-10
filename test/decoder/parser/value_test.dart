@@ -423,6 +423,18 @@ void main() {
           ),
         );
       });
+      test('can parse UTC date-times without seconds', () {
+        expect(
+          TomlValue.parse('1989-11-09 17:53Z'),
+          equals(
+            TomlOffsetDateTime(
+              TomlFullDate(1989, 11, 9),
+              TomlPartialTime(17, 53, 0),
+              TomlTimeZoneOffset.utc(),
+            ),
+          ),
+        );
+      });
       test('allows \'T\' as a separator between date and time', () {
         expect(
           TomlValue.parse('1989-11-09T17:53:00Z'),
@@ -447,6 +459,21 @@ void main() {
           ),
         );
       });
+      test(
+        'can parse date-times with numeric time zone offset without seconds',
+        () {
+          expect(
+            TomlValue.parse('1989-11-09 18:53+01:00'),
+            equals(
+              TomlOffsetDateTime(
+                TomlFullDate(1989, 11, 9),
+                TomlPartialTime(18, 53, 0),
+                TomlTimeZoneOffset.positive(1, 0),
+              ),
+            ),
+          );
+        },
+      );
       test('can parse date-times with fractions of a second', () {
         expect(
           TomlValue.parse('1989-11-09 18:53:00.0099999+01:00'),
@@ -476,6 +503,17 @@ void main() {
       test('can parse date-times without time-zone offset', () {
         expect(
           TomlValue.parse('1989-11-09 17:53:00'),
+          equals(
+            TomlLocalDateTime(
+              TomlFullDate(1989, 11, 9),
+              TomlPartialTime(17, 53, 0),
+            ),
+          ),
+        );
+      });
+      test('can parse date-times without seconds and time-zone offset', () {
+        expect(
+          TomlValue.parse('1989-11-09 17:53'),
           equals(
             TomlLocalDateTime(
               TomlFullDate(1989, 11, 9),
@@ -543,6 +581,12 @@ void main() {
       test('can parse time without date', () {
         expect(
           TomlValue.parse('17:53:00'),
+          equals(TomlLocalTime(TomlPartialTime(17, 53, 0))),
+        );
+      });
+      test('can parse time without seconds and date', () {
+        expect(
+          TomlValue.parse('17:53'),
           equals(TomlLocalTime(TomlPartialTime(17, 53, 0))),
         );
       });

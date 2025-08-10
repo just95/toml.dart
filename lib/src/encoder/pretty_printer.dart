@@ -220,8 +220,13 @@ class TomlPrettyPrinter
   void printPartialTime(TomlPartialTime time) {
     var h = _dd(time.hour);
     var min = _dd(time.minute);
-    var sec = _dd(time.second);
-    _writeToken('$h:$min:$sec');
+    _writeToken('$h:$min');
+
+    // Include the seconds part only if needed.
+    if (time.second != 0 || time.secondFractions.isNotEmpty) {
+      var sec = _dd(time.second);
+      _writeToken(':$sec');
+    }
 
     // Optionally add fractions of a second.
     if (time.secondFractions.isNotEmpty) _writeToken('.');

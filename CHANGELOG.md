@@ -4,6 +4,9 @@
 
 - Experimental support for TOML 1.1.0 has been added.
   - Newlines and trailing commas are now allowed in inline tables.
+  - The seconds part of offset date-times, local date-times and local times is now optional.
+    - If the seconds part is omitted `TomlPartialTime.seconds` is set to `0`.
+    - If a `TomlPartialTime` with `TomlPartialTime.seconds == 0` is encoded and `TomlPartialTime.secondFractions` is empty, the seconds part is omitted.
 
 ## Unreleased
 
