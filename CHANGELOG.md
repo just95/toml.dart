@@ -1,5 +1,10 @@
 # Changelog
 
+## Unreleased (TOML 1.1)
+
+- Experimental support for TOML 1.1.0 has been added.
+  - Newlines and trailing commas are now allowed in inline tables.
+
 ## Unreleased
 
 - Dart 3.7 is now required.
