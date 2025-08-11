@@ -244,6 +244,9 @@ jobs:
     runs-on: ubuntu-latest
     container:
       image: golang:1.18
+    strategy:
+      matrix:
+        toml-version: ["1.1", "latest"]
     needs: compile-toml-test
     steps:
       - name: Checkout
@@ -260,6 +263,6 @@ jobs:
           chmod +x build/bin/decoder
           chmod +x build/bin/encoder
       - name: Run `toml-test` Against Decoder
-        run: $GOPATH/bin/toml-test build/bin/decoder
+        run: $GOPATH/bin/toml-test build/bin/decoder -toml ${{ matrix.toml-version }}
       - name: Run `toml-test` Against Encoder
-        run: $GOPATH/bin/toml-test build/bin/encoder -encoder
+        run: $GOPATH/bin/toml-test build/bin/encoder -encoder -toml ${{ matrix.toml-version }}
