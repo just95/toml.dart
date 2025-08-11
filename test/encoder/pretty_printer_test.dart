@@ -483,6 +483,11 @@ void main() {
             );
             expect(prettyPrinter.toString(), equals(r'"line 1\rstill line 1"'));
           });
+          test('escapes escape characters', () {
+            var prettyPrinter = TomlPrettyPrinter();
+            prettyPrinter.visitBasicString(TomlBasicString('\x1B[0m'));
+            expect(prettyPrinter.toString(), equals(r'"\e[0m"'));
+          });
         });
         group('visitLiteralString', () {
           test('encodes simple literal strings correctly', () {

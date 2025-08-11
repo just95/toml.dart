@@ -9,38 +9,42 @@ abstract class TomlEscapedChar {
   /// The character that is used to escape other characters.
   ///
   ///     escape = %x5C                   ; \
-  static final String escapeChar = '\\';
+  static final String escapeChar = r'\';
 
   /// Unicode code point of a line feed.
-  static final int backspace = 0x08;
+  static final int backspaceCodePoint = 0x08;
+
+  /// Unicode code point of an escape character.
+  static final int escapeCodePoint = 0x1B;
 
   /// Unicode code point of a line feed.
-  static final int tab = 0x09;
+  static final int formFeedCodePoint = 0x0C;
 
   /// Unicode code point of a line feed.
-  static final int lineFeed = 0x0A;
-
-  /// Unicode code point of a line feed.
-  static final int formFeed = 0x0C;
+  static final int lineFeedCodePoint = 0x0A;
 
   /// Unicode code point of a carriage return.
-  static final int carriageReturn = 0x0D;
+  static final int carriageReturnCodePoint = 0x0D;
+
+  /// Unicode code point of a line feed.
+  static final int tabCodePoint = 0x09;
 
   /// Unicode code point of a double quote.
-  static final int doubleQuote = 0x22;
+  static final int doubleQuoteCodePoint = 0x22;
 
   /// Unicode code point of a backslash.
-  static final int backslash = 0x5C;
+  static final int backslashCodePoint = 0x5C;
 
   /// Map between escape characters and the corresponding Unicode code point.
   static final Map<String, int> escapableChars = {
-    'b': backspace,
-    't': tab,
-    'n': lineFeed,
-    'f': formFeed,
-    'r': carriageReturn,
-    '"': doubleQuote,
-    r'\': backslash,
+    'b': backspaceCodePoint,
+    'e': escapeCodePoint,
+    'f': formFeedCodePoint,
+    'n': lineFeedCodePoint,
+    'r': carriageReturnCodePoint,
+    't': tabCodePoint,
+    '"': doubleQuoteCodePoint,
+    r'\': backslashCodePoint,
   };
 
   /// The inverse mapping to [escapableChars].
@@ -65,6 +69,7 @@ abstract class TomlEscapedChar {
   ///     escape-seq-char =  %x22         ; "    quotation mark  U+0022
   ///     escape-seq-char =/ %x5C         ; \    reverse solidus U+005C
   ///     escape-seq-char =/ %x62         ; b    backspace       U+0008
+  ///     escape-seq-char =/ %x65         ; e    escape          U+001B
   ///     escape-seq-char =/ %x66         ; f    form feed       U+000C
   ///     escape-seq-char =/ %x6E         ; n    line feed       U+000A
   ///     escape-seq-char =/ %x72         ; r    carriage return U+000D

@@ -7,6 +7,7 @@
   - The seconds part of offset date-times, local date-times and local times is now optional.
     - If the seconds part is omitted `TomlPartialTime.seconds` is set to `0`.
     - If a `TomlPartialTime` with `TomlPartialTime.seconds == 0` is encoded and `TomlPartialTime.secondFractions` is empty, the seconds part is omitted.
+  - Added escape sequence `\e` for the escape character (`U+001B`).
 
 ## Unreleased
 
