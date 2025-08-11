@@ -1673,7 +1673,9 @@ void main() {
           () {
             expect(
               () => TomlValue.parse(r'"\uD83E"'),
-              throwsA(equals(TomlInvalidEscapeSequenceException(r'\uD83E'))),
+              throwsA(
+                equals(TomlInvalidEscapeSequenceException.nonScalar(r'\uD83E')),
+              ),
             );
           },
         );
@@ -1683,7 +1685,9 @@ void main() {
             expect(
               () => TomlValue.parse(r'"\U00110000"'),
               throwsA(
-                equals(TomlInvalidEscapeSequenceException(r'\U00110000')),
+                equals(
+                  TomlInvalidEscapeSequenceException.nonScalar(r'\U00110000'),
+                ),
               ),
             );
           },

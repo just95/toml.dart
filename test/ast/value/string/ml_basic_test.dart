@@ -29,7 +29,7 @@ void main() {
         expect(TomlMultilineBasicString.escape('\t'), equals('\t'));
       });
       test('escapes control characters', () {
-        expect(TomlMultilineBasicString.escape('\x07'), equals(r'\u0007'));
+        expect(TomlMultilineBasicString.escape('\x07'), equals(r'\x07'));
       });
       test('does not escape surrogate pairs', () {
         expect(
@@ -40,13 +40,17 @@ void main() {
       test('cannot escape standalone high surrogate characters', () {
         expect(
           () => TomlMultilineBasicString.escape('\ud83e'),
-          throwsA(equals(TomlInvalidEscapeSequenceException('\\ud83e'))),
+          throwsA(
+            equals(TomlImpossibleEscapeSequenceException.nonScalar(0xd83e)),
+          ),
         );
       });
       test('cannot escape standalone low surrogate characters', () {
         expect(
           () => TomlMultilineBasicString.escape('\udda6'),
-          throwsA(equals(TomlInvalidEscapeSequenceException('\\udda6'))),
+          throwsA(
+            equals(TomlImpossibleEscapeSequenceException.nonScalar(0xdda6)),
+          ),
         );
       });
     });

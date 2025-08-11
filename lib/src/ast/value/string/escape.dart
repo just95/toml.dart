@@ -3,6 +3,7 @@ import 'package:petitparser/petitparser.dart';
 import '../../../decoder/exception/invalid_escape_sequence.dart';
 import '../../../decoder/parser/ranges.dart';
 import '../../../decoder/parser/whitespace.dart';
+import '../../../encoder.dart';
 
 /// Collection of parsers for escape sequences.
 abstract class TomlEscapedChar {
@@ -83,16 +84,21 @@ abstract class TomlEscapedChar {
     tomlWhitespaceChar,
   ]).neg().map((shortcut) {
     if (!escapableChars.containsKey(shortcut)) {
-      throw TomlInvalidEscapeSequenceException('\\$shortcut');
+      throw TomlInvalidEscapeSequenceException.unspecified("\\$shortcut");
     }
     return String.fromCharCode(escapableChars[shortcut]!);
   });
 
   /// Parser for Unicode escape sequences.
   ///
+  ///     escape-seq-char =/ %x78 2HEXDIG ; xHH                  U+00HH
   ///     escape-seq-char =/ %x75 4HEXDIG ; uXXXX                U+XXXX
   ///     escape-seq-char =/ %x55 8HEXDIG ; UXXXXXXXX            U+XXXXXXXX
   static final Parser<String> escapedUnicodeParser = ChoiceParser([
+    tomlHexDigit()
+        .times(2)
+        .flatten("Two hexadecimal digits expected")
+        .skip(before: char('x')),
     tomlHexDigit()
         .times(4)
         .flatten('Four hexadecimal digits expected')
@@ -106,8 +112,9 @@ abstract class TomlEscapedChar {
     if (isScalarUnicodeValue(charCode)) {
       return String.fromCharCode(charCode);
     }
-    throw TomlInvalidEscapeSequenceException(
-      charCodeStr.length == 4 ? '\\u$charCodeStr' : '\\U$charCodeStr',
+    var prefix = _unicodeEscapeSequencePrefix(charCodeStr.length);
+    throw TomlInvalidEscapeSequenceException.nonScalar(
+      '$escapeChar$prefix$charCodeStr',
     );
   });
 
@@ -137,15 +144,45 @@ abstract class TomlEscapedChar {
       // The current rune must be escaped but there is no shortcut, i.e., the
       // Unicode code point must be escaped. However, Unicode escape sequences
       // are only allowed for scalar Unicode values.
-      var length = rune & 0xffff == rune ? 4 : 8;
-      var prefix = length == 4 ? 'u' : 'U';
+      var length = _unicodeEscapeSequenceLength(rune);
+      var prefix = _unicodeEscapeSequencePrefix(length);
       var hexCode = rune.toRadixString(16).padLeft(length, '0');
       if (!isScalarUnicodeValue(rune)) {
-        throw TomlInvalidEscapeSequenceException('$escapeChar$prefix$hexCode');
+        throw TomlImpossibleEscapeSequenceException.nonScalar(rune);
       }
       buffer.write(escapeChar);
       buffer.write(prefix);
       buffer.write(hexCode);
     }
+  }
+
+  /// Returns the number of hexadecimal digits that are required to represent
+  /// the given [rune] in a Unicode escape sequence.
+  static int _unicodeEscapeSequenceLength(int rune) {
+    if (rune & 0xff == rune) {
+      return 2; // 0xHH
+    } else if (rune & 0xffff == rune) {
+      return 4; // 0xHHHH
+    } else if (rune & 0xffffffff == rune) {
+      return 8; // 0xHHHHHHHH
+    }
+    throw TomlImpossibleEscapeSequenceException.tooLong(rune);
+  }
+
+  /// Returns the prefix for a Unicode escape sequence with the given number of
+  /// hexadecimal digits.
+  static String _unicodeEscapeSequencePrefix(int length) {
+    if (length == 2) {
+      return 'x'; // \xHH
+    } else if (length == 4) {
+      return 'u'; // \uHHHH
+    } else if (length == 8) {
+      return 'U'; // \UHHHHHHHH
+    }
+    throw ArgumentError.value(
+      length,
+      'length',
+      'Length must be 2, 4, or 8 for Unicode escape sequences',
+    );
   }
 }
