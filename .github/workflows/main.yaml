@@ -243,16 +243,16 @@ jobs:
     name: Run `toml-test` Test Suite
     runs-on: ubuntu-latest
     container:
-      image: golang:1.18
+      image: golang:1.19
     strategy:
       matrix:
-        toml-version: ["1.1", "latest"]
+        toml-version: ["1.1.0"]
     needs: compile-toml-test
     steps:
       - name: Checkout
         uses: actions/checkout@v4.2.2
       - name: Install `toml-test`
-        run: go install github.com/toml-lang/toml-test/cmd/toml-test@master
+        run: go install github.com/toml-lang/toml-test/cmd/toml-test@latest
       - name: Download Decoder Executable
         uses: actions/download-artifact@v4
         with:
