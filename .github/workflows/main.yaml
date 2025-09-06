@@ -265,4 +265,4 @@ jobs:
       - name: Run `toml-test` Against Decoder
         run: $GOPATH/bin/toml-test build/bin/decoder -toml ${{ matrix.toml-version }}
       - name: Run `toml-test` Against Encoder
-        run: $GOPATH/bin/toml-test build/bin/encoder -encoder -toml ${{ matrix.toml-version }}
+        run: BURNTSUSHI_TOML_110="" $GOPATH/bin/toml-test build/bin/encoder -encoder -toml ${{ matrix.toml-version }}
