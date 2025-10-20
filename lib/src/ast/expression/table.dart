@@ -97,8 +97,14 @@ class TomlArrayTable extends TomlTable {
   static final Parser<TomlArrayTable> parser = TomlKey.parser
       .trim(tomlWhitespaceChar)
       .skip(
-        before: string(openingDelimiter, '"$openingDelimiter" expected'),
-        after: string(closingDelimiter, '"$closingDelimiter" expected'),
+        before: string(
+          openingDelimiter,
+          message: '"$openingDelimiter" expected',
+        ),
+        after: string(
+          closingDelimiter,
+          message: '"$closingDelimiter" expected',
+        ),
       )
       .map(TomlArrayTable.new);
 
