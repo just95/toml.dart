@@ -4,6 +4,8 @@
 
 - Dart 3.8 is now required.
 
+- Upgraded dependencies.
+
 - `TomlEncodableValue` and `TomlEncodableKey` are now `interface class`es and must not be extended anymore.
 
   - If you have previously extended `TomlEncodableValue`, you must now use the `implements` keyword instead of `extends`.
