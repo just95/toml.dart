@@ -90,11 +90,11 @@ abstract class TomlEscapedChar {
   static final Parser<String> escapedUnicodeParser = ChoiceParser([
     tomlHexDigit()
         .times(4)
-        .flatten('Four hexadecimal digits expected')
+        .flatten(message: 'Four hexadecimal digits expected')
         .skip(before: char('u')),
     tomlHexDigit()
         .times(8)
-        .flatten('Eight hexadecimal digits expected')
+        .flatten(message: 'Eight hexadecimal digits expected')
         .skip(before: char('U')),
   ]).map((charCodeStr) {
     var charCode = int.parse(charCodeStr, radix: 16);

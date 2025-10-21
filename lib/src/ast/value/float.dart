@@ -37,7 +37,7 @@ class TomlFloat extends TomlValue {
         var frac = char('.') & zeroPrefixableInt;
         var float = decimal & ChoiceParser([exp, frac & exp.optional()]);
         return float
-            .flatten('Floating point number expected')
+            .flatten(message: 'Floating point number expected')
             .map((str) => TomlFloat(double.parse(str.replaceAll('_', ''))));
       })();
 

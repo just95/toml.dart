@@ -98,7 +98,7 @@ class TomlInteger extends TomlValue {
         var decimal =
             anyOf('+-').optional() & ChoiceParser([char('0'), digits]);
         return decimal
-            .flatten('Decimal integer expected')
+            .flatten(message: 'Decimal integer expected')
             .map(
               (str) => TomlInteger.dec(
                 BigInt.parse(
@@ -139,7 +139,7 @@ class TomlInteger extends TomlValue {
   }) {
     var digitsParser = digitParser.plus().plusSeparated(char('_'));
     var integerParser = digitsParser
-        .flatten(message)
+        .flatten(message: message)
         .map(
           (str) => BigInt.parse(str.replaceAll('_', ''), radix: format.base),
         );
