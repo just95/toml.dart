@@ -5,7 +5,7 @@ repository: https://github.com/just95/toml.dart
 environment:
   sdk: ">=3.8.0 <4.0.0"
 dependencies:
-  meta: ^1.17.0
+  meta: ^1.16.0
   petitparser: ^7.0.1
   collection: ^1.16.0
   web: ^1.1.1
