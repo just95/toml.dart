@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 0.17.0
 
 - Dart 3.8 is now required.
 
@@ -13,7 +13,7 @@
   - If you have previously extended `TomlEncodableKey` and used the default implementation of the `toTomlKey` method, you must now mixin `TomlEncodableKeyMixin` instead of extending `TomlEncodableKey`.
 
 - On the web `TomlDocument.load` now uses `package:web` instead of `dart:html`.
-  - If you handled exceptions from ` dart:html` in your code you now have to handle the corresponding exceptions from `package:web` instead.
+  - If you handled exceptions from `dart:html` in your code you now have to handle the corresponding exceptions from `package:web` instead.
   - If the web server responds with an HTTP status code that is not in the range of 200-299, `TomlDocument.load` now throws a `TomlUnexpectedHttpStatusException`.
 
 ## 0.16.0
