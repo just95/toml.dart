@@ -4,19 +4,19 @@ import 'package:petitparser/petitparser.dart';
 ///
 ///     digit0-1 = %x30-31                 ; 0-1
 Parser<String> tomlBinDigit([String message = 'binary digit expected']) =>
-    pattern('0-1', message);
+    pattern('0-1', message: message);
 
 /// Parser for a octal digits.
 ///
 ///     digit0-7 = %x30-37                 ; 0-7
 Parser<String> tomlOctDigit([String message = 'octal digit expected']) =>
-    pattern('0-7', message);
+    pattern('0-7', message: message);
 
 /// Parser for hexadecimal digits.
 ///
 ///     HEXDIG = DIGIT / "A" / "B" / "C" / "D" / "E" / "F"
 Parser<String> tomlHexDigit([String message = 'hexadecimal digit expected']) =>
-    pattern('0-9a-fA-F', message);
+    pattern('0-9a-fA-F', message: message);
 
 /// Parser for non-EOL characters that are allowed in TOML comments.
 ///
@@ -44,8 +44,9 @@ final Parser<String> tomlNonAscii = ChoiceParser([
 /// Parser for a UTF-16 surrogate pair.
 ///
 /// Returns the combined Unicode code-point of the surrogate pair.
-final Parser<String> _tomlSurrogatePair =
-    (_tomlHighSurrogate & _tomlLowSurrogate).flatten('Surrogate pair expected');
+final Parser<String> _tomlSurrogatePair = (_tomlHighSurrogate &
+        _tomlLowSurrogate)
+    .flatten(message: 'Surrogate pair expected');
 
 /// Parser for high surrogates (`%xD800-DBFF`).
 final Parser<String> _tomlHighSurrogate = range('\uD800', '\uDBFF');

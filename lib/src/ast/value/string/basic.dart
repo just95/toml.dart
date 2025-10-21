@@ -23,8 +23,8 @@ class TomlBasicString extends TomlSinglelineString {
       .star()
       .join()
       .skip(
-        before: char(delimiter, "opening '$delimiter' expected"),
-        after: char(delimiter, "closing '$delimiter' expected"),
+        before: char(delimiter, message: "opening '$delimiter' expected"),
+        after: char(delimiter, message: "closing '$delimiter' expected"),
       )
       .map(TomlBasicString._fromEncodable);
 
@@ -48,7 +48,7 @@ class TomlBasicString extends TomlSinglelineString {
     range('\x23', '\x5B'),
     range('\x5D', '\x7E'),
     tomlNonAscii,
-  ]).flatten('Basic string character expected');
+  ]).flatten(message: 'Basic string character expected');
 
   /// Escapes all characters of the given string that are not allowed to
   /// occur unescaped in a basic string.

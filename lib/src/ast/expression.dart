@@ -52,7 +52,7 @@ abstract class TomlExpression extends TomlNode {
   static final Parser _lookAheadParser =
       ChoiceParser([
         tomlNewline,
-        endOfInput('newline or end of input expected'),
+        endOfInput(message: 'newline or end of input expected'),
       ]).and();
 
   /// Invokes the correct `visit*` method for this expression of the given

@@ -19,8 +19,8 @@ class TomlLiteralString extends TomlSinglelineString {
   static final Parser<TomlLiteralString> parser = charParser
       .starString()
       .skip(
-        before: char(delimiter, 'opening "$delimiter" expected'),
-        after: char(delimiter, 'closing "$delimiter" expected'),
+        before: char(delimiter, message: 'opening "$delimiter" expected'),
+        after: char(delimiter, message: 'closing "$delimiter" expected'),
       )
       .map(TomlLiteralString._fromEncodable);
 
@@ -35,7 +35,7 @@ class TomlLiteralString extends TomlSinglelineString {
     range('\x20', '\x26'),
     range('\x28', '\x7E'),
     tomlNonAscii,
-  ]).flatten('Literal string character expected');
+  ]).flatten(message: 'Literal string character expected');
 
   /// Tests whether the given string can be represented as a literal string.
   ///

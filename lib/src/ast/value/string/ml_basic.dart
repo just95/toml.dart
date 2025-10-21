@@ -24,8 +24,8 @@ class TomlMultilineBasicString extends TomlMultilineString {
   static final Parser<TomlMultilineBasicString> parser = bodyParser
       .skip(before: tomlNewline.optional())
       .skip(
-        before: string(delimiter, "opening '$delimiter' expected"),
-        after: string(delimiter, "closing '$delimiter' expected"),
+        before: string(delimiter, message: "opening '$delimiter' expected"),
+        after: string(delimiter, message: "closing '$delimiter' expected"),
       )
       .map(TomlMultilineBasicString._fromEncodable);
 
@@ -80,7 +80,7 @@ class TomlMultilineBasicString extends TomlMultilineString {
     range('\x23', '\x5B'),
     range('\x5D', '\x7E'),
     tomlNonAscii,
-  ]).flatten('Unescaped multiline basic string character expected');
+  ]).flatten(message: 'Unescaped multiline basic string character expected');
 
   /// Parser for an escaped newline.
   ///

@@ -25,8 +25,8 @@ class TomlMultilineLiteralString extends TomlMultilineString {
   static final Parser<TomlMultilineLiteralString> parser = bodyParser
       .skip(before: tomlNewline.optional())
       .skip(
-        before: string(delimiter, 'opening "$delimiter" expected'),
-        after: string(delimiter, 'closing "$delimiter" expected'),
+        before: string(delimiter, message: 'opening "$delimiter" expected'),
+        after: string(delimiter, message: 'closing "$delimiter" expected'),
       )
       .map(TomlMultilineLiteralString._fromEncodable);
 
@@ -70,7 +70,7 @@ class TomlMultilineLiteralString extends TomlMultilineString {
     range('\x28', '\x7E'),
     tomlNonAscii,
     tomlNewline,
-  ]).flatten('Multiline literal string character expected');
+  ]).flatten(message: 'Multiline literal string character expected');
 
   /// Tests whether the given string can be represented as a literal string.
   ///
