@@ -108,14 +108,15 @@ class TomlFullDate {
 @immutable
 class TomlPartialTime {
   /// Parser for a partial time value with microsecond precision.
-  static final Parser<TomlPartialTime> parser = (
-    _dd.skip(after: char(':')),
-    _dd.skip(after: char(':')),
-    _dd,
-    _ddd.plus().skip(before: char('.')).optionalWith(<int>[]),
-  ).toSequenceParser().map(
-    (tuple) => TomlPartialTime(tuple.$1, tuple.$2, tuple.$3, tuple.$4),
-  );
+  static final Parser<TomlPartialTime> parser =
+      (
+        _dd.skip(after: char(':')),
+        _dd.skip(after: char(':')),
+        _dd,
+        _ddd.plus().skip(before: char('.')).optionalWith(<int>[]),
+      ).toSequenceParser().map(
+        (tuple) => TomlPartialTime(tuple.$1, tuple.$2, tuple.$3, tuple.$4),
+      );
 
   /// The hour of the day, expressed as in a 24-hour clock (as a number from
   /// `0` to `23`).
@@ -238,8 +239,10 @@ class TomlTimeZoneOffset {
       .map((pair) => TomlTimeZoneOffset.negative(pair.$1, pair.$2));
 
   /// Parser for an unsigned time-zone offset.
-  static final Parser<(int, int)> _unsignedParser =
-      (_dd.skip(after: char(':')), _dd).toSequenceParser();
+  static final Parser<(int, int)> _unsignedParser = (
+    _dd.skip(after: char(':')),
+    _dd,
+  ).toSequenceParser();
 
   /// Whether this offset identifies the UTC time-zone.
   ///

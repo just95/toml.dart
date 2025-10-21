@@ -44,9 +44,10 @@ final Parser<String> tomlNonAscii = ChoiceParser([
 /// Parser for a UTF-16 surrogate pair.
 ///
 /// Returns the combined Unicode code-point of the surrogate pair.
-final Parser<String> _tomlSurrogatePair = (_tomlHighSurrogate &
-        _tomlLowSurrogate)
-    .flatten(message: 'Surrogate pair expected');
+final Parser<String> _tomlSurrogatePair =
+    (_tomlHighSurrogate & _tomlLowSurrogate).flatten(
+      message: 'Surrogate pair expected',
+    );
 
 /// Parser for high surrogates (`%xD800-DBFF`).
 final Parser<String> _tomlHighSurrogate = range('\uD800', '\uDBFF');

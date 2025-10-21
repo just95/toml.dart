@@ -24,8 +24,7 @@ Future<String> loadFile(String filename) async {
 
 /// Throws an [UnsupportedError] because loading configuration files
 /// synchronously via HTTP is not supported using `package:web`.
-String loadFileSync(String filename) =>
-    throw UnsupportedError(
-      'Cannot load file "$filename" synchronously: Configuration files cannot '
-      'be loaded synchronously on the web.',
-    );
+String loadFileSync(String filename) => throw UnsupportedError(
+  'Cannot load file "$filename" synchronously: Configuration files cannot '
+  'be loaded synchronously on the web.',
+);

@@ -15,13 +15,14 @@ import '../date_time.dart';
 @immutable
 class TomlOffsetDateTime extends TomlDateTime {
   /// Parser for a TOML offset date-time value.
-  static final Parser<TomlOffsetDateTime> parser = (
-    TomlFullDate.parser,
-    TomlPartialTime.parser.skip(before: anyOf('Tt ')),
-    TomlTimeZoneOffset.parser,
-  ).toSequenceParser().map(
-    (tuple) => TomlOffsetDateTime(tuple.$1, tuple.$2, tuple.$3),
-  );
+  static final Parser<TomlOffsetDateTime> parser =
+      (
+        TomlFullDate.parser,
+        TomlPartialTime.parser.skip(before: anyOf('Tt ')),
+        TomlTimeZoneOffset.parser,
+      ).toSequenceParser().map(
+        (tuple) => TomlOffsetDateTime(tuple.$1, tuple.$2, tuple.$3),
+      );
 
   /// Parses the given string as a TOML offset date-time.
   static TomlOffsetDateTime parse(String input) =>

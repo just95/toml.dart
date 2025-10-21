@@ -92,22 +92,20 @@ class TomlInteger extends TomlValue {
   ///     underscore = %x5F                  ; _
   ///     digit1-9 = %x31-39                 ; 1-9
   ///     DIGIT = %x30-39 ; 0-9
-  static final Parser<TomlInteger> decParser =
-      (() {
-        var digits = digit().plus().plusSeparated(char('_'));
-        var decimal =
-            anyOf('+-').optional() & ChoiceParser([char('0'), digits]);
-        return decimal
-            .flatten(message: 'Decimal integer expected')
-            .map(
-              (str) => TomlInteger.dec(
-                BigInt.parse(
-                  str.replaceAll('_', ''),
-                  radix: TomlIntegerFormat.dec.base,
-                ),
-              ),
-            );
-      })();
+  static final Parser<TomlInteger> decParser = (() {
+    var digits = digit().plus().plusSeparated(char('_'));
+    var decimal = anyOf('+-').optional() & ChoiceParser([char('0'), digits]);
+    return decimal
+        .flatten(message: 'Decimal integer expected')
+        .map(
+          (str) => TomlInteger.dec(
+            BigInt.parse(
+              str.replaceAll('_', ''),
+              radix: TomlIntegerFormat.dec.base,
+            ),
+          ),
+        );
+  })();
 
   /// Parser for a binary TOML integer value.
   ///

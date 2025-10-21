@@ -33,12 +33,11 @@ class TomlMultilineBasicString extends TomlMultilineString {
   ///
   ///     ml-basic-body =
   ///       *mlb-content *( mlb-quotes 1*mlb-content ) [ mlb-quotes ]
-  static final Parser<String> bodyParser =
-      SequenceParser([
-        contentParser.star().join(),
-        (quotesParser & contentParser.plus().join()).join().star().join(),
-        quotesParser.optionalWith(''),
-      ]).join();
+  static final Parser<String> bodyParser = SequenceParser([
+    contentParser.star().join(),
+    (quotesParser & contentParser.plus().join()).join().star().join(),
+    quotesParser.optionalWith(''),
+  ]).join();
 
   /// Parser for one or two quotation marks.
   ///
@@ -47,15 +46,13 @@ class TomlMultilineBasicString extends TomlMultilineString {
   /// quotes have to be escaped.
   ///
   ///     mlb-quotes = 1*2quotation-mark
-  static final Parser<String> quotesParser =
-      char(TomlBasicString.delimiter)
-          .repeatLazy(
-            string(delimiter).optional() &
-                char(TomlBasicString.delimiter).not(),
-            1,
-            2,
-          )
-          .join();
+  static final Parser<String> quotesParser = char(TomlBasicString.delimiter)
+      .repeatLazy(
+        string(delimiter).optional() & char(TomlBasicString.delimiter).not(),
+        1,
+        2,
+      )
+      .join();
 
   /// Parser for a single character of a multiline basic TOML string.
   ///
@@ -85,16 +82,15 @@ class TomlMultilineBasicString extends TomlMultilineString {
   /// Parser for an escaped newline.
   ///
   ///     mlb-escaped-nl = escape ws newline *( wschar / newline )
-  static final Parser<String> escapedNewlineParser = (char(
-            TomlEscapedChar.escapeChar,
-          ) &
-          tomlWhitespace &
-          tomlNewline &
-          ChoiceParser([
-            tomlWhitespaceChar,
-            tomlNewline,
-          ], failureJoiner: selectFarthestJoined).star())
-      .map((_) => '');
+  static final Parser<String> escapedNewlineParser =
+      (char(TomlEscapedChar.escapeChar) &
+              tomlWhitespace &
+              tomlNewline &
+              ChoiceParser([
+                tomlWhitespaceChar,
+                tomlNewline,
+              ], failureJoiner: selectFarthestJoined).star())
+          .map((_) => '');
 
   /// Escapes all characters of the given string that are not allowed to
   /// occur unescaped in a multiline basic string.

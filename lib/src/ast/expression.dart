@@ -49,11 +49,10 @@ abstract class TomlExpression extends TomlNode {
   /// are multiple expressions on the same line. Without this parser syntax
   /// errors in expressions would not be reported either since [_blankParser]
   /// would always match.
-  static final Parser _lookAheadParser =
-      ChoiceParser([
-        tomlNewline,
-        endOfInput(message: 'newline or end of input expected'),
-      ]).and();
+  static final Parser _lookAheadParser = ChoiceParser([
+    tomlNewline,
+    endOfInput(message: 'newline or end of input expected'),
+  ]).and();
 
   /// Invokes the correct `visit*` method for this expression of the given
   /// visitor.
