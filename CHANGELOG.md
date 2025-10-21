@@ -2,7 +2,7 @@
 
 ## Unreleased
 
-- Dart 3.7 is now required.
+- Dart 3.8 is now required.
 
 - `TomlEncodableValue` and `TomlEncodableKey` are now `interface class`es and must not be extended anymore.
 

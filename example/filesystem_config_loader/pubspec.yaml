@@ -3,7 +3,7 @@ description: An example that demonstrates how to load a configuration file from 
 repository: https://github.com/just95/toml.dart/tree/main/example/filesystem_config_loader
 publish_to: none
 environment:
-  sdk: ">=3.7.0 <4.0.0"
+  sdk: ">=3.8.0 <4.0.0"
 dependencies:
   toml:
     path: ../../
