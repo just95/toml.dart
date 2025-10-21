@@ -13,9 +13,11 @@
 - The encoder will now throw a `TomlImpossibleEscapeSequenceException` instead of a `TomlInvalidEscapeSequenceException` if it encounters a code point that cannot be represented using any supported escape sequence.
   This can happen for example, when the encoded string contains unpaired UTF-16 surrogate code points.
 
-## Unreleased
+## 0.17.0
 
-- Dart 3.7 is now required.
+- Dart 3.8 is now required.
+
+- Upgraded dependencies.
 
 - `TomlEncodableValue` and `TomlEncodableKey` are now `interface class`es and must not be extended anymore.
 
@@ -24,7 +26,7 @@
   - If you have previously extended `TomlEncodableKey` and used the default implementation of the `toTomlKey` method, you must now mixin `TomlEncodableKeyMixin` instead of extending `TomlEncodableKey`.
 
 - On the web `TomlDocument.load` now uses `package:web` instead of `dart:html`.
-  - If you handled exceptions from ` dart:html` in your code you now have to handle the corresponding exceptions from `package:web` instead.
+  - If you handled exceptions from `dart:html` in your code you now have to handle the corresponding exceptions from `package:web` instead.
   - If the web server responds with an HTTP status code that is not in the range of 200-299, `TomlDocument.load` now throws a `TomlUnexpectedHttpStatusException`.
 
 ## 0.16.0

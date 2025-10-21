@@ -190,14 +190,14 @@ class TomlAstBuilder {
   /// Builds a singleline TOML string with the given value.
   TomlSinglelineString buildSinglelineString(String str) =>
       TomlLiteralString.canEncode(str)
-          ? TomlLiteralString(str)
-          : TomlBasicString(str);
+      ? TomlLiteralString(str)
+      : TomlBasicString(str);
 
   /// Builds a multiline TOML string with the given value.
   TomlMultilineString buildMultilineString(String str) =>
       TomlMultilineLiteralString.canEncode(str)
-          ? TomlMultilineLiteralString(str)
-          : TomlMultilineBasicString(str);
+      ? TomlMultilineLiteralString(str)
+      : TomlMultilineBasicString(str);
 
   /// Tests whether the given string contains newlines and thus should be
   /// encoded as a multiline string if possible.

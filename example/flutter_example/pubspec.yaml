@@ -3,7 +3,7 @@ description: An example that demonstrates how to load a configuration file from 
 publish_to: none
 
 environment:
-  sdk: ">=3.7.0 <4.0.0"
+  sdk: ">=3.8.0 <4.0.0"
 
 dependencies:
   flutter:
@@ -14,7 +14,7 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  lints: ^5.1.1
+  lints: ^6.0.0
 
 flutter:
   uses-material-design: true

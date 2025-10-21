@@ -31,7 +31,7 @@ jobs:
       image: dart:stable
     steps:
       - name: Checkout
-        uses: actions/checkout@v4.2.2
+        uses: actions/checkout@v5.0.0
       - name: Print Dart SDK Version
         run: dart --version
       - name: Install Dependencies
@@ -49,7 +49,7 @@ jobs:
       image: dart:stable
     steps:
       - name: Checkout
-        uses: actions/checkout@v4.2.2
+        uses: actions/checkout@v5.0.0
       - name: Print Dart SDK Version
         run: dart --version
       - name: Install Dependencies
@@ -73,10 +73,10 @@ jobs:
       image: dart:${{ matrix.dart-version }}
     strategy:
       matrix:
-        dart-version: ["3.7", latest]
+        dart-version: ["3.8", latest]
     steps:
       - name: Checkout
-        uses: actions/checkout@v4.2.2
+        uses: actions/checkout@v5.0.0
       - name: Print Dart SDK Version
         run: dart --version
       - name: Install Dependencies
@@ -104,9 +104,9 @@ jobs:
         node-version: [16]
     steps:
       - name: Checkout
-        uses: actions/checkout@v4.2.2
+        uses: actions/checkout@v5.0.0
       - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version: ${{ matrix.node-version }}
       - name: Print node.js Version
@@ -133,7 +133,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4.2.2
+        uses: actions/checkout@v5.0.0
       - name: Use Dart SDK
         uses: dart-lang/setup-dart@v1.4
       - name: Print Dart SDK Version
@@ -161,9 +161,9 @@ jobs:
       - chrome-test
     steps:
       - name: Checkout
-        uses: actions/checkout@v4.2.2
+        uses: actions/checkout@v5.0.0
       - name: Download Coverage
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v5
         with:
           pattern: coverage-*
           path: coverage/
@@ -198,7 +198,7 @@ jobs:
       image: dart:stable
     steps:
       - name: Checkout
-        uses: actions/checkout@v4.2.2
+        uses: actions/checkout@v5.0.0
       - name: Print Dart SDK Version
         run: dart --version
       - name: Install Dependencies
@@ -219,7 +219,7 @@ jobs:
       image: dart:stable
     steps:
       - name: Checkout
-        uses: actions/checkout@v4.2.2
+        uses: actions/checkout@v5.0.0
       - name: Print Dart SDK Version
         run: dart --version
       - name: Install Dependencies
@@ -250,11 +250,11 @@ jobs:
     needs: compile-toml-test
     steps:
       - name: Checkout
-        uses: actions/checkout@v4.2.2
+        uses: actions/checkout@v5.0.0
       - name: Install `toml-test`
         run: go install github.com/toml-lang/toml-test/cmd/toml-test@latest
       - name: Download Decoder Executable
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v5
         with:
           name: toml-test
           path: build/bin

@@ -79,44 +79,43 @@ abstract class TomlEscapedChar {
   /// This parser accepts any non-whitespace and non-newline character and
   /// throws a [TomlInvalidEscapeSequenceException] if the parsed character
   /// is not escapable.
-  static final Parser<String> escapedCharParser = ChoiceParser([
-    tomlNewline,
-    tomlWhitespaceChar,
-  ]).neg().map((shortcut) {
-    if (!escapableChars.containsKey(shortcut)) {
-      throw TomlInvalidEscapeSequenceException.unspecified("\\$shortcut");
-    }
-    return String.fromCharCode(escapableChars[shortcut]!);
-  });
+  static final Parser<String> escapedCharParser =
+      ChoiceParser([tomlNewline, tomlWhitespaceChar]).neg().map((shortcut) {
+        if (!escapableChars.containsKey(shortcut)) {
+          throw TomlInvalidEscapeSequenceException.unspecified("\\$shortcut");
+        }
+        return String.fromCharCode(escapableChars[shortcut]!);
+      });
 
   /// Parser for Unicode escape sequences.
   ///
   ///     escape-seq-char =/ %x78 2HEXDIG ; xHH                  U+00HH
   ///     escape-seq-char =/ %x75 4HEXDIG ; uXXXX                U+XXXX
   ///     escape-seq-char =/ %x55 8HEXDIG ; UXXXXXXXX            U+XXXXXXXX
-  static final Parser<String> escapedUnicodeParser = ChoiceParser([
-    tomlHexDigit()
-        .times(2)
-        .flatten("Two hexadecimal digits expected")
-        .skip(before: char('x')),
-    tomlHexDigit()
-        .times(4)
-        .flatten('Four hexadecimal digits expected')
-        .skip(before: char('u')),
-    tomlHexDigit()
-        .times(8)
-        .flatten('Eight hexadecimal digits expected')
-        .skip(before: char('U')),
-  ]).map((charCodeStr) {
-    var charCode = int.parse(charCodeStr, radix: 16);
-    if (isScalarUnicodeValue(charCode)) {
-      return String.fromCharCode(charCode);
-    }
-    var prefix = _unicodeEscapeSequencePrefix(charCodeStr.length);
-    throw TomlInvalidEscapeSequenceException.nonScalar(
-      '$escapeChar$prefix$charCodeStr',
-    );
-  });
+  static final Parser<String> escapedUnicodeParser =
+      ChoiceParser([
+        tomlHexDigit()
+            .times(2)
+            .flatten(message: "Two hexadecimal digits expected")
+            .skip(before: char('x')),
+        tomlHexDigit()
+            .times(4)
+            .flatten(message: 'Four hexadecimal digits expected')
+            .skip(before: char('u')),
+        tomlHexDigit()
+            .times(8)
+            .flatten(message: 'Eight hexadecimal digits expected')
+            .skip(before: char('U')),
+      ]).map((charCodeStr) {
+        var charCode = int.parse(charCodeStr, radix: 16);
+        if (isScalarUnicodeValue(charCode)) {
+          return String.fromCharCode(charCode);
+        }
+        var prefix = _unicodeEscapeSequencePrefix(charCodeStr.length);
+        throw TomlInvalidEscapeSequenceException.nonScalar(
+          '$escapeChar$prefix$charCodeStr',
+        );
+      });
 
   /// Tests whether the given code point is a scalar Unicode value, i.e., in
   /// the range `U+0000` to `U+D7FF` or `U+E000` to `U+10FFFF`.

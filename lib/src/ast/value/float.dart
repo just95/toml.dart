@@ -25,39 +25,37 @@ class TomlFloat extends TomlValue {
   ///
   ///     exp = "e" float-exp-part
   ///     float-exp-part = [ minus / plus ] zero-prefixable-int
-  static final Parser<TomlFloat> finalFloatParser =
-      (() {
-        var floatIntPart = ChoiceParser([
-          char('0'),
-          digit().plus().plusSeparated(char('_')),
-        ]);
-        var zeroPrefixableInt = digit().plus().plusSeparated(char('_'));
-        var decimal = anyOf('+-').optional() & floatIntPart;
-        var exp = anyOf('eE') & anyOf('+-').optional() & zeroPrefixableInt;
-        var frac = char('.') & zeroPrefixableInt;
-        var float = decimal & ChoiceParser([exp, frac & exp.optional()]);
-        return float
-            .flatten('Floating point number expected')
-            .map((str) => TomlFloat(double.parse(str.replaceAll('_', ''))));
-      })();
+  static final Parser<TomlFloat> finalFloatParser = (() {
+    var floatIntPart = ChoiceParser([
+      char('0'),
+      digit().plus().plusSeparated(char('_')),
+    ]);
+    var zeroPrefixableInt = digit().plus().plusSeparated(char('_'));
+    var decimal = anyOf('+-').optional() & floatIntPart;
+    var exp = anyOf('eE') & anyOf('+-').optional() & zeroPrefixableInt;
+    var frac = char('.') & zeroPrefixableInt;
+    var float = decimal & ChoiceParser([exp, frac & exp.optional()]);
+    return float
+        .flatten(message: 'Floating point number expected')
+        .map((str) => TomlFloat(double.parse(str.replaceAll('_', ''))));
+  })();
 
   /// Parser for a special TOML floating point value.
   ///
   ///     special-float = [ minus / plus ] ( inf / nan )
   ///     inf = %x69.6E.66  ; inf
   ///     nan = %x6E.61.6E  ; nan
-  static final Parser<TomlFloat> specialFloatParser =
-      (() {
-        var plus = char('+').map((_) => 1.0);
-        var minus = char('-').map((_) => -1.0);
-        var sign = ChoiceParser([plus, minus]).optionalWith(1.0);
-        var inf = string('inf').map((_) => double.infinity);
-        var nan = string('nan').map((_) => double.nan);
-        return (
-          sign,
-          ChoiceParser([inf, nan]),
-        ).toSequenceParser().map((pair) => TomlFloat(pair.$1 * pair.$2));
-      })();
+  static final Parser<TomlFloat> specialFloatParser = (() {
+    var plus = char('+').map((_) => 1.0);
+    var minus = char('-').map((_) => -1.0);
+    var sign = ChoiceParser([plus, minus]).optionalWith(1.0);
+    var inf = string('inf').map((_) => double.infinity);
+    var nan = string('nan').map((_) => double.nan);
+    return (
+      sign,
+      ChoiceParser([inf, nan]),
+    ).toSequenceParser().map((pair) => TomlFloat(pair.$1 * pair.$2));
+  })();
 
   /// The number represented by this node.
   final double value;

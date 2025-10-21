@@ -16,19 +16,19 @@ import 'date_time/offset_date_time.dart';
 /// Parser for four consecutive digits.
 Parser<int> _dddd = digit()
     .times(4)
-    .flatten('Four digit number expected')
+    .flatten(message: 'Four digit number expected')
     .map(int.parse);
 
 /// Parser for one to three consecutive digits.
 Parser<int> _ddd = digit()
     .repeat(1, 3)
-    .flatten('Number with one to three digits expected')
+    .flatten(message: 'Number with one to three digits expected')
     .map((str) => int.parse(str.padRight(3, '0')));
 
 /// Parser for two consecutive digits.
 Parser<int> _dd = digit()
     .times(2)
-    .flatten('Two digit number expected')
+    .flatten(message: 'Two digit number expected')
     .map(int.parse);
 
 /// A date without time and time-zone offset that is used for the internal
@@ -108,16 +108,18 @@ class TomlFullDate {
 @immutable
 class TomlPartialTime {
   /// Parser for a partial time value with microsecond precision.
-  static final Parser<TomlPartialTime> parser = (
-    _dd,
-    _dd.skip(before: char(':')),
-    (
-      _dd.skip(before: char(':')),
-      _ddd.plus().skip(before: char('.')).optionalWith(<int>[]),
-    ).toSequenceParser().optionalWith((0, <int>[])),
-  ).toSequenceParser().map(
-    (tuple) => TomlPartialTime(tuple.$1, tuple.$2, tuple.$3.$1, tuple.$3.$2),
-  );
+  static final Parser<TomlPartialTime> parser =
+      (
+        _dd,
+        _dd.skip(before: char(':')),
+        (
+          _dd.skip(before: char(':')),
+          _ddd.plus().skip(before: char('.')).optionalWith(<int>[]),
+        ).toSequenceParser().optionalWith((0, <int>[])),
+      ).toSequenceParser().map(
+        (tuple) =>
+            TomlPartialTime(tuple.$1, tuple.$2, tuple.$3.$1, tuple.$3.$2),
+      );
 
   /// The hour of the day, expressed as in a 24-hour clock (as a number from
   /// `0` to `23`).
@@ -240,8 +242,10 @@ class TomlTimeZoneOffset {
       .map((pair) => TomlTimeZoneOffset.negative(pair.$1, pair.$2));
 
   /// Parser for an unsigned time-zone offset.
-  static final Parser<(int, int)> _unsignedParser =
-      (_dd.skip(after: char(':')), _dd).toSequenceParser();
+  static final Parser<(int, int)> _unsignedParser = (
+    _dd.skip(after: char(':')),
+    _dd,
+  ).toSequenceParser();
 
   /// Whether this offset identifies the UTC time-zone.
   ///
