@@ -60,6 +60,9 @@ class TomlOffsetDateTime extends TomlDateTime {
       );
 
   /// Converts this AST node to an UTC [DateTime] object.
+  ///
+  /// Since [DateTime] only supports microsecond precision, any additional
+  /// fractional digits are truncated.
   DateTime toUtcDateTime() => DateTime.utc(
     date.year,
     date.month,

@@ -180,6 +180,17 @@ void main() {
           equals(DateTime.utc(2017, 6, 6, 17, 34, 56)),
         );
       });
+      test('truncates fractional digits beyond microseconds', () {
+        var offsetDateTime = TomlOffsetDateTime(
+          TomlFullDate(2017, 6, 6),
+          TomlPartialTime(12, 34, 56, [123, 456, 789]),
+          TomlTimeZoneOffset.negative(5, 0),
+        );
+        expect(
+          offsetDateTime.toUtcDateTime(),
+          equals(DateTime.utc(2017, 6, 6, 17, 34, 56, 123, 456)),
+        );
+      });
     });
   });
 }
