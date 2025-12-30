@@ -54,6 +54,20 @@ void main() {
             );
             expect(prettyPrinter.toString(), equals('1969-07-20 20:17:42Z'));
           });
+          test('separates date and time of UTC date-time with the letter `T` '
+              'when the flag `useIsoDateTimeSeparator` is set to `true`', () {
+            var prettyPrinter = TomlPrettyPrinter(
+              useIsoDateTimeSeparator: true,
+            );
+            prettyPrinter.visitOffsetDateTime(
+              TomlOffsetDateTime(
+                TomlFullDate(1969, 7, 20),
+                TomlPartialTime(20, 17, 42),
+                TomlTimeZoneOffset.utc(),
+              ),
+            );
+            expect(prettyPrinter.toString(), equals('1969-07-20T20:17:42Z'));
+          });
           test(
             'omits seconds from UTC date-time without fractional seconds',
             () {
@@ -68,6 +82,18 @@ void main() {
               expect(prettyPrinter.toString(), equals('1969-07-20 20:17Z'));
             },
           );
+          test('does not omit seconds from UTC date-time if the flag'
+              '`alwaysIncludeSeconds` is set to `true`', () {
+            var prettyPrinter = TomlPrettyPrinter(alwaysIncludeSeconds: true);
+            prettyPrinter.visitOffsetDateTime(
+              TomlOffsetDateTime(
+                TomlFullDate(1969, 7, 20),
+                TomlPartialTime(20, 17, 0),
+                TomlTimeZoneOffset.utc(),
+              ),
+            );
+            expect(prettyPrinter.toString(), equals('1969-07-20 20:17:00Z'));
+          });
           test(
             'does not omit seconds from UTC date-time with fractional seconds',
             () {
@@ -100,6 +126,26 @@ void main() {
             );
           });
           test(
+            'separates date and time of non-UTC date-time with the letter `T` '
+            'when the flag `useIsoDateTimeSeparator` is set to `true`',
+            () {
+              var prettyPrinter = TomlPrettyPrinter(
+                useIsoDateTimeSeparator: true,
+              );
+              prettyPrinter.visitOffsetDateTime(
+                TomlOffsetDateTime(
+                  TomlFullDate(1969, 7, 20),
+                  TomlPartialTime(20, 17, 42),
+                  TomlTimeZoneOffset.positive(1, 0),
+                ),
+              );
+              expect(
+                prettyPrinter.toString(),
+                equals('1969-07-20T20:17:42+01:00'),
+              );
+            },
+          );
+          test(
             'omits seconds from non-UTC date-time without fractional seconds',
             () {
               var prettyPrinter = TomlPrettyPrinter();
@@ -116,6 +162,21 @@ void main() {
               );
             },
           );
+          test('does not omit seconds from non-UTC date-time if the flag '
+              '`alwaysIncludeSeconds` is set to `true`', () {
+            var prettyPrinter = TomlPrettyPrinter(alwaysIncludeSeconds: true);
+            prettyPrinter.visitOffsetDateTime(
+              TomlOffsetDateTime(
+                TomlFullDate(1969, 7, 20),
+                TomlPartialTime(20, 17, 0),
+                TomlTimeZoneOffset.positive(1, 0),
+              ),
+            );
+            expect(
+              prettyPrinter.toString(),
+              equals('1969-07-20 20:17:00+01:00'),
+            );
+          });
           test('does not omit seconds from non-UTC date-time with fractional '
               'seconds', () {
             var prettyPrinter = TomlPrettyPrinter();
@@ -186,6 +247,19 @@ void main() {
             );
             expect(prettyPrinter.toString(), equals('1969-07-20 20:17:42'));
           });
+          test('seperates date and time of local date-time with the letter `T` '
+              'when the flag `useIsoDateTimeSeparator` is set to `true`', () {
+            var prettyPrinter = TomlPrettyPrinter(
+              useIsoDateTimeSeparator: true,
+            );
+            prettyPrinter.visitLocalDateTime(
+              TomlLocalDateTime(
+                TomlFullDate(1969, 7, 20),
+                TomlPartialTime(20, 17, 42),
+              ),
+            );
+            expect(prettyPrinter.toString(), equals('1969-07-20T20:17:42'));
+          });
           test(
             'omits seconds from local date-time without fractional seconds',
             () {
@@ -199,6 +273,17 @@ void main() {
               expect(prettyPrinter.toString(), equals('1969-07-20 20:17'));
             },
           );
+          test('does not omit seconds from local date-time if the flag '
+              '`alwaysIncludeSeconds` is set to `true`', () {
+            var prettyPrinter = TomlPrettyPrinter(alwaysIncludeSeconds: true);
+            prettyPrinter.visitLocalDateTime(
+              TomlLocalDateTime(
+                TomlFullDate(1969, 7, 20),
+                TomlPartialTime(20, 17, 0),
+              ),
+            );
+            expect(prettyPrinter.toString(), equals('1969-07-20 20:17:00'));
+          });
           test('does not omit seconds from local date-time with fractional '
               'seconds', () {
             var prettyPrinter = TomlPrettyPrinter();
@@ -271,6 +356,14 @@ void main() {
               TomlLocalTime(TomlPartialTime(20, 17, 0)),
             );
             expect(prettyPrinter.toString(), equals('20:17'));
+          });
+          test('does not omit seconds from time if the flag '
+              '`alwaysIncludeSeconds` is set to `true`', () {
+            var prettyPrinter = TomlPrettyPrinter(alwaysIncludeSeconds: true);
+            prettyPrinter.visitLocalTime(
+              TomlLocalTime(TomlPartialTime(20, 17, 0)),
+            );
+            expect(prettyPrinter.toString(), equals('20:17:00'));
           });
           test('does not omit seconds from time with fractional seconds', () {
             var prettyPrinter = TomlPrettyPrinter();

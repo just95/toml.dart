@@ -58,6 +58,14 @@ String getValueType(dynamic value) {
 /// Converts a value to a string in the format expected by `toml-test`.
 String serializeValue(dynamic value) {
   if (value is double) return value.toString().toLowerCase();
+  if (value is TomlDateTime) {
+    final prettyPrinter = TomlPrettyPrinter(
+      alwaysIncludeSeconds: true,
+      useIsoDateTimeSeparator: true,
+    );
+    prettyPrinter.visitValue(value);
+    return prettyPrinter.toString();
+  }
   return value.toString();
 }
 

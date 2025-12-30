@@ -16,8 +16,23 @@ class TomlPrettyPrinter
   /// Buffer for constructing the TOML formatted string.
   final StringBuffer _buffer;
 
+  /// Whether the seconds of time values should be printed even if set to zero.
+  ///
+  /// By default, the seconds-part is omitted if it is zero and there are no
+  /// fractional seconds.
+  final bool alwaysIncludeSeconds;
+
+  /// Whether to use the letter `T` to separate the date and time of date-time
+  /// values.
+  ///
+  /// By default, the date- and time-parts are separated by a space.
+  final bool useIsoDateTimeSeparator;
+
   /// Creates a new pretty printer for TOML AST nodes.
-  TomlPrettyPrinter() : _buffer = StringBuffer();
+  TomlPrettyPrinter({
+    this.alwaysIncludeSeconds = false,
+    this.useIsoDateTimeSeparator = false,
+  }) : _buffer = StringBuffer();
 
   @override
   String toString() => _buffer.toString();
@@ -208,6 +223,10 @@ class TomlPrettyPrinter
     return n.toString().padLeft(2, '0');
   }
 
+  void _printDateTimeSeparator() {
+    _writeToken(useIsoDateTimeSeparator ? 'T' : ' ');
+  }
+
   /// Prints a full date.
   void printFullDate(TomlFullDate date) {
     var yyyy = _dddd(date.year);
@@ -223,7 +242,9 @@ class TomlPrettyPrinter
     _writeToken('$h:$min');
 
     // Include the seconds part only if needed.
-    if (time.second != 0 || time.secondFractions.isNotEmpty) {
+    if (time.second != 0 ||
+        time.secondFractions.isNotEmpty ||
+        alwaysIncludeSeconds) {
       var sec = _dd(time.second);
       _writeToken(':$sec');
     }
@@ -253,7 +274,7 @@ class TomlPrettyPrinter
   @override
   void visitLocalDateTime(TomlLocalDateTime localDateTime) {
     printFullDate(localDateTime.date);
-    _writeToken(' ');
+    _printDateTimeSeparator();
     printPartialTime(localDateTime.time);
   }
 
@@ -265,7 +286,7 @@ class TomlPrettyPrinter
   @override
   void visitOffsetDateTime(TomlOffsetDateTime offsetDateTime) {
     printFullDate(offsetDateTime.date);
-    _writeToken(' ');
+    _printDateTimeSeparator();
     printPartialTime(offsetDateTime.time);
     printTimeZoneOffset(offsetDateTime.offset);
   }
