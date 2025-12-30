@@ -2,7 +2,7 @@
 
 ## Unreleased (TOML 1.1)
 
-- Experimental support for TOML 1.1.0 has been added.
+- Support for TOML [v1.1.0][toml-spec/v1.1.0] has been added.
   - Newlines and trailing commas are now allowed in inline tables.
   - The seconds part of offset date-times, local date-times and local times is now optional.
     - If the seconds part is omitted `TomlPartialTime.seconds` is set to `0`.
@@ -186,4 +186,5 @@ This is a major update that does not only bring along many changes to the intern
 [toml-spec/v0.4.0]: https://toml.io/en/v0.4.0 "TOML: English v0.4.0"
 [toml-spec/v0.5.0]: https://toml.io/en/v0.5.0 "TOML: English v0.5.0"
 [toml-spec/v1.0.0]: https://toml.io/en/v1.0.0 "TOML: English v1.0.0"
+[toml-spec/v1.1.0]: https://toml.io/en/v1.1.0 "TOML: English v1.1.0"
 [toml-test]: https://github.com/toml-lang/toml-test "A language agnostic test suite for TOML parsers."
