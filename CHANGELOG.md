@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased (TOML 1.1)
+## 0.18.0
 
 - Support for TOML [v1.1.0][toml-spec/v1.1.0] has been added.
   - Newlines and trailing commas are now allowed in inline tables.
