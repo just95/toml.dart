@@ -116,8 +116,8 @@ class TomlMultilineBasicString extends TomlMultilineString {
 
         // If the current rune is a carriage return and the next rune is a
         // line feed, the carriage return does not have to be escaped.
-        if (rune == TomlEscapedChar.carriageReturn &&
-            _peekNext(iterator) == TomlEscapedChar.lineFeed) {
+        if (rune == TomlEscapedChar.carriageReturnCodePoint &&
+            _peekNext(iterator) == TomlEscapedChar.lineFeedCodePoint) {
           buffer.writeCharCode(rune);
         } else {
           TomlEscapedChar.writeEscapedChar(rune, buffer, unescapedOrNewline);

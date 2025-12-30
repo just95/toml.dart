@@ -423,6 +423,18 @@ void main() {
           ),
         );
       });
+      test('can parse UTC date-times without seconds', () {
+        expect(
+          TomlValue.parse('1989-11-09 17:53Z'),
+          equals(
+            TomlOffsetDateTime(
+              TomlFullDate(1989, 11, 9),
+              TomlPartialTime(17, 53, 0),
+              TomlTimeZoneOffset.utc(),
+            ),
+          ),
+        );
+      });
       test('allows \'T\' as a separator between date and time', () {
         expect(
           TomlValue.parse('1989-11-09T17:53:00Z'),
@@ -447,6 +459,21 @@ void main() {
           ),
         );
       });
+      test(
+        'can parse date-times with numeric time zone offset without seconds',
+        () {
+          expect(
+            TomlValue.parse('1989-11-09 18:53+01:00'),
+            equals(
+              TomlOffsetDateTime(
+                TomlFullDate(1989, 11, 9),
+                TomlPartialTime(18, 53, 0),
+                TomlTimeZoneOffset.positive(1, 0),
+              ),
+            ),
+          );
+        },
+      );
       test('can parse date-times with fractions of a second', () {
         expect(
           TomlValue.parse('1989-11-09 18:53:00.0099999+01:00'),
@@ -476,6 +503,17 @@ void main() {
       test('can parse date-times without time-zone offset', () {
         expect(
           TomlValue.parse('1989-11-09 17:53:00'),
+          equals(
+            TomlLocalDateTime(
+              TomlFullDate(1989, 11, 9),
+              TomlPartialTime(17, 53, 0),
+            ),
+          ),
+        );
+      });
+      test('can parse date-times without seconds and time-zone offset', () {
+        expect(
+          TomlValue.parse('1989-11-09 17:53'),
           equals(
             TomlLocalDateTime(
               TomlFullDate(1989, 11, 9),
@@ -543,6 +581,12 @@ void main() {
       test('can parse time without date', () {
         expect(
           TomlValue.parse('17:53:00'),
+          equals(TomlLocalTime(TomlPartialTime(17, 53, 0))),
+        );
+      });
+      test('can parse time without seconds and date', () {
+        expect(
+          TomlValue.parse('17:53'),
           equals(TomlLocalTime(TomlPartialTime(17, 53, 0))),
         );
       });
@@ -1240,7 +1284,7 @@ void main() {
       test('can parse empty inline table with whitespace', () {
         expect(TomlValue.parse('{ }'), equals(TomlInlineTable([])));
       });
-      test('can parse empty inline table with single key/value pair', () {
+      test('can parse inline table with single key/value pair', () {
         expect(
           TomlValue.parse('{ key = "value" }'),
           equals(
@@ -1253,7 +1297,7 @@ void main() {
           ),
         );
       });
-      test('can parse empty inline table with multiple key/value pairs', () {
+      test('can parse inline table with multiple key/value pairs', () {
         expect(
           TomlValue.parse('{ x = 1, y = 2, z = 3 }'),
           equals(
@@ -1274,8 +1318,30 @@ void main() {
           ),
         );
       });
-      test('does not allow trailing comma in inline table', () {
+      test('allows trailing comma in inline table', () {
         var input = '{ x = 1, y = 2, z = 3, }';
+        expect(
+          TomlValue.parse(input),
+          equals(
+            TomlInlineTable([
+              TomlKeyValuePair(
+                TomlKey([TomlUnquotedKey('x')]),
+                TomlInteger.dec(BigInt.from(1)),
+              ),
+              TomlKeyValuePair(
+                TomlKey([TomlUnquotedKey('y')]),
+                TomlInteger.dec(BigInt.from(2)),
+              ),
+              TomlKeyValuePair(
+                TomlKey([TomlUnquotedKey('z')]),
+                TomlInteger.dec(BigInt.from(3)),
+              ),
+            ]),
+          ),
+        );
+      });
+      test('does not allow inline table with comma only', () {
+        var input = '{,}';
         expect(
           () => TomlValue.parse(input),
           throwsA(
@@ -1283,7 +1349,7 @@ void main() {
               TomlParserException(
                 message: '"}" expected',
                 source: input,
-                offset: 21,
+                offset: 1,
               ),
             ),
           ),
@@ -1305,73 +1371,149 @@ void main() {
           ),
         );
       });
-      test('does not allow newline after opening brace of inline table', () {
+      test('allows newline after opening brace of inline table', () {
         var input =
             '{\n'
             '  x = 1, y = 2, z = 3 }';
         expect(
-          () => TomlValue.parse(input),
-          throwsA(
-            equals(
-              TomlParserException(
-                message: '"}" expected',
-                source: input,
-                offset: 1,
+          TomlValue.parse(input),
+          equals(
+            TomlInlineTable([
+              TomlKeyValuePair(
+                TomlKey([TomlUnquotedKey('x')]),
+                TomlInteger.dec(BigInt.from(1)),
               ),
-            ),
+              TomlKeyValuePair(
+                TomlKey([TomlUnquotedKey('y')]),
+                TomlInteger.dec(BigInt.from(2)),
+              ),
+              TomlKeyValuePair(
+                TomlKey([TomlUnquotedKey('z')]),
+                TomlInteger.dec(BigInt.from(3)),
+              ),
+            ]),
           ),
         );
       });
-      test('does not allow newline before closing brace of inline table', () {
+      test('allows newline before closing brace of inline table', () {
         var input =
             '{ x = 1, y = 2, z = 3 \n'
             '}';
         expect(
-          () => TomlValue.parse(input),
-          throwsA(
-            equals(
-              TomlParserException(
-                message: '"}" expected',
-                source: input,
-                offset: 22,
+          TomlValue.parse(input),
+          equals(
+            TomlInlineTable([
+              TomlKeyValuePair(
+                TomlKey([TomlUnquotedKey('x')]),
+                TomlInteger.dec(BigInt.from(1)),
               ),
-            ),
+              TomlKeyValuePair(
+                TomlKey([TomlUnquotedKey('y')]),
+                TomlInteger.dec(BigInt.from(2)),
+              ),
+              TomlKeyValuePair(
+                TomlKey([TomlUnquotedKey('z')]),
+                TomlInteger.dec(BigInt.from(3)),
+              ),
+            ]),
           ),
         );
       });
-      test('does not allow newline before commas in inline table', () {
+      test('allows newline before commas in inline table', () {
         var input =
             '{ x = 1\n'
             ', y = 2\n'
             ', z = 3 }';
         expect(
-          () => TomlValue.parse(input),
-          throwsA(
-            equals(
-              TomlParserException(
-                message: '"}" expected',
-                source: input,
-                offset: 7,
+          TomlValue.parse(input),
+          equals(
+            TomlInlineTable([
+              TomlKeyValuePair(
+                TomlKey([TomlUnquotedKey('x')]),
+                TomlInteger.dec(BigInt.from(1)),
               ),
-            ),
+              TomlKeyValuePair(
+                TomlKey([TomlUnquotedKey('y')]),
+                TomlInteger.dec(BigInt.from(2)),
+              ),
+              TomlKeyValuePair(
+                TomlKey([TomlUnquotedKey('z')]),
+                TomlInteger.dec(BigInt.from(3)),
+              ),
+            ]),
           ),
         );
       });
-      test('does not allow newline after commas in inline table', () {
+      test('allows newline before trailing comma in inline table', () {
+        var input =
+            '{ x = 1, y = 2, z = 3\n'
+            ', }';
+        expect(
+          TomlValue.parse(input),
+          equals(
+            TomlInlineTable([
+              TomlKeyValuePair(
+                TomlKey([TomlUnquotedKey('x')]),
+                TomlInteger.dec(BigInt.from(1)),
+              ),
+              TomlKeyValuePair(
+                TomlKey([TomlUnquotedKey('y')]),
+                TomlInteger.dec(BigInt.from(2)),
+              ),
+              TomlKeyValuePair(
+                TomlKey([TomlUnquotedKey('z')]),
+                TomlInteger.dec(BigInt.from(3)),
+              ),
+            ]),
+          ),
+        );
+      });
+      test('allows newline after commas in inline table', () {
+        var input =
+            '{ x = 1, y = 2, z = 3,\n'
+            ' }';
+        expect(
+          TomlValue.parse(input),
+          equals(
+            TomlInlineTable([
+              TomlKeyValuePair(
+                TomlKey([TomlUnquotedKey('x')]),
+                TomlInteger.dec(BigInt.from(1)),
+              ),
+              TomlKeyValuePair(
+                TomlKey([TomlUnquotedKey('y')]),
+                TomlInteger.dec(BigInt.from(2)),
+              ),
+              TomlKeyValuePair(
+                TomlKey([TomlUnquotedKey('z')]),
+                TomlInteger.dec(BigInt.from(3)),
+              ),
+            ]),
+          ),
+        );
+      });
+      test('allows newline after trailing comma in inline table', () {
         var input =
             '{ x = 1,\n'
             '  y = 2,\n'
             '  z = 3 }';
         expect(
-          () => TomlValue.parse(input),
-          throwsA(
-            equals(
-              TomlParserException(
-                message: '"}" expected',
-                source: input,
-                offset: 7,
+          TomlValue.parse(input),
+          equals(
+            TomlInlineTable([
+              TomlKeyValuePair(
+                TomlKey([TomlUnquotedKey('x')]),
+                TomlInteger.dec(BigInt.from(1)),
               ),
-            ),
+              TomlKeyValuePair(
+                TomlKey([TomlUnquotedKey('y')]),
+                TomlInteger.dec(BigInt.from(2)),
+              ),
+              TomlKeyValuePair(
+                TomlKey([TomlUnquotedKey('z')]),
+                TomlInteger.dec(BigInt.from(3)),
+              ),
+            ]),
           ),
         );
       });
@@ -1531,7 +1673,9 @@ void main() {
           () {
             expect(
               () => TomlValue.parse(r'"\uD83E"'),
-              throwsA(equals(TomlInvalidEscapeSequenceException(r'\uD83E'))),
+              throwsA(
+                equals(TomlInvalidEscapeSequenceException.nonScalar(r'\uD83E')),
+              ),
             );
           },
         );
@@ -1541,7 +1685,9 @@ void main() {
             expect(
               () => TomlValue.parse(r'"\U00110000"'),
               throwsA(
-                equals(TomlInvalidEscapeSequenceException(r'\U00110000')),
+                equals(
+                  TomlInvalidEscapeSequenceException.nonScalar(r'\U00110000'),
+                ),
               ),
             );
           },

@@ -48,24 +48,87 @@ void main() {
             prettyPrinter.visitOffsetDateTime(
               TomlOffsetDateTime(
                 TomlFullDate(1969, 7, 20),
-                TomlPartialTime(20, 17, 0),
+                TomlPartialTime(20, 17, 42),
                 TomlTimeZoneOffset.utc(),
               ),
             );
-            expect(prettyPrinter.toString(), equals('1969-07-20 20:17:00Z'));
+            expect(prettyPrinter.toString(), equals('1969-07-20 20:17:42Z'));
           });
+          test(
+            'omits seconds from UTC date-time without fractional seconds',
+            () {
+              var prettyPrinter = TomlPrettyPrinter();
+              prettyPrinter.visitOffsetDateTime(
+                TomlOffsetDateTime(
+                  TomlFullDate(1969, 7, 20),
+                  TomlPartialTime(20, 17, 0),
+                  TomlTimeZoneOffset.utc(),
+                ),
+              );
+              expect(prettyPrinter.toString(), equals('1969-07-20 20:17Z'));
+            },
+          );
+          test(
+            'does not omit seconds from UTC date-time with fractional seconds',
+            () {
+              var prettyPrinter = TomlPrettyPrinter();
+              prettyPrinter.visitOffsetDateTime(
+                TomlOffsetDateTime(
+                  TomlFullDate(1969, 7, 20),
+                  TomlPartialTime(20, 17, 0, [123]),
+                  TomlTimeZoneOffset.utc(),
+                ),
+              );
+              expect(
+                prettyPrinter.toString(),
+                equals('1969-07-20 20:17:00.123Z'),
+              );
+            },
+          );
           test('pretty prints non-UTC date-time correctly', () {
             var prettyPrinter = TomlPrettyPrinter();
             prettyPrinter.visitOffsetDateTime(
               TomlOffsetDateTime(
                 TomlFullDate(1969, 7, 20),
-                TomlPartialTime(20, 17, 0),
+                TomlPartialTime(20, 17, 42),
                 TomlTimeZoneOffset.positive(1, 0),
               ),
             );
             expect(
               prettyPrinter.toString(),
-              equals('1969-07-20 20:17:00+01:00'),
+              equals('1969-07-20 20:17:42+01:00'),
+            );
+          });
+          test(
+            'omits seconds from non-UTC date-time without fractional seconds',
+            () {
+              var prettyPrinter = TomlPrettyPrinter();
+              prettyPrinter.visitOffsetDateTime(
+                TomlOffsetDateTime(
+                  TomlFullDate(1969, 7, 20),
+                  TomlPartialTime(20, 17, 0),
+                  TomlTimeZoneOffset.positive(1, 0),
+                ),
+              );
+              expect(
+                prettyPrinter.toString(),
+                equals('1969-07-20 20:17+01:00'),
+              );
+            },
+          );
+          test('does not omit seconds from non-UTC date-time with fractional '
+              'seconds', () {
+            var prettyPrinter = TomlPrettyPrinter();
+            prettyPrinter.visitOffsetDateTime(
+              TomlOffsetDateTime(
+                TomlFullDate(1969, 7, 20),
+                TomlPartialTime(20, 17, 0, [123]),
+                TomlTimeZoneOffset.positive(1, 0),
+              ),
+            );
+            expect(
+              prettyPrinter.toString(),
+              equals('1969-07-20 20:17:00.123+01:00'),
             );
           });
           test('pretty prints UTC date-time with milliseconds correctly', () {
@@ -118,10 +181,34 @@ void main() {
             prettyPrinter.visitLocalDateTime(
               TomlLocalDateTime(
                 TomlFullDate(1969, 7, 20),
-                TomlPartialTime(20, 17, 0),
+                TomlPartialTime(20, 17, 42),
               ),
             );
-            expect(prettyPrinter.toString(), equals('1969-07-20 20:17:00'));
+            expect(prettyPrinter.toString(), equals('1969-07-20 20:17:42'));
+          });
+          test(
+            'omits seconds from local date-time without fractional seconds',
+            () {
+              var prettyPrinter = TomlPrettyPrinter();
+              prettyPrinter.visitLocalDateTime(
+                TomlLocalDateTime(
+                  TomlFullDate(1969, 7, 20),
+                  TomlPartialTime(20, 17, 0),
+                ),
+              );
+              expect(prettyPrinter.toString(), equals('1969-07-20 20:17'));
+            },
+          );
+          test('does not omit seconds from local date-time with fractional '
+              'seconds', () {
+            var prettyPrinter = TomlPrettyPrinter();
+            prettyPrinter.visitLocalDateTime(
+              TomlLocalDateTime(
+                TomlFullDate(1969, 7, 20),
+                TomlPartialTime(20, 17, 0, [123]),
+              ),
+            );
+            expect(prettyPrinter.toString(), equals('1969-07-20 20:17:00.123'));
           });
           test('pretty prints local date-time with milliseconds correctly', () {
             var prettyPrinter = TomlPrettyPrinter();
@@ -174,9 +261,23 @@ void main() {
           test('pretty prints time correctly', () {
             var prettyPrinter = TomlPrettyPrinter();
             prettyPrinter.visitLocalTime(
+              TomlLocalTime(TomlPartialTime(20, 17, 42)),
+            );
+            expect(prettyPrinter.toString(), equals('20:17:42'));
+          });
+          test('omits seconds from time without fractional seconds', () {
+            var prettyPrinter = TomlPrettyPrinter();
+            prettyPrinter.visitLocalTime(
               TomlLocalTime(TomlPartialTime(20, 17, 0)),
             );
-            expect(prettyPrinter.toString(), equals('20:17:00'));
+            expect(prettyPrinter.toString(), equals('20:17'));
+          });
+          test('does not omit seconds from time with fractional seconds', () {
+            var prettyPrinter = TomlPrettyPrinter();
+            prettyPrinter.visitLocalTime(
+              TomlLocalTime(TomlPartialTime(20, 17, 0, [123])),
+            );
+            expect(prettyPrinter.toString(), equals('20:17:00.123'));
           });
           test('pretty prints time with milliseconds correctly', () {
             var prettyPrinter = TomlPrettyPrinter();
@@ -351,7 +452,7 @@ void main() {
             prettyPrinter.visitBasicString(
               TomlBasicString('\u0000\u001f\u007f'),
             );
-            expect(prettyPrinter.toString(), equals(r'"\u0000\u001f\u007f"'));
+            expect(prettyPrinter.toString(), equals(r'"\x00\x1f\x7f"'));
           });
           test('does not escape single quotes', () {
             var prettyPrinter = TomlPrettyPrinter();
@@ -374,6 +475,11 @@ void main() {
               TomlBasicString('line 1\rstill line 1'),
             );
             expect(prettyPrinter.toString(), equals(r'"line 1\rstill line 1"'));
+          });
+          test('escapes escape characters', () {
+            var prettyPrinter = TomlPrettyPrinter();
+            prettyPrinter.visitBasicString(TomlBasicString('\x1B[0m'));
+            expect(prettyPrinter.toString(), equals(r'"\e[0m"'));
           });
         });
         group('visitLiteralString', () {
@@ -474,7 +580,7 @@ void main() {
               prettyPrinter.toString(),
               equals(
                 '"""\n'
-                r'\u0000\u001f\u007f"""',
+                r'\x00\x1f\x7f"""',
               ),
             );
           });

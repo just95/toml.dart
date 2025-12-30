@@ -43,8 +43,8 @@ class TomlFloat extends TomlValue {
   /// Parser for a special TOML floating point value.
   ///
   ///     special-float = [ minus / plus ] ( inf / nan )
-  ///     inf = %x69.6e.66  ; inf
-  ///     nan = %x6e.61.6e  ; nan
+  ///     inf = %x69.6E.66  ; inf
+  ///     nan = %x6E.61.6E  ; nan
   static final Parser<TomlFloat> specialFloatParser = (() {
     var plus = char('+').map((_) => 1.0);
     var minus = char('-').map((_) => -1.0);

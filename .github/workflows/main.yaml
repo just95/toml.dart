@@ -243,13 +243,16 @@ jobs:
     name: Run `toml-test` Test Suite
     runs-on: ubuntu-latest
     container:
-      image: golang:1.18
+      image: golang:1.19
+    strategy:
+      matrix:
+        toml-version: ["1.1.0"]
     needs: compile-toml-test
     steps:
       - name: Checkout
         uses: actions/checkout@v6.0.1
       - name: Install `toml-test`
-        run: go install github.com/toml-lang/toml-test/cmd/toml-test@master
+        run: go install github.com/toml-lang/toml-test/cmd/toml-test@latest
       - name: Download Decoder Executable
         uses: actions/download-artifact@v7
         with:
@@ -260,6 +263,6 @@ jobs:
           chmod +x build/bin/decoder
           chmod +x build/bin/encoder
       - name: Run `toml-test` Against Decoder
-        run: $GOPATH/bin/toml-test build/bin/decoder
+        run: $GOPATH/bin/toml-test build/bin/decoder -toml ${{ matrix.toml-version }}
       - name: Run `toml-test` Against Encoder
-        run: $GOPATH/bin/toml-test build/bin/encoder -encoder
+        run: BURNTSUSHI_TOML_110="" $GOPATH/bin/toml-test build/bin/encoder -encoder -toml ${{ matrix.toml-version }}

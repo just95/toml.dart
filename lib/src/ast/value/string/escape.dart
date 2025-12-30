@@ -3,44 +3,49 @@ import 'package:petitparser/petitparser.dart';
 import '../../../decoder/exception/invalid_escape_sequence.dart';
 import '../../../decoder/parser/ranges.dart';
 import '../../../decoder/parser/whitespace.dart';
+import '../../../encoder.dart';
 
 /// Collection of parsers for escape sequences.
 abstract class TomlEscapedChar {
   /// The character that is used to escape other characters.
   ///
   ///     escape = %x5C                   ; \
-  static final String escapeChar = '\\';
+  static final String escapeChar = r'\';
 
   /// Unicode code point of a line feed.
-  static final int backspace = 0x08;
+  static final int backspaceCodePoint = 0x08;
+
+  /// Unicode code point of an escape character.
+  static final int escapeCodePoint = 0x1B;
 
   /// Unicode code point of a line feed.
-  static final int tab = 0x09;
+  static final int formFeedCodePoint = 0x0C;
 
   /// Unicode code point of a line feed.
-  static final int lineFeed = 0x0A;
-
-  /// Unicode code point of a line feed.
-  static final int formFeed = 0x0C;
+  static final int lineFeedCodePoint = 0x0A;
 
   /// Unicode code point of a carriage return.
-  static final int carriageReturn = 0x0D;
+  static final int carriageReturnCodePoint = 0x0D;
+
+  /// Unicode code point of a line feed.
+  static final int tabCodePoint = 0x09;
 
   /// Unicode code point of a double quote.
-  static final int doubleQuote = 0x22;
+  static final int doubleQuoteCodePoint = 0x22;
 
   /// Unicode code point of a backslash.
-  static final int backslash = 0x5C;
+  static final int backslashCodePoint = 0x5C;
 
   /// Map between escape characters and the corresponding Unicode code point.
   static final Map<String, int> escapableChars = {
-    'b': backspace,
-    't': tab,
-    'n': lineFeed,
-    'f': formFeed,
-    'r': carriageReturn,
-    '"': doubleQuote,
-    r'\': backslash,
+    'b': backspaceCodePoint,
+    'e': escapeCodePoint,
+    'f': formFeedCodePoint,
+    'n': lineFeedCodePoint,
+    'r': carriageReturnCodePoint,
+    't': tabCodePoint,
+    '"': doubleQuoteCodePoint,
+    r'\': backslashCodePoint,
   };
 
   /// The inverse mapping to [escapableChars].
@@ -65,6 +70,7 @@ abstract class TomlEscapedChar {
   ///     escape-seq-char =  %x22         ; "    quotation mark  U+0022
   ///     escape-seq-char =/ %x5C         ; \    reverse solidus U+005C
   ///     escape-seq-char =/ %x62         ; b    backspace       U+0008
+  ///     escape-seq-char =/ %x65         ; e    escape          U+001B
   ///     escape-seq-char =/ %x66         ; f    form feed       U+000C
   ///     escape-seq-char =/ %x6E         ; n    line feed       U+000A
   ///     escape-seq-char =/ %x72         ; r    carriage return U+000D
@@ -76,17 +82,22 @@ abstract class TomlEscapedChar {
   static final Parser<String> escapedCharParser =
       ChoiceParser([tomlNewline, tomlWhitespaceChar]).neg().map((shortcut) {
         if (!escapableChars.containsKey(shortcut)) {
-          throw TomlInvalidEscapeSequenceException('\\$shortcut');
+          throw TomlInvalidEscapeSequenceException.unspecified("\\$shortcut");
         }
         return String.fromCharCode(escapableChars[shortcut]!);
       });
 
   /// Parser for Unicode escape sequences.
   ///
+  ///     escape-seq-char =/ %x78 2HEXDIG ; xHH                  U+00HH
   ///     escape-seq-char =/ %x75 4HEXDIG ; uXXXX                U+XXXX
   ///     escape-seq-char =/ %x55 8HEXDIG ; UXXXXXXXX            U+XXXXXXXX
   static final Parser<String> escapedUnicodeParser =
       ChoiceParser([
+        tomlHexDigit()
+            .times(2)
+            .flatten(message: "Two hexadecimal digits expected")
+            .skip(before: char('x')),
         tomlHexDigit()
             .times(4)
             .flatten(message: 'Four hexadecimal digits expected')
@@ -100,8 +111,9 @@ abstract class TomlEscapedChar {
         if (isScalarUnicodeValue(charCode)) {
           return String.fromCharCode(charCode);
         }
-        throw TomlInvalidEscapeSequenceException(
-          charCodeStr.length == 4 ? '\\u$charCodeStr' : '\\U$charCodeStr',
+        var prefix = _unicodeEscapeSequencePrefix(charCodeStr.length);
+        throw TomlInvalidEscapeSequenceException.nonScalar(
+          '$escapeChar$prefix$charCodeStr',
         );
       });
 
@@ -131,15 +143,45 @@ abstract class TomlEscapedChar {
       // The current rune must be escaped but there is no shortcut, i.e., the
       // Unicode code point must be escaped. However, Unicode escape sequences
       // are only allowed for scalar Unicode values.
-      var length = rune & 0xffff == rune ? 4 : 8;
-      var prefix = length == 4 ? 'u' : 'U';
+      var length = _unicodeEscapeSequenceLength(rune);
+      var prefix = _unicodeEscapeSequencePrefix(length);
       var hexCode = rune.toRadixString(16).padLeft(length, '0');
       if (!isScalarUnicodeValue(rune)) {
-        throw TomlInvalidEscapeSequenceException('$escapeChar$prefix$hexCode');
+        throw TomlImpossibleEscapeSequenceException.nonScalar(rune);
       }
       buffer.write(escapeChar);
       buffer.write(prefix);
       buffer.write(hexCode);
     }
+  }
+
+  /// Returns the number of hexadecimal digits that are required to represent
+  /// the given [rune] in a Unicode escape sequence.
+  static int _unicodeEscapeSequenceLength(int rune) {
+    if (rune & 0xff == rune) {
+      return 2; // 0xHH
+    } else if (rune & 0xffff == rune) {
+      return 4; // 0xHHHH
+    } else if (rune & 0xffffffff == rune) {
+      return 8; // 0xHHHHHHHH
+    }
+    throw TomlImpossibleEscapeSequenceException.tooLong(rune);
+  }
+
+  /// Returns the prefix for a Unicode escape sequence with the given number of
+  /// hexadecimal digits.
+  static String _unicodeEscapeSequencePrefix(int length) {
+    if (length == 2) {
+      return 'x'; // \xHH
+    } else if (length == 4) {
+      return 'u'; // \uHHHH
+    } else if (length == 8) {
+      return 'U'; // \UHHHHHHHH
+    }
+    throw ArgumentError.value(
+      length,
+      'length',
+      'Length must be 2, 4, or 8 for Unicode escape sequences',
+    );
   }
 }

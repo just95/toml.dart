@@ -1,5 +1,18 @@
 # Changelog
 
+## Unreleased (TOML 1.1)
+
+- Experimental support for TOML 1.1.0 has been added.
+  - Newlines and trailing commas are now allowed in inline tables.
+  - The seconds part of offset date-times, local date-times and local times is now optional.
+    - If the seconds part is omitted `TomlPartialTime.seconds` is set to `0`.
+    - If a `TomlPartialTime` with `TomlPartialTime.seconds == 0` is encoded and `TomlPartialTime.secondFractions` is empty, the seconds part is omitted.
+  - Added escape sequence `\e` for the escape character (`U+001B`).
+  - Added escape sequence `\xHH` for code points in the range of `U+0000` to `U+00FF`.
+    - The encoder will use this type of escape sequence to encode control characters in basic strings and multiline basic strings that do not have a corresponding one letter escape sequence.
+- The encoder will now throw a `TomlImpossibleEscapeSequenceException` instead of a `TomlInvalidEscapeSequenceException` if it encounters a code point that cannot be represented using any supported escape sequence.
+  This can happen for example, when the encoded string contains unpaired UTF-16 surrogate code points.
+
 ## 0.17.0
 
 - Dart 3.8 is now required.
