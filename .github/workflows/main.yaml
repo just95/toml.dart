@@ -163,7 +163,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v6.0.1
       - name: Download Coverage
-        uses: actions/download-artifact@v7
+        uses: actions/download-artifact@v8
         with:
           pattern: coverage-*
           path: coverage/
@@ -254,7 +254,7 @@ jobs:
       - name: Install `toml-test`
         run: go install github.com/toml-lang/toml-test/v2/cmd/toml-test@latest
       - name: Download Decoder Executable
-        uses: actions/download-artifact@v7
+        uses: actions/download-artifact@v8
         with:
           name: toml-test
           path: build/bin
